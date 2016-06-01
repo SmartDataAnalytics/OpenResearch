@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # This program can be used to extract semantic property with corresponding values for events in WikiCFP
 # Author: Yakun Li, Email: liyakun127@gmail.com
-# run the program by using command from terminal: "python crawlWikiCFP.py"
+# run by using command from terminal: "python crawlWikiCFP.py", output will be in current directory named "events.csv"
 import requests
 import csv
 from bs4 import BeautifulSoup
@@ -10,8 +10,9 @@ from bs4 import BeautifulSoup
 events = []
 
 
+# parsing single event page in wikiCFP
 def page_analysis(page_):
-    dict = {}
+    dict_ = {}
     soup = BeautifulSoup(page_.text, "html.parser")
     for content in soup.body.find_all('div', attrs={'class': 'contsec'}):
         for table in content.find_all('tr'):
@@ -20,29 +21,29 @@ def page_analysis(page_):
                     for span in info.find_all('span', attrs={'property': ['v:summary', 'v:eventType', 'v:startDate',
                                                                           'v:endDate', 'v:locality', 'v:description']}):
                         if span['property'] == "v:description":
-                            dict['Title'] = span.text.encode('utf-8').strip()
+                            dict_['Title'] = span.text.encode('utf-8').strip()
                         elif span['property'] == "v:summary":
-                            dict['Acronym'] = span['content'].encode('utf-8').strip()
+                            dict_['Acronym'] = span['content'].encode('utf-8').strip()
                         elif span['property'] == "v:startDate":
-                            dict['startDate'] = span['content']
+                            dict_['startDate'] = span['content']
                         elif span['property'] == "v:endDate":
-                            dict['endDate'] = span['content']
+                            dict_['endDate'] = span['content']
                         elif span['property'] == "v:eventType":
-                            dict['Type'] = span['content']
+                            dict_['Type'] = span['content']
                         elif span['property'] == 'v:locality':
                             location = span['content'].encode('utf-8').strip()
                             locations = [loc.strip() for loc in location.split(',')]
                             if len(locations) == 1:  # if location only contain one place, default use city
-                                dict['City'] = locations[0]
+                                dict_['City'] = locations[0]
                             # if location contains more than or equal to two places, last two places are always
                             else:   # city and country
-                                dict['City'] = locations[-2]
-                                dict['Country'] = locations[-1]
+                                dict_['City'] = locations[-2]
+                                dict_['Country'] = locations[-1]
                         else:
                             raise ValueError("Property not found!")
 
                 for info in infos.find_all('a', attrs={'target': "_newtab"}):   # home page
-                    dict['Homepage'] = info['href'].encode('utf-8').strip()
+                    dict_['Homepage'] = info['href'].encode('utf-8').strip()
 
                 for info in infos.find_all('table', attrs={'align': "center"}):
                     for tr in info.find_all('tr'):
@@ -57,7 +58,7 @@ def page_analysis(page_):
                                             if span['property'] == 'v:summary':
                                                 proper = span['content']
                                             elif span['property'] == 'v:startDate':
-                                                dict[proper] = span['content']
+                                                dict_[proper] = span['content']
                                             else:
                                                 raise ValueError("Property not found!")
 
@@ -68,12 +69,12 @@ def page_analysis(page_):
                                                     category += link.text
                                                     category += ', '
 
-                                            dict['Field'] = category.rstrip(', ')
-    events.append(dict)
+                                            dict_['Field'] = category.rstrip(', ')
+    events.append(dict_)
 
 
 def main():
-    num_pages = 2
+    num_pages = 2   # define how many pages to process at http://www.wikicfp.com/cfp/allcfp
     print('Extracting the data from WikiCFP')
     url = 'http://www.wikicfp.com/cfp/allcfp'
     site = 0
