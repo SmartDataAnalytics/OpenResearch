@@ -48,7 +48,8 @@ def page_analysis(page_):
                             raise ValueError("Property not found!")
 
                 for info in infos.find_all('a', attrs={'target': "_newtab"}):   # home page
-                    dict_['Homepage'] = info['href'].encode('utf-8').strip()
+                    dict_['Homepage'] = info['href'].encode('utf-8').strip().replace("http://", "").replace("https://",
+                                                                                                            "")
 
                 for info in infos.find_all('table', attrs={'align': "center"}):
                     for tr in info.find_all('tr'):
