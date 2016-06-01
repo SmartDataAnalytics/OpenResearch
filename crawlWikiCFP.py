@@ -1,7 +1,12 @@
 #!/usr/bin/python
-# This program can be used to extract semantic property with corresponding values for events in WikiCFP
-# Author: Yakun Li, Email: liyakun127@gmail.com
-# run by using command from terminal: "python crawlWikiCFP.py", output will be in current directory named "events.csv"
+"""
+This program can be used to extract semantic property with corresponding values for events in WikiCFP
+run by using command from terminal: "python crawlWikiCFP.py", output will be in current directory named "events.csv"
+Author: Yakun Li, Email: liyakun127@gmail.com
+
+You can combine output of this script with http://openresearch.org/OpenResearch:HowTo to create to import multiple
+events, by using the template.txt in current directory.
+"""
 import requests
 import csv
 from bs4 import BeautifulSoup
