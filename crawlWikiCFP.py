@@ -55,9 +55,9 @@ def page_analysis(page_):
                                         # find all the important dates
                                         for span in td_.find_all('span', attrs={'property': ['v:startDate',
                                                                                              'v:summary']}):
-                                            if span['property'] == 'v:summary':
+                                            if span['property'] == 'v:summary':  # get the key of important dates
                                                 proper = span['content']
-                                            elif span['property'] == 'v:startDate':
+                                            elif span['property'] == 'v:startDate':  # get the value of important dates
                                                 dict_[proper] = span['content']
                                             else:
                                                 raise ValueError("Property not found!")
@@ -98,7 +98,7 @@ def main():
                 for infos in table.find_all('td', attrs={'align': 'left'}):
                     for info in infos.find_all('a'):
                         page = requests.get('http://www.wikicfp.com' + info['href'])
-                        print "Processing page: http://www.wikicfp.com" + info['href']
+                        print "Processing event: http://www.wikicfp.com" + info['href']
                         page_analysis(page)
 
     #  write dicts to file
