@@ -80,7 +80,7 @@ def page_analysis(page_):
 
 
 def main():
-    num_pages = 2   # define how many pages to process at http://www.wikicfp.com/cfp/allcfp
+    num_pages = 10   # define how many pages to process at http://www.wikicfp.com/cfp/allcfp
     print('Extracting the data from WikiCFP')
     url = 'http://www.wikicfp.com/cfp/allcfp'
     site = 0
@@ -109,10 +109,13 @@ def main():
 
     #  write dicts to file
     all_keys = set().union(*(dict_.keys() for dict_ in events))  # union all keys from events
-    with open("events.csv", 'wb') as f:
-        dict_writer = csv.DictWriter(f, all_keys)
-        dict_writer.writeheader()
-        dict_writer.writerows(events)
+    #  split list into equal size 10 events in each file 
+    all_events = zip(*[iter(events)]*10)
+    for index, item in enumerate(all_events):
+        with open("events" + str(index) + ".csv", 'wb') as f:
+            dict_writer = csv.DictWriter(f, all_keys)
+            dict_writer.writeheader()
+            dict_writer.writerows(item)
 
 
 if __name__ == "__main__":
