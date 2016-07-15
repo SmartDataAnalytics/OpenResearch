@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf:RDF[
+	<!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+	<!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+	<!ENTITY owl 'http://www.w3.org/2002/07/owl#'>
+	<!ENTITY swivt 'http://semantic-mediawiki.org/swivt/1.0#'>
+	<!ENTITY wiki 'http://openresearch.org/wiki/Special:URIResolver/'>
+	<!ENTITY category 'http://openresearch.org/wiki/Special:URIResolver/Category-3A'>
+	<!ENTITY property 'http://openresearch.org/wiki/Special:URIResolver/Property-3A'>
+	<!ENTITY wikiurl 'http://openresearch.org/wiki/'>
+]>
+
+<rdf:RDF
+	xmlns:rdf="&rdf;"
+	xmlns:rdfs="&rdfs;"
+	xmlns:owl ="&owl;"
+	xmlns:swivt="&swivt;"
+	xmlns:wiki="&wiki;"
+	xmlns:category="&category;"
+	xmlns:property="&property;">
+
+	<owl:Ontology rdf:about="http://openresearch.org/wiki/Special:ExportRDF/EKAW+2016">
+		<swivt:creationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-07-15T23:59:35+02:00</swivt:creationDate>
+		<owl:imports rdf:resource="http://semantic-mediawiki.org/swivt/1.0"/>
+	</owl:Ontology>
+	<swivt:Subject rdf:about="http://openresearch.org/wiki/Special:URIResolver/EKAW_2016">
+		<rdf:type rdf:resource="http://openresearch.org/wiki/Special:URIResolver/Category-3AConference"/>
+		<rdf:type rdf:resource="http://openresearch.org/wiki/Special:URIResolver/Category-3AKnowledge_Engineering"/>
+		<rdf:type rdf:resource="http://openresearch.org/wiki/Special:URIResolver/Category-3AItaly"/>
+		<rdf:type rdf:resource="http://openresearch.org/wiki/Special:URIResolver/Category-3AStand-2Dalone_event"/>
+		<rdfs:label>EKAW 2016</rdfs:label>
+		<swivt:page rdf:resource="http://openresearch.org/wiki/EKAW_2016"/>
+		<rdfs:isDefinedBy rdf:resource="http://openresearch.org/wiki/Special:ExportRDF/EKAW_2016"/>
+		<swivt:wikiNamespace rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</swivt:wikiNamespace>
+		<property:Abstract_deadline rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2016-07-08Z</property:Abstract_deadline>
+		<property:Abstract_deadline-23aux rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2457577.5</property:Abstract_deadline-23aux>
+		<property:Acronym rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EKAW 2016</property:Acronym>
+		<property:End_date rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2016-11-23Z</property:End_date>
+		<property:End_date-23aux rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2457715.5</property:End_date-23aux>
+		<property:Event_in_series rdf:resource="&wiki;EKAW"/>
+		<property:Has_coordinates-23aux rdf:datatype="http://www.w3.org/2001/XMLSchema#string">44.493811111111,11.33875</property:Has_coordinates-23aux>
+		<property:Has_general_chair rdf:resource="&wiki;Paolo_Ciancarini"/>
+		<property:Has_location_city rdf:resource="&wiki;Bologna"/>
+		<property:Has_location_country rdf:resource="http://openresearch.org/wiki/Special:URIResolver/Category-3AItaly"/>
+		<property:Has_program_chair rdf:resource="&wiki;Eva_Blomqvist"/>
+		<property:Has_program_chair rdf:resource="&wiki;Fabio_Vitali"/>
+		<property:Homepage rdf:resource="http://ekaw2016.cs.unibo.it"/>
+		<property:Start_date rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2016-11-19Z</property:Start_date>
+		<property:Start_date-23aux rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2457711.5</property:Start_date-23aux>
+		<property:Submission_deadline rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2016-07-15Z</property:Submission_deadline>
+		<property:Submission_deadline-23aux rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2457584.5</property:Submission_deadline-23aux>
+		<property:Title rdf:datatype="http://www.w3.org/2001/XMLSchema#string">20th International Conference on Knowledge Engineering and Knowledge Management</property:Title>
+		<property:Has_query rdf:resource="&wiki;EKAW_2016-23_QUERYafa98df421ab205c832629e734022a8b"/>
+		<property:Has_query rdf:resource="&wiki;EKAW_2016-23_QUERYf243cbc231cd0502961d5b65e6603f8f"/>
+		<property:Creation_date-23aux rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-06-04T08:13:51Z</property:Creation_date-23aux>
+		<property:Creation_date-23aux rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2457543.8429514</property:Creation_date-23aux>
+		<swivt:wikiPageModificationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2016-06-04T08:15:11Z</swivt:wikiPageModificationDate>
+		<property:Modification_date-23aux rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2457543.8438773</property:Modification_date-23aux>
+		<swivt:wikiPageSortKey rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EKAW 2016</swivt:wikiPageSortKey>
+	</swivt:Subject>
+	<swivt:Subject rdf:about="http://openresearch.org/wiki/Special:URIResolver/EKAW_2016-23_QUERYafa98df421ab205c832629e734022a8b">
+		<swivt:masterPage rdf:resource="&wiki;EKAW_2016"/>
+		<swivt:wikiNamespace rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</swivt:wikiNamespace>
+		<property:Query_depth rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0</property:Query_depth>
+		<property:Query_format rdf:datatype="http://www.w3.org/2001/XMLSchema#string">icalendar</property:Query_format>
+		<property:Query_size rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</property:Query_size>
+		<property:Query_string rdf:datatype="http://www.w3.org/2001/XMLSchema#string">[[:EKAW 2016]]</property:Query_string>
+		<swivt:wikiPageSortKey rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EKAW 2016</swivt:wikiPageSortKey>
+	</swivt:Subject>
+	<swivt:Subject rdf:about="http://openresearch.org/wiki/Special:URIResolver/EKAW_2016-23_QUERYf243cbc231cd0502961d5b65e6603f8f">
+		<swivt:masterPage rdf:resource="&wiki;EKAW_2016"/>
+		<swivt:wikiNamespace rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</swivt:wikiNamespace>
+		<property:Query_depth rdf:datatype="http://www.w3.org/2001/XMLSchema#double">1</property:Query_depth>
+		<property:Query_format rdf:datatype="http://www.w3.org/2001/XMLSchema#string">list</property:Query_format>
+		<property:Query_size rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2</property:Query_size>
+		<property:Query_string rdf:datatype="http://www.w3.org/2001/XMLSchema#string">[[Subevent of::EKAW 2016]]</property:Query_string>
+		<swivt:wikiPageSortKey rdf:datatype="http://www.w3.org/2001/XMLSchema#string">EKAW 2016</swivt:wikiPageSortKey>
+	</swivt:Subject>
+	<owl:DatatypeProperty rdf:about="http://semantic-mediawiki.org/swivt/1.0#creationDate" />
+	<owl:Class rdf:about="http://openresearch.org/wiki/Special:URIResolver/Category-3AConference" />
+	<owl:Class rdf:about="http://openresearch.org/wiki/Special:URIResolver/Category-3AKnowledge_Engineering" />
+	<owl:Class rdf:about="http://openresearch.org/wiki/Special:URIResolver/Category-3AItaly" />
+	<owl:Class rdf:about="http://openresearch.org/wiki/Special:URIResolver/Category-3AStand-2Dalone_event" />
+	<owl:ObjectProperty rdf:about="http://semantic-mediawiki.org/swivt/1.0#page" />
+	<owl:DatatypeProperty rdf:about="http://semantic-mediawiki.org/swivt/1.0#wikiNamespace" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AAbstract_deadline" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AAbstract_deadline-23aux" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AAcronym" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AEnd_date" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AEnd_date-23aux" />
+	<owl:ObjectProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AEvent_in_series" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AHas_coordinates-23aux" />
+	<owl:ObjectProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AHas_general_chair" />
+	<owl:ObjectProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AHas_location_city" />
+	<owl:ObjectProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AHas_location_country" />
+	<owl:ObjectProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AHas_program_chair" />
+	<owl:ObjectProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AHomepage" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AStart_date" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AStart_date-23aux" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3ASubmission_deadline" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3ASubmission_deadline-23aux" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3ATitle" />
+	<owl:ObjectProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AHas_query" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3ACreation_date-23aux" />
+	<owl:DatatypeProperty rdf:about="http://semantic-mediawiki.org/swivt/1.0#wikiPageModificationDate" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AModification_date-23aux" />
+	<owl:DatatypeProperty rdf:about="http://semantic-mediawiki.org/swivt/1.0#wikiPageSortKey" />
+	<owl:ObjectProperty rdf:about="http://semantic-mediawiki.org/swivt/1.0#masterPage" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AQuery_depth" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AQuery_format" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AQuery_size" />
+	<owl:DatatypeProperty rdf:about="http://openresearch.org/wiki/Special:URIResolver/Property-3AQuery_string" />
+	<!-- Created by Semantic MediaWiki, https://semantic-mediawiki.org/ -->
+</rdf:RDF>
