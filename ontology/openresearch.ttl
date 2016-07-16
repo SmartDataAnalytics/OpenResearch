@@ -1,0 +1,346 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix swivt: <http://semantic-mediawiki.org/swivt/1.0#> .
+@prefix wiki: <http://openresearch.org/wiki/Special:URIResolver/> .
+@prefix category: <http://openresearch.org/wiki/Special:URIResolver/Category-3A> .
+@prefix or: <http://openresearch.org/vocab/> .
+@prefix swc: <http://data.semanticweb.org/ns/swc/ontology#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix icaltzd: <https://www.w3.org/2002/12/cal/icaltzd#> .
+
+icaltzd:dtend
+    rdfs:isDefinedBy <https://www.w3.org/2002/12/cal/icaltzd> .
+foaf:homepage
+    rdfs:isDefinedBy <http://xmlns.com/foaf/0.1/> .
+icaltzd:dtstart
+    rdfs:isDefinedBy <https://www.w3.org/2002/12/cal/icaltzd> .
+dc:title
+    rdfs:isDefinedBy <http://purl.org/dc/elements/1.1/> .
+<http://data.semanticweb.org/ns/swc/ontology#ConferenceEvent>
+    rdfs:isDefinedBy <http://data.semanticweb.org/ns/swc/ontology> .
+<http://data.semanticweb.org/ns/swc/ontology#WorkshopEvent>
+    rdfs:isDefinedBy <http://data.semanticweb.org/ns/swc/ontology> .
+swc:AcademicEvent
+    rdfs:isDefinedBy <http://data.semanticweb.org/ns/swc/ontology> .
+swc:hasLocation
+    rdfs:isDefinedBy <http://data.semanticweb.org/ns/swc/ontology> .
+
+## deadlines
+or:Abstract_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Abstract deadline" .
+
+or:Camera_ready_due
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Camera ready due" .
+
+or:Demo_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Demo deadline" .
+
+or:Poster_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Poster deadline" .
+
+or:Submission_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Submission deadline" .
+
+or:Tutorial_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Tutorial deadline" .
+
+or:Workshop_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Workshop deadline" .
+
+or:Has_application_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has application deadline" .
+
+or:Paper_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Paper deadline" .
+
+## stats
+
+or:Acceptance_rate
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Acceptance rate" .
+
+or:Has_acceptance_rate
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has acceptance rate" .
+
+or:Accepted_papers
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Accepted papers" .
+
+or:Has_Average_Acceptance_Rate
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has Average Acceptance Rate" .
+
+or:Has_CORE2014_Rank
+    swivt:type swivt:_txt ;
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/wiki/Special:ExportRDF/Property:Has_CORE2014_Rank> ;
+    rdfs:label "Has CORE2014 Rank" .
+
+or:Has_member_count
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has member count" .
+
+or:Has_staff_count
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has staff count" .
+
+or:Impact_factor
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Impact factor" .
+
+or:Last_Accepted_Rates
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Last Accepted Rates" .
+
+or:Member_count
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Member count" .
+
+## otehr metadata
+
+or:Acronym
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Acronym" .
+
+## fees
+
+
+or:Fee
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Fee" .
+or:Attendance_fee
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Attendance fee" .
+
+or:Attendance_fee_reduced
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Attendance fee reduced" .
+
+## relations
+
+or:Event_in_series
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Event in series" .
+
+or:Had_Submitting_link
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Had Submitting link" .
+
+or:Has_EB_member
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has EB member" .
+
+or:Has_Keynote_speaker
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has Keynote speaker" .
+
+or:Has_OC_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has OC chair" .
+
+or:Has_OC_member
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has OC member" .
+
+or:Has_PB_member
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has PB member" .
+
+or:Has_PC_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has PC chair" .
+
+or:Has_PC_member
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has PC member" .
+
+or:Has_SC_member
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has SC member" .
+
+or:Has_associate_editor
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has associate editor" .
+
+or:Has_author
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has author" .
+
+or:Has_budget
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has budget" .
+
+or:Has_coordinator
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has coordinator" .
+
+or:Has_deadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has deadline" .
+
+or:Has_demo_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has demo chair" .
+
+or:Has_developer
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has developer" .
+
+or:Has_editor
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has editor" .
+
+or:Has_event
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has event" .
+
+or:Has_funding
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has funding" .
+
+or:Has_general_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has general chair" ;
+    rdfs:subPropertyOf or:Has_OC_member .
+
+or:Has_guest_editor
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has guest editor" .
+
+or:Has_keynote_speaker
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has keynote speaker" .
+
+or:Has_local_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has local chair" .
+
+or:Has_organizer
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has organizer" .
+
+or:Has_program_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has program chair" ;
+    rdfs:subPropertyOf or:Has_OC_member, or:Has_PC_member .
+
+or:Has_publication_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has publication chair" .
+
+or:Has_publicity_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has publicity chair" .
+
+or:Has_publisher
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has publisher" .
+
+or:Has_sponsorship_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has sponsorship chair" .
+
+or:Has_sub_event
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has sub event" .
+
+or:Has_sub_organization
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has sub organization" .
+
+or:Has_tutorial_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has tutorial chair" .
+
+or:Has_workshop_chair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Has workshop chair" .
+
+or:Part_of_series
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Part of series" .
+
+or:Publication_in_series
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Publication in series" .
+
+or:Subevent_of
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Subevent of" .
+
+or:Submitted_papers
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy or: ;
+    rdfs:label "Submitted papers" .
+
