@@ -22,81 +22,17 @@ swc:WorkshopEvent
 swc:hasLocation
     rdfs:isDefinedBy <http://data.semanticweb.org/ns/swc/ontology> .
 
-or:Abstract_deadline
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Abstract deadline" .
-
-or:Acceptance_rate
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Acceptance rate" .
-
-or:Accepted_papers
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Accepted papers" .
-
-or:Acronym
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Acronym" .
-
-or:Attendance_fee
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Attendance fee" .
-
-or:Attendance_fee_reduced
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Attendance fee reduced" .
-
-or:Camera_ready_due
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Camera ready due" .
-
-or:Demo_deadline
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Demo deadline" .
-
-or:Event_in_series
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Event in series" .
-
-or:Fee
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Fee" .
-
-or:Had_Submitting_link
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Had Submitting link" .
-
-or:Has_Average_Acceptance_Rate
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Has Average Acceptance Rate" .
-
-or:Has_CORE2014_Rank
+or:CORE2014Rank
     swivt:type swivt:_txt ;
     a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/wiki/Special:ExportRDF/Property:Has_CORE2014_Rank> ;
-    rdfs:label "Has CORE2014 Rank" .
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Has CORE2014 Rank" ;
+    rdfs:seeAlso <http://portal.core.edu.au/conf-ranks/> .
 
 or:Has_EB_member
     a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Has EB member" .
-
-or:Has_Keynote_speaker
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Has Keynote speaker" .
 
 or:Has_OC_chair
     a owl:ObjectProperty ;
@@ -127,16 +63,6 @@ or:Has_SC_member
     a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Has SC member" .
-
-or:Has_acceptance_rate
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Has acceptance rate" .
-
-or:Has_application_deadline
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Has application deadline" .
 
 or:Has_associate_editor
     a owl:ObjectProperty ;
@@ -188,12 +114,6 @@ or:Has_funding
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Has funding" .
 
-or:Has_general_chair
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Has general chair" ;
-    rdfs:subPropertyOf or:Has_OC_member .
-
 or:Has_guest_editor
     a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
@@ -209,21 +129,10 @@ or:Has_local_chair
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Has local chair" .
 
-or:Has_member_count
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Has member count" .
-
 or:Has_organizer
     a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Has organizer" .
-
-or:Has_program_chair
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Has program chair" ;
-    rdfs:subPropertyOf or:Has_OC_member, or:Has_PC_member .
 
 or:Has_publication_chair
     a owl:ObjectProperty ;
@@ -245,11 +154,6 @@ or:Has_sponsorship_chair
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Has sponsorship chair" .
 
-or:Has_staff_count
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Has staff count" .
-
 or:Has_sub_event
     a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
@@ -270,36 +174,6 @@ or:Has_workshop_chair
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Has workshop chair" .
 
-or:Impact_factor
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Impact factor" .
-
-or:Last_Accepted_Rates
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Last Accepted Rates" .
-
-or:Member_count
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Member count" .
-
-or:Paper_deadline
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Paper deadline" .
-
-or:Part_of_series
-    a owl:ObjectProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Part of series" .
-
-or:Poster_deadline
-    a owl:DatatypeProperty ;
-    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Poster deadline" .
-
 or:Publication_in_series
     a owl:ObjectProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
@@ -310,25 +184,169 @@ or:Subevent_of
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Subevent of" .
 
-or:Submission_deadline
+or:abstractDeadline
     a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Submission deadline" .
+    rdfs:label "Abstract Deadline" ;
+    rdfs:subPropertyOf or:submissionDeadline .
 
-or:Submitted_papers
+or:acceptanceRate
     a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Acceptance rate" .
+
+or:acceptedPapers
+    a owl:DatatypeProperty ;
+    rdfs:comment "Number of accepted papers" ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Accepted papers" .
+
+or:acronym
+    a owl:DatatypeProperty ;
+    rdfs:comment "The usual acronym used for an event" ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Acronym" .
+
+or:applicationDeadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Has application deadline" ;
+    rdfs:subPropertyOf or:submissionDeadline .
+
+or:attendanceFee
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Attendance fee" ;
+    rdfs:subPropertyOf or:fee .
+
+or:attendanceFeeReduced
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Attendance fee reduced" ;
+    rdfs:subPropertyOf or:fee .
+
+or:averageAcceptanceRate
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Has Average Acceptance Rate" .
+
+or:cameraReadyDue
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Camera Ready Due" ;
+    rdfs:subPropertyOf or:submissionDeadline .
+
+or:demoDeadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Demo Deadline" ;
+    rdfs:subPropertyOf or:submissionDeadline .
+
+or:eventInSeries
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Event in series" .
+
+or:fee
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Fee" .
+
+or:generalChair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Has general chair" ;
+    rdfs:subPropertyOf or:Has_OC_member .
+
+or:impactFactor
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Impact factor" .
+
+or:keynoteSpeaker
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Has Keynote speaker" .
+
+or:lastAcceptanceRate
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Last Accepted Rates" .
+
+or:locationCity
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Location city" ;
+    rdfs:subPropertyOf swc:hasLocation .
+
+or:locationCountry
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Location Country" ;
+    rdfs:subPropertyOf swc:hasLocation .
+
+or:memberCount
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Has member count" .
+
+or:paperDeadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Paper deadline" ;
+    rdfs:subPropertyOf or:submissionDeadline .
+
+or:partOfSeries
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Part of series" .
+
+or:posterDeadline
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Poster deadline" ;
+    rdfs:subPropertyOf or:submissionDeadline .
+
+or:programChair
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Has program chair" ;
+    rdfs:subPropertyOf or:Has_OC_member, or:Has_PC_member .
+
+or:staffCount
+    a owl:DatatypeProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Has staff count" .
+
+or:submissionDeadline
+    a owl:DatatypeProperty ;
+    rdfs:comment "A date by which some artefact hast to be submitted" ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Submission deadline" ;
+    rdfs:subPropertyOf dc:date .
+
+or:submissionLink
+    a owl:ObjectProperty ;
+    rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
+    rdfs:label "Had Submitting link" .
+
+or:submittedPapers
+    a owl:DatatypeProperty ;
+    rdfs:comment "Number of submitted papers" ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
     rdfs:label "Submitted papers" .
 
-or:Tutorial_deadline
+or:tutorialDeadline
     a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Tutorial deadline" .
+    rdfs:label "Tutorial deadline" ;
+    rdfs:subPropertyOf or:submissionDeadline .
 
-or:Workshop_deadline
+or:workshopDeadline
     a owl:DatatypeProperty ;
     rdfs:isDefinedBy <http://openresearch.org/vocab/> ;
-    rdfs:label "Workshop deadline" .
+    rdfs:label "Workshop deadline" ;
+    rdfs:subPropertyOf or:submissionDeadline .
 
 dc:title
     rdfs:isDefinedBy <http://purl.org/dc/elements/1.1/> .
