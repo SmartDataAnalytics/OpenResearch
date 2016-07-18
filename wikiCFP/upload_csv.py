@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 url = 'http://mwcsvimport.pronique.com/users/login'
 
 # user name and password for mediawiki csv import
-values = {'data[User][username]': 'liyakun127@gmail.com', 'data[User][password]': 'Root421@'}
+values = {'data[User][username]': 'username', 'data[User][password]': 'password'}
 
 # get the Session
 s = requests.Session()
