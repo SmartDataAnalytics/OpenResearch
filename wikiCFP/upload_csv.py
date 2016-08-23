@@ -81,7 +81,7 @@ class Crawler:
             r = self.session.get(url)
 
 
-crawler = Crawler('liyakun127@gmail.com', '1QAYxsw2')
+crawler = Crawler('username', 'password')
 crawler.login()
 crawler.upload_csv('./events')
 # crawler.delete_csv()
