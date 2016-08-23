@@ -34,7 +34,7 @@ def page_analysis(page_):
                         elif span['property'] == "v:endDate":
                             dict_['endDate'] = span['content']
                         elif span['property'] == "v:eventType":
-                            dict_['Type'] = span['content']
+                            dict_['Type'] = span['content'].encode('utf-8')
                         elif span['property'] == 'v:locality':
                             location = span['content'].encode('utf-8').strip()
                             locations = [loc.strip() for loc in location.split(',')]
@@ -62,9 +62,9 @@ def page_analysis(page_):
                                         for span in td_.find_all('span', attrs={'property': ['v:startDate',
                                                                                              'v:summary']}):
                                             if span['property'] == 'v:summary':  # get the key of important dates
-                                                proper = span['content']
+                                                proper = span['content'].encode('utf-8')
                                             elif span['property'] == 'v:startDate':  # get the value of important dates
-                                                dict_[proper] = span['content']
+                                                dict_[proper] = span['content'].encode('utf-8')
                                             else:
                                                 raise ValueError("Property not found!")
 
@@ -75,7 +75,7 @@ def page_analysis(page_):
                                                     category += link.text
                                                     category += ', '
 
-                                            dict_['Field'] = category.rstrip(', ')
+                                            dict_['Field'] = category.rstrip(', ').encode('utf-8')
     events.append(dict_)
 
 
@@ -112,7 +112,7 @@ def main():
     #  split list into equal size 10 events in each file 
     all_events = zip(*[iter(events)]*10)
     for index, item in enumerate(all_events):
-        with open("events" + str(index) + ".csv", 'wb') as f:
+        with open("./events/events" + str(index) + ".csv", 'wb') as f:
             dict_writer = csv.DictWriter(f, all_keys)
             dict_writer.writeheader()
             dict_writer.writerows(item)

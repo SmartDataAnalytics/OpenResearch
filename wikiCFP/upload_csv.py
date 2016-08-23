@@ -2,51 +2,89 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-# login page of mediawiki csv import
-url = 'http://mwcsvimport.pronique.com/users/login'
 
-# user name and password for mediawiki csv import
-values = {'data[User][username]': 'username', 'data[User][password]': 'password'}
+class Crawler:
 
-# get the Session
-s = requests.Session()
-r = s.post(url, data=values)
+    def __init__(self, login_username, login_password, login_url='http://mwcsvimport.pronique.com/users/login'):
+        self.username = login_username
+        self.password = login_password
+        self.credentials = {'data[User][username]': self.username, 'data[User][password]': self.password}
+        self.loginpage = login_url
+        self.session = ''
 
-# start to upload csv file
-'''
-for subdir, dirs, files in os.walk('./events'):
-    for file in files:
-        myFile = open(subdir + os.sep + file, "rb")
-        upload = s.post('http://mwcsvimport.pronique.com/datasets/add', data={'submit': 'Upload'}, files={'data[Dataset][csvfile]': myFile})
-'''
+    def login(self):
+        self.session = requests.Session()
+        try:
+            response = self.session.post(self.loginpage, data=self.credentials)
+            print 'Login successfully!'
+        except Exception, e:
+            print e.message
+        if response.status_code != 200:
+            print "Can't connect to http://mwcsvimport.pronique.com/users/login, (status code: " + response.status_code \
+                  + ")"
 
-# delete csv data from mediawiki csv import
-base = 'http://mwcsvimport.pronique.com/'
-page = 'http://mwcsvimport.pronique.com/datasets/index/page:'
-page_number = 1
-more_data = True
-del_urls = []
-while more_data and page_number <= 7:
-    try:
-        data = s.get(page + str(page_number))
-    except Exception, e:
-        more_data = False
-        print e.message
-    if data.status_code != 200:
-        print "There are no more files to delete (status code: " + data.status_code + ")"
-    page_number += 1
+    def upload_csv(self, path):
+        file = {'data[Dataset][csvfile]': ('events0.csv', open('./events/events0.csv', 'rb'), 'text/csv')}
+        url = 'http://mwcsvimport.pronique.com/datasets/add'
+        values = {'upload_type': 'standard', 'upload_to': '0'}
+        r = self.session.post(url, files=file)
+        print r.headers
+        print r.request.headers
+        #all_files = []
+        #for subdir, dirs, files in os.walk(path):
+        #    for file in files:
+        #        all_files.append(open(subdir + os.sep + file, "rb"))
+        #self.session.post('http://mwcsvimport.pronique.com/datasets/add', data={}, files={'data[Dataset][csvfile]': all_files[0]})
+        #print 'uploading: ' + subdir + os.sep + file
+        #myfile = {'file': open(subdir + os.sep + file, 'rb')}
+        #upload = self.session.post('http://mwcsvimport.pronique.com/datasets/add', data={}, files={'data[Dataset][csvfile]': myFile})
+        #print self.session.headers
+        #myFile.close()
 
-    soup = BeautifulSoup(data.text, "html.parser")
-    for table in soup.body.find_all('table', attrs={'cellpadding': '0'}):
-        for tr in soup.body.find_all('tr'):
-            for td in soup.body.find_all('td', attrs={'class': ""}):
-                for href in soup.body.find_all('a', href=True):
-                    if 'delete' in href['href']:
-                        del_urls.append(base+href['href'])
+    def delete_csv(self):
+        # delete csv data from mediawiki csv import
+        base = 'http://mwcsvimport.pronique.com/'
+        page = 'http://mwcsvimport.pronique.com/datasets/index/page:'
 
-for url in del_urls:
-    r = s.get(url)
-    print url
+        page_number, total_pages = 1, 1
+        more_data = True
+        del_urls = []
+        while more_data and page_number <= total_pages:
+            try:
+                data = self.session.get(page + str(page_number))
+                print 'get page: ' + str(page_number)
+            except Exception, e:
+                more_data = False
+                print e.message
+            if data.status_code != 200:
+                print "There are no more files to delete (status code: " + data.status_code + ")"
+
+            soup = BeautifulSoup(data.text, "html.parser")
+
+            if page_number == 1:
+                for pages in soup.find_all('p', attrs={'class': 'paging-status'}):
+                    total_pages = int(pages.text.split(', ')[0].split(' ')[-1])
+
+            for table in soup.body.find_all('table', attrs={'cellpadding': '0'}):
+                for tr in table.find_all('tr'):
+                    for td in tr.find_all('td', attrs={'class': ""}):
+                        for href in td.find_all('a', href=True):
+                            if 'delete' in href['href']:
+                                del_urls.append(base + href['href'])
+                                print del_urls[-1]
+
+            page_number += 1
+
+        print 'Start to delete files'
+        for url in del_urls:
+            print 'delete: ' + url
+            r = self.session.get(url)
+
+
+crawler = Crawler('liyakun127@gmail.com', '1QAYxsw2')
+crawler.login()
+crawler.upload_csv('./events')
+# crawler.delete_csv()
 
 
 
