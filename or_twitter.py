@@ -65,11 +65,26 @@ def get_category_list(site):
 def update_twitter_list(new_items, twitter_list, api):
     print "update twitter %s list by adding" % twitter_list[0]
     print new_items
+    api.CreateListsMember(twitter_list[2], None, None, new_items) # create twitter list members
 
+# insert twitter code to OpenResearch page
+def update_category_page(title, list_name, site):
+    page = site.pages[title]
+    text = page.text()
+
+    new_data = '<div id="fixbox"><html><a class="twitter-timeline" height="500" width="180" href="https://twitter.com/openresearch_bn/lists/'+list_name+'">A Twitter List by openresearch_bn</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></html></div>'
+
+    if new_data not in text:
+        text += new_data
+        page.save(text, 'append twitter feeds by robot')
 
 # create a twitter list with information from category
-def create_twitter_list(category_list, api):
-    pass
+def create_twitter_list(category_list, api, site):
+    print 'create category: '
+    print category_list
+    new_list = api.CreateList(category_list[0], mode='public', description='A list of twitters related to ' + category_list[0])
+    api.CreateListsMember(new_list.id, None, None, category_list[1]) # create twitter list members
+    update_category_page(category_list[0], new_list.screen_name, site)
 
 # compare category list and twitter list items, return the not added elements in twitter list
 def elements_checker(category_list, twitter_list):
@@ -77,7 +92,7 @@ def elements_checker(category_list, twitter_list):
     return list(set(category_elements[1:]).symmetric_difference(set(twitter_list[1])))
 
 # check whether a category twitter list appears in a twitter list or not
-def category_twitters_checker(category_list, twitters_list, api):
+def category_twitters_checker(category_list, twitters_list, api, site):
     new_items = []
     exist = 0
     category = category_list[0][0].replace('Category:', '').lower()
@@ -90,15 +105,15 @@ def category_twitters_checker(category_list, twitters_list, api):
             new_items = elements_checker(category_list, twitter_list) # check whether their elements are the same or not
             break;
     if exist != 1: # if category does not exist in twitter list
-        create_twitter_list(category_list, api)
+        create_twitter_list(category_list, api, site)
     elif len(new_items) > 0:
         update_twitter_list(new_items, twitter_list, api)
 
 
 # check whether the twitters in category are all included in the twitter list or not
-def validation(twitter_lists, categories_lists, api):
+def validation(twitter_lists, categories_lists, api, site):
     for category_list in categories_list:
-        category_twitters_checker(category_list, twitter_lists, api)
+        category_twitters_checker(category_list, twitter_lists, api, site)
 
 # check for each category whether there is new twitter account
 def update_category(category_name):
@@ -132,15 +147,15 @@ def get_lists_list(twitter_api):
         for member in twitter_api.GetListMembers(list_.id):
             # print member
             members.append(member.screen_name)
-        list_lists.append((list_.name, members))
+        list_lists.append((list_.name, members, list_.id))
     return list_lists
 
 
 site = mwclient.Site(('http', 'openresearch.org'), path='/')
-site.login('username', 'password')
+site.login('', '')
 # update_pages("Organization")
 
 twitter_api = login_twitter() # login twitter, and get api object back
 lists_list = get_lists_list(twitter_api) # get list of ((list, members)) in twitter account
 categories_list = get_category_list(site) # get the categories which contains twitters account
-validation(lists_list, categories_list, twitter_api) # check whether lists in twitter are idental with lists in each category
+validation(lists_list, categories_list, twitter_api, site) # check whether lists in twitter are idental with lists in each category
