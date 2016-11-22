@@ -3,6 +3,7 @@ import requests
 import mwclient
 import twitter
 import ast
+import unicodecsv
 
 C_KEY = ''
 C_SEC = ''
@@ -40,7 +41,7 @@ def update_pages(category):
     append_twitters(pages, site)
 
 # transform the csv result to a list for a specific inline query to OpenResearch
-def get_list_from_csv(site, url): 
+def get_list_from_csv(site, url):
     response = requests.get(url)
     cr = csv.reader(response.content.decode('utf-8').splitlines(), delimiter=',')
     return list(cr)
@@ -49,39 +50,60 @@ def get_list_from_csv(site, url):
 def get_category_list(site):
     url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::Science-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
     categories = get_list_from_csv(site, url)
- 
+
     # for each category, if it contains pages with "Twitter" account then add to list
     categories_twitter = []
     for category in categories:
-        if len(category) > 0:
+        if len(category) > 0 and 'science' not in category[0]: # temporaly avoid encoding error in category "Computer science"
             url1 = "http://openresearch.org/Special:Ask/-5B-5B"+category[0]+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
-            twitters_in_category = get_list_from_csv(site, url1) 
-            print twitters_in_category
-            if len(twitters_in_category) > 0:
-                print category[0]
+            twitters_in_category = get_list_from_csv(site, url1)
+            if len(twitters_in_category) > 1:
                 categories_twitter.append((category, twitters_in_category))
+    return categories_twitter
+
+# update an existing twitter list(by adding a(some) new member(s))
+def update_twitter_list(new_items, twitter_list, api):
+    print "update twitter %s list by adding" % twitter_list[0]
+    print new_items
 
 
-# get the list elements of a twitter list with "category_name" name
-def get_twitter_list(category_name):
+# create a twitter list with information from category
+def create_twitter_list(category_list, api):
     pass
 
-# get the twitters account in category in MediaWiki
-def get_twitters_in_category():
-    pass
+# compare category list and twitter list items, return the not added elements in twitter list
+def elements_checker(category_list, twitter_list):
+    category_elements = [x[1].replace('@', '') for x in category_list[1]]
+    return list(set(category_elements[1:]).symmetric_difference(set(twitter_list[1])))
+
+# check whether a category twitter list appears in a twitter list or not
+def category_twitters_checker(category_list, twitters_list, api):
+    new_items = []
+    exist = 0
+    category = category_list[0][0].replace('Category:', '').lower()
+    print category
+    for twitter_list in twitters_list:
+        print twitter_list
+        if category == twitter_list[0]: # if category already exist in twitter list
+            print 'Category exists in twitter already'
+            exist = 1
+            new_items = elements_checker(category_list, twitter_list) # check whether their elements are the same or not
+            break;
+    if exist != 1: # if category does not exist in twitter list
+        create_twitter_list(category_list, api)
+    elif len(new_items) > 0:
+        update_twitter_list(new_items, twitter_list, api)
+
 
 # check whether the twitters in category are all included in the twitter list or not
-def is_same(twitter_list, twitters_in_category):
-    pass
-
-# add new elements to list or create a new list for a new category
-def update_twitter_list(category_name):
-    pass
+def validation(twitter_lists, categories_lists, api):
+    for category_list in categories_list:
+        category_twitters_checker(category_list, twitter_lists, api)
 
 # check for each category whether there is new twitter account
 def update_category(category_name):
     twitter_list = get_twitter_list(category_name)
-    twitters_in_category = get_twitters_in_category() 
+    twitters_in_category = get_twitters_in_category()
     # if twitter list is not same as the twitters in category, then update twitter list in twitter
     if(is_same(twitter_list, twitters_in_category) is not True):
         update_twitter_list(category_name)
@@ -107,8 +129,9 @@ def get_lists_list(twitter_api):
     list_lists = []
     for list_ in results:
         members = []
-	for member in twitter_api.GetListMembers(list_.id):
-            members.append(member.name)
+        for member in twitter_api.GetListMembers(list_.id):
+            # print member
+            members.append(member.screen_name)
         list_lists.append((list_.name, members))
     return list_lists
 
@@ -119,5 +142,5 @@ site.login('username', 'password')
 
 twitter_api = login_twitter() # login twitter, and get api object back
 lists_list = get_lists_list(twitter_api) # get list of ((list, members)) in twitter account
-
-get_category_list(site)
+categories_list = get_category_list(site) # get the categories which contains twitters account
+validation(lists_list, categories_list, twitter_api) # check whether lists in twitter are idental with lists in each category
