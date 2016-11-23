@@ -8,10 +8,10 @@ class Twitter:
 
     # get basic information defined
     def __init__(self):
-        self.C_KEY = '8r4wZlvgj4YRJdarLiU1kDADv'
-        self.C_SEC = 'Nd6a8xvwz7l2SEGti99D5yUlOhzLpi4KrIkjQOttGgfyZrTfTw'
-        self.A_TOKEN = '768866832598065154-GKk9OgnF6FhQ5KWGKgLpwZnGQPTl0dG'
-        self.A_TOKEN_SEC = 'RbFoCAHpQa1P5NhBrj0o81xHNw6Zw7glXu2j1xBLUGkES'
+        self.C_KEY = ''
+        self.C_SEC = ''
+        self.A_TOKEN = ''
+        self.A_TOKEN_SEC = ''
         self.api = ''
 
     # login twitter account, and get api
@@ -55,7 +55,7 @@ class ORPage:
         self.site = mwclient.Site(('http', 'openresearch.org'), path='/')
 
     def login(self):
-        self.site.login('liy1', '1QAYxsw2')
+        self.site.login('', '')
 
     # save the changes to a page
     def save_page(self, new_data, page):
