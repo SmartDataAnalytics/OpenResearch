@@ -6,12 +6,12 @@ import twitter
 
 class Twitter:
 
-    # get basic informaiton defined
+    # get basic information defined
     def __init__(self):
-        self.C_KEY = ''
-        self.C_SEC = ''
-        self.A_TOKEN = ''
-        self.A_TOKEN_SEC = ''
+        self.C_KEY = '8r4wZlvgj4YRJdarLiU1kDADv'
+        self.C_SEC = 'Nd6a8xvwz7l2SEGti99D5yUlOhzLpi4KrIkjQOttGgfyZrTfTw'
+        self.A_TOKEN = '768866832598065154-GKk9OgnF6FhQ5KWGKgLpwZnGQPTl0dG'
+        self.A_TOKEN_SEC = 'RbFoCAHpQa1P5NhBrj0o81xHNw6Zw7glXu2j1xBLUGkES'
         self.api = ''
 
     # login twitter account, and get api
@@ -45,7 +45,7 @@ class Twitter:
         print 'create category: '
         print category_list
         new_list = api.CreateList(category_list[0], mode='public', description='A list of twitters related to ' + category_list[0])
-        api.CreateListsMember(new_list.id, None, None, category_list[1]) # create twitter list members
+        api.CreateListsMember(new_list.id, None, None, category_list[1])  # create twitter list members
         openres.update_category_page(category_list[0], new_list.screen_name, site)
 
 
@@ -55,7 +55,7 @@ class ORPage:
         self.site = mwclient.Site(('http', 'openresearch.org'), path='/')
 
     def login(self):
-        self.site.login('username', 'password')
+        self.site.login('liy1', '1QAYxsw2')
 
     # save the changes to a page
     def save_page(self, new_data, page):
@@ -92,7 +92,7 @@ class ORPage:
 
     # create a twitter section on a page in category, if it does not exist
     def update_pages(self, category):
-        pages = self.query_pages(ategory)
+        pages = self.query_pages(category)
         self.append_pages(pages)
 
     """ The code bellow is for update category page """
@@ -105,7 +105,7 @@ class ORPage:
         # for each category, if it contains pages with "Twitter" account then add to list
         categories_twitter = []
         for category in categories:
-            if len(category) > 0 and 'science' not in category[0]: # temporaly avoid encoding error in category "Computer science"
+            if len(category) > 0 and 'science' not in category[0]:  # temporaly avoid encoding error in category "Computer science"
                 url1 = "http://openresearch.org/Special:Ask/-5B-5B"+category[0]+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
                 twitters_in_category = self.get_list_from_csv(url1)
                 if len(twitters_in_category) > 1:
@@ -116,35 +116,39 @@ class ORPage:
     def update_category_page(self, title, list_name, site):
         page = site.pages[title]
         new_data = '<div id="fixbox"><html><a class="twitter-timeline" height="500" width="180" href="https://twitter.com/openresearch_bn/lists/'+list_name+'">A Twitter List by openresearch_bn</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></html></div>'
-        save_page(new_data, page)
+        self.save_page(new_data, page)
 
     # compare category list and twitter list items, return the not added elements in twitter list
     def elements_checker(self, category_list, twitter_list):
         category_elements = [x[1].replace('@', '') for x in category_list[1]]
+        print 'category'
+        print category_elements[1:]
+        print 'twitter list'
+        print twitter_list[1]
         return list(set(category_elements[1:]).symmetric_difference(set(twitter_list[1])))
 
     # check whether a category twitter list appears in a twitter list or not
-    def category_twitters_checker(self, category_list, twitters_list, twit, site, openres):
+    def category_twitters_checker(self, category_list, twitters_list, twit, openres):
         new_items = []
         exist = 0
         category = category_list[0][0].replace('Category:', '').lower()
         print category
         for twitter_list in twitters_list:
             print twitter_list
-            if category == twitter_list[0]: # if category already exist in twitter list
+            if category == twitter_list[0]:  # if category already exist in twitter list
                 print 'Category exists in twitter already'
                 exist = 1
-                new_items = self.elements_checker(category_list, twitter_list) # check whether their elements are the same or not
-                break;
-        if exist != 1: # if category does not exist in twitter list
-            twit.create_twitter_list(category_list, twit.api, site, openres)
+                new_items = self.elements_checker(category_list, twitter_list)  # check whether their elements are the same or not
+                break
+        if exist != 1:  # if category does not exist in twitter list
+            twit.create_twitter_list(category_list, twit.api, self.site, openres)
         elif len(new_items) > 0:
             twit.update_twitter_list(new_items, twitter_list, twit.api)
 
     # check whether the twitters in category are all included in the twitter list or not
     def validation(self, twitter_lists, categories_lists, twit, openres):
-        for category_list in categories_list:
-            self.category_twitters_checker(category_list, twitter_lists, twit, self.site, openres)
+        for category_list in categories_lists:
+            self.category_twitters_checker(category_list, twitter_lists, twit, openres)
 
 
 openres = ORPage()
@@ -153,6 +157,6 @@ openres.login()
 
 twit = Twitter()
 twit.login()
-lists_list = twit.get_lists_list() # get list of ((list, members)) in twitter account
-categories_list = openres.get_category_list() # get the categories which contains twitters account
-openres.validation(lists_list, categories_list, twit, openres) # check whether lists in twitter are idental with lists in each category
+lists_list = twit.get_lists_list()  # get list of ((list, members)) in twitter account
+categories_list = openres.get_category_list()  # get the categories which contains twitters account
+openres.validation(lists_list, categories_list, twit, openres)  # check whether lists in twitter are idental with lists in each category
