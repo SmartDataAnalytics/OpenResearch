@@ -29,24 +29,24 @@ class Twitter:
         for list_ in results:
             members = []
             for member in self.api.GetListMembers(list_.id):
-                # print member
                 members.append(member.screen_name)
             list_lists.append((list_.name, members, list_.id))
         return list_lists
 
     # update an existing twitter list(by adding a(some) new member(s))
     def update_twitter_list(self, new_items, twitter_list, api):
-        print "update twitter %s list by adding" % twitter_list[0]
+        print "update twitter list: %s" % twitter_list[0]
         print new_items
         api.CreateListsMember(twitter_list[2], None, None, new_items) # create twitter list members
 
     # create a twitter list with information from category
     def create_twitter_list(self, category_list, api, site, openres):
-        print 'create category: '
-        print category_list
-        new_list = api.CreateList(category_list[0], mode='public', description='A list of twitters related to ' + category_list[0])
-        api.CreateListsMember(new_list.id, None, None, category_list[1])  # create twitter list members
-        openres.update_category_page(category_list[0], new_list.screen_name, site)
+        category = category_list[0].replace('Category:', '').lower()
+        print 'create twitter list: %s' % category
+        new_list = api.CreateList(category, mode='public', description='A list of twitters related to ' + category)
+        category_elements = [x[1].replace('@', '') for x in category_list[1]]
+        api.CreateListsMember(new_list.id, None, None, category_elements)  # create twitter list members
+        #openres.update_category_page(category_list[0], new_list.screen_name, site)
 
 
 class ORPage:
@@ -55,7 +55,7 @@ class ORPage:
         self.site = mwclient.Site(('http', 'openresearch.org'), path='/')
 
     def login(self):
-        self.site.login('', '')
+        self.site.login('username', 'password')
 
     # save the changes to a page
     def save_page(self, new_data, page):
@@ -78,7 +78,7 @@ class ORPage:
     def get_list_from_csv(self, url):
         response = requests.get(url)
         cr = csv.reader(response.content.decode('utf-8').splitlines(), delimiter=',')
-        return list(cr)
+        return [c[0] for c in cr if len(c) > 0 and c[0] != '']
 
     # get a list of pages in a certain category
     def query_pages(self, op):
@@ -99,44 +99,33 @@ class ORPage:
 
     # get all the sub categories of "Science" from OpenResearch which contains a twitter account
     def get_category_list(self):
-        url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::Science-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
-        categories = self.get_list_from_csv(url)
-
+        subcategories_url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::Computer Science-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
+        categories = self.get_list_from_csv(subcategories_url)
         # for each category, if it contains pages with "Twitter" account then add to list
         categories_twitter = []
         for category in categories:
-            if len(category) > 0 and 'science' not in category[0]:  # temporaly avoid encoding error in category "Computer science"
-                url1 = "http://openresearch.org/Special:Ask/-5B-5B"+category[0]+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
-                twitters_in_category = self.get_list_from_csv(url1)
+            if 'Computer science' not in category and 'Web-Based Learning' not in category:  # temporaly avoid encoding error in category "Computer science"
+                url = "http://openresearch.org/Special:Ask/-5B-5B"+category+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
+                twitters_in_category = self.get_list_from_csv(url)
                 if len(twitters_in_category) > 1:
                     categories_twitter.append((category, twitters_in_category))
         return categories_twitter
 
-    # insert twitter code to OpenResearch page
-    def update_category_page(self, title, list_name, site):
-        page = site.pages[title]
-        new_data = '<div id="fixbox"><html><a class="twitter-timeline" height="500" width="180" href="https://twitter.com/openresearch_bn/lists/'+list_name+'">A Twitter List by openresearch_bn</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></html></div>'
-        self.save_page(new_data, page)
-
     # compare category list and twitter list items, return the not added elements in twitter list
     def elements_checker(self, category_list, twitter_list):
         category_elements = [x[1].replace('@', '') for x in category_list[1]]
-        print 'category'
-        print category_elements[1:]
-        print 'twitter list'
-        print twitter_list[1]
         return list(set(category_elements[1:]).symmetric_difference(set(twitter_list[1])))
 
     # check whether a category twitter list appears in a twitter list or not
     def category_twitters_checker(self, category_list, twitters_list, twit, openres):
         new_items = []
         exist = 0
-        category = category_list[0][0].replace('Category:', '').lower()
+        category = category_list[0].replace('Category:', '').lower()
         print category
         for twitter_list in twitters_list:
             print twitter_list
             if category == twitter_list[0]:  # if category already exist in twitter list
-                print 'Category exists in twitter already'
+                print 'Category %s exists in twitter already' % category
                 exist = 1
                 new_items = self.elements_checker(category_list, twitter_list)  # check whether their elements are the same or not
                 break
