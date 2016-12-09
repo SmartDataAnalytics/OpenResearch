@@ -2,6 +2,8 @@ import csv
 import requests
 import mwclient
 import twitter
+import json
+import urllib
 
 
 class Twitter:
@@ -43,10 +45,11 @@ class Twitter:
     def create_twitter_list(self, category_list, api, site, openres):
         category = category_list[0].replace('Category:', '').lower()
         print 'create twitter list: %s' % category
-        new_list = api.CreateList(category, mode='public', description='A list of twitters related to ' + category)
-        category_elements = [x[1].replace('@', '') for x in category_list[1]]
-        api.CreateListsMember(new_list.id, None, None, category_elements)  # create twitter list members
-        #openres.update_category_page(category_list[0], new_list.screen_name, site)
+        if len(category) < 25: # twtter list lenght restriction
+            new_list = api.CreateList(category, mode='public', description='A list of twitters related to ' + category)
+            category_elements = [x[1].replace('@', '') for x in category_list[1]]
+            api.CreateListsMember(new_list.id, None, None, category_elements)  # create twitter list members
+            #openres.update_category_page(category_list[0], new_list.screen_name, site)
 
 
 class ORPage:
@@ -55,7 +58,7 @@ class ORPage:
         self.site = mwclient.Site(('http', 'openresearch.org'), path='/')
 
     def login(self):
-        self.site.login('username', 'password')
+        self.site.login('', '')
 
     # save the changes to a page
     def save_page(self, new_data, page):
@@ -97,18 +100,45 @@ class ORPage:
 
     """ The code bellow is for update category page """
 
+    def get_query_result(self, category_name):
+        query_url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::"+category_name+"-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
+        response = urllib.urlopen(query_url)
+        try:
+            data = json.load(response)
+        except Exception as e:
+            print e
+            return []
+        else:
+            return [key.lstrip('Category:') for key in data['results'].keys()]
+
+    # iteratively get all the subcategories of a category
+    def get_sub_categories(self, category_name, categories):
+        print 'Parsing subcategories of %s' % category_name
+        subcategories = self.get_query_result(category_name)
+        if len(subcategories) > 0:
+            print subcategories
+            categories.extend(subcategories)
+            for category in subcategories:
+                self.get_sub_categories(category, categories)
+
+    # check whether there is a twitter account in category
+    def check_twitter_account(self, category_name):
+        if 'Computer science' not in category_name and 'Web-Based Learning' not in category_name:
+            url = "http://openresearch.org/Special:Ask/-5B-5B"+category_name+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
+            result = self.get_query_result(url)
+            if len(result) > 0:
+                return result
+
     # get all the sub categories of "Science" from OpenResearch which contains a twitter account
     def get_category_list(self):
-        subcategories_url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::Computer Science-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
-        categories = self.get_list_from_csv(subcategories_url)
+        categories = []
+        self.get_sub_categories('Computer Science', categories)
         # for each category, if it contains pages with "Twitter" account then add to list
         categories_twitter = []
         for category in categories:
-            if 'Computer science' not in category and 'Web-Based Learning' not in category:  # temporaly avoid encoding error in category "Computer science"
-                url = "http://openresearch.org/Special:Ask/-5B-5B"+category+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
-                twitters_in_category = self.get_list_from_csv(url)
-                if len(twitters_in_category) > 1:
-                    categories_twitter.append((category, twitters_in_category))
+            twitters_in_category = self.check_twitter_account(category)
+            if twitters_in_category != None:
+                categories_twitter.append((category, twitters_in_category))
         return categories_twitter
 
     # compare category list and twitter list items, return the not added elements in twitter list
@@ -139,6 +169,17 @@ class ORPage:
         for category_list in categories_lists:
             self.category_twitters_checker(category_list, twitter_lists, twit, openres)
 
+    def get_all_categories(self):
+        categories_twitter = []
+        for category in self.site.allcategories():
+            print category.name
+            if 'Computer science' not in category.name and 'Web-Based Learning' not in category.name:  # temporaly avoid encoding error in category "Computer science"
+                url = "http://openresearch.org/Special:Ask/-5B-5B"+category.name+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
+                twitters_in_category = self.get_list_from_csv(url)
+                if len(twitters_in_category) > 1:
+                    categories_twitter.append((category.name, twitters_in_category))
+        return categories_twitter
+
 
 openres = ORPage()
 openres.login()
@@ -147,5 +188,7 @@ openres.login()
 twit = Twitter()
 twit.login()
 lists_list = twit.get_lists_list()  # get list of ((list, members)) in twitter account
-categories_list = openres.get_category_list()  # get the categories which contains twitters account
-openres.validation(lists_list, categories_list, twit, openres)  # check whether lists in twitter are idental with lists in each category
+categories_list = openres.get_category_list()  # get the categories which contain twitters account
+# categories_list = openres.get_all_categories()  # get the categories which contain twitters account
+print categories_list
+# openres.validation(lists_list, categories_list, twit, openres)  # check whether lists in twitter are idental with lists in each category
