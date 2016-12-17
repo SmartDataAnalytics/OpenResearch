@@ -1,4 +1,3 @@
-import csv
 import requests
 import mwclient
 import twitter
