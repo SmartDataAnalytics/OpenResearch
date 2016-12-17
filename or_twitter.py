@@ -8,24 +8,25 @@ import urllib
 
 class Twitter:
 
-    # get basic information defined
     def __init__(self):
+        """Initialize with twitter login credientials
+        """
         self.C_KEY = ''
         self.C_SEC = ''
         self.A_TOKEN = ''
         self.A_TOKEN_SEC = ''
         self.api = ''
 
-    # login twitter account, and get api
     def login(self):
+        """Login twitter account, and get api"""
         self.api = twitter.Api(consumer_key=self.C_KEY,
                                consumer_secret=self.C_SEC,
                                access_token_key=self.A_TOKEN,
                                access_token_secret=self.A_TOKEN_SEC)
         return self.api
 
-    # get a list of list ((list_name, list_members)) in twitter
     def get_lists_list(self):
+        """Get a list of list ((list_name, list_members)) in twitter"""
         results = self.api.GetLists(screen_name='openresearch_bn')
         list_lists = []
         for list_ in results:
@@ -35,160 +36,185 @@ class Twitter:
             list_lists.append((list_.name, members, list_.id))
         return list_lists
 
-    # update an existing twitter list(by adding a(some) new member(s))
-    def update_twitter_list(self, new_items, twitter_list, api):
+    def update_twitter_list(self, new_items, twitter_list):
+        """Update an existing twitter list(by adding a(some) new member(s))
+
+        Key arguments:
+        new_items -- new items will be added to twitter list
+        twitter_list -- twitter list to be updated
+        api -- api of object
+        """
         print "update twitter list: %s" % twitter_list[0]
         print new_items
-        api.CreateListsMember(twitter_list[2], None, None, new_items) # create twitter list members
+        try:
+            self.api.CreateListsMember(twitter_list[2], None, None, new_items) # create twitter list members
+        except Exception as e:
+            print e
 
-    # create a twitter list with information from category
-    def create_twitter_list(self, category_list, api, site, openres):
+    def create_twitter_list(self, category_list):
+        """Create a twitter list with information from category
+
+        Key arguments:
+        category_list -- category list to be created into twitter
+        """
         category = category_list[0].replace('Category:', '').lower()
-        print 'create twitter list: %s' % category
+        print 'Create twitter list {} with elements {}'.format(category, category_list[1])
         if len(category) < 25: # twtter list lenght restriction
-            new_list = api.CreateList(category, mode='public', description='A list of twitters related to ' + category)
-            category_elements = [x[1].replace('@', '') for x in category_list[1]]
-            api.CreateListsMember(new_list.id, None, None, category_elements)  # create twitter list members
-            #openres.update_category_page(category_list[0], new_list.screen_name, site)
+            new_list = self.api.CreateList(category, mode='public', description='A list of twitters related to ' + category)
+            category_elements = [x.replace('@', '') for x in category_list[1]]
+            try:
+                self.api.CreateListsMember(new_list.id, None, None, category_elements)  # create twitter list members
+            except Exception as e:
+                print e
 
 
-class ORPage:
+class OpenResearch(object):
 
-    def __init__(self):
+    def __init__(self, username, password):
+        """Set the username and password for OpenResearch
+
+        Key arguments:
+        username -- username in OR
+        password -- password in OR
+        """
         self.site = mwclient.Site(('http', 'openresearch.org'), path='/')
+        self.username = username
+        self.password = password
 
     def login(self):
-        self.site.login('', '')
+        """Login OpenResearch
+        """
+        self.site.login(self.username, self.password)
 
-    # save the changes to a page
     def save_page(self, new_data, page):
+        """Save changes to a page
+
+        Key arguments:
+        new_data -- new append data to current page
+        page -- current page edited
+        """
         text = page.text()
         if new_data not in text:
             text += new_data
             page.save(text, 'append twitter feeds by robot')
 
-    # append twittes to a wiki page if it does not exist before
-    def append_page(self, account, title):
-        page = self.site.pages[title]
-        base = "http://openresearch.org/index.php?title="
-        pre_url = '\n==Tweets by ' + title + '==\n <div><html><a class="twitter-timeline" height="400" width="350" href="https://twitter.com/'
-        tweet_by = '">Tweets by '
-        post_url = '</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></html></div>'
-        new_data = pre_url + account + tweet_by + account + post_url
-        self.save_page(new_data, page)
+    def get_query_result(self, query_url):
+        """Get query result from OpenResearch in json format
 
-    # transform the csv result to a list for a specific inline query to OpenResearch
-    def get_list_from_csv(self, url):
-        response = requests.get(url)
-        cr = csv.reader(response.content.decode('utf-8').splitlines(), delimiter=',')
-        return [c[0] for c in cr if len(c) > 0 and c[0] != '']
-
-    # get a list of pages in a certain category
-    def query_pages(self, op):
-        url = "http://openresearch.org/Special:Ask/-5B-5BCategory:"+op+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter%3DTwitter-20account/mainlabel%3DAcronym/limit%3D100/offset%3D0/format%3Dcsv"
-        return self.get_list_from_csv(url)
-
-    # append twittes to pages in a certain category
-    def append_pages(self, pages):
-        for page in pages:
-            self.append_page(page[1], page[0])
-
-    # create a twitter section on a page in category, if it does not exist
-    def update_pages(self, category):
-        pages = self.query_pages(category)
-        self.append_pages(pages)
-
-    """ The code bellow is for update category page """
-
-    def get_query_result(self, category_name):
-        query_url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::"+category_name+"-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
+        Key arguments:
+        query_url -- url of query
+        """
         response = urllib.urlopen(query_url)
         try:
             data = json.load(response)
         except Exception as e:
             print e
-            return []
+            return None
         else:
-            return [key.lstrip('Category:') for key in data['results'].keys()]
+            return data
 
-    # iteratively get all the subcategories of a category
     def get_sub_categories(self, category_name, categories):
+        """Get the subcategories of a category
+
+        Key arguments:
+        category_name -- category name
+        categories -- keep all the subcategories
+        """
         print 'Parsing subcategories of %s' % category_name
-        subcategories = self.get_query_result(category_name)
-        if len(subcategories) > 0:
+        query_url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::"+category_name+"-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
+        data = self.get_query_result(query_url)
+        if data != None:
+            subcategories = [key.replace('Category:','') for key in data['results'].keys()]
             print subcategories
             categories.extend(subcategories)
             for category in subcategories:
                 self.get_sub_categories(category, categories)
 
-    # check whether there is a twitter account in category
-    def check_twitter_account(self, category_name):
-        if 'Computer science' not in category_name and 'Web-Based Learning' not in category_name:
-            url = "http://openresearch.org/Special:Ask/-5B-5B"+category_name+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
-            result = self.get_query_result(url)
-            if len(result) > 0:
-                return result
+    def check_twitter_account(self, subcategory_name):
+        """Check whether there is a twitter account in category or not
 
-    # get all the sub categories of "Science" from OpenResearch which contains a twitter account
-    def get_category_list(self):
-        categories = []
-        self.get_sub_categories('Computer Science', categories)
+        Key arguments:
+        subcategory_name -- category to be checked
+        """
+        url = "http://openresearch.org/Special:Ask/-5B-5BCategory:"+subcategory_name+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
+        result = self.get_query_result(url)
+        twitters_in_subcategory = []
+        if result != None:
+            print "Twitters in subcategory %s" % subcategory_name
+            for key in result['results'].keys():
+                twitters_in_subcategory.extend(result['results'][key]['printouts']['Has twitter'])
+            print twitters_in_subcategory
+            return twitters_in_subcategory
+        return None
+
+    def get_subcategories_list(self):
+        """Get get all the sub categories of "Science" from OpenResearch which contains a twitter account
+        """
+        all_subcategories = []
+        self.get_sub_categories('Science', all_subcategories)
         # for each category, if it contains pages with "Twitter" account then add to list
-        categories_twitter = []
-        for category in categories:
-            twitters_in_category = self.check_twitter_account(category)
-            if twitters_in_category != None:
-                categories_twitter.append((category, twitters_in_category))
-        return categories_twitter
+        twitters_in_subcategories = []
+        for subcategory in all_subcategories:
+            twitters_in_subcategory = self.check_twitter_account(subcategory)
+            if twitters_in_subcategory != None:
+                twitters_in_subcategories.append((subcategory, twitters_in_subcategory))
+        return twitters_in_subcategories
 
-    # compare category list and twitter list items, return the not added elements in twitter list
     def elements_checker(self, category_list, twitter_list):
-        category_elements = [x[1].replace('@', '') for x in category_list[1]]
-        return list(set(category_elements[1:]).symmetric_difference(set(twitter_list[1])))
+        """Compare category list and twitter list items, return the not added elements in twitter list
 
-    # check whether a category twitter list appears in a twitter list or not
-    def category_twitters_checker(self, category_list, twitters_list, twit, openres):
-        new_items = []
+        Key arguments:
+        category_list -- category list contains category and corresponding twitter accounts
+        twitter_list -- twitter list, same twitter list name as category
+        """
+        category_elements = [x.replace('@', '') for x in category_list[1]]
+        # return the elements in OpenResearch category but not in corresponding list in twitter
+        return [element for element in category_elements if element not in twitter_list[1]]
+
+    def category_twitters_checker(self, category_list, twitters_list, twit):
+        """Check whether a category twitter list appears in a twitter list or not
+
+        Key arguments:
+        category_list -- contains all the categories with corresponding twitters in each category
+        twitter_list -- contains all the twitter lists
+        twit -- a Twitter class
+        """
         exist = 0
+        new_items = None
         category = category_list[0].replace('Category:', '').lower()
-        print category
         for twitter_list in twitters_list:
-            print twitter_list
             if category == twitter_list[0]:  # if category already exist in twitter list
-                print 'Category %s exists in twitter already' % category
+                print 'Elements in category {} not in twitter list {}: '.format(category, twitter_list[0])
                 exist = 1
-                new_items = self.elements_checker(category_list, twitter_list)  # check whether their elements are the same or not
+                new_items = self.elements_checker(category_list, twitter_list)
+                print new_items
                 break
         if exist != 1:  # if category does not exist in twitter list
-            twit.create_twitter_list(category_list, twit.api, self.site, openres)
+            twit.create_twitter_list(category_list)
         elif len(new_items) > 0:
-            twit.update_twitter_list(new_items, twitter_list, twit.api)
+            twit.update_twitter_list(new_items, twitter_list)
 
-    # check whether the twitters in category are all included in the twitter list or not
-    def validation(self, twitter_lists, categories_lists, twit, openres):
+    def validation(self, twitter_lists, categories_lists, twit):
+        """Check whether the twitters in category are all included in the twitter list or not
+
+        Key arguments:
+        category_list -- contains all the categories with corresponding twitters in each category
+        twitter_list -- contains all the twitter lists
+        twit -- a Twitter class
+        openres -- a OpenResearch class
+        """
         for category_list in categories_lists:
-            self.category_twitters_checker(category_list, twitter_lists, twit, openres)
-
-    def get_all_categories(self):
-        categories_twitter = []
-        for category in self.site.allcategories():
-            print category.name
-            if 'Computer science' not in category.name and 'Web-Based Learning' not in category.name:  # temporaly avoid encoding error in category "Computer science"
-                url = "http://openresearch.org/Special:Ask/-5B-5B"+category.name+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Dcsv"
-                twitters_in_category = self.get_list_from_csv(url)
-                if len(twitters_in_category) > 1:
-                    categories_twitter.append((category.name, twitters_in_category))
-        return categories_twitter
+            self.category_twitters_checker(category_list, twitter_lists, twit)
 
 
-openres = ORPage()
+openres = OpenResearch('username', 'password') # username and password in OpenResearch
 openres.login()
-# openres.update_pages("Organization")
 
 twit = Twitter()
 twit.login()
-lists_list = twit.get_lists_list()  # get list of ((list, members)) in twitter account
-categories_list = openres.get_category_list()  # get the categories which contain twitters account
-# categories_list = openres.get_all_categories()  # get the categories which contain twitters account
-print categories_list
-# openres.validation(lists_list, categories_list, twit, openres)  # check whether lists in twitter are idental with lists in each category
+# get list of ((list, members)) in twitter account
+lists_list = twit.get_lists_list()
+# get the categories which contain twitters account
+categories_list = openres.get_subcategories_list()
+# check whether lists in twitter are idental with lists in each category
+openres.validation(lists_list, categories_list, twit)
