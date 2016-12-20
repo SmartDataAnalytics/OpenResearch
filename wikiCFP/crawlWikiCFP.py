@@ -11,8 +11,25 @@ import requests
 import csv
 from bs4 import BeautifulSoup
 
-# Extract the Data
+# keep all the extracted the Data
 events = []
+# keep all the accepted categories, categories in WikiCFP -> http://www.wikicfp.com/cfp/allcat
+accepted_categories = ['computer science', 'semantic web', 'artificial intelligence', 'data mining', 'machine learning'
+                       , 'networking', 'signal processing', 'robotics', 'databases', 'cloud computing', 'big data'
+                       , 'information systems', 'computer vision', 'web', 'intelligent systems', 'computer graphics'
+                       , 'internet of things', 'algorithms', 'distributed systems', 'pattern recognition']
+
+
+def acceptable_categories(categories):
+    """Filter categories, if all the category in categories are not in accepted_categories, then abandon
+    :param categories:
+    :return:
+    """
+    categories = categories.split(',')
+    for category in categories:
+        if category.strip() in accepted_categories:
+            return True
+    return False
 
 
 # parsing single event page in wikiCFP
@@ -74,8 +91,10 @@ def page_analysis(page_):
                                                 if index is not 0:
                                                     category += link.text
                                                     category += ', '
-
-                                            dict_['Field'] = category.rstrip(', ').encode('utf-8')
+                                            if acceptable_categories(category) is True:
+                                                dict_['Field'] = category.rstrip(', ').encode('utf-8')
+                                            else:
+                                                return
     events.append(dict_)
 
 
