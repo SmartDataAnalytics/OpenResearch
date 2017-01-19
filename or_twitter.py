@@ -1,4 +1,3 @@
-import requests
 import mwclient
 import twitter
 import json
@@ -8,7 +7,7 @@ import urllib
 class Twitter:
 
     def __init__(self):
-        """Initialize with twitter login credientials
+        """Initialize with twitter login credentials
         """
         self.C_KEY = ''
         self.C_SEC = ''
@@ -17,7 +16,8 @@ class Twitter:
         self.api = ''
 
     def login(self):
-        """Login twitter account, and get api"""
+        """Login twitter account, and get api
+        """
         self.api = twitter.Api(consumer_key=self.C_KEY,
                                consumer_secret=self.C_SEC,
                                access_token_key=self.A_TOKEN,
@@ -25,7 +25,8 @@ class Twitter:
         return self.api
 
     def get_lists_list(self):
-        """Get a list of list ((list_name, list_members)) in twitter"""
+        """Get a list of list ((list_name, list_members)) in twitter
+        """
         results = self.api.GetLists(screen_name='openresearch_bn')
         list_lists = []
         for list_ in results:
@@ -58,7 +59,7 @@ class Twitter:
         """
         category = category_list[0].replace('Category:', '').lower()
         print 'Create twitter list {} with elements {}'.format(category, category_list[1])
-        if len(category) < 25: # twtter list lenght restriction
+        if len(category) < 25:  # twitter list length restriction
             new_list = self.api.CreateList(category, mode='public', description='A list of twitters related to ' + category)
             category_elements = [x.replace('@', '') for x in category_list[1]]
             try:
@@ -73,8 +74,8 @@ class OpenResearch(object):
         """Set the username and password for OpenResearch
 
         Key arguments:
-        username -- username in OR
-        password -- password in OR
+        username -- username in OpenResearch
+        password -- password in OpenResearch
         """
         self.site = mwclient.Site(('http', 'openresearch.org'), path='/')
         self.username = username
@@ -85,7 +86,8 @@ class OpenResearch(object):
         """
         self.site.login(self.username, self.password)
 
-    def save_page(self, new_data, page):
+    @staticmethod
+    def save_page(new_data, page):
         """Save changes to a page
 
         Key arguments:
@@ -97,7 +99,8 @@ class OpenResearch(object):
             text += new_data
             page.save(text, 'append twitter feeds by robot')
 
-    def get_query_result(self, query_url):
+    @staticmethod
+    def get_query_result(query_url):
         """Get query result from OpenResearch in json format
 
         Key arguments:
@@ -120,10 +123,11 @@ class OpenResearch(object):
         categories -- keep all the subcategories
         """
         print 'Parsing subcategories of %s' % category_name
-        query_url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::"+category_name+"-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
+        query_url = "http://openresearch.org/Special:Ask/-5B-5BSubcategory-20of::"+category_name + \
+                    "-5D-5D/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
         data = self.get_query_result(query_url)
-        if data != None:
-            subcategories = [key.replace('Category:','') for key in data['results'].keys()]
+        if data is not None:
+            subcategories = [key.replace('Category:', '') for key in data['results'].keys()]
             print subcategories
             categories.extend(subcategories)
             for category in subcategories:
@@ -135,10 +139,12 @@ class OpenResearch(object):
         Key arguments:
         subcategory_name -- category to be checked
         """
-        url = "http://openresearch.org/Special:Ask/-5B-5BCategory:"+subcategory_name+"-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/offset%3D0/format%3Djson"
+        url = "http://openresearch.org/Special:Ask/-5B-5BCategory:"+subcategory_name + \
+              "-5D-5D-20-5B-5BHas-20twitter::%2B-5D-5D/-3FHas-20twitter/mainlabel%3D/limit%3D100/" \
+              "offset%3D0/format%3Djson"
         result = self.get_query_result(url)
         twitters_in_subcategory = []
-        if result != None:
+        if result is not None:
             print "Twitters in subcategory %s" % subcategory_name
             for key in result['results'].keys():
                 twitters_in_subcategory.extend(result['results'][key]['printouts']['Has twitter'])
@@ -155,11 +161,12 @@ class OpenResearch(object):
         twitters_in_subcategories = []
         for subcategory in all_subcategories:
             twitters_in_subcategory = self.check_twitter_account(subcategory)
-            if twitters_in_subcategory != None:
+            if twitters_in_subcategory is not None:
                 twitters_in_subcategories.append((subcategory, twitters_in_subcategory))
         return twitters_in_subcategories
 
-    def elements_checker(self, category_list, twitter_list):
+    @staticmethod
+    def elements_checker(category_list, twitter_list):
         """Compare category list and twitter list items, return the not added elements in twitter list
 
         Key arguments:
@@ -175,14 +182,16 @@ class OpenResearch(object):
 
         Key arguments:
         category_list -- contains all the categories with corresponding twitters in each category
-        twitter_list -- contains all the twitter lists
+        twitters_list -- contains all the twitter lists
         twit -- a Twitter class
         """
         exist = 0
         new_items = None
         category = category_list[0].replace('Category:', '').lower()
+        twitter_list_ = None
         for twitter_list in twitters_list:
             if category == twitter_list[0]:  # if category already exist in twitter list
+                twitter_list_ = twitter_list
                 print 'Elements in category {} not in twitter list {}: '.format(category, twitter_list[0])
                 exist = 1
                 new_items = self.elements_checker(category_list, twitter_list)
@@ -191,7 +200,7 @@ class OpenResearch(object):
         if exist != 1:  # if category does not exist in twitter list
             twit.create_twitter_list(category_list)
         elif len(new_items) > 0:
-            twit.update_twitter_list(new_items, twitter_list)
+            twit.update_twitter_list(new_items, twitter_list_)
 
     def validation(self, twitter_lists, categories_lists, twit):
         """Check whether the twitters in category are all included in the twitter list or not
@@ -206,7 +215,7 @@ class OpenResearch(object):
             self.category_twitters_checker(category_list, twitter_lists, twit)
 
 
-openres = OpenResearch('username', 'password') # username and password in OpenResearch
+openres = OpenResearch('', '')  # username and password in OpenResearch
 openres.login()
 
 twit = Twitter()
