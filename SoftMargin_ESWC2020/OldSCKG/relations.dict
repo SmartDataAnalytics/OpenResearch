@@ -1,0 +1,4 @@
+0	/author/affiliation/department
+1	/author/collaboration/coauthor
+2	/author/publication/paper
+3	/author/publication/paper/publication_location/venue
