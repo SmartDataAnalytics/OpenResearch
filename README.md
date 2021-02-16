@@ -30,6 +30,6 @@ This repository is mainly used as public ticket system for
 # Opensource Projects
 We contributed to and/or created the following OpenSource projects to reach our project goals:
 * [ConfIDent dataimports](https://github.com/TIBHannover/confiDent-dataimports)
-* [https://github.com/somnathrakshit/geograpy3](geograpy3)
+* [geograpy3](https://github.com/somnathrakshit/geograpy3)
 * [py-3dparty-mediawiki](https://github.com/WolfgangFahl/py-3rdparty-mediawiki)
-* [https://github.com/WolfgangFahl/pyLoDStorage](pyLoDstorage)
+* [pyLodstorage](https://github.com/WolfgangFahl/pyLoDStorage)
