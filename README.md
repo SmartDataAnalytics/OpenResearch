@@ -5,8 +5,7 @@
 [![Website OPENRESEARCH](https://img.shields.io/website-up-down-green-red/https/www.openresearch.org.svg)](https://www.openresearch.org)
 
 This repository is mainly used as public ticket system for
-[![OPENRESEARCH LOGO](https://www.openresearch.org/mediawiki/images/e/ed/Openresearch_logo_2017_rgb_resized.png)]
-[OPENRESEARCH](https://www.openresearch.org/wiki/Main_Page)
+[![OPENRESEARCH LOGO](https://www.openresearch.org/mediawiki/images/e/ed/Openresearch_logo_2017_rgb_resized.png)](https://www.openresearch.org/wiki/Main_Page)
 
 
 # ConfIDent
