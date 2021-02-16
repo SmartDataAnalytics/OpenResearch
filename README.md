@@ -1,6 +1,9 @@
+[![Join the discussion](https://img.shields.io/badge/Discussion-OPENRESEARCH-brightgreen)](https://github.com/SmartDataAnalytics/OpenResearch/discussions)
+
 [![GitHub issues](https://img.shields.io/github/issues/SmartDataAnalytics/OpenResearch.svg)](https://github.com/SmartDataAnalytics/OpenResearch/issues)
 [![GitHub issues](https://img.shields.io/github/issues-closed/SmartDataAnalytics/OpenResearch.svg)](https://github.com/SmartDataAnalytics/OpenResearch/issues/?q=is%3Aissue+is%3Aclosed)
 # OPEN RESEARCH
+[![Website OPENRESEARCH](https://img.shields.io/website-up-down-green-red/https/www.openresearch.org.svg)](https://www.openresearch.org)
 
 This repository is mainly used as public ticket system for
 ![OPENRESEARCH LOGO](https://www.openresearch.org/mediawiki/images/e/ed/Openresearch_logo_2017_rgb_resized.png)
