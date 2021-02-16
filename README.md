@@ -1,6 +1,5 @@
 [![GitHub issues](https://img.shields.io/github/issues/SmartDataAnalytics/OpenResearch.svg)](https://github.com/SmartDataAnalytics/OpenResearch/issues)
 [![GitHub issues](https://img.shields.io/github/issues-closed/SmartDataAnalytics/OpenResearch.svg)](https://github.com/SmartDataAnalytics/OpenResearch/issues/?q=is%3Aissue+is%3Aclosed)
-https://github.com/
 # OPEN RESEARCH
 
 This repository is mainly used as public ticket system for
@@ -12,7 +11,7 @@ This repository is mainly used as public ticket system for
 ## Public Links
 * [ConfIDent Project Home page](https://projects.tib.eu/en/confident/)
 * [ConfIDent Project page at TIB](https://www.tib.eu/en/research-development/project-overview/project-summary/confident)
-* [Proceedings Title Parser] (http://ptp.bitplan.com)
+* [Proceedings Title Parser](http://ptp.bitplan.com)
 * [RWTH Aachen i5 ConfIDent server](https://confident.dbis.rwth-aachen.de/)
 * [TIB confident-conference.org](https://www.confident-conference.org/r/)
 
