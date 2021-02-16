@@ -9,6 +9,8 @@ This repository is mainly used as public ticket system for
 
 
 # ConfIDent
+![ConfIDent Logo](https://projects.tib.eu/fileadmin/templates/confident/tib_projects_confident_1150.jpg)
+
 ## Public Links
 * [OPENRESEARCH](https://www.openresearch.org)
 * [ConfIDent Project Home page](https://projects.tib.eu/en/confident/)
