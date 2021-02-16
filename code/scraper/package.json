@@ -18,16 +18,16 @@
   "homepage": "https://gitlab.com/platipino/open-research-scraper#README",
   "dependencies": {
     "cheerio": "^0.22.0",
-    "colors": "^1.1.2",
+    "colors": "^1.4.0",
     "html-to-text": "^3.3.0",
     "lodash": "^4.17.20",
     "momentjs": "^2.0.0",
     "pg": "^6.4.2",
-    "q": "^1.5.0",
-    "request": "^2.81.0",
-    "request-promise": "^4.2.1",
-    "sequelize": "^5.15.1",
-    "socks5-http-client": "^1.0.2",
-    "xmlbuilder": "^9.0.1"
+    "q": "^1.5.1",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "sequelize": "^5.22.3",
+    "socks5-http-client": "^1.0.4",
+    "xmlbuilder": "^9.0.7"
   }
 }
