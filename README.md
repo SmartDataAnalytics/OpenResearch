@@ -10,7 +10,7 @@ This repository is mainly used as public ticket system for
 
 # ConfIDent
 ## Public Links
-* [OPENRESEARCH https://www.openresearch.org]
+* [OPENRESEARCH](https://www.openresearch.org)
 * [ConfIDent Project Home page](https://projects.tib.eu/en/confident/)
 * [ConfIDent Project page at TIB](https://www.tib.eu/en/research-development/project-overview/project-summary/confident)
 * [Proceedings Title Parser](http://ptp.bitplan.com)
