@@ -15,9 +15,21 @@ This repository is mainly used as public ticket system for
 * [OPENRESEARCH](https://www.openresearch.org)
 * [ConfIDent Project Home page](https://projects.tib.eu/en/confident/)
 * [ConfIDent Project page at TIB](https://www.tib.eu/en/research-development/project-overview/project-summary/confident)
-* [Proceedings Title Parser](http://ptp.bitplan.com)
 * [RWTH Aachen i5 ConfIDent server](https://confident.dbis.rwth-aachen.de/)
 * [TIB confident-conference.org](https://www.confident-conference.org/r/)
 
+## Demos
+* [Proceedings Title Parser](http://ptp.bitplan.com)
+* [Semantified CEUR-WS](http://ceur-ws.bitplan.com/index.php/Main_Page)
+* [Conferences and Location demo](https://cr.bitplan.com/index.php/Main_Page)
+* [dblp xml conference import](https://confident.dbis.rwth-aachen.de/dblpconf/)
+
 ## Protected content
 * [ConfIDent Requirements, Usecases and Design](https://rq.bitplan.com/)
+
+# Opensource Projects
+We contributed to and/or created the following OpenSource projects to reach our project goals:
+* [ConfIDent dataimports](https://github.com/TIBHannover/confiDent-dataimports)
+* [https://github.com/somnathrakshit/geograpy3](geograpy3)
+* [py-3dparty-mediawiki](https://github.com/WolfgangFahl/py-3rdparty-mediawiki)
+* [https://github.com/WolfgangFahl/pyLoDStorage](pyLoDstorage)
