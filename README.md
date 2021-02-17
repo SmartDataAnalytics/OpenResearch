@@ -33,3 +33,5 @@ We contributed to and/or created the following OpenSource projects to reach our 
 * [geograpy3](https://github.com/somnathrakshit/geograpy3)
 * [py-3dparty-mediawiki](https://github.com/WolfgangFahl/py-3rdparty-mediawiki)
 * [pyLodstorage](https://github.com/WolfgangFahl/pyLoDStorage)
+* [dblpconf](https://pypi.org/project/dblpconf/)
+* [aeon](https://github.com/tibonto/aeon)
