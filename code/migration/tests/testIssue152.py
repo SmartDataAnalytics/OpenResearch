@@ -14,7 +14,7 @@ class TestIssue152(unittest.TestCase):
     '''
 
     def setUp(self):
-        self.debug=False
+        self.debug=True
         pass
     
     def inPublicCI(self):
@@ -34,8 +34,17 @@ class TestIssue152(unittest.TestCase):
         '''
         fixer=AcceptanceRateFixer()
         pages=fixer.getAllPages()
-        expected=0 if self.inPublicCI() else 18000
-        self.assertTrue(len(pages)>=expected)
+        expectedPages=0 if self.inPublicCI() else 18000
+        self.assertTrue(len(pages)>=expectedPages)
+        events=list(fixer.getAllEvents())
+        expectedEvents=0 if self.inPublicCI else 10000
+        self.assertTrue(len(events)>=expectedEvents)
+        fixer.checkAll()
+        if self.debug:
+            print(fixer.result())
+        if not self.inPublicCI():
+            self.assertTrue(fixer.nosub>=86)
+            self.assertTrue(fixer.noacc>=17)
 
 
 if __name__ == "__main__":
