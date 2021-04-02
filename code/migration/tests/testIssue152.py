@@ -35,7 +35,7 @@ class TestIssue152(unittest.TestCase):
         fixer=AcceptanceRateFixer()
         pages=fixer.getAllPages()
         expected=0 if self.inPublicCI() else 18000
-        self.assertTrue(len(pages)>expected)
+        self.assertTrue(len(pages)>=expected)
 
 
 if __name__ == "__main__":
