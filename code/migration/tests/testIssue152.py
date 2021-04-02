@@ -34,7 +34,7 @@ class TestIssue152(unittest.TestCase):
         '''
         fixer=AcceptanceRateFixer()
         pages=fixer.getAllPages()
-        self.assertTrue(len(pages>18000))
+        self.assertTrue(len(pages)>18000)
 
 
 if __name__ == "__main__":
