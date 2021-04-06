@@ -1,0 +1,20 @@
+#!/bin/bash
+#WF 2021-04-06
+wb=openresearchwikibackup.tgz
+cd /tmp
+if [ ! -f $wb ]
+then
+  curl https://confident.dbis.rwth-aachen.de/orintegrate/images/$wb -o $wb
+else
+  echo "$wb exists"
+fi
+wbd=$HOME/wikibackup
+wiki=or
+if [ -d $wbd/$wiki ]
+then
+  echo "$wbd/$wiki exists"
+else
+  mkdir -p $wbd
+  cd $wbd
+  tar xvfz /tmp/$wb
+fi
