@@ -3,6 +3,8 @@ Created on 2021-04-06
 
 @author: wf
 '''
+from lodstorage.jsonable import JSONAble, Types
+
 
 class Event(object):
     '''
