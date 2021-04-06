@@ -13,36 +13,27 @@ class AcceptanceRateFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/152
     '''
 
-    def __init__(self, wikiId="or",baseUrl="https://www.openresearch.org/wiki/",debug=False):
+    def __init__(self, wikiId="ormk",baseUrl="https://www.openresearch.org/wiki/",debug=False):
         '''
         Constructor
         '''
         # call super constructor
-        super(AcceptanceRateFixer,self).__init__()
-        self.wikiId=wikiId
-        self.baseUrl=baseUrl
+        super(AcceptanceRateFixer,self).__init__(wikiId,baseUrl)
         self.debug=debug
         self.nosub=0
         self.noacc=0
-        
-                    
-    def link(self,page):
-        search=r".*%s/(.*)\.wiki" % self.wikiId
-        replace=r"%s\1" % self.baseUrl
-        alink=re.sub(search,replace,page)
-        alink=alink.replace(" ","_")
-        return alink
+
     
 
     def check(self,page,event):
         '''
         check the given page and event
         '''
-        if event.lower().find('|Submitted papers='.lower()) == -1 and event.lower().find('|Accepted papers='.lower()) != -1:
+        if len(re.findall('\|.*submitted papers.*=.*\n',event.lower())) == 0 and  len(re.findall('\|.*accepted papers.*=.*\n',event.lower())) != 0:
             self.nosub+=1
-            if self.debug: print(self.link(page))
-        elif event.lower().find('|Submitted papers='.lower()) != -1 and event.lower().find('|Accepted papers='.lower()) == -1:
-            if self.debug: print(self.link(page))
+            if self.debug: print(self.generateLink(page))
+        elif len(re.findall('\|.*submitted papers.*=.*\n',event.lower())) != 0 and  len(re.findall('\|.*accepted papers.*=.*\n',event.lower())) == 0:
+            if self.debug: print(self.generateLink( page))
             self.noacc+=1
             
     def checkAll(self):

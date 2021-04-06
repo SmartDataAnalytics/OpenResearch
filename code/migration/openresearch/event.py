@@ -34,9 +34,10 @@ class Event(object):
 |Acronym=ICSME 2020
 |Title=36th IEEE International Conference on Software Maintenance and Evolution
 |Series=ICSME
+|Ordinal=36th
 |Type=Conference
 |Field=Software engineering
-|Start date=2020/09/27
+|Start date=27th Sept, 2020
 |End date=2020/10/03
 |Homepage=https://icsme2020.github.io/
 |City=Adelaide
@@ -56,7 +57,14 @@ class Event(object):
             samplesWikiSon="..."
         
         return samplesWikiSon
-            
-        
-    
-        
+    @classmethod
+    def WikiSontoLOD(self,wiki_sample):
+        property_list = wiki_sample.replace('}}', '').split('|')[1:]
+        wikidict = {}
+        for i in property_list:
+            mapping = i.strip().split('=')
+            try:
+                wikidict[mapping[0]] = int(mapping[1])
+            except:
+                wikidict[mapping[0]] = mapping[1]
+        return [wikidict]

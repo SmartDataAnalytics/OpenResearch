@@ -3,27 +3,44 @@ Created on 06.04.2021
 
 @author: wf
 '''
-import glob
-from os.path import expanduser
+
+from os import walk,path
+import re
+from fnmatch import filter
+from sys import stdin
 
 class PageFixer(object):
     '''
     helper fixing page
     '''
 
-
-    def __init__(self):
+    def __init__(self,wikiId="ormk",baseUrl="https://www.openresearch.org/wiki/",debug=False):
         '''
         Constructor
         '''
+        self.wikiId = wikiId
+        self.baseUrl = baseUrl
+
+    def generateLink(self,page):
+        search=r".*%s/(.*)\.wiki" % self.wikiId
+        replace=r"%s\1" % self.baseUrl
+        alink=re.sub(search,replace,page)
+        alink=alink.replace(" ","_")
+        return alink
         
     def getAllPages(self):
         '''
         get all wiki pages
         '''
-        home = expanduser("~")
-        allPages = glob.glob('%s/wikibackup/%s/*.wiki' % (home,self.wikiId))
+        home = path.expanduser("~")
+        allPages = []
+        for root, dirnames, filenames in walk('%s/wikibackup/%s/' % (home,self.wikiId)):
+            for filename in filter(filenames, '*.wiki'):
+                allPages.append(path.join(root, filename))
         return allPages
+
+    def getAllPagesStdin(self):
+        allx = stdin.readlines()
     
     def getAllPageTitles4Topic(self,topicName="Event"):
         '''
@@ -39,6 +56,6 @@ class PageFixer(object):
             with open(page,'r') as f:
                 event =f.read()
                 wikison="{{%s" % topicName
-                if wikison  in event:
+                if wikison in event:
                     yield page,event
         

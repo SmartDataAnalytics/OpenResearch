@@ -24,9 +24,12 @@ class TestEvent(unittest.TestCase):
         '''
         types=Types("Event")
         samples=Event.getSamples()
+        wikiSonSample = Event.getSampleWikiSon()
         types.getTypes("events", samples, 1)
-        print(types.typeMap)
-        pass
+        # print(types.typeMap)
+        LOD=Event.WikiSontoLOD(wikiSonSample[0])
+        self.assertTrue(LOD[0]['Acronym'] == 'ICSME 2020')
+        # pass
 
 
 if __name__ == "__main__":

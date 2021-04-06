@@ -1,0 +1,2734 @@
+#
+#  Proceedings title dictionary
+#
+Athens:
+  type: city
+Atlanta:
+  type: city
+Amsterdam:
+  type: city
+Auckland:
+  type: city
+Baltimore:
+  type: city
+Barcelona:
+  type: city
+Berlin:
+  type: city
+Bethesda:
+  type: city
+Bologna:
+  type: city
+Boston:
+  type: city
+Brussels:
+  type: city
+Budapest:
+  type: city
+Cambridge:
+  type: city
+Chicago:
+  type: city
+Cologne:
+  type: city
+Copenhagen:
+  type: city
+Edinburgh:
+  type: city
+Frankfurt:
+  type: city
+Geneva:
+  type: city
+Innsbruck:
+  type: city
+Istanbul:
+  type: city
+Hamburg:
+  type: city
+Helsinki:
+  type: city
+Houston:
+  type: city
+Kings Beach:
+  type: city
+Kyoto:
+  type: city
+Las Vegas:
+  type: city
+Leipzig:
+  type: city
+London:
+  type: city
+Lyon:
+  type: city
+Luzern:
+  type: city
+Madrid:
+  type: city
+Miami Beach:
+  type: city
+Melbourne:
+  type: city
+Milan:
+  type: city
+Montreal:
+  type: city
+Munich:
+  type: city
+New York:
+  type: city
+New York City:
+  type: city
+Nice:
+  type: city
+Orleans:
+  type: city
+Oslo:
+  type: city
+Oxford:
+  type: city
+Los Angeles:
+  type: city
+Panama City:
+  type: city
+Paris:
+  type: city
+Philadelphia:
+  type: city
+Prague:
+  type: city
+Quebec City:
+  type: city
+Rome:
+  type: city
+Seattle:
+  type: city
+San Antonio:
+  type: city
+San Diego:
+  type: city
+Santa Fe:
+  type: city
+San Francisco:
+  type: city
+Sydney:
+  type: city
+Stockholm:
+  type: city
+Toronto:
+  type: city
+Tokyo:
+  type: city
+Vancouver:
+  type: city
+Vienna:
+  type: city
+Washington:
+  type: city
+York:
+  type: city
+America:
+  type: country
+Australia:
+  type: country
+Austria:
+  type: country
+Belgium:
+  type: country
+Britain:
+  type: country
+Brazil:
+  type: country
+Great Britain:
+  type: country
+Canada:
+  type: country
+China:
+  type: country
+Czech Republic:
+  type: country
+Denmark:
+  type: country
+Finland:
+  type: country
+France:
+  type: country
+Germany:
+  type: country
+Greece:
+  type: country
+India:
+  type: country
+Ireland:
+  type: country
+ireland:
+  type: country
+Italy:
+  type: country
+Japan:
+  type: country
+Netherlands:
+  type: country
+New Zealand:
+  type: country
+Österreich:
+  type: country
+Panama:
+  type: country
+Spain:
+  type: country
+Sweden:
+  type: country
+Switzerland:
+  type: country
+Turkey:
+  type: country
+United Kingdom:
+  type: country
+USA:
+  type: country
+Algeria:
+  type: country
+  isocode: DZ
+  population: 41318142
+  gpdPerCapita: 4055
+Argentina:
+  type: country
+  isocode: AR
+  population: 44938712
+  gpdPerCapita: 14398
+Bulgaria:
+  type: country
+  isocode: BG
+  population: 7000039
+  gpdPerCapita: 8228
+Chile:
+  type: country
+  isocode: CL
+  population: 18054726
+  gpdPerCapita: 15346
+Croatia:
+  type: country
+  isocode: HR
+  population: 4105493
+  gpdPerCapita: 13386
+Cyprus:
+  type: country
+  isocode: CY
+  population: 1141166
+  gpdPerCapita: 25658
+Estonia:
+  type: country
+  isocode: EE
+  population: 1324820
+  gpdPerCapita: 20200
+Hungary:
+  type: country
+  isocode: HU
+  population: 9769526
+  gpdPerCapita: 14278
+Iceland:
+  type: country
+  isocode: IS
+  population: 357050
+  gpdPerCapita: 71311
+Indonesia:
+  type: country
+  isocode: ID
+  population: 263991379
+  gpdPerCapita: 3846
+Israel:
+  type: country
+  isocode: IL
+  population: 9093000
+  gpdPerCapita: 40543
+Lithuania:
+  type: country
+  isocode: LT
+  population: 2790842
+  gpdPerCapita: 16809
+Luxembourg:
+  type: country
+  isocode: LU
+  population: 626108
+  gpdPerCapita: 101450
+Malaysia:
+  type: country
+  isocode: MY
+  population: 31624264
+  gpdPerCapita: 9951
+Malta:
+  type: country
+  isocode: MT
+  population: 465292
+  gpdPerCapita: 26748
+Mexico:
+  type: country
+  isocode: MX
+  population: 130526945
+  gpdPerCapita: 8910
+Montenegro:
+  type: country
+  isocode: ME
+  population: 622359
+  gpdPerCapita: 7784
+Morocco:
+  type: country
+  isocode: MA
+  population: 36029138
+  gpdPerCapita: 3022
+Norway:
+  type: country
+  isocode: false
+  population: 5367580
+  gpdPerCapita: 75704
+Peru:
+  type: country
+  isocode: PE
+  population: 29381884
+  gpdPerCapita: 6571
+Poland:
+  type: country
+  isocode: PL
+  population: 38382576
+  gpdPerCapita: 13863
+Portugal:
+  type: country
+  isocode: PT
+  population: 10600000
+  gpdPerCapita: 21291
+Romania:
+  type: country
+  isocode: RO
+  population: 19586539
+  gpdPerCapita: 10819
+Russia:
+  type: country
+  isocode: RU
+  population: 146804372
+  gpdPerCapita: 10749
+Serbia:
+  type: country
+  isocode: RS
+  population: 7022268
+  gpdPerCapita: 5901
+Singapore:
+  type: country
+  isocode: SG
+  population: 5888926
+  gpdPerCapita: 57714
+Slovakia:
+  type: country
+  isocode: SK
+  population: 5397036
+  gpdPerCapita: 17579
+Slovenia:
+  type: country
+  isocode: SI
+  population: 2066880
+  gpdPerCapita: 23601
+Thailand:
+  type: country
+  isocode: TH
+  population: 65931550
+  gpdPerCapita: 6595
+Tunisia:
+  type: country
+  isocode: TN
+  population: 11565204
+  gpdPerCapita: 3464
+Ukraine:
+  type: country
+  isocode: UA
+  population: 42558328
+  gpdPerCapita: 2639
+Vietnam:
+  type: country
+  isocode: VN
+  population: 94660000
+  gpdPerCapita: 2342
+Albania:
+  type: country
+  isocode: AL
+  population: 3020209
+  gpdPerCapita: 4537
+Bangladesh:
+  type: country
+  isocode: BD
+  population: 164669751
+  gpdPerCapita: 1516
+Barbados:
+  type: country
+  isocode: BB
+  population: 285719
+  gpdPerCapita: 16356
+Cambodia:
+  type: country
+  isocode: KH
+  population: 16005373
+  gpdPerCapita: 1384
+Cameroon:
+  type: country
+  isocode: CM
+  population: 24053727
+  gpdPerCapita: 1451
+Colombia:
+  type: country
+  isocode: CO
+  population: 49065615
+  gpdPerCapita: 6408
+Cuba:
+  type: country
+  isocode: CU
+  population: 11484636
+  gpdPerCapita: 8433
+Ecuador:
+  type: country
+  isocode: EC
+  population: 16624858
+  gpdPerCapita: 6273
+Egypt:
+  type: country
+  isocode: EG
+  population: 94798827
+  gpdPerCapita: 2412
+Ethiopia:
+  type: country
+  isocode: ET
+  population: 104957438
+  gpdPerCapita: 767
+Ghana:
+  type: country
+  isocode: GH
+  population: 26908262
+  gpdPerCapita: 2046
+Guatemala:
+  type: country
+  isocode: GT
+  population: 17263239
+  gpdPerCapita: 4470
+Haiti:
+  type: country
+  isocode: HT
+  population: 10981229
+  gpdPerCapita: 765
+Iran:
+  type: country
+  isocode: IR
+  population: 79966230
+  gpdPerCapita: 5593
+Jamaica:
+  type: country
+  isocode: JM
+  population: 2890299
+  gpdPerCapita: 5114
+Jordan:
+  type: country
+  isocode: JO
+  population: 10428241
+  gpdPerCapita: 4129
+Kenya:
+  type: country
+  isocode: KE
+  population: 48468138
+  gpdPerCapita: 1594
+Kuwait:
+  type: country
+  isocode: KW
+  population: 4600000
+  gpdPerCapita: 29040
+Latvia:
+  type: country
+  isocode: LV
+  population: 1909000
+  gpdPerCapita: 15684
+Lebanon:
+  type: country
+  isocode: LB
+  population: 6100075
+  gpdPerCapita: 8808
+Madagascar:
+  type: country
+  isocode: MG
+  population: 25570895
+  gpdPerCapita: 449
+Mauritius:
+  type: country
+  isocode: MU
+  population: 1264613
+  gpdPerCapita: 10490
+Monaco:
+  type: country
+  isocode: MC
+  population: 38695
+  gpdPerCapita: 168010
+Myanmar:
+  type: country
+  isocode: MM
+  population: 53370609
+  gpdPerCapita: 1256
+Nepal:
+  type: country
+  isocode: NP
+  population: 29400000
+  gpdPerCapita: 849
+Nigeria:
+  type: country
+  isocode: NG
+  population: 190886311
+  gpdPerCapita: 1968
+Pakistan:
+  type: country
+  isocode: PK
+  population: 216565318
+  gpdPerCapita: 1547
+Paraguay:
+  type: country
+  isocode: PY
+  population: 6811297
+  gpdPerCapita: 5823
+Philippines:
+  type: country
+  isocode: PH
+  population: 104918090
+  gpdPerCapita: 2988
+Qatar:
+  type: country
+  isocode: QA
+  population: 2639211
+  gpdPerCapita: 63249
+Senegal:
+  type: country
+  isocode: SN
+  population: 15850567
+  gpdPerCapita: 1329
+Seychelles:
+  type: country
+  isocode: SC
+  population: 95843
+  gpdPerCapita: 15629
+Suriname:
+  type: country
+  isocode: SR
+  population: 563402
+  gpdPerCapita: 5317
+Tanzania:
+  type: country
+  isocode: TZ
+  population: 57310019
+  gpdPerCapita: 958
+Uganda:
+  type: country
+  isocode: UG
+  population: 42862958
+  gpdPerCapita: 606
+Uruguay:
+  type: country
+  isocode: UY
+  population: 3456750
+  gpdPerCapita: 16245
+'-':
+  type: delimiter
+':':
+  type: delimiter
+'&':
+  type: delimiter
+\\:
+  type: delimiter
+'1':
+  type: enum
+  value: 1
+'1.':
+  type: enum
+  value: 1
+'10.':
+  type: enum
+  value: 10
+10th:
+  type: enum
+  value: 10
+'11.':
+  type: enum
+  value: 11
+11th:
+  type: enum
+  value: 11
+'12.':
+  type: enum
+  value: 12
+12nd:
+  type: enum
+  value: 12
+12th:
+  type: enum
+  value: 12
+'13.':
+  type: enum
+  value: 13
+13rd:
+  type: enum
+  value: 13
+13th:
+  type: enum
+  value: 13
+'14.':
+  type: enum
+  value: 14
+14th:
+  type: enum
+  value: 14
+'15.':
+  type: enum
+  value: 15
+15th:
+  type: enum
+  value: 15
+'16.':
+  type: enum
+  value: 16
+16th:
+  type: enum
+  value: 16
+'17.':
+  type: enum
+  value: 17
+17th:
+  type: enum
+  value: 17
+'18.':
+  type: enum
+  value: 18
+18th:
+  type: enum
+  value: 18
+'19.':
+  type: enum
+  value: 19
+19th:
+  type: enum
+  value: 19
+1st:
+  type: enum
+  value: 1
+'2':
+  type: enum
+  value: 2
+'2.':
+  type: enum
+  value: 2
+'20.':
+  type: enum
+  value: 20
+20th:
+  type: enum
+  value: 20
+'21.':
+  type: enum
+  value: 21
+21st:
+  type: enum
+  value: 21
+'22.':
+  type: enum
+  value: 22
+22nd:
+  type: enum
+  value: 22
+'23.':
+  type: enum
+  value: 23
+23rd:
+  type: enum
+  value: 23
+'24.':
+  type: enum
+  value: 24
+24th:
+  type: enum
+  value: 24
+'25.':
+  type: enum
+  value: 25
+25th:
+  type: enum
+  value: 25
+'26.':
+  type: enum
+  value: 26
+26th:
+  type: enum
+  value: 26
+'27.':
+  type: enum
+  value: 27
+Twenty-third:
+  type: enum
+  value: 23
+Twenty-seventh:
+  type: enum
+  value: 27
+27th:
+  type: enum
+  value: 27
+'28.':
+  type: enum
+  value: 28
+28th:
+  type: enum
+  value: 28
+'29.':
+  type: enum
+  value: 29
+29th:
+  type: enum
+  value: 29
+2nd:
+  type: enum
+  value: 2
+'3.':
+  type: enum
+  value: 3
+'30.':
+  type: enum
+  value: 30
+30th:
+  type: enum
+  value: 30
+'31.':
+  type: enum
+  value: 31
+31st:
+  type: enum
+  value: 31
+'32.':
+  type: enum
+  value: 32
+32nd:
+  type: enum
+  value: 32
+'33.':
+  type: enum
+  value: 33
+33rd:
+  type: enum
+  value: 33
+'34.':
+  type: enum
+  value: 34
+34th:
+  type: enum
+  value: 34
+'35.':
+  type: enum
+  value: 35
+35th:
+  type: enum
+  value: 35
+'36.':
+  type: enum
+  value: 36
+36th:
+  type: enum
+  value: 36
+'37.':
+  type: enum
+  value: 37
+37th:
+  type: enum
+  value: 37
+'38.':
+  type: enum
+  value: 38
+38th:
+  type: enum
+  value: 38
+'39.':
+  type: enum
+  value: 39
+39th:
+  type: enum
+  value: 39
+3rd:
+  type: enum
+  value: 3
+'4.':
+  type: enum
+  value: 4
+'40.':
+  type: enum
+  value: 40
+40th:
+  type: enum
+  value: 40
+'41.':
+  type: enum
+  value: 41
+41st:
+  type: enum
+  value: 41
+'42.':
+  type: enum
+  value: 42
+42nd:
+  type: enum
+  value: 42
+'43.':
+  type: enum
+  value: 43
+43rd:
+  type: enum
+  value: 43
+'44.':
+  type: enum
+  value: 44
+44th:
+  type: enum
+  value: 44
+'45.':
+  type: enum
+  value: 45
+45th:
+  type: enum
+  value: 45
+'46.':
+  type: enum
+  value: 46
+46th:
+  type: enum
+  value: 46
+'47.':
+  type: enum
+  value: 47
+47th:
+  type: enum
+  value: 47
+'48.':
+  type: enum
+  value: 48
+48th:
+  type: enum
+  value: 48
+'49.':
+  type: enum
+  value: 49
+49th:
+  type: enum
+  value: 49
+4th:
+  type: enum
+  value: 4
+'5.':
+  type: enum
+  value: 5
+'50.':
+  type: enum
+  value: 50
+50th:
+  type: enum
+  value: 50
+'51.':
+  type: enum
+  value: 51
+51st:
+  type: enum
+  value: 51
+'52.':
+  type: enum
+  value: 52
+52nd:
+  type: enum
+  value: 52
+'53.':
+  type: enum
+  value: 53
+53rd:
+  type: enum
+  value: 53
+'54.':
+  type: enum
+  value: 54
+54th:
+  type: enum
+  value: 54
+'55.':
+  type: enum
+  value: 55
+55th:
+  type: enum
+  value: 55
+'56.':
+  type: enum
+  value: 56
+56th:
+  type: enum
+  value: 56
+'57.':
+  type: enum
+  value: 57
+57th:
+  type: enum
+  value: 57
+'58.':
+  type: enum
+  value: 58
+58th:
+  type: enum
+  value: 58
+'59.':
+  type: enum
+  value: 59
+59th:
+  type: enum
+  value: 59
+5th:
+  type: enum
+  value: 5
+'6.':
+  type: enum
+  value: 6
+'60.':
+  type: enum
+  value: 60
+60th:
+  type: enum
+  value: 60
+'61.':
+  type: enum
+  value: 61
+61st:
+  type: enum
+  value: 61
+'62.':
+  type: enum
+  value: 62
+62nd:
+  type: enum
+  value: 62
+'63.':
+  type: enum
+  value: 63
+63rd:
+  type: enum
+  value: 63
+'64.':
+  type: enum
+  value: 64
+64th:
+  type: enum
+  value: 64
+'65.':
+  type: enum
+  value: 65
+65th:
+  type: enum
+  value: 65
+'66.':
+  type: enum
+  value: 66
+66th:
+  type: enum
+  value: 66
+'67.':
+  type: enum
+  value: 67
+67th:
+  type: enum
+  value: 67
+'68.':
+  type: enum
+  value: 68
+68th:
+  type: enum
+  value: 68
+'69.':
+  type: enum
+  value: 69
+69th:
+  type: enum
+  value: 69
+6th:
+  type: enum
+  value: 6
+'7.':
+  type: enum
+  value: 7
+'70.':
+  type: enum
+  value: 70
+70th:
+  type: enum
+  value: 70
+'71.':
+  type: enum
+  value: 71
+71st:
+  type: enum
+  value: 71
+'72.':
+  type: enum
+  value: 72
+72nd:
+  type: enum
+  value: 72
+'73.':
+  type: enum
+  value: 73
+73rd:
+  type: enum
+  value: 73
+'74.':
+  type: enum
+  value: 74
+74th:
+  type: enum
+  value: 74
+'75.':
+  type: enum
+  value: 75
+75th:
+  type: enum
+  value: 75
+'76.':
+  type: enum
+  value: 76
+76th:
+  type: enum
+  value: 76
+'77.':
+  type: enum
+  value: 77
+77th:
+  type: enum
+  value: 77
+'78.':
+  type: enum
+  value: 78
+78th:
+  type: enum
+  value: 78
+'79.':
+  type: enum
+  value: 79
+79th:
+  type: enum
+  value: 79
+7th:
+  type: enum
+  value: 7
+'8.':
+  type: enum
+  value: 8
+'80.':
+  type: enum
+  value: 80
+80th:
+  type: enum
+  value: 80
+'81.':
+  type: enum
+  value: 81
+81st:
+  type: enum
+  value: 81
+'82.':
+  type: enum
+  value: 82
+82nd:
+  type: enum
+  value: 82
+'83.':
+  type: enum
+  value: 83
+83rd:
+  type: enum
+  value: 83
+'84.':
+  type: enum
+  value: 84
+84th:
+  type: enum
+  value: 84
+'85.':
+  type: enum
+  value: 85
+85th:
+  type: enum
+  value: 85
+'86.':
+  type: enum
+  value: 86
+86th:
+  type: enum
+  value: 86
+'87.':
+  type: enum
+  value: 87
+87th:
+  type: enum
+  value: 87
+'88.':
+  type: enum
+  value: 88
+88th:
+  type: enum
+  value: 88
+'89.':
+  type: enum
+  value: 89
+89th:
+  type: enum
+  value: 89
+8th:
+  type: enum
+  value: 8
+'9.':
+  type: enum
+  value: 9
+'90.':
+  type: enum
+  value: 90
+90th:
+  type: enum
+  value: 90
+'91.':
+  type: enum
+  value: 91
+91st:
+  type: enum
+  value: 91
+'92.':
+  type: enum
+  value: 92
+92nd:
+  type: enum
+  value: 92
+'93.':
+  type: enum
+  value: 93
+93rd:
+  type: enum
+  value: 93
+'94.':
+  type: enum
+  value: 94
+94th:
+  type: enum
+  value: 94
+'95.':
+  type: enum
+  value: 95
+95th:
+  type: enum
+  value: 95
+'96.':
+  type: enum
+  value: 96
+96th:
+  type: enum
+  value: 96
+'97.':
+  type: enum
+  value: 97
+97th:
+  type: enum
+  value: 97
+'98.':
+  type: enum
+  value: 98
+98th:
+  type: enum
+  value: 98
+'99.':
+  type: enum
+  value: 99
+99th:
+  type: enum
+  value: 99
+9th:
+  type: enum
+  value: 9
+Eighth:
+  type: enum
+  value: 8
+Fifth:
+  type: enum
+  value: 5
+first:
+  type: enum
+  value: 1
+First:
+  type: enum
+  value: 1
+Fourth:
+  type: enum
+  value: 4
+I.:
+  type: enum
+  value: 1
+II:
+  type: enum
+  value: 2
+II.:
+  type: enum
+  value: 2
+III:
+  type: enum
+  value: 3
+III.:
+  type: enum
+  value: 3
+IV.:
+  type: enum
+  value: 4
+IX.:
+  type: enum
+  value: 9
+L.:
+  type: enum
+  value: 50
+LI.:
+  type: enum
+  value: 51
+LII.:
+  type: enum
+  value: 52
+LIII.:
+  type: enum
+  value: 53
+LIV.:
+  type: enum
+  value: 54
+LIX.:
+  type: enum
+  value: 59
+LV.:
+  type: enum
+  value: 55
+LVI.:
+  type: enum
+  value: 56
+LVII.:
+  type: enum
+  value: 57
+LVIII.:
+  type: enum
+  value: 58
+LX.:
+  type: enum
+  value: 60
+LXI.:
+  type: enum
+  value: 61
+LXII.:
+  type: enum
+  value: 62
+LXIII.:
+  type: enum
+  value: 63
+LXIV.:
+  type: enum
+  value: 64
+LXIX.:
+  type: enum
+  value: 69
+LXV.:
+  type: enum
+  value: 65
+LXVI.:
+  type: enum
+  value: 66
+LXVII.:
+  type: enum
+  value: 67
+LXVIII.:
+  type: enum
+  value: 68
+LXX.:
+  type: enum
+  value: 70
+LXXI.:
+  type: enum
+  value: 71
+LXXII.:
+  type: enum
+  value: 72
+LXXIII.:
+  type: enum
+  value: 73
+LXXIV.:
+  type: enum
+  value: 74
+LXXIX.:
+  type: enum
+  value: 79
+LXXV.:
+  type: enum
+  value: 75
+LXXVI.:
+  type: enum
+  value: 76
+LXXVII.:
+  type: enum
+  value: 77
+LXXVIII.:
+  type: enum
+  value: 78
+LXXX.:
+  type: enum
+  value: 80
+LXXXI.:
+  type: enum
+  value: 81
+LXXXII.:
+  type: enum
+  value: 82
+LXXXIII.:
+  type: enum
+  value: 83
+LXXXIV.:
+  type: enum
+  value: 84
+LXXXIX.:
+  type: enum
+  value: 89
+LXXXV.:
+  type: enum
+  value: 85
+LXXXVI.:
+  type: enum
+  value: 86
+LXXXVII.:
+  type: enum
+  value: 87
+LXXXVIII.:
+  type: enum
+  value: 88
+Eight:
+  type: enum
+  value: 8
+Ninth:
+  type: enum
+  value: 9
+Second:
+  type: enum
+  value: 2
+second:
+  type: enum
+  value: 2
+Seventh:
+  type: enum
+  value: 7
+Sixth:
+  type: enum
+  value: 6
+Tenth:
+  type: enum
+  value: 10
+Third:
+  type: enum
+  value: 3
+third:
+  type: enum
+  value: 3
+V.:
+  type: enum
+  value: 5
+VI.:
+  type: enum
+  value: 6
+VII.:
+  type: enum
+  value: 7
+VIII.:
+  type: enum
+  value: 8
+X.:
+  type: enum
+  value: 10
+XC.:
+  type: enum
+  value: 90
+XCI.:
+  type: enum
+  value: 91
+XCII.:
+  type: enum
+  value: 92
+XCIII.:
+  type: enum
+  value: 93
+XCIV.:
+  type: enum
+  value: 94
+XCIX.:
+  type: enum
+  value: 99
+XCV.:
+  type: enum
+  value: 95
+XCVI.:
+  type: enum
+  value: 96
+XCVII.:
+  type: enum
+  value: 97
+XCVIII.:
+  type: enum
+  value: 98
+XI.:
+  type: enum
+  value: 11
+XII.:
+  type: enum
+  value: 12
+XIII.:
+  type: enum
+  value: 13
+XIV.:
+  type: enum
+  value: 14
+XIX.:
+  type: enum
+  value: 19
+XL.:
+  type: enum
+  value: 40
+XLI.:
+  type: enum
+  value: 41
+XLII.:
+  type: enum
+  value: 42
+XLIII.:
+  type: enum
+  value: 43
+XLIV.:
+  type: enum
+  value: 44
+XLIX.:
+  type: enum
+  value: 49
+XLV.:
+  type: enum
+  value: 45
+XLVI.:
+  type: enum
+  value: 46
+XLVII.:
+  type: enum
+  value: 47
+XLVIII.:
+  type: enum
+  value: 48
+XV.:
+  type: enum
+  value: 15
+XVI.:
+  type: enum
+  value: 16
+XVII.:
+  type: enum
+  value: 17
+XVIII.:
+  type: enum
+  value: 18
+XX.:
+  type: enum
+  value: 20
+XXI.:
+  type: enum
+  value: 21
+XXII.:
+  type: enum
+  value: 22
+XXIII.:
+  type: enum
+  value: 23
+XXIV.:
+  type: enum
+  value: 24
+XXIX.:
+  type: enum
+  value: 29
+XXV.:
+  type: enum
+  value: 25
+XXVI.:
+  type: enum
+  value: 26
+XXVII.:
+  type: enum
+  value: 27
+XXVIII.:
+  type: enum
+  value: 28
+XXX.:
+  type: enum
+  value: 30
+XXXI.:
+  type: enum
+  value: 31
+XXXII.:
+  type: enum
+  value: 32
+XXXIII.:
+  type: enum
+  value: 33
+XXXIV.:
+  type: enum
+  value: 34
+XXXIX.:
+  type: enum
+  value: 39
+XXXV.:
+  type: enum
+  value: 35
+XXXVI.:
+  type: enum
+  value: 36
+XXXVII.:
+  type: enum
+  value: 37
+XXXVIII.:
+  type: enum
+  value: 38
+11st:
+  type: enum
+  value: 11
+fourth:
+  type: enum
+  value: 4
+fifth:
+  type: enum
+  value: 5
+sixth:
+  type: enum
+  value: 6
+seventh:
+  type: enum
+  value: 7
+eighth:
+  type: enum
+  value: 8
+ninth:
+  type: enum
+  value: 9
+tenth:
+  type: enum
+  value: 10
+eleventh:
+  type: enum
+  value: 11
+twelfth:
+  type: enum
+  value: 12
+thirteenth:
+  type: enum
+  value: 13
+fourteenth:
+  type: enum
+  value: 14
+fifteenth:
+  type: enum
+  value: 15
+sixteenth:
+  type: enum
+  value: 16
+seventeenth:
+  type: enum
+  value: 17
+eighteenth:
+  type: enum
+  value: 18
+nineteenth:
+  type: enum
+  value: 19
+twentieth:
+  type: enum
+  value: 20
+twenty-first:
+  type: enum
+  value: 21
+twenty-second:
+  type: enum
+  value: 22
+twenty-third:
+  type: enum
+  value: 23
+twenty-fourth:
+  type: enum
+  value: 24
+twenty-fifth:
+  type: enum
+  value: 25
+twenty-sixth:
+  type: enum
+  value: 26
+twenty-seventh:
+  type: enum
+  value: 27
+twenty-eighth:
+  type: enum
+  value: 28
+twenty-ninth:
+  type: enum
+  value: 29
+thirtieth:
+  type: enum
+  value: 30
+thirty-first:
+  type: enum
+  value: 31
+thirty-second:
+  type: enum
+  value: 32
+thirty-third:
+  type: enum
+  value: 33
+thirty-fourth:
+  type: enum
+  value: 34
+thirty-fifth:
+  type: enum
+  value: 35
+thirty-sixth:
+  type: enum
+  value: 36
+thirty-seventh:
+  type: enum
+  value: 37
+thirty-eighth:
+  type: enum
+  value: 38
+thirty-ninth:
+  type: enum
+  value: 39
+fortieth:
+  type: enum
+  value: 40
+forty-first:
+  type: enum
+  value: 41
+forty-second:
+  type: enum
+  value: 42
+forty-third:
+  type: enum
+  value: 43
+forty-fourth:
+  type: enum
+  value: 44
+forty-fifth:
+  type: enum
+  value: 45
+forty-sixth:
+  type: enum
+  value: 46
+forty-seventh:
+  type: enum
+  value: 47
+forty-eighth:
+  type: enum
+  value: 48
+forty-ninth:
+  type: enum
+  value: 49
+fiftieth:
+  type: enum
+  value: 50
+fifty-first:
+  type: enum
+  value: 51
+fifty-second:
+  type: enum
+  value: 52
+fifty-third:
+  type: enum
+  value: 53
+fifty-fourth:
+  type: enum
+  value: 54
+fifty-fifth:
+  type: enum
+  value: 55
+fifty-sixth:
+  type: enum
+  value: 56
+fifty-seventh:
+  type: enum
+  value: 57
+fifty-eighth:
+  type: enum
+  value: 58
+fifty-ninth:
+  type: enum
+  value: 59
+sixtieth:
+  type: enum
+  value: 60
+sixty-first:
+  type: enum
+  value: 61
+sixty-second:
+  type: enum
+  value: 62
+sixty-third:
+  type: enum
+  value: 63
+sixty-fourth:
+  type: enum
+  value: 64
+sixty-fifth:
+  type: enum
+  value: 65
+sixty-sixth:
+  type: enum
+  value: 66
+sixty-seventh:
+  type: enum
+  value: 67
+sixty-eighth:
+  type: enum
+  value: 68
+sixty-ninth:
+  type: enum
+  value: 69
+seventieth:
+  type: enum
+  value: 70
+seventy-first:
+  type: enum
+  value: 71
+seventy-second:
+  type: enum
+  value: 72
+seventy-third:
+  type: enum
+  value: 73
+seventy-fourth:
+  type: enum
+  value: 74
+seventy-fifth:
+  type: enum
+  value: 75
+seventy-sixth:
+  type: enum
+  value: 76
+seventy-seventh:
+  type: enum
+  value: 77
+seventy-eighth:
+  type: enum
+  value: 78
+seventy-ninth:
+  type: enum
+  value: 79
+eightieth:
+  type: enum
+  value: 80
+eighty-first:
+  type: enum
+  value: 81
+eighty-second:
+  type: enum
+  value: 82
+eighty-third:
+  type: enum
+  value: 83
+eighty-fourth:
+  type: enum
+  value: 84
+eighty-fifth:
+  type: enum
+  value: 85
+eighty-sixth:
+  type: enum
+  value: 86
+eighty-seventh:
+  type: enum
+  value: 87
+eighty-eighth:
+  type: enum
+  value: 88
+eighty-ninth:
+  type: enum
+  value: 89
+ninetieth:
+  type: enum
+  value: 90
+ninety-first:
+  type: enum
+  value: 91
+ninety-second:
+  type: enum
+  value: 92
+ninety-third:
+  type: enum
+  value: 93
+ninety-fourth:
+  type: enum
+  value: 94
+ninety-fifth:
+  type: enum
+  value: 95
+ninety-sixth:
+  type: enum
+  value: 96
+ninety-seventh:
+  type: enum
+  value: 97
+ninety-eighth:
+  type: enum
+  value: 98
+ninety-ninth:
+  type: enum
+  value: 99
+Eleventh:
+  type: enum
+  value: 11
+Twelfth:
+  type: enum
+  value: 12
+Thirteenth:
+  type: enum
+  value: 13
+Fourteenth:
+  type: enum
+  value: 14
+Fifteenth:
+  type: enum
+  value: 15
+Sixteenth:
+  type: enum
+  value: 16
+Seventeenth:
+  type: enum
+  value: 17
+Eighteenth:
+  type: enum
+  value: 18
+Nineteenth:
+  type: enum
+  value: 19
+Twentieth:
+  type: enum
+  value: 20
+Twenty-First:
+  type: enum
+  value: 21
+Twenty-Second:
+  type: enum
+  value: 22
+Twenty-Third:
+  type: enum
+  value: 23
+Twenty-Fourth:
+  type: enum
+  value: 24
+Twenty-Fifth:
+  type: enum
+  value: 25
+Twenty-Sixth:
+  type: enum
+  value: 26
+Twenty-Seventh:
+  type: enum
+  value: 27
+Twenty-Eighth:
+  type: enum
+  value: 28
+Twenty-Ninth:
+  type: enum
+  value: 29
+Thirtieth:
+  type: enum
+  value: 30
+Thirty-First:
+  type: enum
+  value: 31
+Thirty-Second:
+  type: enum
+  value: 32
+Thirty-Third:
+  type: enum
+  value: 33
+Thirty-Fourth:
+  type: enum
+  value: 34
+Thirty-Fifth:
+  type: enum
+  value: 35
+Thirty-Sixth:
+  type: enum
+  value: 36
+Thirty-Seventh:
+  type: enum
+  value: 37
+Thirty-Eighth:
+  type: enum
+  value: 38
+Thirty-Ninth:
+  type: enum
+  value: 39
+Fortieth:
+  type: enum
+  value: 40
+Forty-First:
+  type: enum
+  value: 41
+Forty-Second:
+  type: enum
+  value: 42
+Forty-Third:
+  type: enum
+  value: 43
+Forty-Fourth:
+  type: enum
+  value: 44
+Forty-Fifth:
+  type: enum
+  value: 45
+Forty-Sixth:
+  type: enum
+  value: 46
+Forty-Seventh:
+  type: enum
+  value: 47
+Forty-Eighth:
+  type: enum
+  value: 48
+Forty-Ninth:
+  type: enum
+  value: 49
+Fiftieth:
+  type: enum
+  value: 50
+Fifty-First:
+  type: enum
+  value: 51
+Fifty-Second:
+  type: enum
+  value: 52
+Fifty-Third:
+  type: enum
+  value: 53
+Fifty-Fourth:
+  type: enum
+  value: 54
+Fifty-Fifth:
+  type: enum
+  value: 55
+Fifty-Sixth:
+  type: enum
+  value: 56
+Fifty-Seventh:
+  type: enum
+  value: 57
+Fifty-Eighth:
+  type: enum
+  value: 58
+Fifty-Ninth:
+  type: enum
+  value: 59
+Sixtieth:
+  type: enum
+  value: 60
+Sixty-First:
+  type: enum
+  value: 61
+Sixty-Second:
+  type: enum
+  value: 62
+Sixty-Third:
+  type: enum
+  value: 63
+Sixty-Fourth:
+  type: enum
+  value: 64
+Sixty-Fifth:
+  type: enum
+  value: 65
+Sixty-Sixth:
+  type: enum
+  value: 66
+Sixty-Seventh:
+  type: enum
+  value: 67
+Sixty-Eighth:
+  type: enum
+  value: 68
+Sixty-Ninth:
+  type: enum
+  value: 69
+Seventieth:
+  type: enum
+  value: 70
+Seventy-First:
+  type: enum
+  value: 71
+Seventy-Second:
+  type: enum
+  value: 72
+Seventy-Third:
+  type: enum
+  value: 73
+Seventy-Fourth:
+  type: enum
+  value: 74
+Seventy-Fifth:
+  type: enum
+  value: 75
+Seventy-Sixth:
+  type: enum
+  value: 76
+Seventy-Seventh:
+  type: enum
+  value: 77
+Seventy-Eighth:
+  type: enum
+  value: 78
+Seventy-Ninth:
+  type: enum
+  value: 79
+Eightieth:
+  type: enum
+  value: 80
+Eighty-First:
+  type: enum
+  value: 81
+Eighty-Second:
+  type: enum
+  value: 82
+Eighty-Third:
+  type: enum
+  value: 83
+Eighty-Fourth:
+  type: enum
+  value: 84
+Eighty-Fifth:
+  type: enum
+  value: 85
+Eighty-Sixth:
+  type: enum
+  value: 86
+Eighty-Seventh:
+  type: enum
+  value: 87
+Eighty-Eighth:
+  type: enum
+  value: 88
+Eighty-Ninth:
+  type: enum
+  value: 89
+Ninetieth:
+  type: enum
+  value: 90
+Ninety-First:
+  type: enum
+  value: 91
+Ninety-Second:
+  type: enum
+  value: 92
+Ninety-Third:
+  type: enum
+  value: 93
+Ninety-Fourth:
+  type: enum
+  value: 94
+Ninety-Fifth:
+  type: enum
+  value: 95
+Ninety-Sixth:
+  type: enum
+  value: 96
+Ninety-Seventh:
+  type: enum
+  value: 97
+Ninety-Eighth:
+  type: enum
+  value: 98
+Ninety-Ninth:
+  type: enum
+  value: 99
+Conference:
+  type: eventType
+Colloquium:
+  type: eventType
+Congress:
+  type: eventType
+Consensus Meeting:
+  type: eventType
+Consensus Conference:
+  type: eventType
+Forum:
+  type: eventType
+Meeting:
+  type: eventType
+round-table discussion:
+  type: eventType
+School:
+  type: eventType
+Seminar:
+  type: eventType
+Session:
+  type: eventType
+Summit:
+  type: eventType
+Symposium:
+  type: eventType
+Workshop:
+  type: eventType
+conference:
+  type: eventType
+congress:
+  type: eventType
+meeting:
+  type: eventType
+symposium:
+  type: eventType
+satellite symposium:
+  type: eventType
+workshop:
+  type: eventType
+A summary of:
+  type: extract
+Highlights of:
+  type: extract
+Abstract:
+  type: extract
+Abstract of:
+  type: extract
+Abstracts of:
+  type: extract
+Abstracts from:
+  type: extract
+Abstracts From:
+  type: extract
+In:
+  type: extract
+Selected:
+  type: extract
+Select Legal:
+  type: extract
+Report on:
+  type: extract
+Anatomical:
+  type: field
+anatomical:
+  type: field
+Animal:
+  type: field
+Biochemical:
+  type: field
+biochemical:
+  type: field
+Biological:
+  type: field
+Biology:
+  type: field
+biology:
+  type: field
+Biomedical:
+  type: field
+Blood:
+  type: field
+Bone:
+  type: field
+Breast:
+  type: field
+Brain:
+  type: field
+Cancer:
+  type: field
+cancer:
+  type: field
+Cardiac:
+  type: field
+cardiac:
+  type: field
+Cardiovascular:
+  type: field
+Care:
+  type: field
+Cell:
+  type: field
+cell:
+  type: field
+Cellular:
+  type: field
+cellular:
+  type: field
+Clinical:
+  type: field
+Dental:
+  type: field
+Diabetes:
+  type: field
+diagnosis:
+  type: field
+disease:
+  type: field
+Diseases:
+  type: field
+diseases:
+  type: field
+Disease:
+  type: field
+Disorders:
+  type: field
+Drug:
+  type: field
+Entomological:
+  type: field
+Environmental:
+  type: field
+Food:
+  type: field
+Genetic:
+  type: field
+Genetics:
+  type: field
+Health:
+  type: field
+health:
+  type: field
+Heart:
+  type: field
+heart:
+  type: field
+Hip:
+  type: field
+Human:
+  type: field
+human:
+  type: field
+Hypertension:
+  type: field
+Information:
+  type: field
+Infections:
+  type: field
+Immunology:
+  type: field
+Laboratory:
+  type: field
+Lung:
+  type: field
+Medical:
+  type: field
+medical:
+  type: field
+Medicine:
+  type: field
+Metabolism:
+  type: field
+Molecular:
+  type: field
+molecular:
+  type: field
+Neurological:
+  type: field
+Nutrition:
+  type: field
+Obstetrical:
+  type: field
+Oncology:
+  type: field
+Orthopedic:
+  type: field
+Orthopaedic:
+  type: field
+Paediatric:
+  type: field
+Pathology:
+  type: field
+Pediatric:
+  type: field
+Pharmacology:
+  type: field
+Pharmacological:
+  type: field
+Physiological:
+  type: field
+Prevention:
+  type: field
+Radiation:
+  type: field
+Radiology:
+  type: field
+Surgery:
+  type: field
+Systems:
+  type: field
+Surgical:
+  type: field
+Therapy:
+  type: field
+therapy:
+  type: field
+Therapeutic:
+  type: field
+therapeutic:
+  type: field
+Thoracic:
+  type: field
+Toxicology:
+  type: field
+Transplantation:
+  type: field
+Treatment:
+  type: field
+treatment:
+  type: field
+clinical:
+  type: field
+Veterinary:
+  type: field
+Annual:
+  type: frequency
+annual:
+  type: frequency
+Biennial:
+  type: frequency
+Triennial:
+  type: frequency
+April:
+  type: month
+  value: 4
+August:
+  type: month
+  value: 8
+December:
+  type: month
+  value: 12
+February:
+  type: month
+  value: 2
+January:
+  type: month
+  value: 1
+July:
+  type: month
+  value: 7
+June:
+  type: month
+  value: 6
+March:
+  type: month
+  value: 3
+May:
+  type: month
+  value: 5
+November:
+  type: month
+  value: 11
+October:
+  type: month
+  value: 10
+September:
+  type: month
+  value: 9
+Academy:
+  type: organization
+Association:
+  type: organization
+Club:
+  type: organization
+Commission:
+  type: organization
+Committee:
+  type: organization
+College:
+  type: organization
+Council:
+  type: organization
+Group:
+  type: organization
+Institute:
+  type: organization
+Institutes:
+  type: organization
+Societies:
+  type: organization
+Society:
+  type: organization
+Study Group:
+  type: organization
+University:
+  type: organization
+Working Group:
+  type: organization
+society:
+  type: organization
+Arizona:
+  type: province
+California:
+  type: province
+Carolina:
+  type: province
+Colorado:
+  type: province
+Florida:
+  type: province
+Georgia:
+  type: province
+Hawaii:
+  type: province
+Illinois:
+  type: province
+Louisiana:
+  type: province
+Maryland:
+  type: province
+Massachusetts:
+  type: province
+Michigan:
+  type: province
+Nevada:
+  type: province
+Ohio:
+  type: province
+Ontario:
+  type: province
+Pennsylvania:
+  type: province
+Québec:
+  type: province
+Texas:
+  type: province
+Virginia:
+  type: province
+Abstracts:
+  type: publish
+Advances:
+  type: publish
+Proceedings:
+  type: publish
+Research:
+  type: publish
+scientific:
+  type: publish
+research:
+  type: publish
+American:
+  type: scope
+Asian:
+  type: scope
+Australasian:
+  type: scope
+British:
+  type: scope
+Canadian:
+  type: scope
+Central:
+  type: scope
+Coast:
+  type: scope
+Croatian:
+  type: scope
+Czech:
+  type: scope
+Eastern:
+  type: scope
+European:
+  type: scope
+French:
+  type: scope
+German:
+  type: scope
+Global:
+  type: scope
+International:
+  type: scope
+Italian:
+  type: scope
+Japanese:
+  type: scope
+Local:
+  type: scope
+Margaux:
+  type: scope
+National:
+  type: scope
+Nordisk:
+  type: scope
+North:
+  type: scope
+Pacific:
+  type: scope
+Regional:
+  type: scope
+Royal:
+  type: scope
+Scandinavian:
+  type: scope
+South:
+  type: scope
+Swiss:
+  type: scope
+West:
+  type: scope
+World:
+  type: scope
+international:
+  type: scope
+A:
+  type: syntax
+Learned:
+  type: syntax
+New:
+  type: syntax
+The:
+  type: syntax
+a:
+  type: syntax
+an:
+  type: syntax
+and:
+  type: syntax
+as:
+  type: syntax
+at:
+  type: syntax
+between:
+  type: syntax
+by:
+  type: syntax
+for:
+  type: syntax
+from:
+  type: syntax
+held at:
+  type: syntax
+held in:
+  type: syntax
+in:
+  type: syntax
+into:
+  type: syntax
+its:
+  type: syntax
+of:
+  type: syntax
+'on':
+  type: syntax
+the:
+  type: syntax
+to:
+  type: syntax
+towards:
+  type: syntax
+Towards:
+  type: syntax
+with:
+  type: syntax
+'1960':
+  type: year
+  value: 1960
+'1961':
+  type: year
+  value: 1961
+'1962':
+  type: year
+  value: 1962
+'1963':
+  type: year
+  value: 1963
+'1964':
+  type: year
+  value: 1964
+'1965':
+  type: year
+  value: 1965
+'1966':
+  type: year
+  value: 1966
+'1967':
+  type: year
+  value: 1967
+'1968':
+  type: year
+  value: 1968
+'1969':
+  type: year
+  value: 1969
+'1970':
+  type: year
+  value: 1970
+'1971':
+  type: year
+  value: 1971
+'1972':
+  type: year
+  value: 1972
+'1973':
+  type: year
+  value: 1973
+'1974':
+  type: year
+  value: 1974
+'1975':
+  type: year
+  value: 1975
+'1976':
+  type: year
+  value: 1976
+'1977':
+  type: year
+  value: 1977
+'1978':
+  type: year
+  value: 1978
+'1979':
+  type: year
+  value: 1979
+'1980':
+  type: year
+  value: 1980
+'1981':
+  type: year
+  value: 1981
+'1982':
+  type: year
+  value: 1982
+'1983':
+  type: year
+  value: 1983
+'1984':
+  type: year
+  value: 1984
+'1985':
+  type: year
+  value: 1985
+'1986':
+  type: year
+  value: 1986
+'1987':
+  type: year
+  value: 1987
+'1988':
+  type: year
+  value: 1988
+'1989':
+  type: year
+  value: 1989
+'1990':
+  type: year
+  value: 1990
+'1991':
+  type: year
+  value: 1991
+'1992':
+  type: year
+  value: 1992
+'1993':
+  type: year
+  value: 1993
+'1994':
+  type: year
+  value: 1994
+'1995':
+  type: year
+  value: 1995
+'1996':
+  type: year
+  value: 1996
+'1997':
+  type: year
+  value: 1997
+'1998':
+  type: year
+  value: 1998
+'1999':
+  type: year
+  value: 1999
+'2000':
+  type: year
+  value: 2000
+'2001':
+  type: year
+  value: 2001
+'2002':
+  type: year
+  value: 2002
+'2003':
+  type: year
+  value: 2003
+'2004':
+  type: year
+  value: 2004
+'2005':
+  type: year
+  value: 2005
+'2006':
+  type: year
+  value: 2006
+'2007':
+  type: year
+  value: 2007
+'2008':
+  type: year
+  value: 2008
+'2009':
+  type: year
+  value: 2009
+'2010':
+  type: year
+  value: 2010
+'2011':
+  type: year
+  value: 2011
+'2012':
+  type: year
+  value: 2012
+'2013':
+  type: year
+  value: 2013
+'2014':
+  type: year
+  value: 2014
+'2015':
+  type: year
+  value: 2015
+'2016':
+  type: year
+  value: 2016
+'2017':
+  type: year
+  value: 2017
+'2018':
+  type: year
+  value: 2018
+'2019':
+  type: year
+  value: 2019
+'2020':
+  type: year
+  value: 2020
+'2021':
+  type: year
+  value: 2021
+'2022':
+  type: year
+  value: 2022
+'2023':
+  type: year
+  value: 2023
+'2024':
+  type: year
+  value: 2024
+'2025':
+  type: year
+  value: 2025
+'2026':
+  type: year
+  value: 2026
+'2027':
+  type: year
+  value: 2027
+'2028':
+  type: year
+  value: 2028
+'2029':
+  type: year
+  value: 2029
