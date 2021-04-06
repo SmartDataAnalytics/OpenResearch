@@ -34,17 +34,16 @@ class TestIssue152(unittest.TestCase):
         '''
         fixer=AcceptanceRateFixer(debug=self.debug)
         pages=fixer.getAllPages()
-        expectedPages=0 if self.inPublicCI() else 18000
+        expectedPages=18000
         self.assertTrue(len(pages)>=expectedPages)
         events=list(fixer.getAllPageTitles4Topic("Event"))
-        expectedEvents=0 if self.inPublicCI else 10000
+        expectedEvents=10000
         self.assertTrue(len(events)>=expectedEvents)
         fixer.checkAll()
         if self.debug:
             print(fixer.result())
-        if not self.inPublicCI():
-            self.assertTrue(fixer.nosub>=86)
-            self.assertTrue(fixer.noacc>=17)
+        self.assertTrue(fixer.nosub>=86)
+        self.assertTrue(fixer.noacc>=17)
 
 
 if __name__ == "__main__":
