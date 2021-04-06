@@ -16,5 +16,5 @@ then
 else
   mkdir -p $wbd
   cd $wbd
-  tar xvfz /tmp/$wb
+  tar xfz /tmp/$wb
 fi
