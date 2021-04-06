@@ -3,11 +3,10 @@ Created on 2021-04-02
 
 @author: wf
 '''
-import glob
-from os.path import expanduser
 import re
+from migrate.fixer import PageFixer
 
-class AcceptanceRateFixer(object):
+class AcceptanceRateFixer(PageFixer):
 
     '''
     fixer for Acceptance Rate Not calculated
@@ -18,27 +17,14 @@ class AcceptanceRateFixer(object):
         '''
         Constructor
         '''
+        # call super constructor
+        super(AcceptanceRateFixer,self).__init__()
         self.wikiId=wikiId
         self.baseUrl=baseUrl
         self.debug=debug
         self.nosub=0
         self.noacc=0
         
-        
-    def getAllPages(self):
-        '''
-        get all wiki pages
-        '''
-        home = expanduser("~")
-        allPages = glob.glob('%s/wikibackup/%s/*.wiki' % (home,self.wikiId))
-        return allPages
-    
-    def getAllEvents(self):
-        for page in self.getAllPages():
-            with open(page,'r') as f:
-                event =f.read()
-                if "{{Event" in event:
-                    yield page,event
                     
     def link(self,page):
         search=r".*%s/(.*)\.wiki" % self.wikiId
@@ -63,13 +49,12 @@ class AcceptanceRateFixer(object):
         '''
         check all events
         '''
-        for page,event in self.getAllEvents():
+        for page,event in self.getAllPageTitles4Topic("Event"):
             self.check(page,event)
             
     def result(self):
         text="submitted papers missing for %d: accepted papers missing for: %d" % (self.nosub, self.noacc)
         return text
-
 
         
 if __name__ == "__main__":
