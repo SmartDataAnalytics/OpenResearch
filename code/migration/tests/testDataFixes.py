@@ -87,8 +87,8 @@ Help:Topic"""
         if self.debug:
             print(fixer.result())
             print(expectedEvents)
-        self.assertTrue(fixer.nosub>=50)
-        self.assertTrue(fixer.noacc>=10)
+        self.assertTrue(fixer.nosub>=0 if self.inPublicCI() else 50)
+        self.assertTrue(fixer.nosub>=0 if self.inPublicCI() else 50)
 
     def testIssue119(self):
         '''

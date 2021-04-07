@@ -20,6 +20,14 @@ class OrdinalFixer(PageFixer):
         self.restoreOut = restoreOut
 
     def convert_ordinal_to_cardinal(self, file_content: str, lookup_dict: Dictionary):
+        '''
+        Converts the ordinal value to cardinal value in the given file_content
+        Args:
+            file_content(str): wiki file content in string
+            lookup_dict(Dictionary): Dictionary for mapping of ordinals
+        Returns:
+            new_file_content(str):Page text with fixed ordinal
+        '''
         pattern = r"{{ *Event(?:.|\r|\n)*\| *Ordinal *= *(?P<ordinal>[^\|\n}]*) *[\n|}}|\|]"
         match = re.search(pattern, file_content)
         if match:
@@ -41,7 +49,7 @@ class OrdinalFixer(PageFixer):
 
     def fixFile(self, filePath, new_file_content):
         '''
-        separate concerns of fixing/writing and gathering a list of files that haven been fixed
+        separate concerns of fixing/writing.
         fix the given file
         
         Args:
@@ -51,5 +59,11 @@ class OrdinalFixer(PageFixer):
                 fileWrite.write(new_file_content)
             
     def fixAllFiles(self,fileList):
+        '''
+            separate concerns of fixing/writing of bulk files
+
+            Args:
+                filePath(str):
+            '''
         for page,event in self.getAllPageTitles4Topic("Event"):
             self.check(event,Dictionary)
