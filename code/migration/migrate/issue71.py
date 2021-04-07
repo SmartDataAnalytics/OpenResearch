@@ -5,7 +5,8 @@ Created on 2021-04-02
 '''
 import re
 from migrate.fixer import PageFixer
-#from dateutil import parser
+from dateutil import parser
+from migrate.toolbox import parseDate
 
 
 class DateFixer(PageFixer):
@@ -22,24 +23,23 @@ class DateFixer(PageFixer):
         super(DateFixer, self).__init__(wikiId, baseUrl)
         self.debug = debug
         self.restoreOut = restoreOut
-        
 
-    def getFixedDate(self, page, event):
+
+    def getFixedDate(self, page, event, datetype='date'):
         '''
         fix the date of the given page and event and mark unfixable pages
         Returns:
             Fixed text of the page.
         '''
-        dates = re.findall('.*\|.*date.*=.*\n', event)
+        dates = re.findall('|.*'+datetype+'.*=.*\n', event)
         if len(dates) != 0:
             for element in dates:
                 name,value=self.getNameValue(element)
-                try:
-                    fixed = parser.parse(dcheck[-1].strip()).date().strftime("%Y/%m/%d")
-                    event= event.replace(element.strip(),dcheck[0].lstrip()+'='+fixed)
-                except:
-                    prop_div = element.strip().split('=')
-                    if len(prop_div[1]) > 0 and '?' not in prop_div[0]:
+                if name is not None:
+                    fixedDate = parseDate(value)
+                    if fixedDate is not None:
+                        event = event.replace(element,'|'+name+'='+fixedDate)
+                    else:
                         if self.debug: print(self.generateLink(page))
         return event
 

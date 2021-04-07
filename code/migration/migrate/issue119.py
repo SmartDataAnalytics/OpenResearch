@@ -39,9 +39,8 @@ class OrdinalFixer(PageFixer):
                             print(f"{ordinal_val} will changed to {cardinal_value}.")
                     return new_file_content
 
-    def fixFiles(self, filePath, new_file_content,fixList=None):
+    def fixFile(self, filePath, new_file_content):
         '''
-        TODO: rename to singular or actually handle multiple files -
         separate concerns of fixing/writing and gathering a list of files that haven been fixed
         fix the given file
         
@@ -50,9 +49,7 @@ class OrdinalFixer(PageFixer):
         '''
         with open(filePath, mode='w') as fileWrite:
                 fileWrite.write(new_file_content)
-        if fixList is not None:
-            fixList.append(filePath)
             
-    def fixAll(self,Dictionary):
+    def fixAllFiles(self,fileList):
         for page,event in self.getAllPageTitles4Topic("Event"):
             self.check(event,Dictionary)

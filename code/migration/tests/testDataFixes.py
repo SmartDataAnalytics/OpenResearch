@@ -8,6 +8,7 @@ import io
 from migrate.issue152 import AcceptanceRateFixer
 from migrate.issue119 import OrdinalFixer
 from migrate.issue71 import DateFixer
+from migrate.toolbox import parseDate
 from migrate.fixer import PageFixer
 from openresearch.event import Event
 from lodstorage.jsonable import JSONAble, Types
@@ -29,7 +30,17 @@ class TestDataFixes(unittest.TestCase):
 
     def tearDown(self):
         pass
-    
+
+    def testDateParser(self):
+        '''
+        test the date parser used to convert dates in issue 71
+        '''
+        sampledates=['2020-02-20','2020/02/20','2020.02.20','20/02/2020','02/20/2020','20.02.2020','02.20.2020','20 Feb, 2020','2020, Feb 20','2020 20 Feb','2020 Feb 20']
+        for date in sampledates:
+            self.assertEqual('2020/02/20',parseDate(date))
+
+
+
     def testNameValue(self):
         '''
         test the name value helper function
