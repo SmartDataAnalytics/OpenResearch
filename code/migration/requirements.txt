@@ -1,4 +1,4 @@
 # https://pypi.org/project/pylodstorage/
 pylodstorage
 # https://pypi.org/project/python-dateutil/
-dateutil
+python-dateutil
