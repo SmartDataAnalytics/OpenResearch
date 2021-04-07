@@ -65,6 +65,8 @@ class PageFixer(object):
                 value=parts[1]
                 if dostrip:
                     value=value.strip()
+                if len(value) == 0:
+                    return name,None
                 return name,value
         return None,None
     

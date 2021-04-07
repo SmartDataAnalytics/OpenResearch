@@ -44,7 +44,7 @@ class Event(object):
 |State=Online
 |Country=Australia
 |Abstract deadline=2020/05/22
-|Paper deadline=2020/05/28
+|Paper deadline=28th May, 2020
 |Notification=2020/08/04
 |Camera ready=2020/08/25
 |Has host organization=Institute of Electrical and Electronics Engineers

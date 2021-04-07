@@ -31,33 +31,32 @@ class DateFixer(PageFixer):
         Returns:
             Fixed text of the page.
         '''
+        generateLink=False
         dates = re.findall('|.*'+datetype+'.*=.*\n', event)
         if len(dates) != 0:
             for element in dates:
                 name,value=self.getNameValue(element)
-                if name is not None:
+                if name is not None and value is not None:
                     fixedDate = parseDate(value)
                     if fixedDate is not None:
                         event = event.replace(element,'|'+name+'='+fixedDate)
                     else:
-                        if self.debug: print(self.generateLink(page))
+                        generateLink=True
+        if self.debug and generateLink: print(self.generateLink(page))
         return event
 
-    def fixFiles(self, filePath, new_file_content):
+    def fixFile(self, filePath, new_file_content):
+        with open(filePath, mode='w') as fileWrite:
+            fileWrite.write(new_file_content)
         if self.restoreOut:
-            with open(filePath, mode='w') as fileWrite:
-                fileWrite.write(new_file_content)
                 print(filePath)
-        else:
-            with open(filePath, mode='w') as fileWrite:
-                fileWrite.write(new_file_content)
 
-    def checkAllFiles(self):
+    def checkAllFiles(self,type='date'):
         '''
             check all events
         '''
         for page, event in self.getAllPageTitles4Topic("Event"):
-            self.getFixedDate(page, event)
+            self.getFixedDate(page, event,type)
 
     def fixAllFiles(self,Dictionary):
         for page,event in self.getAllPageTitles4Topic("Event"):
@@ -69,4 +68,4 @@ class DateFixer(PageFixer):
 if __name__ == "__main__":
     fixer = DateFixer()
     fixer.debug = True
-    fixer.checkAllFiles()
+    fixer.checkAllFiles('deadline')

@@ -45,7 +45,7 @@ class TestDataFixes(unittest.TestCase):
         '''
         test the name value helper function
         '''
-        nameValues=["|a=1","|b= a=c ","|w|b"]
+        nameValues=["|a=1","|b= a=c ","|w|b",'|a=']
         pageFixer=PageFixer()
         for i,nameValue in enumerate(nameValues):
             name,value=pageFixer.getNameValue(nameValue)
@@ -54,6 +54,7 @@ class TestDataFixes(unittest.TestCase):
             if i==0: self.assertEqual(name,"a") 
             if i==1: self.assertEqual(value,"a=c")
             if i==2: self.assertIsNone(value)
+            if i==3: self.assertIsNone(value)
         
 
     def testGetAllPagesFromFile(self):
@@ -77,14 +78,15 @@ Help:Topic"""
         '''
         fixer=AcceptanceRateFixer(debug=self.debug)
         pages=fixer.getAllPages()
-        expectedPages=8000
+        expectedPages=0 if self.inPublicCI() else 8000
         self.assertTrue(len(pages)>=expectedPages)
         events=list(fixer.getAllPageTitles4Topic("Event"))
-        expectedEvents=5500
+        expectedEvents=0 if self.inPublicCI() else 5500
         self.assertTrue(len(events)>=expectedEvents)
         fixer.checkAll()
         if self.debug:
             print(fixer.result())
+            print(expectedEvents)
         self.assertTrue(fixer.nosub>=50)
         self.assertTrue(fixer.noacc>=10)
 
@@ -96,7 +98,7 @@ Help:Topic"""
         fixer=OrdinalFixer(debug=self.debug)
         types = Types("Event")
         samples = Event.getSampleWikiSon()
-        lookup_dict = Dictionary('../../dataset/dictionary.yaml')
+        lookup_dict = Dictionary('../dataset/dictionary.yaml' if self.inPublicCI() else '../../dataset/dictionary.yaml')
         fixed=fixer.convert_ordinal_to_cardinal(samples[0],lookup_dict)
         fixed_dic=Event.WikiSontoLOD(fixed)
         type_dict=types.getTypes("events", fixed_dic, 1)
@@ -110,9 +112,11 @@ Help:Topic"""
         fixer=DateFixer(debug=self.debug)
         types = Types("Event")
         samples = Event.getSampleWikiSon()
-        fixed=fixer.getFixedDate('sample',samples[0])
-        fixed_dic=Event.WikiSontoLOD(fixed)
+        fixedDates=fixer.getFixedDate('sample',samples[0])
+        fixedDeadlines=fixer.getFixedDate('sample',fixedDates,'deadline')
+        fixed_dic=Event.WikiSontoLOD(fixedDeadlines)
         self.assertTrue(fixed_dic[0]['Start date'] == '2020/09/27')
+        self.assertTrue(fixed_dic[0]['Paper deadline'] == '2020/05/28')
 
 
 if __name__ == "__main__":
