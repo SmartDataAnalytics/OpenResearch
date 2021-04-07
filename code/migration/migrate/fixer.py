@@ -20,6 +20,7 @@ class PageFixer(object):
         '''
         self.wikiId = wikiId
         self.baseUrl = baseUrl
+        self.debug=debug
 
     def generateLink(self,page):
         search=r".*%s/(.*)\.wiki" % self.wikiId
@@ -39,8 +40,33 @@ class PageFixer(object):
                 allPages.append(path.join(root, filename))
         return allPages
 
-    def getAllPagesStdin(self):
-        allx = stdin.readlines()
+    def getAllPagesFromFile(self,file=stdin):
+        allx = file.readlines()
+        return allx
+    
+    
+    def getNameValue(self,element,dostrip=True,separator="="):
+        '''
+        get a name value pair from a wikison element like |a=b
+        
+        Args:
+            element(str): the element to check
+            strip(bool): should spaces be removed
+            separator(str): the separator - default is "="
+        
+        Returns:
+            name(str): the name
+            value(str): the value
+        '''
+        if element.startswith("|"):
+            parts = element[1:].split(separator,1)
+            if len(parts)==2:
+                name=parts[0]
+                value=parts[1]
+                if dostrip:
+                    value=value.strip()
+                return name,value
+        return None,None
     
     def getAllPageTitles4Topic(self,topicName="Event"):
         '''
@@ -58,4 +84,5 @@ class PageFixer(object):
                 wikison="{{%s" % topicName
                 if wikison in event:
                     yield page,event
+
         

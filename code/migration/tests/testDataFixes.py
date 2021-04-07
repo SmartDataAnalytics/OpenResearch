@@ -4,9 +4,11 @@ Created on 2021-04-02
 @author: wf
 '''
 import unittest
+import io
 from migrate.issue152 import AcceptanceRateFixer
 from migrate.issue119 import OrdinalFixer
 from migrate.issue71 import DateFixer
+from migrate.fixer import PageFixer
 from openresearch.event import Event
 from lodstorage.jsonable import JSONAble, Types
 from migrate.Dictionary import  Dictionary
@@ -27,7 +29,35 @@ class TestDataFixes(unittest.TestCase):
 
     def tearDown(self):
         pass
+    
+    def testNameValue(self):
+        '''
+        test the name value helper function
+        '''
+        nameValues=["|a=1","|b= a=c ","|w|b"]
+        pageFixer=PageFixer()
+        for i,nameValue in enumerate(nameValues):
+            name,value=pageFixer.getNameValue(nameValue)
+            if self.debug:
+                print("%d: %s=%s" % (i,name,value))
+            if i==0: self.assertEqual(name,"a") 
+            if i==1: self.assertEqual(value,"a=c")
+            if i==2: self.assertIsNone(value)
+        
 
+    def testGetAllPagesFromFile(self):
+        '''
+        test utility function to get pageTitles from a file e.g. stdin
+        '''
+        pageFixer=PageFixer()
+        # we'd love to test form a string
+        # see https://stackoverflow.com/a/141451/1497139
+        pageTitles="""Concept:Topic
+Help:Topic"""
+        fstdin = io.StringIO(pageTitles)
+        pageTitleList=pageFixer.getAllPagesFromFile(fstdin)
+        self.assertEqual(2,len(pageTitleList))
+        
 
     def testIssue152(self):
         '''

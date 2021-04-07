@@ -5,7 +5,7 @@ Created on 2021-04-02
 '''
 import re
 from migrate.fixer import PageFixer
-from dateutil import parser
+#from dateutil import parser
 
 
 class DateFixer(PageFixer):
@@ -22,6 +22,7 @@ class DateFixer(PageFixer):
         super(DateFixer, self).__init__(wikiId, baseUrl)
         self.debug = debug
         self.restoreOut = restoreOut
+        
 
     def getFixedDate(self, page, event):
         '''
@@ -32,7 +33,7 @@ class DateFixer(PageFixer):
         dates = re.findall('.*\|.*date.*=.*\n', event)
         if len(dates) != 0:
             for element in dates:
-                dcheck = element.split('=')
+                name,value=self.getNameValue(element)
                 try:
                     fixed = parser.parse(dcheck[-1].strip()).date().strftime("%Y/%m/%d")
                     event= event.replace(element.strip(),dcheck[0].lstrip()+'='+fixed)
