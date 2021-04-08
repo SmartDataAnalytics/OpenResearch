@@ -5,6 +5,7 @@ Created on 2021-04-02
 '''
 import unittest
 import io
+import os
 from migrate.issue152 import AcceptanceRateFixer
 from migrate.issue119 import OrdinalFixer
 from migrate.issue71 import DateFixer
@@ -98,7 +99,8 @@ Help:Topic"""
         fixer=OrdinalFixer(debug=self.debug)
         types = Types("Event")
         samples = Event.getSampleWikiSon()
-        lookup_dict = Dictionary('../dataset/dictionary.yaml' if self.inPublicCI() else '../../dataset/dictionary.yaml')
+        path = os.path.dirname(__file__) +  "/../../dataset/dictionary.yaml"
+        lookup_dict = Dictionary(path)
         fixed=fixer.convert_ordinal_to_cardinal(samples[0],lookup_dict)
         fixed_dic=Event.WikiSontoLOD(fixed)
         type_dict=types.getTypes("events", fixed_dic, 1)
