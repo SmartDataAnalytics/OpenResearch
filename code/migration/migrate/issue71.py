@@ -45,35 +45,11 @@ class DateFixer(PageFixer):
         if self.debug and generateLink: print(self.generateLink(page))
         return event
 
-    def fixFile(self, filePath, new_file_content):
-        """
-            Args:
-                filePath(str): Path to wiki file to fix
-                new_file_content(str): Fixed wiki file(output from the getFixedDate Function)
-            Handler to fix the fixable dates in given page
-        """
-        with open(filePath, mode='w') as fileWrite:
-            fileWrite.write(new_file_content)
-        if self.restoreOut:
-                print(filePath)
 
-    def checkAllFiles(self,type='date'):
-        '''
-            Check all event pages for false dates and output links to unfixable pages if debug parameter is turned on
-            Args:
-                type(str): type of dates to check. e.g 'deadline'. Default configuration: "date"
-        '''
-        for page, event in self.getAllPageTitles4Topic("Event"):
-            self.getFixedDate(page, event,type)
-
-    def fixAllFiles(self,Dictionary):
-        for page,event in self.getAllPageTitles4Topic("Event"):
-            fixed_page=self.getFixedDate(event,Dictionary)
-            self.fixFiles(page,fixed_page)
 
 
 
 if __name__ == "__main__":
     fixer = DateFixer()
     fixer.debug = True
-    fixer.checkAllFiles('deadline')
+    fixer.checkAllFiles(fixer.getFixedDate)

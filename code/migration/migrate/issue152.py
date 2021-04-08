@@ -27,7 +27,7 @@ class AcceptanceRateFixer(PageFixer):
 
     def check(self,page,event):
         '''
-        check the given page and event
+        check the given page and event for missing 'Submitted papers' and 'Accepted Papers' field
         '''
         if len(re.findall('\|.*submitted papers.*=.*\n',event.lower())) == 0 and  len(re.findall('\|.*accepted papers.*=.*\n',event.lower())) != 0:
             self.nosub+=1
@@ -35,14 +35,7 @@ class AcceptanceRateFixer(PageFixer):
         elif len(re.findall('\|.*submitted papers.*=.*\n',event.lower())) != 0 and  len(re.findall('\|.*accepted papers.*=.*\n',event.lower())) == 0:
             if self.debug: print(self.generateLink( page))
             self.noacc+=1
-            
-    def checkAll(self):
-        '''
-        check all events
-        '''
-        for page,event in self.getAllPageTitles4Topic("Event"):
-            self.check(page,event)
-            
+
     def result(self):
         text="submitted papers missing for %d: accepted papers missing for: %d" % (self.nosub, self.noacc)
         return text
@@ -51,6 +44,6 @@ class AcceptanceRateFixer(PageFixer):
 if __name__ == "__main__":
     fixer=AcceptanceRateFixer()
     fixer.debug=True
-    fixer.checkAll()
+    fixer.checkAllFiles(fixer.check)
     print (fixer.result())
     

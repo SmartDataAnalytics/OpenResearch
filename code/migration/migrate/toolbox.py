@@ -1,4 +1,6 @@
 from dateutil import parser
+import os
+from migrate.Dictionary import Dictionary
 
 def parseDate(date):
     '''
@@ -15,3 +17,8 @@ def parseDate(date):
     datetimeToDate = parseToDatetime.date()
     datetimetoString = datetimeToDate.strftime("%Y/%m/%d")
     return datetimetoString
+
+def loadDictionary():
+    path = os.path.dirname(__file__) + "/../../dataset/dictionary.yaml"
+    lookup_dict = Dictionary(path)
+    return lookup_dict

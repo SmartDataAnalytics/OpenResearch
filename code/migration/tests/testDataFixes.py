@@ -9,11 +9,10 @@ import os
 from migrate.issue152 import AcceptanceRateFixer
 from migrate.issue119 import OrdinalFixer
 from migrate.issue71 import DateFixer
-from migrate.toolbox import parseDate
+from migrate.toolbox import parseDate,loadDictionary
 from migrate.fixer import PageFixer
 from openresearch.event import Event
 from lodstorage.jsonable import JSONAble, Types
-from migrate.Dictionary import  Dictionary
 import getpass
 
 class TestDataFixes(unittest.TestCase):
@@ -84,26 +83,32 @@ Help:Topic"""
         events=list(fixer.getAllPageTitles4Topic("Event"))
         expectedEvents=0 if self.inPublicCI() else 5500
         self.assertTrue(len(events)>=expectedEvents)
-        fixer.checkAll()
+        fixer.checkAllFiles(fixer.check)
         if self.debug:
             print(fixer.result())
             print(expectedEvents)
         self.assertTrue(fixer.nosub>=0 if self.inPublicCI() else 50)
         self.assertTrue(fixer.nosub>=0 if self.inPublicCI() else 50)
 
+    def testDictionaryLoad(self):
+        """
+        test for loading the lookup Dictionary
+        """
+        lookup_dict=loadDictionary
+        self.assertIsNotNone(lookup_dict)
+
     def testIssue119(self):
         '''
             test for fixing Ordinals not a number
-            https://github.com/SmartDataAnalytics/OpenResearch/issues/152
+            https://github.com/SmartDataAnalytics/OpenResearch/issues/119
         '''
         fixer=OrdinalFixer(debug=self.debug)
         types = Types("Event")
         samples = Event.getSampleWikiSon()
-        path = os.path.dirname(__file__) +  "/../../dataset/dictionary.yaml"
-        lookup_dict = Dictionary(path)
+        lookup_dict = loadDictionary()
         fixed=fixer.convert_ordinal_to_cardinal(samples[0],lookup_dict)
         fixed_dic=Event.WikiSontoLOD(fixed)
-        type_dict=types.getTypes("events", fixed_dic, 1)
+        types.getTypes("events", fixed_dic, 1)
         self.assertTrue(types.typeMap['events']['Ordinal'] == 'int')
 
     def testIssue71(self):

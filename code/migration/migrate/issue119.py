@@ -47,23 +47,3 @@ class OrdinalFixer(PageFixer):
                             print(f"{ordinal_val} will changed to {cardinal_value}.")
                     return new_file_content
 
-    def fixFile(self, filePath, new_file_content):
-        '''
-        separate concerns of fixing/writing.
-        fix the given file
-        
-        Args:
-            filePath(str): 
-        '''
-        with open(filePath, mode='w') as fileWrite:
-                fileWrite.write(new_file_content)
-            
-    def fixAllFiles(self,fileList):
-        '''
-            separate concerns of fixing/writing of bulk files
-
-            Args:
-                filePath(str):
-            '''
-        for page,event in self.getAllPageTitles4Topic("Event"):
-            self.check(event,Dictionary)

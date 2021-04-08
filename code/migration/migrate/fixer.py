@@ -14,7 +14,7 @@ class PageFixer(object):
     helper fixing page
     '''
 
-    def __init__(self,wikiId="ormk",baseUrl="https://www.openresearch.org/wiki/",debug=False):
+    def __init__(self,wikiId="or",baseUrl="https://www.openresearch.org/wiki/",debug=False):
         '''
         Constructor
         '''
@@ -41,8 +41,14 @@ class PageFixer(object):
         return allPages
 
     def getAllPagesFromFile(self,file=stdin):
-        allx = file.readlines()
-        return allx
+        '''
+        Args:
+            file(obj): IO object to read file paths from
+        Returns:
+            listOfFiles(list): list of all file paths
+        '''
+        listOfFiles = file.readlines()
+        return listOfFiles
     
     
     def getNameValue(self,element,dostrip=True,separator="="):
@@ -69,7 +75,41 @@ class PageFixer(object):
                     return name,None
                 return name,value
         return None,None
-    
+
+    def fixFile(self, filePath, new_file_content):
+        '''
+        separate concerns of fixing/writing.
+        fix the given file
+
+        Args:
+            filePath(str):path of the wiki file to be fixed
+            new_file_content(str): fixed content to be replaced with old content
+        '''
+        with open(filePath, mode='w') as fileWrite:
+            fileWrite.write(new_file_content)
+
+    def fixAllFiles(self, checkFunc, *args):
+        '''
+            Fix all event pages for false dates and output links to unfixable pages if debug parameter is turned on
+            Args:
+                checkFunc(Func): Function used for getting fixed content of files.
+                args(list of args): Additional arguments to pass to the checkFunc. Default Args: page, event
+        '''
+        for page, event in self.getAllPageTitles4Topic("Event"):
+            fixed_page = checkFunc(page, event, *args)
+            self.fixFile(page, fixed_page)
+
+
+    def checkAllFiles(self,checkFunc,*args):
+        '''
+            Check all event pages for false dates and output links to unfixable pages if debug parameter is turned on
+            Args:
+                checkFunc(Func): Function to use to check files for errors.
+                args(list of args): Additional arguments to pass to the checkFunc. Default Args: page, event
+        '''
+        for page, event in self.getAllPageTitles4Topic("Event"):
+            checkFunc(page, event,*args)
+
     def getAllPageTitles4Topic(self,topicName="Event"):
         '''
         get all pages for the given topicName
