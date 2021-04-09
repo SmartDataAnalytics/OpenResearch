@@ -5,11 +5,11 @@ Created on 2021-04-02
 '''
 import unittest
 import io
-import os
+from os import path
 from migrate.issue152 import AcceptanceRateFixer
 from migrate.issue119 import OrdinalFixer
 from migrate.issue71 import DateFixer
-from migrate.toolbox import parseDate,loadDictionary
+from migrate.toolbox import parseDate, loadDictionary, ensureDirectoryExists
 from migrate.fixer import PageFixer
 from openresearch.event import Event
 from lodstorage.jsonable import JSONAble, Types
@@ -39,8 +39,13 @@ class TestDataFixes(unittest.TestCase):
         for date in sampledates:
             self.assertEqual('2020/02/20',parseDate(date))
 
-
-
+    '''
+     @TODO       
+    # def testDirectoryExists(self):
+    #     ensureDirectoryExists('./test')
+    #     self.assertTrue(os.path.exists('./test'))
+    #     os.remove('./test')
+    '''
     def testNameValue(self):
         '''
         test the name value helper function
@@ -69,7 +74,12 @@ Help:Topic"""
         fstdin = io.StringIO(pageTitles)
         pageTitleList=pageFixer.getAllPagesFromFile(fstdin)
         self.assertEqual(2,len(pageTitleList))
-        
+
+    def testFixedPath(self):
+        fixer = DateFixer(debug=self.debug)
+        dirname= 'Fixed'
+        fixedPath = fixer.getFixedPagePath('/asd/asd/asd/test.wiki',dirname)
+        self.assertTrue(fixedPath == '%s/wikibackup/%s/%s' % (path.expanduser("~"), dirname, 'test.wiki'))
 
     def testIssue152(self):
         '''
@@ -78,10 +88,14 @@ Help:Topic"""
         '''
         fixer=AcceptanceRateFixer(debug=self.debug)
         pages=fixer.getAllPages()
+        if self.debug:
+            print("Number of pages: ", len(pages))
         expectedPages=0 if self.inPublicCI() else 8000
         self.assertTrue(len(pages)>=expectedPages)
         events=list(fixer.getAllPageTitles4Topic("Event"))
         expectedEvents=0 if self.inPublicCI() else 5500
+        if self.debug:
+            print("Number of events: ", len(events))
         self.assertTrue(len(events)>=expectedEvents)
         fixer.checkAllFiles(fixer.check)
         if self.debug:
@@ -106,7 +120,7 @@ Help:Topic"""
         types = Types("Event")
         samples = Event.getSampleWikiSon()
         lookup_dict = loadDictionary()
-        fixed=fixer.convert_ordinal_to_cardinal(samples[0],lookup_dict)
+        fixed=fixer.convert_ordinal_to_cardinal('sample',samples[0],lookup_dict)
         fixed_dic=Event.WikiSontoLOD(fixed)
         types.getTypes("events", fixed_dic, 1)
         self.assertTrue(types.typeMap['events']['Ordinal'] == 'int')

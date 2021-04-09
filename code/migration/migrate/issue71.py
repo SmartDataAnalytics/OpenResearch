@@ -1,5 +1,5 @@
 '''
-Created on 2021-04-02
+Created on 2021-04-06
 
 @author: wf
 '''
@@ -15,7 +15,7 @@ class DateFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/152
     '''
 
-    def __init__(self, wikiId="ormk", baseUrl="https://www.openresearch.org/wiki/", debug=False,restoreOut=False):
+    def __init__(self, wikiId="or", baseUrl="https://www.openresearch.org/wiki/", debug=False,restoreOut=False):
         '''
         Constructor
         '''
@@ -52,4 +52,6 @@ class DateFixer(PageFixer):
 if __name__ == "__main__":
     fixer = DateFixer()
     fixer.debug = True
-    fixer.checkAllFiles(fixer.getFixedDate)
+    # fixer.checkAllFiles(fixer.getFixedDate, 'deadline')
+    fixer.fixAllFiles(fixer.getFixedDate, "Date", 'date')
+    fixer.fixAllFiles(fixer.getFixedDate, "Deadline", 'deadline')

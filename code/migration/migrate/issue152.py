@@ -13,7 +13,7 @@ class AcceptanceRateFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/152
     '''
 
-    def __init__(self, wikiId="ormk",baseUrl="https://www.openresearch.org/wiki/",debug=False):
+    def __init__(self, wikiId="or",baseUrl="https://www.openresearch.org/wiki/",debug=False):
         '''
         Constructor
         '''
@@ -46,4 +46,5 @@ if __name__ == "__main__":
     fixer.debug=True
     fixer.checkAllFiles(fixer.check)
     print (fixer.result())
-    
+
+

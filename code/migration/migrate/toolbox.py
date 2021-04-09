@@ -1,6 +1,7 @@
 from dateutil import parser
 import os
 from migrate.Dictionary import Dictionary
+from pathlib import Path
 
 def parseDate(date):
     '''
@@ -18,7 +19,26 @@ def parseDate(date):
     datetimetoString = datetimeToDate.strftime("%Y/%m/%d")
     return datetimetoString
 
+
 def loadDictionary():
     path = os.path.dirname(__file__) + "/../../dataset/dictionary.yaml"
     lookup_dict = Dictionary(path)
     return lookup_dict
+
+
+def ensureDirectoryExists(directory):
+    '''
+    Given a path ensures the directory exists. New directory will be made if it doesn't exist
+    Args:
+        directory(str): PAth to directory
+    '''
+    Path(directory).mkdir(parents=True, exist_ok=True)
+
+
+def getHomePath(localPath):
+    '''
+    get the given home path
+    '''
+    homePath=str(Path.home() / localPath)
+    ensureDirectoryExists(homePath)
+    return homePath

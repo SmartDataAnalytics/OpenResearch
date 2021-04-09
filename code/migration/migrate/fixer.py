@@ -8,6 +8,8 @@ from os import walk,path
 import re
 from fnmatch import filter
 from sys import stdin
+from migrate.toolbox import ensureDirectoryExists
+import ntpath
 
 class PageFixer(object):
     '''
@@ -28,7 +30,14 @@ class PageFixer(object):
         alink=re.sub(search,replace,page)
         alink=alink.replace(" ","_")
         return alink
-        
+
+    def getFixedPagePath(self,oldpath,fixType='Fixer'):
+        oldpath
+        home = path.expanduser("~")
+        fixedDir = '%s/wikibackup/%s/' % (home,fixType)
+        ensureDirectoryExists(fixedDir)
+        return fixedDir + ntpath.basename(oldpath)
+
     def getAllPages(self):
         '''
         get all wiki pages
@@ -76,7 +85,7 @@ class PageFixer(object):
                 return name,value
         return None,None
 
-    def fixFile(self, filePath, new_file_content):
+    def fixFile(self, filePath, new_file_content,fixType='Fixer'):
         '''
         separate concerns of fixing/writing.
         fix the given file
@@ -85,10 +94,11 @@ class PageFixer(object):
             filePath(str):path of the wiki file to be fixed
             new_file_content(str): fixed content to be replaced with old content
         '''
-        with open(filePath, mode='w') as fileWrite:
+        fixedPath = self.getFixedPagePath(filePath,fixType)
+        with open(fixedPath, mode='w') as fileWrite:
             fileWrite.write(new_file_content)
 
-    def fixAllFiles(self, checkFunc, *args):
+    def fixAllFiles(self, checkFunc,fixType='Fixer', *args):
         '''
             Fix all event pages for false dates and output links to unfixable pages if debug parameter is turned on
             Args:
@@ -97,7 +107,8 @@ class PageFixer(object):
         '''
         for page, event in self.getAllPageTitles4Topic("Event"):
             fixed_page = checkFunc(page, event, *args)
-            self.fixFile(page, fixed_page)
+            if fixed_page is not None:
+                self.fixFile(page, fixed_page,fixType)
 
 
     def checkAllFiles(self,checkFunc,*args):
