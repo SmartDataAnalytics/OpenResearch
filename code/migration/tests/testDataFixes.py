@@ -9,7 +9,8 @@ from os import path
 from migrate.issue152 import AcceptanceRateFixer
 from migrate.issue119 import OrdinalFixer
 from migrate.issue71 import DateFixer
-from migrate.toolbox import parseDate, loadDictionary, ensureDirectoryExists
+
+from migrate.toolbox import HelperFunctions
 from migrate.fixer import PageFixer
 from openresearch.event import Event
 from lodstorage.jsonable import JSONAble, Types
@@ -37,7 +38,7 @@ class TestDataFixes(unittest.TestCase):
         '''
         sampledates=['2020-02-20','2020/02/20','2020.02.20','20/02/2020','02/20/2020','20.02.2020','02.20.2020','20 Feb, 2020','2020, Feb 20','2020 20 Feb','2020 Feb 20']
         for date in sampledates:
-            self.assertEqual('2020/02/20',parseDate(date))
+            self.assertEqual('2020/02/20',HelperFunctions.parseDate(date))
 
     '''
      @TODO       
@@ -108,7 +109,7 @@ Help:Topic"""
         """
         test for loading the lookup Dictionary
         """
-        lookup_dict=loadDictionary
+        lookup_dict=HelperFunctions.loadDictionary
         self.assertIsNotNone(lookup_dict)
 
     def testIssue119(self):
@@ -119,9 +120,9 @@ Help:Topic"""
         fixer=OrdinalFixer(debug=self.debug)
         types = Types("Event")
         samples = Event.getSampleWikiSon()
-        lookup_dict = loadDictionary()
+        lookup_dict = HelperFunctions.loadDictionary()
         fixed=fixer.convert_ordinal_to_cardinal('sample',samples[0],lookup_dict)
-        fixed_dic=Event.WikiSontoLOD(fixed)
+        fixed_dic=HelperFunctions.WikiSontoLOD(fixed)
         types.getTypes("events", fixed_dic, 1)
         self.assertTrue(types.typeMap['events']['Ordinal'] == 'int')
 
@@ -135,7 +136,7 @@ Help:Topic"""
         samples = Event.getSampleWikiSon()
         fixedDates=fixer.getFixedDate('sample',samples[0])
         fixedDeadlines=fixer.getFixedDate('sample',fixedDates,'deadline')
-        fixed_dic=Event.WikiSontoLOD(fixedDeadlines)
+        fixed_dic=HelperFunctions.WikiSontoLOD(fixedDeadlines)
         self.assertTrue(fixed_dic[0]['Start date'] == '2020/09/27')
         self.assertTrue(fixed_dic[0]['Paper deadline'] == '2020/05/28')
 

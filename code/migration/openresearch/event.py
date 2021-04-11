@@ -12,7 +12,51 @@ class EventSeries(JSONAble):
         '''
         Constructor
         '''
-    
+
+    @classmethod
+    def getSamples(self):
+        '''
+        Returns a sample LOD of an event Series
+        '''
+        samplesLOD= [{
+            'acronym' : 'AAAI',
+            'Title' : 'Conference on Artificial Intelligence',
+            'Field' : 'Artificial Intelligence',
+            'Homepage' : 'www.aaai.org/Conferences/AAAI/aaai.php',
+            'WikiDataId' : 'Q56682083',
+            'DblpSeries' : 'aaai'
+        }]
+        return samplesLOD
+
+    @classmethod
+    def getSampleWikiSon(cls, mode='legacy'):
+        '''
+        Returns a sample of Event Series in wikison format
+        Args:
+            mode(str): Default legacy, used to provide the mode dependant on updates and changes to structure of Event series
+        '''
+        if mode == 'legacy':
+            samplesWikiSon = ["""{{Event series
+|Acronym=AAAI
+|Title=Conference on Artificial Intelligence
+|Logo=Aaai-logo.jpg
+|has CORE2017 Rank=A*
+|Field=Artificial intelligence
+|Period=1
+|Unit=year
+|Homepage=www.aaai.org/Conferences/AAAI/aaai.php
+|WikiDataId=Q56682083
+|has CORE2018 Rank=A*
+|has Bibliography=dblp.uni-trier.de/db/conf/aaai/
+|has CORE2014 Rank=A*
+|DblpSeries=aaai
+}}"""]
+        else:
+            samplesWikiSon = "..."
+
+        return samplesWikiSon
+
+
 class Event(JSONAble):
     '''
     I represent an Event
@@ -66,14 +110,3 @@ class Event(JSONAble):
             samplesWikiSon="..."
         
         return samplesWikiSon
-    @classmethod
-    def WikiSontoLOD(self,wiki_sample):
-        property_list = wiki_sample.replace('}}', '').split('|')[1:]
-        wikidict = {}
-        for i in property_list:
-            mapping = i.strip().split('=')
-            try:
-                wikidict[mapping[0]] = int(mapping[1])
-            except:
-                wikidict[mapping[0]] = mapping[1]
-        return [wikidict]

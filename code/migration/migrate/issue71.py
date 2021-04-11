@@ -6,7 +6,7 @@ Created on 2021-04-06
 import re
 from migrate.fixer import PageFixer
 from dateutil import parser
-from migrate.toolbox import parseDate
+from migrate.toolbox import HelperFunctions
 
 
 class DateFixer(PageFixer):
@@ -37,7 +37,7 @@ class DateFixer(PageFixer):
             for element in dates:
                 name,value=self.getNameValue(element)
                 if name is not None and value is not None:
-                    fixedDate = parseDate(value)
+                    fixedDate = HelperFunctions.parseDate(value)
                     if fixedDate is not None:
                         event = event.replace(element,'|'+name+'='+fixedDate)
                     else:

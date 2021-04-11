@@ -8,7 +8,7 @@ from os import walk,path
 import re
 from fnmatch import filter
 from sys import stdin
-from migrate.toolbox import ensureDirectoryExists
+from migrate.toolbox import HelperFunctions
 import ntpath
 
 class PageFixer(object):
@@ -35,7 +35,7 @@ class PageFixer(object):
         oldpath
         home = path.expanduser("~")
         fixedDir = '%s/wikibackup/%s/' % (home,fixType)
-        ensureDirectoryExists(fixedDir)
+        HelperFunctions.ensureDirectoryExists(fixedDir)
         return fixedDir + ntpath.basename(oldpath)
 
     def getAllPages(self):

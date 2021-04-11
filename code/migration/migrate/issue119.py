@@ -7,7 +7,7 @@ Created on 2021-04-07
 import re
 from migrate.fixer import PageFixer
 from migrate.Dictionary import Dictionary
-from migrate.toolbox import loadDictionary
+from migrate.toolbox import HelperFunctions
 
 class OrdinalFixer(PageFixer):
     '''
@@ -56,4 +56,4 @@ class OrdinalFixer(PageFixer):
 if __name__ == "__main__":
     fixer = OrdinalFixer()
     fixer.debug = True
-    fixer.fixAllFiles(fixer.convert_ordinal_to_cardinal, "Ordinal", loadDictionary())
+    fixer.fixAllFiles(fixer.convert_ordinal_to_cardinal, "Ordinal", HelperFunctions.loadDictionary())
