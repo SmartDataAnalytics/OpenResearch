@@ -6,12 +6,14 @@ Created on 2021-04-06
 import unittest
 from openresearch.event import Event, EventSeries
 from lodstorage.jsonable import JSONAble, Types
+from lodstorage.sql import SQLDB, EntityInfo
 from migrate.toolbox import HelperFunctions
 
 class TestEvent(unittest.TestCase):
 
 
     def setUp(self):
+        self.debug=True
         pass
 
 
@@ -40,6 +42,16 @@ class TestEvent(unittest.TestCase):
         self.assertIsNotNone(types.typeMap)
         LOD=HelperFunctions.WikiSontoLOD(wikiSonSample[0])
         self.assertTrue(LOD[0]['Acronym'] == 'ICSME 2020')
+        
+        
+    def testSqlLite(self):
+        listOfRecords=Event.getSamples()
+        sqlDB=SQLDB(debug=self.debug,errorDebug=False) 
+        entityInfo=sqlDB.createTable(listOfRecords,'Event','acronym')
+        sqlDB.store(listOfRecords,entityInfo,executeMany=False)
+        if self.debug:
+            print(entityInfo.createTableCmd)
+           
         # pass
 
 
