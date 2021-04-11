@@ -5,10 +5,19 @@ Created on 2021-04-06
 '''
 from lodstorage.jsonable import JSONAble, Types
 
-
-class Event(object):
+class EventSeries(JSONAble):
+    '''
+    '''
+    def __init__(self):
+        '''
+        Constructor
+        '''
+    
+class Event(JSONAble):
     '''
     I represent an Event
+    
+    see https://rq.bitplan.com/index.php/Event
     '''
 
 
