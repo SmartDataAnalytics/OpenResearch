@@ -4,7 +4,7 @@ Created on 2021-04-06
 @author: wf
 '''
 from lodstorage.jsonable import JSONAble,JSONAbleList, Types
-
+from datetime import datetime
 class EventSeriesList(JSONAbleList):
     '''
     i represent a list of EventSeries
@@ -34,6 +34,7 @@ class EventSeries(JSONAble):
         Returns a sample LOD of an event Series
         '''
         samplesLOD= [{
+            'pageTitle': 'AAAI',
             'acronym' : 'AAAI',
             'Title' : 'Conference on Artificial Intelligence',
             'Field' : 'Artificial Intelligence',
@@ -85,7 +86,32 @@ class EventList(JSONAbleList):
             event.fromDict(record)
             self.events.append(event)
         pass
+    
+    
+    def getAskQuery(self,askExtra=""):
+        '''
+        get the query that will ask for all my events
         
+        Args:
+           askExtra(str): any additional constraints
+        '''
+        ask="""{{#ask:[[IsA::Event]]%s
+|mainlabel=pageTitle""" % askExtra
+        propertyLookupList=[
+            { 'prop':'Acronym',    'name': 'acronym'},
+            { 'prop':'Ordinal',    'name': 'ordinal'},
+            { 'prop':'Homepage',   'name': 'homepage'},
+            { 'prop':'Title',      'name': 'title'},
+            { 'prop':'Type',       'name': 'type'},
+            { 'prop':'Start date', 'name': 'startDate'},
+            { 'prop':'End date',   'name': 'endDate'}
+        ]               
+        for propertyLookup in propertyLookupList:
+            propName=propertyLookup['prop']
+            name=propertyLookup['name']
+            ask+="|?%s=%s\n" % (propName,name)
+        ask+="}}"
+        return ask
     
 class Event(JSONAble):
     '''
@@ -93,8 +119,6 @@ class Event(JSONAble):
     
     see https://rq.bitplan.com/index.php/Event
     '''
-
-
     def __init__(self):
         '''
         Constructor
@@ -103,10 +127,13 @@ class Event(JSONAble):
     @classmethod
     def getSamples(cls):
         samplesLOD=[{
+            "pageTitle": "ICSME 2020",
             "acronym":"ICSME 2020",
             "ordinal": 36,
             "type": "Conference",
-            "subject": "Software engineering"
+            "subject": "Software engineering",
+            "startDate":  datetime.fromisoformat("2020-09-27"),
+            "endDate":  datetime.fromisoformat("2020-09-27")
         }]
         return samplesLOD
     
@@ -141,3 +168,6 @@ class Event(JSONAble):
         
         return samplesWikiSon
 
+    def __str__(self):
+        text=self.pageTitle
+        return text

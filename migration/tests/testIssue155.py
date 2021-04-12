@@ -9,14 +9,16 @@ from lodstorage.jsonable import  Types
 from lodstorage.sql import SQLDB
 from wikibot.wikipush import WikiPush
 from migrate.toolbox import HelperFunctions
-from openresearch.dbHandler import DBHandler
-import os
+import time
 
 class TestEvent(unittest.TestCase):
+    '''
+    test handling Event and EventSeries
+    '''
 
 
     def setUp(self):
-        self.debug=False
+        self.debug=True
         pass
 
 
@@ -46,38 +48,36 @@ class TestEvent(unittest.TestCase):
         LOD=HelperFunctions.WikiSontoLOD(wikiSonSample[0])
         self.assertTrue(LOD[0]['Acronym'] == 'ICSME 2020')
         
-        
-    def getDBPath(self):
-        path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
-        return path
-    
     def getSQLDB(self,path=None):
         if path is not None:
             sqlDB=SQLDB(path)
         else:
             sqlDB=SQLDB() # in memory DB!
         return sqlDB
+    
+    def getEventList(self,listOfRecords):
+        self.sqlDB=self.getSQLDB()
+        entityInfo=self.sqlDB.createTable(listOfRecords,'Event','pageTitle',withDrop=True,sampleRecordCount=len(listOfRecords))
+        self.assertIsNotNone(entityInfo)
+        self.sqlDB.store(listOfRecords,entityInfo,fixNone=True)
+        if self.debug:
+            print(entityInfo.createTableCmd)
+        eventList=EventList()  
+        eventList.fromSQLTable(self.sqlDB,entityInfo)
+        return eventList
         
     def testEventSql(self):   
         '''
         test event handling with SQL
         ''' 
         listOfRecords=Event.getSamples()
-        sqlDB=self.getSQLDB()
-        entityInfo=sqlDB.createTable(listOfRecords,'Event','acronym',withDrop=True)
-        self.assertIsNotNone(entityInfo)
-        sqlDB.store(listOfRecords,entityInfo,fixNone=True)
-        if self.debug:
-            print(entityInfo.createTableCmd)
-        eventList=EventList()  
-        eventList.fromSQLTable(sqlDB,entityInfo)
+        eventList=self.getEventList(listOfRecords)
         self.assertEqual(1,len(eventList.events))
   
-
     def testEventSeriesSql(self):
         '''
-               test event series handling with SQL
-               '''
+        test event series handling with SQL
+        '''
         listOfRecords = EventSeries.getSamples()
         sqlDB = self.getSQLDB()
         entityInfo = sqlDB.createTable(listOfRecords, 'EventSeries', 'acronym', withDrop=True)
@@ -85,37 +85,44 @@ class TestEvent(unittest.TestCase):
         sqlDB.store(listOfRecords, entityInfo, fixNone=True)
         if self.debug:
             print(entityInfo.createTableCmd)
-        eventSeriesList = EventList()
+        eventSeriesList = EventSeriesList()
         eventSeriesList.fromSQLTable(sqlDB, entityInfo)
-        self.assertEqual(1, len(eventSeriesList.events))
-
+        self.assertEqual(1, len(eventSeriesList.eventSeries))
+        
+    def getWikiPush(self):
+        wikiId = 'or'
+        save=HelperFunctions.inPublicCI()
+        wikiClient = HelperFunctions.getWikiClient(wikiId,save)
+        wikiPush = WikiPush(fromWikiId=wikiId)
+        return wikiClient,wikiPush
+    
+    def testWikiPush(self):
+        wikiClient,wikiPush=self.getWikiPush()
+        self.assertIsNotNone(wikiClient)
+        
     def  testLODtoSQL(self):
         """Test if LOD is returned correctly if called from api to store to SQL"""
-        wikiId = 'or'
-        wikiClient = HelperFunctions.getWikiClient(wikiId)
-        self.eventQuery = "[[IsA::Event]][[start date::>2018]][[start date::<2019]]| mainlabel = Event| ?Title = title| ?Event in series = series| ?_CDAT=creation date| ?_MDAT=modification date| ?ordinal=ordinal| ?Homepage = homepage|format=table"
-        wikiPush = WikiPush(fromWikiId=wikiId)
-        askQuery = "{{#ask:" + self.eventQuery + "}}"
-        lod_res = wikiPush.formatQueryResult(askQuery, wikiClient, entityName="Event")
+        wikiClient,wikiPush=self.getWikiPush()
+        eventList=EventList()
+        #askExtra="" if HelperFunctions.inPublicCI() else "[[Start date::>2018]][[Start date::<2019]]"
+        askExtra="[[Ordinal::36]]"
+        askQuery=eventList.getAskQuery(askExtra)
         if self.debug:
-            print(lod_res)
+            print (askQuery)
+        profile=self.debug
+        startTime=time.time()
+        lod_res = wikiPush.formatQueryResult(askQuery, wikiClient, entityName="Event")
+        elapsed=time.time()-startTime
+        if profile:
+            print("query of %d items took %5.1f s" % (len(lod_res),elapsed))
         self.assertTrue(isinstance(lod_res, list))
         self.assertTrue(isinstance(lod_res[0], dict))
-        path = self.getDBPath()
         listOfRecords = HelperFunctions.excludeFaultyEvents(lod_res)
-        EventHandler = DBHandler('Event', 'acronym', path, self.debug)
-        self.assertTrue(EventHandler.createTable(listOfRecords,withDrop=True,sampleRecordCount=150))
-        self.assertTrue(EventHandler.store(listOfRecords,fixNone=True))
-        if self.debug:
-            print(EventHandler.getEntityInfo().createTableCmd)
-
-    def testTableExists(self):
-        path = self.getDBPath()
-        listOfRecords = [{'test':1}]
-        TestHandler = DBHandler('Test', 'test', path, self.debug)
-        self.assertTrue(TestHandler.createTable(listOfRecords,withDrop=True))
-        self.assertTrue(TestHandler.checkTableExists('Test'))
-
+        eventList=self.getEventList(listOfRecords)
+        for event in eventList.events[:5]:
+            print(event)
+            print(event.toJSON())
+        #self.assertTrue(len(eventList.events)>100)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

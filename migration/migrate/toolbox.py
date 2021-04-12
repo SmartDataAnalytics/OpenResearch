@@ -1,7 +1,6 @@
 from dateutil import parser
 import os
 from migrate.Dictionary import Dictionary
-from pathlib import Path
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 import getpass
@@ -22,13 +21,16 @@ class HelperFunctions:
     @classmethod
     def excludeFaultyEvents(cls,LoDEvents):
         new_Lod=[]
-        for i in LoDEvents:
-            if type(i['series'])!=list:
-                new_Lod.append(i)
+        for record in LoDEvents:
+            if 'series' in record:
+                if type(record['series'])!=list:
+                    new_Lod.append(record)
+            else:
+                new_Lod.append(record)
         return new_Lod
 
     @classmethod
-    def getSMW_WikiUser(cls,wikiId="or"):
+    def getSMW_WikiUser(cls,wikiId="or",save=False):
         '''
         get semantic media wiki users for SemanticMediawiki.org and openresearch.org
         '''
@@ -38,19 +40,19 @@ class HelperFunctions:
             wikiDict=None
             if wikiId=="or":
                 wikiDict={"wikiId": wikiId,"email":"webmaster@openresearch.org","url":"https://www.openresearch.org","scriptPath":"/mediawiki/","version":"MediaWiki 1.31.1"}
-            else:
+            if wikiDict is not None:    
                 wikiUser=WikiUser.ofDict(wikiDict, lenient=True)
-                if HelperFunctions.inPublicCI():
+                if save:
                     wikiUser.save()
         else:
             wikiUser=WikiUser.ofWikiId(wikiId,lenient=True)
         return wikiUser
 
     @classmethod
-    def getWikiClient(self,wikiId='or'):
+    def getWikiClient(self,wikiId='or',save=False):
         ''' get the alternative SMW access instances for the given wiki id
         '''
-        wikiuser=HelperFunctions.getSMW_WikiUser(wikiId)
+        wikiuser=HelperFunctions.getSMW_WikiUser(wikiId,save=save)
         wikiclient=WikiClient.ofWikiUser(wikiuser)
         return wikiclient
 
@@ -78,15 +80,6 @@ class HelperFunctions:
         return lookup_dict
 
     @classmethod
-    def ensureDirectoryExists(self,directory):
-        '''
-        Given a path ensures the directory exists. New directory will be made if it doesn't exist
-        Args:
-            directory(str): PAth to directory
-        '''
-        Path(directory).mkdir(parents=True, exist_ok=True)
-
-    @classmethod
     def WikiSontoLOD(self, wiki_sample):
         property_list = wiki_sample.replace('}}', '').split('|')[1:]
         wikidict = {}
@@ -97,12 +90,3 @@ class HelperFunctions:
             except:
                 wikidict[mapping[0]] = mapping[1]
         return [wikidict]
-
-
-    def getHomePath(localPath):
-        '''
-        get the given home path
-        '''
-        homePath=str(Path.home() / localPath)
-        ensureDirectoryExists(homePath)
-        return homePath

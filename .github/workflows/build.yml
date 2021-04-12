@@ -20,7 +20,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./code/migration
+        working-directory: ./migration
 
     steps:
     - uses: actions/checkout@v2
