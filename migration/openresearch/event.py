@@ -162,13 +162,15 @@ class EventList(OREntityList):
             { 'prop':'Ordinal',             'name': 'ordinal'},
             { 'prop':'Homepage',            'name': 'homepage'},
             { 'prop':'Title',               'name': 'title'},
-            { 'prop':'Event Type',          'name': 'eventType'},
+            { 'prop':'Event type',          'name': 'eventType'},
             { 'prop':'Start date',          'name': 'startDate'},
             { 'prop':'End date',            'name': 'endDate'},
             { 'prop':'Event in series',     'name': 'inEventSeries'},
             { 'prop':'Has_location_country','name': 'country'},
             { 'prop':'Has_location_state',  'name': 'region'},
-            { 'prop':'Has_location_city',   'name': 'city'}
+            { 'prop':'Has_location_city',   'name': 'city'},
+            { 'prop':'Accepted_papers',     'name': 'acceptedPapers'},
+            { 'prop':'Submitted_papers',    'name': 'submittedPapers'}
             
         ]               
         ask=super().getAskQuery(propertyLookupList,askExtra)
@@ -191,7 +193,7 @@ class Event(JSONAble):
             "pageTitle": "ICSME 2020",
             "acronym":"ICSME 2020",
             "ordinal": 36,
-            "type": "Conference",
+            "evenType": "Conference",
             "subject": "Software engineering",
             "startDate":  datetime.fromisoformat("2020-09-27"),
             "endDate":  datetime.fromisoformat("2020-09-27")
