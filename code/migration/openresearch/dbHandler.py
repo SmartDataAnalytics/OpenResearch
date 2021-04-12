@@ -21,8 +21,8 @@ class DBHandler():
 
     def checkTableExists(self,entityName):
         listofTables=self.sqlDB.getTableList()
-        for Name in listofTables:
-            if Name['name'] == entityName:
+        for name in listofTables:
+            if name['name'] == entityName:
                 return True
         return False
 

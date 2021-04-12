@@ -8,7 +8,7 @@ from openresearch.event import Event, EventSeries
 from lodstorage.jsonable import  Types
 from wikibot.wikipush import WikiPush
 from migrate.toolbox import HelperFunctions
-from openresearch.DBHandler import DBHandler
+from openresearch.dbHandler import DBHandler
 import os
 
 class TestEvent(unittest.TestCase):
