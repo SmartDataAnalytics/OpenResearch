@@ -2,6 +2,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/SmartDataAnalytics/OpenResearch.svg)](https://github.com/SmartDataAnalytics/OpenResearch/issues)
 [![GitHub issues](https://img.shields.io/github/issues-closed/SmartDataAnalytics/OpenResearch.svg)](https://github.com/SmartDataAnalytics/OpenResearch/issues/?q=is%3Aissue+is%3Aclosed)
 [![Website OPENRESEARCH](https://img.shields.io/website-up-down-green-red/https/www.openresearch.org.svg)](https://www.openresearch.org)
+[![pypi](https://img.shields.io/pypi/pyversions/OpenResearchMigration)](https://pypi.org/project/OpenResearchMigration/)
+
 # OPEN RESEARCH
 
 This repository is mainly used as public ticket system for
