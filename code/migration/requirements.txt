@@ -2,3 +2,5 @@
 pylodstorage
 # https://pypi.org/project/python-dateutil/
 python-dateutil
+# https://pypi.org/project/py-3rdparty-mediawiki/
+py-3rdparty-mediawiki
