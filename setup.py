@@ -12,7 +12,7 @@ except:
     long_description = open('../../README.md').read()
 
 setup(name='OpenResearchMigration',
-      version='0.0.2',
+      version='0.0.3',
       description='python api to access OPENRESEARCH data',
       long_description=long_description,
       long_description_content_type='text/markdown',
@@ -33,7 +33,7 @@ setup(name='OpenResearchMigration',
             'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9'
       ],
-      packages=['code/migration'],
+      packages=['migration'],
       install_requires=[
           'pylodstorage',
           'python-dateutil',
