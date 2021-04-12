@@ -13,7 +13,7 @@ from migrate.issue71 import DateFixer
 from migrate.toolbox import HelperFunctions
 from migrate.fixer import PageFixer
 from openresearch.event import Event
-from lodstorage.jsonable import JSONAble, Types
+from lodstorage.jsonable import Types
 
 class TestDataFixes(unittest.TestCase):
 

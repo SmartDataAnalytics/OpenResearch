@@ -4,11 +4,11 @@ Created on 06.04.2021
 @author: wf
 '''
 
+import os
 from os import walk,path
 import re
 from fnmatch import filter
 from sys import stdin
-from migrate.toolbox import HelperFunctions
 import ntpath
 
 class PageFixer(object):
@@ -35,7 +35,7 @@ class PageFixer(object):
         oldpath
         home = path.expanduser("~")
         fixedDir = '%s/wikibackup/%s/' % (home,fixType)
-        HelperFunctions.ensureDirectoryExists(fixedDir)
+        os.makedirs(fixedDir,exist_ok=True)
         return fixedDir + ntpath.basename(oldpath)
 
     def getAllPages(self):

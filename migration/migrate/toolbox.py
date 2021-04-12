@@ -11,6 +11,9 @@ class HelperFunctions:
         self.debug=debug
         
         
+        
+        
+        
     @staticmethod    
     def inPublicCI():
         '''
@@ -72,10 +75,16 @@ class HelperFunctions:
         datetimeToDate = parseToDatetime.date()
         datetimetoString = datetimeToDate.strftime("%Y/%m/%d")
         return datetimetoString
+    
+    @classmethod
+    def getResourcePath(cls):
+        path = os.path.dirname(__file__) + "/../resources/"
+        return path
 
     @classmethod
-    def loadDictionary(self):
-        path = os.path.dirname(__file__) + "/../../dataset/dictionary.yaml"
+    def loadDictionary(cls):
+        resourcePath=HelperFunctions.getResourcePath()
+        path="%s/dictionary.yaml" %resourcePath
         lookup_dict = Dictionary(path)
         return lookup_dict
 
