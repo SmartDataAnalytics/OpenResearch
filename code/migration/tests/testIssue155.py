@@ -70,29 +70,24 @@ class TestEvent(unittest.TestCase):
         if self.debug:
             print(entityInfo.createTableCmd)
         eventList=EventList()  
-        eventList.fromSQLTable(sqlDB,entityInfo) 
+        eventList.fromSQLTable(sqlDB,entityInfo)
         self.assertEqual(1,len(eventList.events))
   
-        
-    def testEventSqlWithDBHandler(self):
-        path=self.getDBPath()
-        listOfRecords=Event.getSamples()
-        EventHandler= DBHandler('Event','acronym',path,self.debug)
-        self.assertTrue(EventHandler.createTable(listOfRecords,withDrop=True))
-        self.assertTrue(EventHandler.store(listOfRecords))
-        if self.debug:
-            print(EventHandler.getEntityInfo().createTableCmd)
 
     def testEventSeriesSql(self):
-        path=self.getDBPath()
+        '''
+               test event series handling with SQL
+               '''
         listOfRecords = EventSeries.getSamples()
-        EventSeriesHandler = DBHandler('EventSeries', 'acronym', path, self.debug)
-        self.assertTrue(EventSeriesHandler.createTable(listOfRecords,withDrop=True))
-        self.assertTrue(EventSeriesHandler.store(listOfRecords))
+        sqlDB = self.getSQLDB()
+        entityInfo = sqlDB.createTable(listOfRecords, 'EventSeries', 'acronym', withDrop=True)
+        self.assertIsNotNone(entityInfo)
+        sqlDB.store(listOfRecords, entityInfo, fixNone=True)
         if self.debug:
-            print(EventSeriesHandler.getEntityInfo().createTableCmd)
-           
-        # pass
+            print(entityInfo.createTableCmd)
+        eventSeriesList = EventList()
+        eventSeriesList.fromSQLTable(sqlDB, entityInfo)
+        self.assertEqual(1, len(eventSeriesList.events))
 
     def  testLODtoSQL(self):
         """Test if LOD is returned correctly if called from api to store to SQL"""
