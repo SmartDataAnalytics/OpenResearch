@@ -14,19 +14,12 @@ from migrate.toolbox import HelperFunctions
 from migrate.fixer import PageFixer
 from openresearch.event import Event
 from lodstorage.jsonable import JSONAble, Types
-import getpass
 
 class TestDataFixes(unittest.TestCase):
 
     def setUp(self):
         self.debug=False
         pass
-    
-    def inPublicCI(self):
-        '''
-        are we running in a public Continuous Integration Environment?
-        '''
-        return getpass.getuser() in [ "travis", "runner" ];
 
 
     def tearDown(self):
@@ -91,10 +84,10 @@ Help:Topic"""
         pages=fixer.getAllPages()
         if self.debug:
             print("Number of pages: ", len(pages))
-        expectedPages=0 if self.inPublicCI() else 8000
+        expectedPages=0 if HelperFunctions.inPublicCI() else 8000
         self.assertTrue(len(pages)>=expectedPages)
         events=list(fixer.getAllPageTitles4Topic("Event"))
-        expectedEvents=0 if self.inPublicCI() else 5500
+        expectedEvents=0 if HelperFunctions.inPublicCI() else 5500
         if self.debug:
             print("Number of events: ", len(events))
         self.assertTrue(len(events)>=expectedEvents)
@@ -102,8 +95,8 @@ Help:Topic"""
         if self.debug:
             print(fixer.result())
             print(expectedEvents)
-        self.assertTrue(fixer.nosub>=0 if self.inPublicCI() else 50)
-        self.assertTrue(fixer.nosub>=0 if self.inPublicCI() else 50)
+        self.assertTrue(fixer.nosub>=0 if HelperFunctions.inPublicCI() else 50)
+        self.assertTrue(fixer.nosub>=0 if HelperFunctions.inPublicCI() else 50)
 
     def testDictionaryLoad(self):
         """

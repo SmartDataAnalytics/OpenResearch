@@ -4,18 +4,20 @@ from migrate.Dictionary import Dictionary
 from pathlib import Path
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
-
+import getpass
 
 class HelperFunctions:
-    def __init__(self,debug):
+    def __init__(self,debug=False):
         'Constructor'
-        self.debug=False
-
-    def inPublicCI(self):
+        self.debug=debug
+        
+        
+    @staticmethod    
+    def inPublicCI():
         '''
         are we running in a public Continuous Integration Environment?
         '''
-        return False
+        return getpass.getuser() in [ "travis", "runner" ];
 
     @classmethod
     def excludeFaultyEvents(cls,LoDEvents):
@@ -26,7 +28,7 @@ class HelperFunctions:
         return new_Lod
 
     @classmethod
-    def getSMW_WikiUser(cls,testUser,wikiId="or"):
+    def getSMW_WikiUser(cls,wikiId="or"):
         '''
         get semantic media wiki users for SemanticMediawiki.org and openresearch.org
         '''
@@ -38,17 +40,17 @@ class HelperFunctions:
                 wikiDict={"wikiId": wikiId,"email":"webmaster@openresearch.org","url":"https://www.openresearch.org","scriptPath":"/mediawiki/","version":"MediaWiki 1.31.1"}
             else:
                 wikiUser=WikiUser.ofDict(wikiDict, lenient=True)
-                if testUser.inPublicCI():
+                if HelperFunctions.inPublicCI():
                     wikiUser.save()
         else:
             wikiUser=WikiUser.ofWikiId(wikiId,lenient=True)
         return wikiUser
 
     @classmethod
-    def getWikiClient(self,testUser,wikiId='or'):
+    def getWikiClient(self,wikiId='or'):
         ''' get the alternative SMW access instances for the given wiki id
         '''
-        wikiuser=HelperFunctions.getSMW_WikiUser(testUser,wikiId)
+        wikiuser=HelperFunctions.getSMW_WikiUser(wikiId)
         wikiclient=WikiClient.ofWikiUser(wikiuser)
         return wikiclient
 

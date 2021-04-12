@@ -74,7 +74,7 @@ class TestEvent(unittest.TestCase):
     def  testLODtoSQL(self):
         """Test if LOD is returned correctly if called from api to store to SQL"""
         wikiId = 'or'
-        wikiClient = HelperFunctions.getWikiClient(TestEvent,wikiId)
+        wikiClient = HelperFunctions.getWikiClient(wikiId)
         self.eventQuery = "[[IsA::Event]][[start date::>2018]][[start date::<2019]]| mainlabel = Event| ?Title = title| ?Event in series = series| ?_CDAT=creation date| ?_MDAT=modification date| ?ordinal=ordinal| ?Homepage = homepage|format=table"
         wikiPush = WikiPush(fromWikiId=wikiId)
         askQuery = "{{#ask:" + self.eventQuery + "}}"
