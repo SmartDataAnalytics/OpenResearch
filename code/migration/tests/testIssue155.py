@@ -5,9 +5,8 @@ Created on 2021-04-06
 '''
 import unittest
 from openresearch.event import Event, EventSeries
-from lodstorage.jsonable import JSONAble, Types
-from wikibot.wikipush import WikiPush, mainQuery
-from lodstorage.sql import SQLDB, EntityInfo
+from lodstorage.jsonable import  Types
+from wikibot.wikipush import WikiPush
 from migrate.toolbox import HelperFunctions
 from openresearch.DBHandler import DBHandler
 import os
@@ -47,8 +46,13 @@ class TestEvent(unittest.TestCase):
         self.assertTrue(LOD[0]['Acronym'] == 'ICSME 2020')
         
         
-    def testEventSql(self):
+    def getDBPath(self):
         path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
+        return path
+        
+        
+    def testEventSql(self):
+        path=self.getDBPath()
         listOfRecords=Event.getSamples()
         EventHandler= DBHandler('Event','acronym',path,self.debug)
         self.assertTrue(EventHandler.createTable(listOfRecords,withDrop=True))
@@ -57,7 +61,7 @@ class TestEvent(unittest.TestCase):
             print(EventHandler.getEntityInfo().createTableCmd)
 
     def testEventSeriesSql(self):
-        path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
+        path=self.getDBPath()
         listOfRecords = EventSeries.getSamples()
         EventSeriesHandler = DBHandler('EventSeries', 'acronym', path, self.debug)
         self.assertTrue(EventSeriesHandler.createTable(listOfRecords,withDrop=True))
@@ -79,7 +83,7 @@ class TestEvent(unittest.TestCase):
             print(lod_res)
         self.assertTrue(isinstance(lod_res, list))
         self.assertTrue(isinstance(lod_res[0], dict))
-        path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
+        path = self.getDBPath()
         listOfRecords = HelperFunctions.excludeFaultyEvents(lod_res)
         EventHandler = DBHandler('Event', 'acronym', path, self.debug)
         self.assertTrue(EventHandler.createTable(listOfRecords,withDrop=True,sampleRecordCount=150))
@@ -88,7 +92,7 @@ class TestEvent(unittest.TestCase):
             print(EventHandler.getEntityInfo().createTableCmd)
 
     def testTableExists(self):
-        path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
+        path = self.getDBPath()
         listOfRecords = [{'test':1}]
         TestHandler = DBHandler('Test', 'test', path, self.debug)
         self.assertTrue(TestHandler.createTable(listOfRecords,withDrop=True))
