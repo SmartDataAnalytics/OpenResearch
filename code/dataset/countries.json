@@ -1,0 +1,319 @@
+{
+  "Countries" : [
+    {
+      "country" : "USA",
+      "countryWikidataName" : "United States of America",
+      "countryWikidataId" : "Q30"
+    },
+    {
+      "country" : "China",
+      "countryWikidataName" : "People's Republic of China",
+      "countryWikidataId" : "Q148"
+    },
+    {
+      "country" : "Germany",
+      "countryWikidataName" : "Germany",
+      "countryWikidataId" : "Q183"
+    },
+    {
+      "country" : "Italy",
+      "countryWikidataName" : "Italy",
+      "countryWikidataId" : "Q38"
+    },
+    {
+      "country" : "France",
+      "countryWikidataName" : "France",
+      "countryWikidataId" : "Q142"
+    },
+    {
+      "country" : "Canada",
+      "countryWikidataName" : "Canada",
+      "countryWikidataId" : "Q16"
+    },
+    {
+      "country" : "Spain",
+      "countryWikidataName" : "Spain",
+      "countryWikidataId" : "Q29"
+    },
+    {
+      "country" : "Japan",
+      "countryWikidataName" : "Japan",
+      "countryWikidataId" : "Q17"
+    },
+    {
+      "country" : "Portugal",
+      "countryWikidataName" : "Portugal",
+      "countryWikidataId" : "Q45"
+    },
+    {
+      "country" : "UK",
+      "countryWikidataName" : "United Kingdom",
+      "countryWikidataId" : "Q145"
+    },
+    {
+      "country" : "Greece",
+      "countryWikidataName" : "Greece",
+      "countryWikidataId" : "Q41"
+    },
+    {
+      "country" : "Australia",
+      "countryWikidataName" : "Australia",
+      "countryWikidataId" : "Q408"
+    },
+    {
+      "country" : "Austria",
+      "countryWikidataName" : "Austria",
+      "countryWikidataId" : "Q40"
+    },
+    {
+      "country" : "Netherlands",
+      "countryWikidataName" : "Kingdom of the Netherlands",
+      "countryWikidataId" : "Q55"
+    },
+    {
+      "country" : "India",
+      "countryWikidataName" : "India",
+      "countryWikidataId" : "Q668"
+    },
+    {
+      "country" : "Singapore",
+      "countryWikidataName" : "Singapore",
+      "countryWikidataId" : "Q334"
+    },
+    {
+      "country" : "United Kingdom",
+      "countryWikidataName" : "United Kingdom",
+      "countryWikidataId" : "Q145"
+    },
+    {
+      "country" : "Poland",
+      "countryWikidataName" : "Poland",
+      "countryWikidataId" : "Q36"
+    },
+    {
+      "country" : "Thailand",
+      "countryWikidataName" : "Thailand",
+      "countryWikidataId" : "Q869"
+    },
+    {
+      "country" : "Sweden",
+      "countryWikidataName" : "Sweden",
+      "countryWikidataId" : "Q34"
+    },
+    {
+      "country" : "Czech Republic",
+      "countryWikidataName" : "Czech Republic",
+      "countryWikidataId" : "Q213"
+    },
+    {
+      "country" : "Taiwan",
+      "countryWikidataName" : "Taiwan",
+      "countryWikidataId" : "Q865"
+    },
+    {
+      "country" : "Brazil",
+      "countryWikidataName" : "Brazil",
+      "countryWikidataId" : "Q155"
+    },
+    {
+      "country" : "South Korea",
+      "countryWikidataName" : "South Korea",
+      "countryWikidataId" : "Q884"
+    },
+    {
+      "country" : "Morocco",
+      "countryWikidataName" : "Morocco",
+      "countryWikidataId" : "Q1028"
+    },
+    {
+      "country" : "Mexico",
+      "countryWikidataName" : "Mexico",
+      "countryWikidataId" : "Q96"
+    },
+    {
+      "country" : "Switzerland",
+      "countryWikidataName" : "Switzerland",
+      "countryWikidataId" : "Q39"
+    },
+    {
+      "country" : "Finland",
+      "countryWikidataName" : "Finland",
+      "countryWikidataId" : "Q33"
+    },
+    {
+      "country" : "Malaysia",
+      "countryWikidataName" : "Malaysia",
+      "countryWikidataId" : "Q833"
+    },
+    {
+      "country" : "New Zealand",
+      "countryWikidataName" : "New Zealand",
+      "countryWikidataId" : "Q664"
+    },
+    {
+      "country" : "Belgium",
+      "countryWikidataName" : "Belgium",
+      "countryWikidataId" : "Q31"
+    },
+    {
+      "country" : "Korea",
+      "countryWikidataName" : "South Korea",
+      "countryWikidataId" : "Q884"
+    },
+    {
+      "country" : "Denmark",
+      "countryWikidataName" : "Danish Realm",
+      "countryWikidataId" : "Q35"
+    },
+    {
+      "country" : "Ireland",
+      "countryWikidataName" : "Ireland",
+      "countryWikidataId" : "Q27"
+    },
+    {
+      "country" : "Russia",
+      "countryWikidataName" : "Russia",
+      "countryWikidataId" : "Q159"
+    },
+    {
+      "country" : "Turkey",
+      "countryWikidataName" : "Turkey",
+      "countryWikidataId" : "Q43"
+    },
+    {
+      "country" : "Indonesia",
+      "countryWikidataName" : "Indonesia",
+      "countryWikidataId" : "Q252"
+    },
+    {
+      "country" : "Vietnam",
+      "countryWikidataName" : "Vietnam",
+      "countryWikidataId" : "Q881"
+    },
+    {
+      "country" : "Hungary",
+      "countryWikidataName" : "Hungary",
+      "countryWikidataId" : "Q28"
+    },
+    {
+      "country" : "Cyprus",
+      "countryWikidataName" : "Cyprus",
+      "countryWikidataId" : "Q229"
+    },
+    {
+      "country" : "Norway",
+      "countryWikidataName" : "Norway",
+      "countryWikidataId" : "Q20"
+    },
+    {
+      "country" : "Romania",
+      "countryWikidataName" : "Romania",
+      "countryWikidataId" : "Q218"
+    },
+    {
+      "country" : "UAE",
+      "countryWikidataName" : "United Arab Emirates",
+      "countryWikidataId" : "Q878"
+    },
+    {
+      "country" : "Egypt",
+      "countryWikidataName" : "Egypt",
+      "countryWikidataId" : "Q79"
+    },
+    {
+      "country" : "South Africa",
+      "countryWikidataName" : "South Africa",
+      "countryWikidataId" : "Q258"
+    },
+    {
+      "country" : "Croatia",
+      "countryWikidataName" : "Croatia",
+      "countryWikidataId" : "Q224"
+    },
+    {
+      "country" : "Estonia",
+      "countryWikidataName" : "Estonia",
+      "countryWikidataId" : "Q191"
+    },
+    {
+      "country" : "Israel",
+      "countryWikidataName" : "Israel",
+      "countryWikidataId" : "Q801"
+    },
+    {
+      "country" : "Malta",
+      "countryWikidataName" : "Malta",
+      "countryWikidataId" : "Q233"
+    },
+    {
+      "country" : "United Arab Emirates",
+      "countryWikidataName" : "United Arab Emirates",
+      "countryWikidataId" : "Q878"
+    },
+    {
+      "country" : "Bulgaria",
+      "countryWikidataName" : "Bulgaria",
+      "countryWikidataId" : "Q219"
+    },
+    {
+      "country" : "Iceland",
+      "countryWikidataName" : "Iceland",
+      "countryWikidataId" : "Q189"
+    },
+    {
+      "country" : "Slovenia",
+      "countryWikidataName" : "Slovenia",
+      "countryWikidataId" : "Q215"
+    },
+    {
+      "country" : "Tunisia",
+      "countryWikidataName" : "Tunisia",
+      "countryWikidataId" : "Q948"
+    },
+    {
+      "country" : "Scotland",
+      "countryWikidataName" : "Kingdom of Scotland",
+      "countryWikidataId" : "Q230791"
+    },
+    {
+      "country" : "Chile",
+      "countryWikidataName" : "Chile",
+      "countryWikidataId" : "Q298"
+    },
+    {
+      "country" : "Slovakia",
+      "countryWikidataName" : "Slovakia",
+      "countryWikidataId" : "Q214"
+    },
+    {
+      "country" : "Ukraine",
+      "countryWikidataName" : "Ukraine",
+      "countryWikidataId" : "Q212"
+    },
+    {
+      "country" : "Argentina",
+      "countryWikidataName" : "Argentina",
+      "countryWikidataId" : "Q414"
+    },
+    {
+      "country" : "Luxembourg",
+      "countryWikidataName" : "Luxembourg",
+      "countryWikidataId" : "Q32"
+    },
+    {
+      "country" : "Philippines",
+      "countryWikidataName" : "Philippines",
+      "countryWikidataId" : "Q928"
+    },
+    {
+      "country" : "Iran",
+      "countryWikidataName" : "Iran",
+      "countryWikidataId" : "Q794"
+    },
+    {
+      "country" : "Serbia",
+      "countryWikidataName" : "Serbia",
+      "countryWikidataId" : "Q403"
+    }
+  ]
+}
