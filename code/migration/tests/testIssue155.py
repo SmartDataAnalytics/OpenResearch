@@ -6,14 +6,17 @@ Created on 2021-04-06
 import unittest
 from openresearch.event import Event, EventSeries
 from lodstorage.jsonable import JSONAble, Types
+from wikibot.wikipush import WikiPush, mainQuery
 from lodstorage.sql import SQLDB, EntityInfo
 from migrate.toolbox import HelperFunctions
+from openresearch.DBHandler import DBHandler
+import os
 
 class TestEvent(unittest.TestCase):
 
 
     def setUp(self):
-        self.debug=True
+        self.debug=False
         pass
 
 
@@ -44,15 +47,52 @@ class TestEvent(unittest.TestCase):
         self.assertTrue(LOD[0]['Acronym'] == 'ICSME 2020')
         
         
-    def testSqlLite(self):
+    def testEventSql(self):
+        path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
         listOfRecords=Event.getSamples()
-        sqlDB=SQLDB(debug=self.debug,errorDebug=False) 
-        entityInfo=sqlDB.createTable(listOfRecords,'Event','acronym')
-        sqlDB.store(listOfRecords,entityInfo,executeMany=False)
+        EventHandler= DBHandler('Event','acronym',path,self.debug)
+        self.assertTrue(EventHandler.createTable(listOfRecords,withDrop=True))
+        self.assertTrue(EventHandler.store(listOfRecords))
         if self.debug:
-            print(entityInfo.createTableCmd)
+            print(EventHandler.getEntityInfo().createTableCmd)
+
+    def testEventSeriesSql(self):
+        path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
+        listOfRecords = EventSeries.getSamples()
+        EventSeriesHandler = DBHandler('EventSeries', 'acronym', path, self.debug)
+        self.assertTrue(EventSeriesHandler.createTable(listOfRecords,withDrop=True))
+        self.assertTrue(EventSeriesHandler.store(listOfRecords))
+        if self.debug:
+            print(EventSeriesHandler.getEntityInfo().createTableCmd)
            
         # pass
+
+    def  testLODtoSQL(self):
+        """Test if LOD is returned correctly if called from api to store to SQL"""
+        wikiId = 'or'
+        wikiClient = HelperFunctions.getWikiClient(TestEvent,wikiId)
+        self.eventQuery = "[[IsA::Event]][[start date::>2018]][[start date::<2019]]| mainlabel = Event| ?Title = title| ?Event in series = series| ?_CDAT=creation date| ?_MDAT=modification date| ?ordinal=ordinal| ?Homepage = homepage|format=table"
+        wikiPush = WikiPush(fromWikiId=wikiId)
+        askQuery = "{{#ask:" + self.eventQuery + "}}"
+        lod_res = wikiPush.formatQueryResult(askQuery, wikiClient, entityName="Event")
+        if self.debug:
+            print(lod_res)
+        self.assertTrue(isinstance(lod_res, list))
+        self.assertTrue(isinstance(lod_res[0], dict))
+        path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
+        listOfRecords = HelperFunctions.excludeFaultyEvents(lod_res)
+        EventHandler = DBHandler('Event', 'acronym', path, self.debug)
+        self.assertTrue(EventHandler.createTable(listOfRecords,withDrop=True,sampleRecordCount=150))
+        self.assertTrue(EventHandler.store(listOfRecords,fixNone=True))
+        if self.debug:
+            print(EventHandler.getEntityInfo().createTableCmd)
+
+    def testTableExists(self):
+        path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
+        listOfRecords = [{'test':1}]
+        TestHandler = DBHandler('Test', 'test', path, self.debug)
+        self.assertTrue(TestHandler.createTable(listOfRecords,withDrop=True))
+        self.assertTrue(TestHandler.checkTableExists('Test'))
 
 
 if __name__ == "__main__":
