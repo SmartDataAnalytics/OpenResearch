@@ -4,8 +4,9 @@ Created on 2021-04-06
 @author: wf
 '''
 import unittest
-from openresearch.event import Event, EventSeries
+from openresearch.event import Event, EventList, EventSeries, EventSeriesList
 from lodstorage.jsonable import  Types
+from lodstorage.sql import SQLDB
 from wikibot.wikipush import WikiPush
 from migrate.toolbox import HelperFunctions
 from openresearch.dbHandler import DBHandler
@@ -49,9 +50,31 @@ class TestEvent(unittest.TestCase):
     def getDBPath(self):
         path = os.path.dirname(__file__) + "/../../dataset/OpenResearch.DB"
         return path
+    
+    def getSQLDB(self,path=None):
+        if path is not None:
+            sqlDB=SQLDB(path)
+        else:
+            sqlDB=SQLDB() # in memory DB!
+        return sqlDB
         
+    def testEventSql(self):   
+        '''
+        test event handling with SQL
+        ''' 
+        listOfRecords=Event.getSamples()
+        sqlDB=self.getSQLDB()
+        entityInfo=sqlDB.createTable(listOfRecords,'Event','acronym',withDrop=True)
+        self.assertIsNotNone(entityInfo)
+        sqlDB.store(listOfRecords,entityInfo,fixNone=True)
+        if self.debug:
+            print(entityInfo.createTableCmd)
+        eventList=EventList()  
+        eventList.fromSQLTable(sqlDB,entityInfo) 
+        self.assertEqual(1,len(eventList.events))
+  
         
-    def testEventSql(self):
+    def testEventSqlWithDBHandler(self):
         path=self.getDBPath()
         listOfRecords=Event.getSamples()
         EventHandler= DBHandler('Event','acronym',path,self.debug)

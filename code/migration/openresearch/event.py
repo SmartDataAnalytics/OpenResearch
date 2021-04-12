@@ -3,8 +3,15 @@ Created on 2021-04-06
 
 @author: wf
 '''
-from lodstorage.jsonable import JSONAble, Types
+from lodstorage.jsonable import JSONAble,JSONAbleList, Types
 
+class EventSeriesList(JSONAbleList):
+    '''
+    i represent a list of EventSeries
+    '''
+    def __init__(self):
+        self.eventSeries=[]
+        
 class EventSeries(JSONAble):
     '''
     '''
@@ -56,7 +63,22 @@ class EventSeries(JSONAble):
 
         return samplesWikiSon
 
-
+class EventList(JSONAbleList):
+    '''
+    i represent a list of Events
+    '''
+    def __init__(self):
+        self.events=[]
+        
+    def fromSQLTable(self,sqlDB,entityInfo):
+        lod=sqlDB.queryAll(entityInfo)
+        for record in lod:
+            event=Event()
+            event.fromDict(record)
+            self.events.append(event)
+        pass
+        
+    
 class Event(JSONAble):
     '''
     I represent an Event
