@@ -150,7 +150,6 @@ class EventList(OREntityList):
             self.events.append(event)
         pass
     
-    
     def getAskQuery(self,askExtra=""):
         '''
         get the query that will ask for all my events
@@ -159,13 +158,18 @@ class EventList(OREntityList):
            askExtra(str): any additional constraints
         '''
         propertyLookupList=[
-            { 'prop':'Acronym',    'name': 'acronym'},
-            { 'prop':'Ordinal',    'name': 'ordinal'},
-            { 'prop':'Homepage',   'name': 'homepage'},
-            { 'prop':'Title',      'name': 'title'},
-            { 'prop':'Type',       'name': 'type'},
-            { 'prop':'Start date', 'name': 'startDate'},
-            { 'prop':'End date',   'name': 'endDate'}
+            { 'prop':'Acronym',             'name': 'acronym'},
+            { 'prop':'Ordinal',             'name': 'ordinal'},
+            { 'prop':'Homepage',            'name': 'homepage'},
+            { 'prop':'Title',               'name': 'title'},
+            { 'prop':'Event Type',          'name': 'eventType'},
+            { 'prop':'Start date',          'name': 'startDate'},
+            { 'prop':'End date',            'name': 'endDate'},
+            { 'prop':'Event in series',     'name': 'inEventSeries'},
+            { 'prop':'Has_location_country','name': 'country'},
+            { 'prop':'Has_location_state',  'name': 'region'},
+            { 'prop':'Has_location_city',   'name': 'city'}
+            
         ]               
         ask=super().getAskQuery(propertyLookupList,askExtra)
         return ask
