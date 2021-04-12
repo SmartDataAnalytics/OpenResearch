@@ -22,13 +22,16 @@ class HelperFunctions:
         return getpass.getuser() in [ "travis", "runner" ];
 
     @classmethod
-    def excludeFaultyEvents(cls,LoDEvents):
+    def excludeFaultyEvents(cls,LoDEvents,debug=True):
         new_Lod=[]
         for record in LoDEvents:
-            if 'series' in record:
-                if type(record['series'])!=list:
-                    new_Lod.append(record)
-            else:
+            ok=True
+            for key in record.keys():
+                if type(record[key])==list:
+                    ok=False
+                    if debug:    
+                        print("%d %s in %s" % (len(record[key]),key,record))
+            if ok:     
                 new_Lod.append(record)
         return new_Lod
 

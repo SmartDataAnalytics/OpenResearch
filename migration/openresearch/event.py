@@ -3,14 +3,51 @@ Created on 2021-04-06
 
 @author: wf
 '''
-from lodstorage.jsonable import JSONAble,JSONAbleList, Types
+from lodstorage.jsonable import JSONAble,JSONAbleList
 from datetime import datetime
-class EventSeriesList(JSONAbleList):
+
+class OREntityList(JSONAbleList):
+    '''
+    wrapper for JSONAble
+    '''
+    def __init__(self,listName:str=None,clazz=None,tableName:str=None):
+        super(OREntityList, self).__init__(listName,clazz,tableName)
+        
+    def getList(self):
+        return self.__dict__[self.listName]
+    
+    def getEntityName(self):
+        '''
+        get my entity name
+        '''
+        return self.clazz.__name__
+    
+    def getAskQuery(self,propertyLookupList,askExtra=""):
+        '''
+        get the query that will ask for all my events
+        
+        Args:
+            propertyLookupList:  a list of dicts for propertyLookup
+           askExtra(str): any additional constraints
+        '''
+        entityName=self.getEntityName()
+        selector="IsA::Event" if entityName=="Event" else "Category:Event series"
+        ask="""{{#ask:[[%s]]%s
+|mainlabel=pageTitle""" % (selector,askExtra)
+        for propertyLookup in propertyLookupList:
+            propName=propertyLookup['prop']
+            name=propertyLookup['name']
+            ask+="|?%s=%s\n" % (propName,name)
+        ask+="}}"
+        return ask
+        
+class EventSeriesList(OREntityList):
     '''
     i represent a list of EventSeries
     '''
     def __init__(self):
         self.eventSeries=[]
+        super(EventSeriesList, self).__init__("eventSeries",EventSeries)
 
     def fromSQLTable(self,sqlDB,entityInfo):
         lod=sqlDB.queryAll(entityInfo)
@@ -19,6 +56,24 @@ class EventSeriesList(JSONAbleList):
             eventSeries.fromDict(record)
             self.eventSeries.append(eventSeries)
         pass
+    
+    def getAskQuery(self,askExtra=""):
+        '''
+        get the query that will ask for all my events
+        
+        Args:
+           askExtra(str): any additional constraints
+        '''
+        propertyLookupList=[
+            { 'prop':'Acronym',    'name': 'acronym'},
+            { 'prop':'Homepage',   'name': 'homepage'},
+            { 'prop':'Title',      'name': 'title'},
+            { 'prop':'Field',      'name': 'subject'},
+            { 'prop':'WikiDataId',  'name': 'wikiDataId'},
+            { 'prop':'DblpSeries',  'name': 'dblpSeries' }
+        ]               
+        ask=super().getAskQuery(propertyLookupList,askExtra)
+        return ask
         
 class EventSeries(JSONAble):
     '''
@@ -27,6 +82,7 @@ class EventSeries(JSONAble):
         '''
         Constructor
         '''
+        
 
     @classmethod
     def getSamples(self):
@@ -71,13 +127,20 @@ class EventSeries(JSONAble):
             samplesWikiSon = "..."
 
         return samplesWikiSon
+    
+    def __str__(self):
+        text=self.pageTitle
+        if hasattr(self, "acronym"):
+            text+="(%s)" %self.acronym
+        return text
 
-class EventList(JSONAbleList):
+class EventList(OREntityList):
     '''
     i represent a list of Events
     '''
     def __init__(self):
         self.events=[]
+        super(EventList, self).__init__("events",Event)
         
     def fromSQLTable(self,sqlDB,entityInfo):
         lod=sqlDB.queryAll(entityInfo)
@@ -95,8 +158,6 @@ class EventList(JSONAbleList):
         Args:
            askExtra(str): any additional constraints
         '''
-        ask="""{{#ask:[[IsA::Event]]%s
-|mainlabel=pageTitle""" % askExtra
         propertyLookupList=[
             { 'prop':'Acronym',    'name': 'acronym'},
             { 'prop':'Ordinal',    'name': 'ordinal'},
@@ -106,11 +167,7 @@ class EventList(JSONAbleList):
             { 'prop':'Start date', 'name': 'startDate'},
             { 'prop':'End date',   'name': 'endDate'}
         ]               
-        for propertyLookup in propertyLookupList:
-            propName=propertyLookup['prop']
-            name=propertyLookup['name']
-            ask+="|?%s=%s\n" % (propName,name)
-        ask+="}}"
+        ask=super().getAskQuery(propertyLookupList,askExtra)
         return ask
     
 class Event(JSONAble):
@@ -170,4 +227,6 @@ class Event(JSONAble):
 
     def __str__(self):
         text=self.pageTitle
+        if hasattr(self, "acronym"):
+            text+="(%s)" %self.acronym
         return text
