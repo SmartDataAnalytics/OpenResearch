@@ -11,6 +11,14 @@ class EventSeriesList(JSONAbleList):
     '''
     def __init__(self):
         self.eventSeries=[]
+
+    def fromSQLTable(self,sqlDB,entityInfo):
+        lod=sqlDB.queryAll(entityInfo)
+        for record in lod:
+            eventSeries=EventSeries()
+            eventSeries.fromDict(record)
+            self.eventSeries.append(eventSeries)
+        pass
         
 class EventSeries(JSONAble):
     '''
@@ -132,3 +140,4 @@ class Event(JSONAble):
             samplesWikiSon="..."
         
         return samplesWikiSon
+
