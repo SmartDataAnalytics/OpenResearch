@@ -23,24 +23,6 @@ class HelperFunctions:
         return getpass.getuser() in [ "travis", "runner" ];
 
     @classmethod
-    def excludeFaultyEvents(cls,LoDEvents,debug=True):
-        '''
-        fix faulty events
-        TODO: this is a fixer and should move to one of a base fixer class
-        '''
-        new_Lod=[]
-        for record in LoDEvents:
-            ok=True
-            for key in record.keys():
-                if type(record[key])==list:
-                    ok=False
-                    if debug:    
-                        print("%d %s in %s" % (len(record[key]),key,record))
-            if ok:     
-                new_Lod.append(record)
-        return new_Lod
-
-    @classmethod
     def getSMW_WikiUser(cls,wikiId="or",save=False):
         '''
         get semantic media wiki users for SemanticMediawiki.org and openresearch.org

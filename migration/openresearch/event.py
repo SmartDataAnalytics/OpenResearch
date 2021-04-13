@@ -5,6 +5,13 @@ Created on 2021-04-06
 '''
 from lodstorage.jsonable import JSONAble,JSONAbleList
 from datetime import datetime
+from wikibot.wikiuser import WikiUser
+from wikibot.wikiclient import WikiClient
+from wikibot.wikipush import WikiPush
+from pathlib import Path
+import os
+import time
+from pandas.core.ops import invalid
 
 class OREntityList(JSONAbleList):
     '''
@@ -12,6 +19,11 @@ class OREntityList(JSONAbleList):
     '''
     def __init__(self,listName:str=None,clazz=None,tableName:str=None):
         super(OREntityList, self).__init__(listName,clazz,tableName)
+        self.profile=False
+        self.debug=False
+        self.wikiClient=None
+        self.wikiPush=None
+        self.askExtra=""
         
     def getList(self):
         return self.__dict__[self.listName]
@@ -31,7 +43,8 @@ class OREntityList(JSONAbleList):
            askExtra(str): any additional constraints
         '''
         entityName=self.getEntityName()
-        selector="IsA::Event" if entityName=="Event" else "Category:Event series"
+        isASelector="IsA::%s" % entityName
+        selector="Category:Event series" if entityName=="EventSeries" else isASelector
         ask="""{{#ask:[[%s]]%s
 |mainlabel=pageTitle""" % (selector,askExtra)
         for propertyLookup in propertyLookupList:
@@ -40,6 +53,85 @@ class OREntityList(JSONAbleList):
             ask+="|?%s=%s\n" % (propName,name)
         ask+="}}"
         return ask
+    
+    @staticmethod        
+    def getCachePath():
+        home = str(Path.home())
+        cachedir="%s/.or/" %home
+        return cachedir
+    
+    def getJsonFile(self):
+        '''
+        get the json File for me
+        '''
+        cachePath=OREntityList.getCachePath()
+        os.makedirs(cachePath,exist_ok=True)
+        jsonPrefix="%s/%s" % (cachePath,self.getEntityName())
+        jsonFilePath="%s.json" % jsonPrefix
+        return jsonFilePath
+    
+    def fromCache(self,wikiuser:WikiUser):
+        '''
+        Args:
+            wikiuser: the wikiuser to use 
+        '''
+        jsonFilePath=self.getJsonFile()
+        # TODO: fix upstream pyLodStorage
+        jsonPrefix=jsonFilePath.replace(".json","")
+        if os.path.isfile(jsonFilePath):
+            self.restoreFromJsonFile(jsonPrefix)
+        else:
+            self.fromWiki(wikiuser,askExtra=self.askExtra,profile=self.profile)
+            self.storeToJsonFile(jsonPrefix)
+            
+    def fromWiki(self,wikiuser:WikiUser,askExtra="",profile=False):
+        '''
+        read me from a wiki using the givne WikiUser configuration
+        '''
+        if self.wikiClient is None:
+            self.wikiclient=WikiClient.ofWikiUser(wikiuser)
+            self.wikiPush = WikiPush(fromWikiId=wikiuser.wikiId)
+        askQuery=self.getAskQuery(askExtra)
+        if self.debug:
+            print(askQuery)
+        startTime=time.time()
+        entityName=self.getEntityName()
+        records = self.wikiPush.formatQueryResult(askQuery, self.wikiClient, entityName=entityName)
+        elapsed=time.time()-startTime
+        if profile:
+            print("query of %d %s records took %5.1f s" % (len(records),entityName,elapsed))
+        self.fromLoD(records)
+        return records
+    
+    def fromSQLTable(self,sqlDB,entityInfo):
+        lod=sqlDB.queryAll(entityInfo)
+        self.fromLoD(lod)
+        
+    def fromLoD(self,lod): 
+        '''
+        create me from the given list of dicts
+        '''
+        errors=[] 
+        entityList=self.getList()  
+        for record in lod:
+            # call the constructor to get a new instance
+            try:
+                entity=self.clazz()
+                if hasattr(entity,"fixRecord"):
+                    fixRecord=getattr(entity,'fixRecord');
+                    if callable(fixRecord):
+                        fixRecord(record)
+                entity.fromDict(record)
+                entityList.append(entity)
+            except Exception as ex:
+                error={
+                    self.getEntityName():record,
+                    "error": ex
+                }
+                errors.append(error)
+                if self.debug:
+                    print(error)
+        return errors
         
 class EventSeriesList(OREntityList):
     '''
@@ -48,14 +140,6 @@ class EventSeriesList(OREntityList):
     def __init__(self):
         self.eventSeries=[]
         super(EventSeriesList, self).__init__("eventSeries",EventSeries)
-
-    def fromSQLTable(self,sqlDB,entityInfo):
-        lod=sqlDB.queryAll(entityInfo)
-        for record in lod:
-            eventSeries=EventSeries()
-            eventSeries.fromDict(record)
-            self.eventSeries.append(eventSeries)
-        pass
     
     def getAskQuery(self,askExtra=""):
         '''
@@ -68,7 +152,7 @@ class EventSeriesList(OREntityList):
             { 'prop':'Acronym',    'name': 'acronym'},
             { 'prop':'Homepage',   'name': 'homepage'},
             { 'prop':'Title',      'name': 'title'},
-            { 'prop':'Field',      'name': 'subject'},
+            #{ 'prop':'Field',      'name': 'subject'},
             { 'prop':'WikiDataId',  'name': 'wikiDataId'},
             { 'prop':'DblpSeries',  'name': 'dblpSeries' }
         ]               
@@ -140,14 +224,6 @@ class EventList(OREntityList):
     def __init__(self):
         self.events=[]
         super(EventList, self).__init__("events",Event)
-        
-    def fromSQLTable(self,sqlDB,entityInfo):
-        lod=sqlDB.queryAll(entityInfo)
-        for record in lod:
-            event=Event()
-            event.fromDict(record)
-            self.events.append(event)
-        pass
     
     def getAskQuery(self,askExtra=""):
         '''
@@ -170,7 +246,6 @@ class EventList(OREntityList):
             { 'prop':'Has_location_city',   'name': 'city'},
             { 'prop':'Accepted_papers',     'name': 'acceptedPapers'},
             { 'prop':'Submitted_papers',    'name': 'submittedPapers'}
-            
         ]               
         ask=super().getAskQuery(propertyLookupList,askExtra)
         return ask
@@ -246,7 +321,26 @@ class Event(JSONAble):
             samplesWikiSon="..."
         
         return samplesWikiSon
-
+    
+    def fixRecord(self,record):
+        '''
+        fix my dict representation
+        '''
+        invalidKeys=[]
+        for key in record.keys():
+            value=record[key]
+            if type(value)==list:
+                # TODO: handle properly e.g. by marking and converting list to 
+                # comma separated list
+                invalidKeys.append(key)
+                print ("%s=%s in %s"  % (key,record[key],record ))
+            if value is None:
+                invalidKeys.append(key)
+                
+        for key in invalidKeys:
+            record.pop(key)
+            
+    
     def __str__(self):
         text=self.pageTitle
         if hasattr(self, "acronym"):

@@ -8,7 +8,7 @@ from openresearch.event import Event, EventList, EventSeries, EventSeriesList
 from lodstorage.jsonable import  Types
 from lodstorage.sql import SQLDB
 from wikibot.wikipush import WikiPush
-from migrate.toolbox import HelperFunctions
+from migrate.toolbox import HelperFunctions as hf
 import time
 
 class TestEvent(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestEvent(unittest.TestCase):
         wikiSonSample = EventSeries.getSampleWikiSon()
         types.getTypes("eventseries", samples, 1)
         self.assertIsNotNone(types.typeMap)
-        LOD = HelperFunctions.WikiSontoLOD(wikiSonSample[0])
+        LOD = hf.WikiSontoLOD(wikiSonSample[0])
         self.assertTrue(LOD[0]['Acronym'] == 'AAAI')
         # pass
 
@@ -45,7 +45,7 @@ class TestEvent(unittest.TestCase):
         wikiSonSample = Event.getSampleWikiSon()
         types.getTypes("events", samples, 1)
         self.assertIsNotNone(types.typeMap)
-        LOD=HelperFunctions.WikiSontoLOD(wikiSonSample[0])
+        LOD=hf.WikiSontoLOD(wikiSonSample[0])
         self.assertTrue(LOD[0]['Acronym'] == 'ICSME 2020')
         
     def getSQLDB(self,path=None):
@@ -107,47 +107,35 @@ class TestEvent(unittest.TestCase):
         eventSeries=eventSeriesList.eventSeries[0]
         self.assertTrue(isinstance(eventSeries,EventSeries))
         
-    def getWikiPush(self):
-        wikiId = 'or'
-        save=HelperFunctions.inPublicCI()
-        wikiClient = HelperFunctions.getWikiClient(wikiId,save)
-        wikiPush = WikiPush(fromWikiId=wikiId)
-        return wikiClient,wikiPush
-    
-    def testWikiPush(self):
-        wikiClient,wikiPush=self.getWikiPush()
-        self.assertIsNotNone(wikiClient)
-        self.assertIsNotNone(wikiPush)
-        
     def testLODtoSQL(self):
         """Test if LOD is returned correctly if called from api to store to SQL"""
-        wikiClient,wikiPush=self.getWikiPush()
+        wikiuser=hf.getSMW_WikiUser()
         expectedCount={"Event":100,"EventSeries":20}
         for entityListClass in EventList,EventSeriesList:
             entityList=entityListClass()
-            askExtra="" if HelperFunctions.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
-            #askExtra="[[Ordinal::36]]"
-            askQuery=entityList.getAskQuery(askExtra)
-            if self.debug:
-                print (askQuery)
-            profile=self.debug
-            startTime=time.time()
             entityName=entityList.getEntityName()
-            lod_res = wikiPush.formatQueryResult(askQuery, wikiClient, entityName=entityName)
-            elapsed=time.time()-startTime
-            if profile:
-                print("query of %d %s records took %5.1f s" % (len(lod_res),entityList.clazz.__name__,elapsed))
-            self.assertTrue(isinstance(lod_res, list))
-            self.assertTrue(isinstance(lod_res[0], dict))
-            listOfRecords = HelperFunctions.excludeFaultyEvents(lod_res)
+            entityList.debug=self.debug
+            entityList.profile=self.debug
+            askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
+            #askExtra="[[Ordinal::36]]"
+            listOfRecords=entityList.fromWiki(wikiuser,askExtra=askExtra)
             entityList=self.getEntityListViaSQL(listOfRecords,entityListClass)
             entities=entityList.getList()
-            if self.debug:
-                print("%d records after exclude converted to %s instances" % (len(entities),entityName))
             for entity in entities[:5]:
                 print(entity)
                 print(entity.toJSON())
             self.assertTrue(len(entities)>=expectedCount[entityName])
+            
+    def testFromCache(self):
+        '''
+        get the eventList from the cache
+        '''
+        eventList=EventList()
+        eventList.profile=True
+        askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
+        eventList.askExtra=askExtra
+        wikiuser=hf.getSMW_WikiUser()
+        eventList.fromCache(wikiuser)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
