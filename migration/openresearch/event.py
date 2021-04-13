@@ -83,7 +83,6 @@ class EventSeries(JSONAble):
         Constructor
         '''
         
-
     @classmethod
     def getSamples(self):
         '''
@@ -236,3 +235,58 @@ class Event(JSONAble):
         if hasattr(self, "acronym"):
             text+="(%s)" %self.acronym
         return text
+    
+class CountryList(JSONAbleList):
+    '''
+    a list of countries
+    '''
+    def __init__(self):
+        self.countries=[]
+        super(CountryList, self).__init__("countries",Country)
+
+class Country(JSONAble):
+    '''
+    distinct region in geography; a broad term that can include political divisions or 
+    regions associated with distinct political characteristics 
+    '''
+    
+    @classmethod
+    def getSamples(cls):
+        '''
+        get my samples
+        TODO:
+           remove countryPrefix and change country attribute to "name"
+        '''
+        samplesLOD=[
+    {
+      "name" : "USA",
+      "wikidataName" : "United States of America",
+      "wikidataId" : "Q30"
+    },
+    {
+      "name" : "China",
+      "wikidataName" : "People's Republic of China",
+      "wikidataId" : "Q148"
+    },
+    {
+      "name" : "Germany",
+      "wikidataName" : "Germany",
+      "wikidataId" : "Q183"
+    },
+    {
+      "name" : "Italy",
+      "wikidataName" : "Italy",
+      "wikidataId" : "Q38"
+    },
+    {
+      "name" : "France",
+      "wikidataName" : "France",
+      "wikidataId" : "Q142"
+    }
+    ]
+        return samplesLOD
+    
+    def __str__(self):
+        text=self.name
+        return text
+    

@@ -6,13 +6,14 @@ from wikibot.wikiclient import WikiClient
 import getpass
 
 class HelperFunctions:
+    '''
+    general helper functions
+    
+    for the OpenResearch Migration project
+    '''
     def __init__(self,debug=False):
         'Constructor'
         self.debug=debug
-        
-        
-        
-        
         
     @staticmethod    
     def inPublicCI():
@@ -23,6 +24,10 @@ class HelperFunctions:
 
     @classmethod
     def excludeFaultyEvents(cls,LoDEvents,debug=True):
+        '''
+        fix faulty events
+        TODO: this is a fixer and should move to one of a base fixer class
+        '''
         new_Lod=[]
         for record in LoDEvents:
             ok=True

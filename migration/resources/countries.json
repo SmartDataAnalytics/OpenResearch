@@ -1,0 +1,319 @@
+{
+  "countries" : [
+    {
+      "name" : "USA",
+      "wikidataName" : "United States of America",
+      "wikidataId" : "Q30"
+    },
+    {
+      "name" : "China",
+      "wikidataName" : "People's Republic of China",
+      "wikidataId" : "Q148"
+    },
+    {
+      "name" : "Germany",
+      "wikidataName" : "Germany",
+      "wikidataId" : "Q183"
+    },
+    {
+      "name" : "Italy",
+      "wikidataName" : "Italy",
+      "wikidataId" : "Q38"
+    },
+    {
+      "name" : "France",
+      "wikidataName" : "France",
+      "wikidataId" : "Q142"
+    },
+    {
+      "name" : "Canada",
+      "wikidataName" : "Canada",
+      "wikidataId" : "Q16"
+    },
+    {
+      "name" : "Spain",
+      "wikidataName" : "Spain",
+      "wikidataId" : "Q29"
+    },
+    {
+      "name" : "Japan",
+      "wikidataName" : "Japan",
+      "wikidataId" : "Q17"
+    },
+    {
+      "name" : "Portugal",
+      "wikidataName" : "Portugal",
+      "wikidataId" : "Q45"
+    },
+    {
+      "name" : "UK",
+      "wikidataName" : "United Kingdom",
+      "wikidataId" : "Q145"
+    },
+    {
+      "name" : "Greece",
+      "wikidataName" : "Greece",
+      "wikidataId" : "Q41"
+    },
+    {
+      "name" : "Australia",
+      "wikidataName" : "Australia",
+      "wikidataId" : "Q408"
+    },
+    {
+      "name" : "Austria",
+      "wikidataName" : "Austria",
+      "wikidataId" : "Q40"
+    },
+    {
+      "name" : "Netherlands",
+      "wikidataName" : "Kingdom of the Netherlands",
+      "wikidataId" : "Q55"
+    },
+    {
+      "name" : "India",
+      "wikidataName" : "India",
+      "wikidataId" : "Q668"
+    },
+    {
+      "name" : "Singapore",
+      "wikidataName" : "Singapore",
+      "wikidataId" : "Q334"
+    },
+    {
+      "name" : "United Kingdom",
+      "wikidataName" : "United Kingdom",
+      "wikidataId" : "Q145"
+    },
+    {
+      "name" : "Poland",
+      "wikidataName" : "Poland",
+      "wikidataId" : "Q36"
+    },
+    {
+      "name" : "Thailand",
+      "wikidataName" : "Thailand",
+      "wikidataId" : "Q869"
+    },
+    {
+      "name" : "Sweden",
+      "wikidataName" : "Sweden",
+      "wikidataId" : "Q34"
+    },
+    {
+      "name" : "Czech Republic",
+      "wikidataName" : "Czech Republic",
+      "wikidataId" : "Q213"
+    },
+    {
+      "name" : "Taiwan",
+      "wikidataName" : "Taiwan",
+      "wikidataId" : "Q865"
+    },
+    {
+      "name" : "Brazil",
+      "wikidataName" : "Brazil",
+      "wikidataId" : "Q155"
+    },
+    {
+      "name" : "South Korea",
+      "wikidataName" : "South Korea",
+      "wikidataId" : "Q884"
+    },
+    {
+      "name" : "Morocco",
+      "wikidataName" : "Morocco",
+      "wikidataId" : "Q1028"
+    },
+    {
+      "name" : "Mexico",
+      "wikidataName" : "Mexico",
+      "wikidataId" : "Q96"
+    },
+    {
+      "name" : "Switzerland",
+      "wikidataName" : "Switzerland",
+      "wikidataId" : "Q39"
+    },
+    {
+      "name" : "Finland",
+      "wikidataName" : "Finland",
+      "wikidataId" : "Q33"
+    },
+    {
+      "name" : "Malaysia",
+      "wikidataName" : "Malaysia",
+      "wikidataId" : "Q833"
+    },
+    {
+      "name" : "New Zealand",
+      "wikidataName" : "New Zealand",
+      "wikidataId" : "Q664"
+    },
+    {
+      "name" : "Belgium",
+      "wikidataName" : "Belgium",
+      "wikidataId" : "Q31"
+    },
+    {
+      "name" : "Korea",
+      "wikidataName" : "South Korea",
+      "wikidataId" : "Q884"
+    },
+    {
+      "name" : "Denmark",
+      "wikidataName" : "Danish Realm",
+      "wikidataId" : "Q35"
+    },
+    {
+      "name" : "Ireland",
+      "wikidataName" : "Ireland",
+      "wikidataId" : "Q27"
+    },
+    {
+      "name" : "Russia",
+      "wikidataName" : "Russia",
+      "wikidataId" : "Q159"
+    },
+    {
+      "name" : "Turkey",
+      "wikidataName" : "Turkey",
+      "wikidataId" : "Q43"
+    },
+    {
+      "name" : "Indonesia",
+      "wikidataName" : "Indonesia",
+      "wikidataId" : "Q252"
+    },
+    {
+      "name" : "Vietnam",
+      "wikidataName" : "Vietnam",
+      "wikidataId" : "Q881"
+    },
+    {
+      "name" : "Hungary",
+      "wikidataName" : "Hungary",
+      "wikidataId" : "Q28"
+    },
+    {
+      "name" : "Cyprus",
+      "wikidataName" : "Cyprus",
+      "wikidataId" : "Q229"
+    },
+    {
+      "name" : "Norway",
+      "wikidataName" : "Norway",
+      "wikidataId" : "Q20"
+    },
+    {
+      "name" : "Romania",
+      "wikidataName" : "Romania",
+      "wikidataId" : "Q218"
+    },
+    {
+      "name" : "UAE",
+      "wikidataName" : "United Arab Emirates",
+      "wikidataId" : "Q878"
+    },
+    {
+      "name" : "Egypt",
+      "wikidataName" : "Egypt",
+      "wikidataId" : "Q79"
+    },
+    {
+      "name" : "South Africa",
+      "wikidataName" : "South Africa",
+      "wikidataId" : "Q258"
+    },
+    {
+      "name" : "Croatia",
+      "wikidataName" : "Croatia",
+      "wikidataId" : "Q224"
+    },
+    {
+      "name" : "Estonia",
+      "wikidataName" : "Estonia",
+      "wikidataId" : "Q191"
+    },
+    {
+      "name" : "Israel",
+      "wikidataName" : "Israel",
+      "wikidataId" : "Q801"
+    },
+    {
+      "name" : "Malta",
+      "wikidataName" : "Malta",
+      "wikidataId" : "Q233"
+    },
+    {
+      "name" : "United Arab Emirates",
+      "wikidataName" : "United Arab Emirates",
+      "wikidataId" : "Q878"
+    },
+    {
+      "name" : "Bulgaria",
+      "wikidataName" : "Bulgaria",
+      "wikidataId" : "Q219"
+    },
+    {
+      "name" : "Iceland",
+      "wikidataName" : "Iceland",
+      "wikidataId" : "Q189"
+    },
+    {
+      "name" : "Slovenia",
+      "wikidataName" : "Slovenia",
+      "wikidataId" : "Q215"
+    },
+    {
+      "name" : "Tunisia",
+      "wikidataName" : "Tunisia",
+      "wikidataId" : "Q948"
+    },
+    {
+      "name" : "Scotland",
+      "wikidataName" : "Kingdom of Scotland",
+      "wikidataId" : "Q230791"
+    },
+    {
+      "name" : "Chile",
+      "wikidataName" : "Chile",
+      "wikidataId" : "Q298"
+    },
+    {
+      "name" : "Slovakia",
+      "wikidataName" : "Slovakia",
+      "wikidataId" : "Q214"
+    },
+    {
+      "name" : "Ukraine",
+      "wikidataName" : "Ukraine",
+      "wikidataId" : "Q212"
+    },
+    {
+      "name" : "Argentina",
+      "wikidataName" : "Argentina",
+      "wikidataId" : "Q414"
+    },
+    {
+      "name" : "Luxembourg",
+      "wikidataName" : "Luxembourg",
+      "wikidataId" : "Q32"
+    },
+    {
+      "name" : "Philippines",
+      "wikidataName" : "Philippines",
+      "wikidataId" : "Q928"
+    },
+    {
+      "name" : "Iran",
+      "wikidataName" : "Iran",
+      "wikidataId" : "Q794"
+    },
+    {
+      "name" : "Serbia",
+      "wikidataName" : "Serbia",
+      "wikidataId" : "Q403"
+    }
+  ]
+}
