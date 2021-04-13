@@ -11,7 +11,7 @@ from wikibot.wikipush import WikiPush
 from pathlib import Path
 import os
 import time
-from pandas.core.ops import invalid
+
 
 class OREntityList(JSONAbleList):
     '''
