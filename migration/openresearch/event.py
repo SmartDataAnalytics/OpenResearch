@@ -46,7 +46,10 @@ class OREntityList(JSONAbleList):
         isASelector="IsA::%s" % entityName
         selector="Category:Event series" if entityName=="EventSeries" else isASelector
         ask="""{{#ask:[[%s]]%s
-|mainlabel=pageTitle""" % (selector,askExtra)
+|mainlabel=pageTitle
+|?_CDAT=creationDate
+|?_MDAT=modificationDate
+""" % (selector,askExtra)
         for propertyLookup in propertyLookupList:
             propName=propertyLookup['prop']
             name=propertyLookup['name']
@@ -333,7 +336,7 @@ class Event(JSONAble):
                 # TODO: handle properly e.g. by marking and converting list to 
                 # comma separated list
                 invalidKeys.append(key)
-                print ("%s=%s in %s"  % (key,record[key],record ))
+                print ("invalid list %s=%s in %s"  % (key,record[key],record ))
             if value is None:
                 invalidKeys.append(key)
                 

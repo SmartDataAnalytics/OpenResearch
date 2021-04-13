@@ -3,10 +3,9 @@ Created on 2021-04-06
 
 @author: wf
 '''
-import re
-from migrate.fixer import PageFixer
-from migrate.toolbox import HelperFunctions
-from wikibot.wikipush import WikiPush
+from migration.migrate.fixer import PageFixer
+from migration.migrate.toolbox import HelperFunctions as hf
+from migration.openresearch.event import EventList
 
 class SeriesFixer(PageFixer):
     '''
@@ -23,30 +22,29 @@ class SeriesFixer(PageFixer):
         self.debug = debug
 
 
-    def checkAll(self,eventQuery):
+    def checkAll(self,askExtra):
         '''
         check if any event has multiple objects in series field
         '''
         """Test if LOD is returned correctly if called from api to store to SQL"""
-        wikiId = 'or'
-        wikiClient = HelperFunctions.getWikiClient(HelperFunctions, wikiId)
-        wikiPush = WikiPush(fromWikiId=wikiId)
-        askQuery = "{{#ask:" + eventQuery + "}}"
-        lod_res = wikiPush.formatQueryResult(askQuery, wikiClient, entityName="Event")
+        wikiUser=hf.getSMW_WikiUser(save=hf.inPublicCI())
+        eventList=EventList()
+        eventList.debug=self.debug
+        eventRecords=eventList.fromWiki(wikiUser,askExtra=askExtra,profile=self.debug)
         count = 0
-        for i in lod_res:
+        for eventRecord in eventRecords:
             # print(str(i['series']) + ":", str(type(i['series'])))
-            if type(i['series'])==list:
-                # print (i)
-                count +=1
-                if self.debug: print(self.generateLink(i['Event']))
+            if 'inEventSeries' in eventRecord:
+                value=eventRecord['inEventSeries']
+                if type(value)==list:
+                    # print (i)
+                    count +=1
+                    if self.debug: 
+                        print(self.generateLink(eventRecord['pageTitle']))
         return count
 
 
-
-
 if __name__ == "__main__":
-    fixer = SeriesFixer()
-    fixer.debug = True
-    # fixer.checkAll("[[IsA::Event]]| mainlabel = Event| ?Title = title| ?Event in series = series| ?_CDAT=creation date| ?_MDAT=modification date| ?ordinal=ordinal| ?Homepage = homepage|format=table")
-    print(fixer.checkAll("[[3DUI]]| mainlabel = Event| ?Title = title| ?Event in series = series| ?_CDAT=creation date| ?_MDAT=modification date| ?ordinal=ordinal| ?Homepage = homepage|format=table"))
+    fixer = SeriesFixer(debug=True)
+    count=fixer.checkAll("")
+    print(count)

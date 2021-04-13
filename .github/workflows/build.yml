@@ -18,10 +18,6 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.7, 3.8, 3.9]
 
-    defaults:
-      run:
-        working-directory: ./migration
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -33,10 +29,10 @@ jobs:
         python -m pip install --upgrade pip
     - name: Install dependencies
       run: |
-        scripts/install
-    - name: get backups 
+        migration/scripts/install
+    - name: get backups
       run: |
-        scripts/getbackup
+        migration/scripts/getbackup
     - name: Run tests
       run: |
-        scripts/test
+        migration/scripts/test

@@ -4,9 +4,9 @@ Created on 2021-04-06
 @author: wf
 '''
 import re
-from migrate.fixer import PageFixer
+from migration.migrate.fixer import PageFixer
 from dateutil import parser
-from migrate.toolbox import HelperFunctions
+from migration.migrate.toolbox import HelperFunctions
 
 
 class DateFixer(PageFixer):

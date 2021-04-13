@@ -4,12 +4,10 @@ Created on 2021-04-06
 @author: wf
 '''
 import unittest
-from openresearch.event import Event, EventList, EventSeries, EventSeriesList
+from migration.openresearch.event import Event, EventList, EventSeries, EventSeriesList
 from lodstorage.jsonable import  Types
 from lodstorage.sql import SQLDB
-from wikibot.wikipush import WikiPush
-from migrate.toolbox import HelperFunctions as hf
-import time
+from migration.migrate.toolbox import HelperFunctions as hf
 
 class TestEvent(unittest.TestCase):
     '''
@@ -18,7 +16,7 @@ class TestEvent(unittest.TestCase):
 
 
     def setUp(self):
-        self.debug=True
+        self.debug=False
         pass
 
 

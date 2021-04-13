@@ -5,8 +5,8 @@ Created on 2021-04-13
 '''
 import unittest
 import os
-from openresearch.event import CountryList
-from migrate.toolbox import HelperFunctions as hf
+from migration.openresearch.event import CountryList
+from migration.migrate.toolbox import HelperFunctions as hf
 
 class TestIssue146(unittest.TestCase):
     '''
@@ -16,7 +16,7 @@ class TestIssue146(unittest.TestCase):
 
 
     def setUp(self):
-        self.debug=True
+        self.debug=False
         pass
 
 

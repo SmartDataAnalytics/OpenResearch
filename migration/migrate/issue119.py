@@ -5,9 +5,9 @@ Created on 2021-04-07
 '''
 
 import re
-from migrate.fixer import PageFixer
-from migrate.Dictionary import Dictionary
-from migrate.toolbox import HelperFunctions
+from migration.migrate.fixer import PageFixer
+from migration.migrate.dictionary import Dictionary
+from migration.migrate.toolbox import HelperFunctions
 
 class OrdinalFixer(PageFixer):
     '''
