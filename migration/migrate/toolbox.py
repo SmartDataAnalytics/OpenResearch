@@ -37,8 +37,13 @@ class HelperFunctions:
         if not os.path.isfile(iniFile):
             wikiDict=None
             if wikiId=="or":
-                wikiDict={"wikiId": wikiId,"email":"webmaster@openresearch.org","url":"https://www.openresearch.org","scriptPath":"/mediawiki/","version":"MediaWiki 1.31.1"}
-            if wikiDict is not None:    
+                wikiDict={"wikiId": wikiId,"email":"noreply@nouser.com","url":"https://www.openresearch.org","scriptPath":"/mediawiki/","version":"MediaWiki 1.31.1"}
+            if wikiId=="cr":
+                wikiDict={"wikiId": wikiId,"email":"noreply@nouser.com","url":"https://cr.bitplan.com","scriptPath":"/","version":"MediaWiki 1.33.4"}
+                
+            if wikiDict is  None:
+                raise Exception("wikiId %s is not known" % wikiId)
+            else:    
                 wikiUser=WikiUser.ofDict(wikiDict, lenient=True)
                 if save:
                     wikiUser.save()

@@ -28,19 +28,54 @@ class OREntityList(JSONAbleList):
     def getList(self):
         return self.__dict__[self.listName]
     
+    def getLookup(self,attrName:str,withDuplicates:bool=False):
+        '''
+        create a lookup dictionary by the given attribute name
+        
+        Args:
+            attrName(str): the attribute to lookup
+            withDuplicates(bool): whether to retain single values or lists
+        
+        Return:
+            a dictionary for lookup
+        '''
+        lookup={}
+        duplicates=[]
+        for entity in self.getList():
+            if hasattr(entity, attrName):
+                value=getattr(entity,attrName)
+                if value in lookup:
+                    if withDuplicates:
+                        lookupResult=lookup[value]
+                    else:
+                        duplicates.append(entity)
+                else:
+                    if withDuplicates:
+                        lookupResult=[entity]
+                    else:
+                        lookupResult=entity
+                lookup[value]=lookupResult  
+        if withDuplicates:
+            return lookup  
+        else:
+            return lookup,duplicates
+    
     def getEntityName(self):
         '''
         get my entity name
         '''
         return self.clazz.__name__
     
-    def getAskQuery(self,propertyLookupList,askExtra=""):
+    def getAskQuery(self,askExtra="",propertyLookupList=None):
         '''
         get the query that will ask for all my events
         
         Args:
-            propertyLookupList:  a list of dicts for propertyLookup
-           askExtra(str): any additional constraints
+           askExtra(str): any additional SMW ask query constraints
+           propertyLookupList:  a list of dicts for propertyLookup
+           
+        Return:
+            str: the SMW ask query
         '''
         entityName=self.getEntityName()
         isASelector="IsA::%s" % entityName
@@ -50,6 +85,8 @@ class OREntityList(JSONAbleList):
 |?_CDAT=creationDate
 |?_MDAT=modificationDate
 """ % (selector,askExtra)
+        if propertyLookupList is None:
+            propertyLookupList=self.propertyLookupList
         for propertyLookup in propertyLookupList:
             propName=propertyLookup['prop']
             name=propertyLookup['name']
@@ -140,6 +177,19 @@ class OREntityList(JSONAbleList):
                 if self.debug:
                     print(error)
         return errors
+    
+    def getRatedLod(self,ratingCallback=None):
+        lod=[]
+        for entity in self.getList():
+            eventRecord={}
+            for propertyLookup in self.propertyLookupList:
+                name=propertyLookup['name']
+                if hasattr(entity,name):
+                    eventRecord[name]=getattr(entity,name)
+            if ratingCallback is not None:
+                ratingCallback(entity,eventRecord)    
+            lod.append(eventRecord)
+        return lod
         
 class EventSeriesList(OREntityList):
     '''
@@ -148,24 +198,14 @@ class EventSeriesList(OREntityList):
     def __init__(self):
         self.eventSeries=[]
         super(EventSeriesList, self).__init__("eventSeries",EventSeries)
-    
-    def getAskQuery(self,askExtra=""):
-        '''
-        get the query that will ask for all my events
-        
-        Args:
-           askExtra(str): any additional constraints
-        '''
-        propertyLookupList=[
+        self.propertyLookupList=[
             { 'prop':'Acronym',    'name': 'acronym'},
             { 'prop':'Homepage',   'name': 'homepage'},
             { 'prop':'Title',      'name': 'title'},
             #{ 'prop':'Field',      'name': 'subject'},
             { 'prop':'WikiDataId',  'name': 'wikiDataId'},
             { 'prop':'DblpSeries',  'name': 'dblpSeries' }
-        ]               
-        ask=super().getAskQuery(propertyLookupList,askExtra)
-        return ask
+        ]
         
 class EventSeries(JSONAble):
     '''
@@ -232,15 +272,7 @@ class EventList(OREntityList):
     def __init__(self):
         self.events=[]
         super(EventList, self).__init__("events",Event)
-    
-    def getAskQuery(self,askExtra=""):
-        '''
-        get the query that will ask for all my events
-        
-        Args:
-           askExtra(str): any additional constraints
-        '''
-        propertyLookupList=[
+        self.propertyLookupList=[
             { 'prop':'Acronym',             'name': 'acronym'},
             { 'prop':'Ordinal',             'name': 'ordinal'},
             { 'prop':'Homepage',            'name': 'homepage'},
@@ -255,8 +287,6 @@ class EventList(OREntityList):
             { 'prop':'Accepted_papers',     'name': 'acceptedPapers'},
             { 'prop':'Submitted_papers',    'name': 'submittedPapers'}
         ]               
-        ask=super().getAskQuery(propertyLookupList,askExtra)
-        return ask
     
 class Event(JSONAble):
     '''
@@ -348,6 +378,13 @@ class Event(JSONAble):
         for key in invalidKeys:
             record.pop(key)
             
+    @classmethod       
+    def rateMigration(cls,event,eventRecord): 
+        acronymLength = len(eventRecord.get('acronym')) if 'acronym' in eventRecord else None
+        acronymMarker = "❌-" if acronymLength is None else f"❌ - {acronymLength}" if acronymLength > 20 else "✅ {acronymLength}"
+        eventRecord['acronym length'] = acronymMarker
+        pass
+            
     
     def __str__(self):
         text=self.pageTitle
@@ -362,6 +399,11 @@ class CountryList(OREntityList):
     def __init__(self):
         self.countries=[]
         super(CountryList, self).__init__("countries",Country)
+        
+        self.propertyLookupList=[
+            { 'prop':'Country name',    'name': 'name'},
+            { 'prop':'Country wikidatid', 'name': 'wikidataId'}
+        ]       
         
     def getDefault(self):
         jsonFilePrefix="%s/countries" % CountryList.getResourcePath()
