@@ -9,10 +9,10 @@ try:
 
 except:
     print('Curr dir:', os.getcwd())
-    long_description = open('../../README.md').read()
+    long_description = open('../README.md').read()
 
 setup(name='OpenResearchMigration',
-      version='0.0.10',
+      version='0.0.11',
       description='python api to access OPENRESEARCH data',
       long_description=long_description,
       long_description_content_type='text/markdown',
