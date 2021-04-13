@@ -381,7 +381,7 @@ class Event(JSONAble):
     @classmethod       
     def rateMigration(cls,event,eventRecord): 
         acronymLength = len(eventRecord.get('acronym')) if 'acronym' in eventRecord else None
-        acronymMarker = "❌-" if acronymLength is None else f"❌ - {acronymLength}" if acronymLength > 20 else "✅ {acronymLength}"
+        acronymMarker = "❌-" if acronymLength is None else f"❌ - {acronymLength}" if acronymLength > 20 else f"✅ {acronymLength}"
         eventRecord['acronym length'] = acronymMarker
         pass
             
