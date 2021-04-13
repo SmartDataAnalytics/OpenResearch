@@ -33,7 +33,7 @@ setup(name='OpenResearchMigration',
             'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9'
       ],
-      packages=['migrate','openresearch','resources'],
+      packages=['migration/migrate','migration/openresearch','migration/resources'],
       install_requires=[
           'pylodstorage',
           'python-dateutil',
