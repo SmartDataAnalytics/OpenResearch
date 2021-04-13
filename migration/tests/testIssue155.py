@@ -107,9 +107,14 @@ class TestEvent(unittest.TestCase):
         eventSeries=eventSeriesList.eventSeries[0]
         self.assertTrue(isinstance(eventSeries,EventSeries))
         
+        
+    def getWikiUser(self):
+        wikiuser=hf.getSMW_WikiUser(save=hf.inPublicCI())
+        return wikiuser
+    
     def testLODtoSQL(self):
         """Test if LOD is returned correctly if called from api to store to SQL"""
-        wikiuser=hf.getSMW_WikiUser()
+        wikiuser=self.getWikiUser()
         expectedCount={"Event":100,"EventSeries":20}
         for entityListClass in EventList,EventSeriesList:
             entityList=entityListClass()
@@ -134,7 +139,7 @@ class TestEvent(unittest.TestCase):
         eventList.profile=True
         askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
         eventList.askExtra=askExtra
-        wikiuser=hf.getSMW_WikiUser()
+        wikiuser=self.getWikiUser()
         eventList.fromCache(wikiuser)
 
 if __name__ == "__main__":
