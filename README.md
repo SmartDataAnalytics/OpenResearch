@@ -2,6 +2,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/SmartDataAnalytics/OpenResearch.svg)](https://github.com/SmartDataAnalytics/OpenResearch/issues)
 [![GitHub issues](https://img.shields.io/github/issues-closed/SmartDataAnalytics/OpenResearch.svg)](https://github.com/SmartDataAnalytics/OpenResearch/issues/?q=is%3Aissue+is%3Aclosed)
 [![Website OPENRESEARCH](https://img.shields.io/website-up-down-green-red/https/www.openresearch.org.svg)](https://www.openresearch.org)
+[![Github Actions Build](https://github.com/SmartDataAnalytics/OpenResearch/workflows/Build/badge.svg?branch=master)](https://github.com/SmartDataAnalytics/OpenResearch/actions?query=workflow%3ABuild+branch%3Amaster)
 [![PyPI Status](https://img.shields.io/pypi/v/OpenResearchMigration.svg)](https://pypi.python.org/pypi/OpenResearchMigration/)
 [![pypi](https://img.shields.io/pypi/pyversions/OpenResearchMigration)](https://pypi.org/project/OpenResearchMigration/)
 
