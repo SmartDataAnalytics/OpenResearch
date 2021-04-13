@@ -1,6 +1,6 @@
 from dateutil import parser
 import os
-from migrate.dictionary import Dictionary
+from migration.migrate.Dictionary import Dictionary
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 import getpass
