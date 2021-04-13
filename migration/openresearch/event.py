@@ -102,7 +102,7 @@ class OREntityList(JSONAbleList):
     
     @classmethod
     def getResourcePath(cls):
-        path = os.path.dirname(__file__) + "/../resources/"
+        path = os.path.dirname(__file__) + "/../ormigrate/resources/"
         return path
     
     def getJsonFile(self):

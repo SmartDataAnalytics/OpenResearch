@@ -35,8 +35,7 @@ setup(name='OpenResearchMigration',
       ],
       packages = find_packages(
         where = 'migration',
-        include = ['pkg*',],
-        exclude = ['additional',]
+        include = ['openresearch','ormigrate'],
       ),
       install_requires=[
           'pylodstorage',
