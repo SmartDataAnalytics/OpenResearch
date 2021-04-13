@@ -16,7 +16,7 @@ class TestIssue146(unittest.TestCase):
 
 
     def setUp(self):
-        self.debug=False
+        self.debug=True
         pass
 
 

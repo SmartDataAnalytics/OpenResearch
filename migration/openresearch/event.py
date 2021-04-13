@@ -196,7 +196,24 @@ class Event(JSONAble):
             "subject": "Software engineering",
             "startDate":  datetime.fromisoformat("2020-09-27"),
             "endDate":  datetime.fromisoformat("2020-09-27")
-        }]
+        },
+        {
+            "pageTitle": "WebSci 2019",
+            "acronym": "WebSci 2019",
+            "ordinal": 10,
+            "homepage": "http://websci19.webscience.org/",
+            "title": "10th ACM Conference on Web Science",
+            "eventType": "Conference",
+            "startDate": datetime.fromisoformat("2019-06-30"),
+            "endDate": datetime.fromisoformat("2019-07-03"),
+            "inEventSeries": "WebSci",
+            "country": "USA",
+            "region": "US-MA",
+            "city": "Boston",
+            "acceptedPapers": 41,
+            "submittedPapers": 120
+        }
+        ]
         return samplesLOD
     
     @classmethod
