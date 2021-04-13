@@ -3,9 +3,9 @@ Created on 2021-04-06
 
 @author: wf
 '''
-from migration.migrate.fixer import PageFixer
-from migration.migrate.toolbox import HelperFunctions as hf
-from migration.openresearch.event import EventList
+from ormigrate.fixer import PageFixer
+from ormigrate.toolbox import HelperFunctions as hf
+from openresearch.event import EventList
 
 class SeriesFixer(PageFixer):
     '''

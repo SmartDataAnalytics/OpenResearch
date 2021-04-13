@@ -4,8 +4,8 @@ Created on 2021-04-13
 @author: wf
 '''
 import unittest
-from migration.openresearch.event import CountryList
-from migration.migrate.toolbox import HelperFunctions as hf
+from openresearch.event import CountryList
+from ormigrate.toolbox import HelperFunctions as hf
 
 class TestIssue146(unittest.TestCase):
     '''

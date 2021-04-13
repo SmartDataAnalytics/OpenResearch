@@ -4,10 +4,10 @@ Created on 2021-04-06
 @author: wf
 '''
 import unittest
-from migration.openresearch.event import Event, EventList, EventSeries, EventSeriesList
+from openresearch.event import Event, EventList, EventSeries, EventSeriesList
 from lodstorage.jsonable import  Types
 from lodstorage.sql import SQLDB
-from migration.migrate.toolbox import HelperFunctions as hf
+from ormigrate.toolbox import HelperFunctions as hf
 
 class TestEvent(unittest.TestCase):
     '''

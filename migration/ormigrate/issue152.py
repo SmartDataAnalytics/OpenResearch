@@ -4,7 +4,7 @@ Created on 2021-04-02
 @author: wf
 '''
 import re
-from migration.migrate.fixer import PageFixer
+from ormigrate.fixer import PageFixer
 
 class AcceptanceRateFixer(PageFixer):
 

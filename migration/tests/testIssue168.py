@@ -4,8 +4,8 @@ Created on 2021-04-13
 @author: wf
 '''
 import unittest
-from migration.migrate.toolbox import HelperFunctions as hf
-from migration.openresearch.event import Event,EventList
+from ormigrate.toolbox import HelperFunctions as hf
+from openresearch.event import Event,EventList
 from collections import Counter
 
 class TestIssue168(unittest.TestCase):

@@ -6,14 +6,14 @@ Created on 2021-04-02
 import unittest
 import io
 from os import path
-from migration.migrate.issue152 import AcceptanceRateFixer
-from migration.migrate.issue119 import OrdinalFixer
-from migration.migrate.issue71 import DateFixer
-from migration.migrate.issue163 import SeriesFixer
+from ormigrate.issue152 import AcceptanceRateFixer
+from ormigrate.issue119 import OrdinalFixer
+from ormigrate.issue71 import DateFixer
+from ormigrate.issue163 import SeriesFixer
 
-from migration.migrate.toolbox import HelperFunctions as hf
-from migration.migrate.fixer import PageFixer
-from migration.openresearch.event import Event
+from ormigrate.toolbox import HelperFunctions as hf
+from ormigrate.fixer import PageFixer
+from openresearch.event import Event
 from lodstorage.jsonable import Types
 
 class TestDataFixes(unittest.TestCase):

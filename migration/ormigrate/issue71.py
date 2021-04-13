@@ -4,9 +4,8 @@ Created on 2021-04-06
 @author: wf
 '''
 import re
-from migration.migrate.fixer import PageFixer
-from dateutil import parser
-from migration.migrate.toolbox import HelperFunctions
+from ormigrate.fixer import PageFixer
+from ormigrate.toolbox import HelperFunctions
 
 
 class DateFixer(PageFixer):
@@ -44,9 +43,6 @@ class DateFixer(PageFixer):
                         generateLink=True
         if self.debug and generateLink: print(self.generateLink(page))
         return event
-
-
-
 
 
 if __name__ == "__main__":

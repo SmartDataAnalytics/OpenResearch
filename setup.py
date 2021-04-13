@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup,find_packages
 import os
 from collections import OrderedDict
 
@@ -33,7 +33,11 @@ setup(name='OpenResearchMigration',
             'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9'
       ],
-      packages=['migration'],
+      packages = find_packages(
+        where = 'migration',
+        include = ['pkg*',],
+        exclude = ['additional',]
+      ),
       install_requires=[
           'pylodstorage',
           'python-dateutil',
