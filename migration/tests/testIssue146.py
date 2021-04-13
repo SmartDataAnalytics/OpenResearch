@@ -4,16 +4,13 @@ Created on 2021-04-13
 @author: wf
 '''
 import unittest
-import os
 from migration.openresearch.event import CountryList
-from migration.migrate.toolbox import HelperFunctions as hf
 
 class TestIssue146(unittest.TestCase):
     '''
     tests for https://github.com/SmartDataAnalytics/OpenResearch/issues/146
     Inconsistent location names
     '''
-
 
     def setUp(self):
         self.debug=False
@@ -29,10 +26,7 @@ class TestIssue146(unittest.TestCase):
         test the countryList handling
         '''
         countryList=CountryList()
-        jsonFilePrefix="%s/countries" % hf.getResourcePath()
-        jsonFilePath="%s.json" %jsonFilePrefix
-        self.assertTrue(os.path.isfile(jsonFilePath))
-        countryList.restoreFromJsonFile(jsonFilePrefix)
+        countryList.getDefault()
         countries=countryList.countries
         self.assertIsNotNone(countries)
         if self.debug:

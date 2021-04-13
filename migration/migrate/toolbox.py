@@ -21,6 +21,11 @@ class HelperFunctions:
         are we running in a public Continuous Integration Environment?
         '''
         return getpass.getuser() in [ "travis", "runner" ];
+    
+    @classmethod
+    def getResourcePath(cls):
+        path = os.path.dirname(__file__) + "/../resources/"
+        return path
 
     @classmethod
     def getSMW_WikiUser(cls,wikiId="or",save=False):
@@ -65,11 +70,6 @@ class HelperFunctions:
         datetimeToDate = parseToDatetime.date()
         datetimetoString = datetimeToDate.strftime("%Y/%m/%d")
         return datetimetoString
-    
-    @classmethod
-    def getResourcePath(cls):
-        path = os.path.dirname(__file__) + "/../resources/"
-        return path
 
     @classmethod
     def loadDictionary(cls):

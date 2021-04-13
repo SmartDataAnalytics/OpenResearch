@@ -63,6 +63,11 @@ class OREntityList(JSONAbleList):
         cachedir="%s/.or/" %home
         return cachedir
     
+    @classmethod
+    def getResourcePath(cls):
+        path = os.path.dirname(__file__) + "/../resources/"
+        return path
+    
     def getJsonFile(self):
         '''
         get the json File for me
@@ -350,13 +355,17 @@ class Event(JSONAble):
             text+="(%s)" %self.acronym
         return text
     
-class CountryList(JSONAbleList):
+class CountryList(OREntityList):
     '''
     a list of countries
     '''
     def __init__(self):
         self.countries=[]
         super(CountryList, self).__init__("countries",Country)
+        
+    def getDefault(self):
+        jsonFilePrefix="%s/countries" % CountryList.getResourcePath()
+        self.restoreFromJsonFile(jsonFilePrefix)
 
 class Country(JSONAble):
     '''
