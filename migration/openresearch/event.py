@@ -354,7 +354,22 @@ class Event(JSONAble):
 |has general chair=Christoph Treude, Hongyu Zhang
 |has program chair=Kelly Blincoe, Zhenchang Xing
 |has demo chair=Mario Linares Vasquez, Hailong Sun
-}}"""]
+}}""","""{{Event
+|Acronym=AISB 2009
+|Title=AISB Symposium: New Frontiers in Human-Robot Interaction
+|Type=Conference
+|Field=Uncategorized
+|Start date=2009/04/08
+|End date=2009/04/09
+|Submission deadline=2009/01/05
+|Homepage=homepages.feis.herts.ac.uk/~comqkd/HRI-AISB2009-Symposium.html
+|City=Edinburgh
+|Country=United Kingdom
+|Notification=2009/02/02
+|Camera ready=2009/02/23
+}}	
+This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=3845&amp;copyownerid=2048 WikiCFP]
+"""]
         else:
             samplesWikiSon="..."
         

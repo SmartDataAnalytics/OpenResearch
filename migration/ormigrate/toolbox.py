@@ -4,6 +4,7 @@ from ormigrate.dictionary import Dictionary
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 import getpass
+import re
 
 class HelperFunctions:
     '''
@@ -84,13 +85,25 @@ class HelperFunctions:
         return lookup_dict
 
     @classmethod
-    def WikiSontoLOD(self, wiki_sample):
-        property_list = wiki_sample.replace('}}', '').split('|')[1:]
-        wikidict = {}
-        for i in property_list:
-            mapping = i.strip().split('=')
-            try:
-                wikidict[mapping[0]] = int(mapping[1])
-            except:
-                wikidict[mapping[0]] = mapping[1]
-        return [wikidict]
+    def wikiSontoLOD(self, wiki_sample, entity="Event"):
+        regex= '{{ *%s(?:.|\r|\n)*\}}' % entity
+        re_groups=re.search(regex,wiki_sample)
+        if re_groups is not None:
+            property_list = re_groups.group().replace('}}', '').split('|')[1:]
+            wikidict = {}
+            for i in property_list:
+                mapping = i.strip().split('=')
+                try:
+                    wikidict[mapping[0].strip()] = int(mapping[1].strip())
+                except:
+                    wikidict[mapping[0].strip()] = mapping[1].strip()
+            return [wikidict]
+        return []
+
+    @classmethod
+    def dicttoWikiSon(self, dic, entity="Event"):
+        wikiSon= "{{%s\n" % entity
+        for key in dic:
+            wikiSon += "|%s = %s \n" %(str(key),str(dic[key]))
+        wikiSon+= "}}"
+        return wikiSon
