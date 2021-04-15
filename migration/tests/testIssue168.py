@@ -34,7 +34,7 @@ class TestIssue168(unittest.TestCase):
         counter=Counter()
         for record in lod:
             counter[record["acronym length"]]+=1
-        print(counter.most_common(10))
+        print(counter.most_common(50))
         pass
 
 
