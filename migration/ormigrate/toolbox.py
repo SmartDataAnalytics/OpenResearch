@@ -25,7 +25,7 @@ class HelperFunctions:
     
     @classmethod
     def getResourcePath(cls):
-        path = os.path.dirname(__file__) + "/resources/"
+        path = os.path.dirname(__file__) + "/resources"
         return path
 
     @classmethod

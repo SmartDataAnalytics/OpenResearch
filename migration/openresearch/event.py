@@ -12,6 +12,9 @@ from pathlib import Path
 import os
 import time
 
+from ormigrate.issue41 import AcronymLengthFixer
+from ormigrate.painscale import PainScale
+
 
 class OREntityList(JSONAbleList):
     '''
@@ -103,7 +106,7 @@ class OREntityList(JSONAbleList):
     
     @classmethod
     def getResourcePath(cls):
-        path = os.path.dirname(__file__) + "/../ormigrate/resources/"
+        path = os.path.dirname(__file__) + "/../ormigrate/resources"
         return path
     
     def getJsonFile(self):
@@ -395,12 +398,10 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
             record.pop(key)
             
     @classmethod       
-    def rateMigration(cls,event,eventRecord): 
-        acronymLength = len(eventRecord.get('acronym')) if 'acronym' in eventRecord else None
-        acronymMarker = "❌-" if acronymLength is None else f"❌ - {acronymLength}" if acronymLength > 20 or acronymLength<6 else f"✅ {acronymLength}"
-        eventRecord['acronym length'] = acronymMarker
+    def rateMigration(cls,event,eventRecord):
+        rating = AcronymLengthFixer.getRating(eventRecord)
+        eventRecord['acronym length'] = PainScale.lookupPainImage(rating)
         pass
-            
     
     def __str__(self):
         text=self.pageTitle
