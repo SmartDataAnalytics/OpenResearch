@@ -30,7 +30,7 @@ class TestEvent(unittest.TestCase):
         wikiSonSample = EventSeries.getSampleWikiSon()
         types.getTypes("eventseries", samples, 1)
         self.assertIsNotNone(types.typeMap)
-        LOD = hf.WikiSontoLOD(wikiSonSample[0])
+        LOD = hf.wikiSontoLOD(wikiSonSample[0])
         self.assertTrue(LOD[0]['Acronym'] == 'AAAI')
         # pass
 
@@ -43,7 +43,7 @@ class TestEvent(unittest.TestCase):
         wikiSonSample = Event.getSampleWikiSon()
         types.getTypes("events", samples, 1)
         self.assertIsNotNone(types.typeMap)
-        LOD=hf.WikiSontoLOD(wikiSonSample[0])
+        LOD=hf.wikiSontoLOD(wikiSonSample[0])
         self.assertTrue(LOD[0]['Acronym'] == 'ICSME 2020')
         
     def getSQLDB(self,path=None):

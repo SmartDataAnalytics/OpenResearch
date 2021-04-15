@@ -10,6 +10,7 @@ from ormigrate.issue152 import AcceptanceRateFixer
 from ormigrate.issue119 import OrdinalFixer
 from ormigrate.issue71 import DateFixer
 from ormigrate.issue163 import SeriesFixer
+from ormigrate.issue166 import WikiCFPIDFixer
 
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.fixer import PageFixer
@@ -116,7 +117,7 @@ Help:Topic"""
         samples = Event.getSampleWikiSon()
         lookup_dict = hf.loadDictionary()
         fixed=fixer.convert_ordinal_to_cardinal('sample',samples[0],lookup_dict)
-        fixed_dic=hf.WikiSontoLOD(fixed)
+        fixed_dic=hf.wikiSontoLOD(fixed)
         types.getTypes("events", fixed_dic, 1)
         self.assertTrue(types.typeMap['events']['Ordinal'] == 'int')
 
@@ -130,7 +131,7 @@ Help:Topic"""
         samples = Event.getSampleWikiSon()
         fixedDates=fixer.getFixedDate('sample',samples[0])
         fixedDeadlines=fixer.getFixedDate('sample',fixedDates,'deadline')
-        fixed_dic=hf.WikiSontoLOD(fixedDeadlines)
+        fixed_dic=hf.wikiSontoLOD(fixedDeadlines)
         self.assertTrue(fixed_dic[0]['Start date'] == '2020/09/27')
         self.assertTrue(fixed_dic[0]['Paper deadline'] == '2020/05/28')
 
@@ -143,7 +144,50 @@ Help:Topic"""
         askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
         count=fixer.checkAll(askExtra)
         # TODO: we do not test the count here  - later we want it to be zero
-        
+
+    def testdictToWikison(self):
+        """
+        Test the helper function to create wikison from a given dict
+        """
+        samples= Event.getSamples()
+        for sample in samples:
+            dic=hf.dicttoWikiSon(sample)
+            self.assertEqual(type(dic),str)
+            self.assertIsNotNone(dic)
+            self.assertIn('acronym', dic)
+
+    def testWikisontoDict(self):
+        """
+        Test the helper function to create wikison from a given dict
+        """
+        samples= Event.getSampleWikiSon()
+        for sample in samples:
+            dic=hf.wikiSontoLOD(sample)
+            self.assertEqual(type(dic[0]),dict)
+            self.assertIsNotNone(dic[0])
+            self.assertIn('Acronym', dic[0])
+
+
+    def testIssue166(self):
+        """
+        Tests the issue 166 for addition of WikiCFP-ID to applicable pages
+        """
+        if hf.inPublicCI():
+            # TODO: Need the Events DB in project to run the test.
+            pass
+        else:
+            fixer= WikiCFPIDFixer()
+            samples = Event.getSampleWikiSon()
+            wikicfpid= fixer.getPageWithWikicfpid('test',samples[1])
+            self.assertIsNotNone(wikicfpid)
+            self.assertEqual(wikicfpid,'3845')
+            fixedPage= fixer.fixPageWithDplp('test',samples[1],wikicfpid)
+            if self.debug:
+                print(fixedPage)
+            fixedDict=hf.wikiSontoLOD(fixedPage)[0]
+            self.assertIsNotNone(fixedDict['WikiCFP-ID'])
+            self.assertEqual(fixedDict['WikiCFP-ID'],3845)
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
