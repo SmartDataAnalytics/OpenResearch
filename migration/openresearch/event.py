@@ -84,6 +84,7 @@ class OREntityList(JSONAbleList):
 |mainlabel=pageTitle
 |?_CDAT=creationDate
 |?_MDAT=modificationDate
+|?_LEDT=lastEditor
 """ % (selector,askExtra)
         if propertyLookupList is None:
             propertyLookupList=self.propertyLookupList
@@ -424,6 +425,10 @@ class CountryList(OREntityList):
         jsonFilePrefix="%s/countries" % CountryList.getResourcePath()
         self.restoreFromJsonFile(jsonFilePrefix)
 
+    @classmethod
+    def getPluralname(cls):
+        return "Countries" 
+    
 class Country(JSONAble):
     '''
     distinct region in geography; a broad term that can include political divisions or 
