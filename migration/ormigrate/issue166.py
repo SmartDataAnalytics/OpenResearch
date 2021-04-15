@@ -10,6 +10,7 @@ from ormigrate.toolbox import HelperFunctions as hf
 from wikibot.wikipush import WikiPush
 import re
 from lodstorage.sql import SQLDB
+from os.path import expanduser
 
 class WikiCFPIDFixer(PageFixer):
     '''
@@ -24,7 +25,9 @@ class WikiCFPIDFixer(PageFixer):
         # call super constructor
         super(WikiCFPIDFixer, self).__init__(wikiId, baseUrl)
         self.debug = debug
-        self.sqlDB = SQLDB(dbname=hf.getResourcePath()+'Event_all.db')
+        home = expanduser("~")
+        dbname="%s/.ptp/Event_all.db" % home
+        self.sqlDB = SQLDB(dbname=dbname)
 
 
     def getPageWithWikicfpid(self,page,event):
