@@ -4,6 +4,7 @@ Created on 2021-04-06
 @author: wf
 '''
 from lodstorage.jsonable import JSONAble,JSONAbleList
+from collections import OrderedDict
 from datetime import datetime
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
@@ -187,17 +188,23 @@ class OREntityList(JSONAbleList):
         
         Args:
             ratingCallback(func): a function to be called for rating of this entity
+            
+        Returns:
+            list: a list of dicts with the rating
         '''
         lod=[]
         for entity in self.getList():
-            eventRecord={'pageTitle':entity.pageTitle}
+            entityRecord=OrderedDict()
+            # pageTitle default attribute
+            if hasattr(entity,'pageTitle'):
+                entityRecord['pageTitle']=entity.pageTitle
             for propertyLookup in self.propertyLookupList:
                 name=propertyLookup['name']
                 if hasattr(entity,name):
-                    eventRecord[name]=getattr(entity,name)
+                    entityRecord[name]=getattr(entity,name)
             if ratingCallback is not None:
-                ratingCallback(entity,eventRecord)    
-            lod.append(eventRecord)
+                ratingCallback(entity,entityRecord)    
+            lod.append(entityRecord)
         return lod
         
 class EventSeriesList(OREntityList):
@@ -404,9 +411,12 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
             
     @classmethod       
     def rateMigration(cls,event,eventRecord):
+        '''
+        get the ratings from the different fixers
+        '''
         rating = AcronymLengthFixer.getRating(eventRecord)
-        eventRecord['acronym length'] = PainScale.lookupPainImage(rating)
-        pass
+        eventRecord['acronym length']=PainScale.lookupPainImage(rating)
+        #eventRecord.move_to_end('acronym length',last=False) 
     
     def __str__(self):
         text=self.pageTitle
