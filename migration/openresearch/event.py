@@ -203,7 +203,7 @@ class EventSeriesList(OREntityList):
             { 'prop':'Homepage',   'name': 'homepage'},
             { 'prop':'Title',      'name': 'title'},
             #{ 'prop':'Field',      'name': 'subject'},
-            { 'prop':'WikiDataId',  'name': 'wikiDataId'},
+            { 'prop':'Wikidataid',  'name': 'wikiDataId'},
             { 'prop':'DblpSeries',  'name': 'dblpSeries' }
         ]
         
