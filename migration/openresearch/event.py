@@ -179,9 +179,15 @@ class OREntityList(JSONAbleList):
         return errors
     
     def getRatedLod(self,ratingCallback=None):
+        '''
+        get the list of dicts with a potential rating
+        
+        Args:
+            ratingCallback(func): a function to be called for rating of this entity
+        '''
         lod=[]
         for entity in self.getList():
-            eventRecord={}
+            eventRecord={'pageTitle':entity.pageTitle}
             for propertyLookup in self.propertyLookupList:
                 name=propertyLookup['name']
                 if hasattr(entity,name):
