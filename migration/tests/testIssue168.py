@@ -7,8 +7,7 @@ import unittest
 from ormigrate.toolbox import HelperFunctions as hf
 from openresearch.event import Event,EventList,EventSeriesList
 from collections import Counter
-from wikibot.wikiuser import WikiUser
-from pandas.tests.groupby.test_index_as_string import series
+
 
 class TestIssue168(unittest.TestCase):
     '''
@@ -23,13 +22,24 @@ class TestIssue168(unittest.TestCase):
     def tearDown(self):
         pass
     
-    def getEventsWithSeries(self,wikiUser):
+    def getEventsWithSeries(self,wikiUser,debug=False):
+        '''
+        get events with series by knitting / linking the entities together
+        '''
         eventList=EventList()
+        eventList.debug=debug
         eventList.fromCache(wikiUser)
+        
+        
         eventSeriesList=EventSeriesList()
+        eventSeriesList.debug=debug
         eventSeriesList.fromCache(wikiUser)
+        
+        # get foreign key hashtable
         seriesLookup=eventList.getLookup("inEventSeries", withDuplicates=True)
+        # get "primary" key hashtable
         seriesAcronymLookup=eventSeriesList.getLookup("acronym",withDuplicates=True)
+        
         for seriesAcronym in seriesLookup.keys():
             if seriesAcronym in seriesAcronymLookup:
                 seriesEvents=seriesLookup[seriesAcronym]
@@ -43,7 +53,7 @@ class TestIssue168(unittest.TestCase):
 
     def testEventsWithSeries(self):
         wikiUser=hf.getSMW_WikiUser(save=hf.inPublicCI())
-        eventList,eventSeriesList=self.getEventsWithSeries(wikiUser)
+        eventList,eventSeriesList=self.getEventsWithSeries(wikiUser,debug=True)
 
     def testRatingCallback(self):
         '''

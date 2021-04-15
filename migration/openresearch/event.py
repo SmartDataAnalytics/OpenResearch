@@ -81,8 +81,7 @@ class OREntityList(JSONAbleList):
             str: the SMW ask query
         '''
         entityName=self.getEntityName()
-        isASelector="IsA::%s" % entityName
-        selector="Category:Event series" if entityName=="EventSeries" else isASelector
+        selector="IsA::%s" % entityName
         ask="""{{#ask:[[%s]]%s
 |mainlabel=pageTitle
 |?_CDAT=creationDate
@@ -183,9 +182,15 @@ class OREntityList(JSONAbleList):
         return errors
     
     def getRatedLod(self,ratingCallback=None):
+        '''
+        get the list of dicts with a potential rating
+        
+        Args:
+            ratingCallback(func): a function to be called for rating of this entity
+        '''
         lod=[]
         for entity in self.getList():
-            eventRecord={}
+            eventRecord={'pageTitle':entity.pageTitle}
             for propertyLookup in self.propertyLookupList:
                 name=propertyLookup['name']
                 if hasattr(entity,name):
@@ -203,11 +208,11 @@ class EventSeriesList(OREntityList):
         self.eventSeries=[]
         super(EventSeriesList, self).__init__("eventSeries",EventSeries)
         self.propertyLookupList=[
-            { 'prop':'Acronym',    'name': 'acronym'},
+            { 'prop':'EventSeries acronym', 'name': 'acronym'},
             { 'prop':'Homepage',   'name': 'homepage'},
             { 'prop':'Title',      'name': 'title'},
             #{ 'prop':'Field',      'name': 'subject'},
-            { 'prop':'WikiDataId',  'name': 'wikiDataId'},
+            { 'prop':'Wikidataid',  'name': 'wikiDataId'},
             { 'prop':'DblpSeries',  'name': 'dblpSeries' }
         ]
         
