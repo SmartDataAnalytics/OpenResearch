@@ -9,10 +9,10 @@ from datetime import datetime
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 from wikibot.wikipush import WikiPush
-from pathlib import Path
 from ormigrate.fixer import PageFixer
 import os
 import time
+from openresearch.openresearch import OpenResearch
 
 from ormigrate.issue41 import AcronymLengthFixer
 from ormigrate.issue119_Ordinals import OrdinalFixer
@@ -103,22 +103,11 @@ class OREntityList(JSONAbleList):
         ask+="}}"
         return ask
     
-    @staticmethod        
-    def getCachePath():
-        home = str(Path.home())
-        cachedir="%s/.or/" %home
-        return cachedir
-    
-    @classmethod
-    def getResourcePath(cls):
-        path = os.path.dirname(__file__) + "/../ormigrate/resources"
-        return path
-    
     def getJsonFile(self):
         '''
         get the json File for me
         '''
-        cachePath=OREntityList.getCachePath()
+        cachePath=OpenResearch.getCachePath()
         os.makedirs(cachePath,exist_ok=True)
         jsonPrefix="%s/%s" % (cachePath,self.getEntityName())
         jsonFilePath="%s.json" % jsonPrefix
@@ -201,9 +190,10 @@ class OREntityList(JSONAbleList):
         errors=[]
         for entity in self.getList():
             entityRecord=OrderedDict()
-            # pageTitle default attribute
-            if hasattr(entity,'pageTitle'):
-                entityRecord['pageTitle']=entity.pageTitle
+            # default attributes
+            for attr in ['pageTitle','lastEditor','creationDate','modificationDate']:
+                if hasattr(entity,attr):
+                    entityRecord[attr]=getattr(entity,attr)
             for propertyLookup in self.propertyLookupList:
                 name=propertyLookup['name']
                 if hasattr(entity,name):
@@ -247,12 +237,22 @@ class EventSeries(JSONAble):
         samplesLOD= [{
             'pageTitle': 'AAAI',
             'acronym' : 'AAAI',
-            'Title' : 'Conference on Artificial Intelligence',
-            'Field' : 'Artificial Intelligence',
-            'Homepage' : 'www.aaai.org/Conferences/AAAI/aaai.php',
-            'WikiDataId' : 'Q56682083',
-            'DblpSeries' : 'aaai'
-        }]
+            'title' : 'Conference on Artificial Intelligence',
+            'subject' : 'Artificial Intelligence',
+            'homepage' : 'www.aaai.org/Conferences/AAAI/aaai.php',
+            'wikidataId' : 'Q56682083',
+            'dblpSeries' : 'aaai'
+        },
+        {
+            "acronym": "3DUI",
+            "creationDate": datetime.fromisoformat("2020-03-17T22:54:10"),
+            "dblpSeries": "3dui",
+            "lastEditor": "Wolfgang Fahl",
+            "modificationDate": datetime.fromisoformat("2021-02-13T06:56:46"),
+            "pageTitle": "3DUI",
+            "title": "IEEE Symposium on 3D User Interfaces",
+            "wikidataId": "Q105456162"
+        },]
         return samplesLOD
 
     @classmethod
@@ -462,6 +462,10 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
         '''
         pageFixerList= [
             {
+                "column": "curationPainRating",
+                "fixer": CurationQualityChecker
+            },
+            {
                 "column": "acronymPainRating",
                 "fixer": AcronymLengthFixer
             },
@@ -500,7 +504,7 @@ class CountryList(OREntityList):
         ]       
         
     def getDefault(self):
-        jsonFilePrefix="%s/countries" % CountryList.getResourcePath()
+        jsonFilePrefix="%s/countries" % OpenResearch.getResourcePath()
         self.restoreFromJsonFile(jsonFilePrefix)
 
     @classmethod

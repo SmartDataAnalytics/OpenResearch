@@ -35,6 +35,8 @@ class AcronymLengthFixer(PageFixer):
         acronym = eventRecord['acronym']
         if acronym is None:
             return Rating(6,Rating.missing,'acronym missing')
+        if '"' in acronym:
+            return Rating(10,Rating.invalid,'acronym contains double quotes')
         alen=len(acronym)
         if alen < 5:
             return Rating(5,Rating.invalid,f'acronym length {alen}<5')

@@ -11,6 +11,8 @@ class HelperFunctions:
     general helper functions
     
     for the OpenResearch Migration project
+    
+    
     '''
     def __init__(self,debug=False):
         'Constructor'

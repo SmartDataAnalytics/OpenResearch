@@ -4,11 +4,9 @@ Created on 2021-04-13
 @author: wf
 '''
 import unittest
-from ormigrate.toolbox import HelperFunctions as hf
-from openresearch.eventcorpus import EventCorpus
 from openresearch.event import Event,EventSeries
 from collections import Counter
-
+from tests.corpus import Corpus
 
 class TestIssue168(unittest.TestCase):
     '''
@@ -23,21 +21,13 @@ class TestIssue168(unittest.TestCase):
 
     def tearDown(self):
         pass
-    
-    def getEventCorpus(self,debug=False):
-        '''
-        get events with series by knitting / linking the entities together
-        '''
-        wikiUser=hf.getSMW_WikiUser(save=hf.inPublicCI())
-        eventCorpus=EventCorpus(debug=debug)
-        eventCorpus.fromWikiUser(wikiUser)
-        return eventCorpus
 
 
     def testEventCorpus(self):
         '''
+        test the event corpus
         '''
-        eventCorpus=self.getEventCorpus(debug=self.debug)
+        eventCorpus=Corpus.getEventCorpus(debug=self.debug)
         listOfEvents=eventCorpus.eventList.getList()
         withSeries=0
         for event in listOfEvents:
@@ -79,7 +69,7 @@ class TestIssue168(unittest.TestCase):
         '''
         test the rating call back
         '''
-        eventCorpus=self.getEventCorpus(debug=self.debug)
+        eventCorpus=Corpus.getEventCorpus(debug=self.debug)
         lod,errors=eventCorpus.eventList.getRatedLod(Event.rateMigration)
         self.checkRatedLod(lod, errors)
         lod,errors=eventCorpus.eventSeriesList.getRatedLod(EventSeries.rateMigration)

@@ -14,7 +14,6 @@ class TestEvent(unittest.TestCase):
     test handling Event and EventSeries
     '''
 
-
     def setUp(self):
         self.debug=False
         pass
@@ -101,7 +100,7 @@ class TestEvent(unittest.TestCase):
         '''
         listOfRecords = EventSeries.getSamples()
         eventSeriesList=self.getEventSeriesList(listOfRecords)
-        self.assertEqual(1, len(eventSeriesList.eventSeries))
+        self.assertEqual(2, len(eventSeriesList.eventSeries))
         eventSeries=eventSeriesList.eventSeries[0]
         self.assertTrue(isinstance(eventSeries,EventSeries))
         
@@ -124,6 +123,7 @@ class TestEvent(unittest.TestCase):
             listOfRecords=entityList.fromWiki(wikiuser,askExtra=askExtra)
             entityList=self.getEntityListViaSQL(listOfRecords,entityListClass)
             entities=entityList.getList()
+            print(f"samples for {entityName}:")
             for entity in entities[:5]:
                 print(entity)
                 print(entity.toJSON())
