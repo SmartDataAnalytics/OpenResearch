@@ -25,7 +25,7 @@ class CurationQualityChecker(PageFixer):
         if len(CurationQualityChecker.userrating)==0:
             if path is None:
                 path=OpenResearch.getCachePath()
-                yamlPath=f"{path}/userrating.yaml"
+            yamlPath=f"{path}/userrating.yaml"
             if os.path.isfile(yamlPath):
                 with open(yamlPath, 'r') as stream:
                     CurationQualityChecker.userrating = yaml.safe_load(stream)
