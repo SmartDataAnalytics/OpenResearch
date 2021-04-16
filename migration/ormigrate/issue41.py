@@ -1,4 +1,5 @@
 from ormigrate.fixer import PageFixer
+from ormigrate.rating import Rating
 import re
 
 class AcronymLengthFixer(PageFixer):
@@ -30,18 +31,21 @@ class AcronymLengthFixer(PageFixer):
             int: pain rating of the acronym
         '''
         if 'acronym' not in eventRecord:
-            return 6
+            return Rating(7,Rating.missing,'software issue acronym info missing')
         acronym = eventRecord['acronym']
         if acronym is None:
-            return 6
-        elif re.match(r'[A-Z]+\s*[0-9]+', acronym):
-            # Regex based on the results of https://cr.bitplan.com/index.php/Acronyms
-            if len(acronym) < 5:
-                return 5
-            elif len(acronym) > 45:
-                return 5
-            else:
-                return 1
+            return Rating(6,Rating.missing,'acronym missing')
+        alen=len(acronym)
+        if alen < 5:
+            return Rating(5,Rating.invalid,f'acronym length {alen}<5')
+        elif alen > 45:
+            return Rating(4,Rating.invalid,f'acronym length {alen}>45')
         else:
-            return 6
+            msg=f'acronym length {alen} in valid range 5-45'
+            
+        if re.match(r'[A-Z]+\s*[0-9]+', acronym):
+            # Regex based on the results of https://cr.bitplan.com/index.php/Acronyms
+            return Rating(1,Rating.ok,f'standard acronym with {msg}')
+        else:
+            return Rating(2,Rating.ok,f'non standard acronym with {msg}')
 

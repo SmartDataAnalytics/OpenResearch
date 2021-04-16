@@ -7,7 +7,7 @@ import unittest
 import io
 from os import path
 from ormigrate.issue152 import AcceptanceRateFixer
-from ormigrate.issue119 import OrdinalFixer
+from ormigrate.issue119_Ordinals import OrdinalFixer
 from ormigrate.issue71 import DateFixer
 from ormigrate.issue163 import SeriesFixer
 from ormigrate.issue166 import WikiCFPIDFixer
@@ -132,7 +132,7 @@ Help:Topic"""
         for event in eventRecords:
             painRating = fixer.getRating(event)
             self.assertIsNotNone(painRating)
-            painRatings.append(painRating)
+            painRatings.append(painRating.pain)
         self.assertEqual(painRatings,[1,4,5,7])
         types = Types("Event")
         samples = Event.getSampleWikiSon()

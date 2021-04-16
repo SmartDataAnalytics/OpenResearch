@@ -10,12 +10,14 @@ from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 from wikibot.wikipush import WikiPush
 from pathlib import Path
+from ormigrate.fixer import PageFixer
 import os
 import time
 
 from ormigrate.issue41 import AcronymLengthFixer
+from ormigrate.issue119_Ordinals import OrdinalFixer
 from ormigrate.painscale import PainScale
-
+from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer
 
 class OREntityList(JSONAbleList):
     '''
@@ -194,6 +196,7 @@ class OREntityList(JSONAbleList):
             list: a list of dicts with the rating
         '''
         lod=[]
+        errors=[]
         for entity in self.getList():
             entityRecord=OrderedDict()
             # pageTitle default attribute
@@ -204,9 +207,11 @@ class OREntityList(JSONAbleList):
                 if hasattr(entity,name):
                     entityRecord[name]=getattr(entity,name)
             if ratingCallback is not None:
-                ratingCallback(entity,entityRecord)    
+                ratingErrors=ratingCallback(entity,entityRecord)   
+                if len(ratingErrors)>0:
+                    errors.append(ratingErrors) 
             lod.append(entityRecord)
-        return lod
+        return lod,errors
         
 class EventSeriesList(OREntityList):
     '''
@@ -281,9 +286,14 @@ class EventSeries(JSONAble):
         '''
         get the ratings from the different fixers
         '''
-        rating = AcronymLengthFixer.getRating(eventSeriesRecord)
-        eventSeriesRecord['acronym']=PainScale.lookupPainImage(rating)
-        eventSeriesRecord.move_to_end('acronym',last=False) 
+        pageFixerList= [
+            {
+                "column": "provenance",
+                "fixer": EventSeriesProvenanceFixer
+            },
+        ]
+        return PageFixer.rateWithFixers(pageFixerList, eventSeries,eventSeriesRecord)
+        
     
     def __str__(self):
         text=self.pageTitle
@@ -424,9 +434,17 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
         '''
         get the ratings from the different fixers
         '''
-        rating = AcronymLengthFixer.getRating(eventRecord)
-        eventRecord['acronym']=PainScale.lookupPainImage(rating)
-        eventRecord.move_to_end('acronym',last=False) 
+        pageFixerList= [
+            {
+                "column": "acronym",
+                "fixer": AcronymLengthFixer
+            },
+            {
+                "column": "ordinal",
+                "fixer": OrdinalFixer
+            }
+        ]
+        return PageFixer.rateWithFixers(pageFixerList, event,eventRecord)
     
     def __str__(self):
         text=self.pageTitle

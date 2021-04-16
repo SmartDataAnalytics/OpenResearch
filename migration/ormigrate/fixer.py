@@ -138,4 +138,28 @@ class PageFixer(object):
                 if wikison in event:
                     yield page,event
 
+    @classmethod
+    def rateWithFixers(cls,pageFixerList,entity,entityRecord):
+        '''
+        rate the given entityRecord with the given list of pageFixers
+        
+        Args:
+            pagerFixerList(list): the list of page Fixers to apply
+            entity(object): the entity instance e.g. an Event  or EventSeries
+            entityRecord(dict): the fields of the entity as a record
+            
+        Returns:
+            errors(list): a list of errors detected
+        '''
+        errors=[]
+        for record in pageFixerList:
+            fixer=record["fixer"]
+            column=record["column"]
+            try:
+                rating = fixer.getRating(entityRecord)
+                entityRecord[column]=rating
+                entityRecord.move_to_end(column,last=False) 
+            except Exception as e:
+                errors.append({'error':e,'fixer':fixer,'entity':entity,'record':entityRecord})
+        return errors
         
