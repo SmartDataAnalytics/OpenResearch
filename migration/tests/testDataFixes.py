@@ -93,7 +93,7 @@ Help:Topic"""
             painRating =fixer.getRating(event)
             self.assertIsNotNone(painRating)
             painRatings.append(painRating.pain)
-        self.assertEqual(painRatings,[1,2,3,4])
+        self.assertEqual(painRatings,[1,3,5,7])
         pages=fixer.getAllPages()
         if self.debug:
             print("Number of pages: ", len(pages))
