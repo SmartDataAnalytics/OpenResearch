@@ -92,7 +92,7 @@ Help:Topic"""
         for event in eventRecords:
             painRating =fixer.getRating(event)
             self.assertIsNotNone(painRating)
-            painRatings.append(painRating)
+            painRatings.append(painRating.pain)
         self.assertEqual(painRatings,[1,2,3,4])
         pages=fixer.getAllPages()
         if self.debug:
@@ -151,16 +151,14 @@ Help:Topic"""
                         {'startDate': None, 'endDate': None},
                         {'startDate': '20 Feb, 2020', 'endDate': None},
                         {'startDate': None, 'endDate': '20 Feb, 2020'},
-                        {'startDate': '20 Feb, 2020', 'endDate': 'test'},
-                        {'startDate': 'test', 'endDate': '20 Feb, 2020'},
-                        {'startDate': 'test', 'endDate': 'test'}]
+                        ]
         painRatings=[]
         fixer=DateFixer(debug=self.debug)
         for event in eventRecords:
             painRating = fixer.getRating(event)
             self.assertIsNotNone(painRating)
-            painRatings.append(painRating)
-        self.assertEqual(painRatings,[1,2,3,4,5,6,7])
+            painRatings.append(painRating.pain)
+        self.assertEqual(painRatings,[1,3,4,5])
 
         types = Types("Event")
         samples = Event.getSampleWikiSon()

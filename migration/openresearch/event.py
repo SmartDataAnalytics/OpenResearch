@@ -16,8 +16,10 @@ import time
 
 from ormigrate.issue41 import AcronymLengthFixer
 from ormigrate.issue119_Ordinals import OrdinalFixer
+from ormigrate.issue71 import DateFixer
 from ormigrate.painscale import PainScale
 from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer
+from ormigrate.issue152 import AcceptanceRateFixer
 
 class OREntityList(JSONAbleList):
     '''
@@ -442,6 +444,14 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
             {
                 "column": "ordinalPainRating",
                 "fixer": OrdinalFixer
+            },
+            {
+                "column": "datePainRating",
+                "fixer": DateFixer
+            },
+            {
+                "column": "AcceptanceRatePainRating",
+                "fixer": AcceptanceRateFixer
             }
         ]
         return PageFixer.rateWithFixers(pageFixerList, event,eventRecord)

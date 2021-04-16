@@ -5,6 +5,7 @@ Created on 2021-04-06
 '''
 import re
 from ormigrate.fixer import PageFixer
+from ormigrate.rating import Rating
 from ormigrate.toolbox import HelperFunctions as hf
 
 
@@ -50,31 +51,22 @@ class DateFixer(PageFixer):
         else:
             return None
 
+    @classmethod
     def getRating(self,eventRecord):
         painrating= None
-        if eventRecord['startDate'] is not None and eventRecord['endDate'] is not None:
-            fixedStartDate = hf.parseDate(eventRecord['startDate'])
-            fixedEndDate= hf.parseDate(eventRecord['endDate'])
-            if fixedStartDate is None and fixedEndDate is None:
-                painrating = 7
-            elif fixedStartDate is None:
-                painrating = 6
-            elif fixedEndDate is None:
-                painrating= 5
-            else:
-                painrating=1
-        elif eventRecord['startDate'] is None and eventRecord['endDate'] is None:
-            painrating=2
-        elif eventRecord['startDate'] is None and eventRecord['endDate'] is not None:
-            painrating=4
-            fixedDate=hf.parseDate(eventRecord['endDate'])
-            if fixedDate is None:
-                painrating= 6
-        elif eventRecord['startDate'] is not None and eventRecord['endDate'] is None:
-            painrating=3
-            fixedDate = hf.parseDate(eventRecord['startDate'])
-            if fixedDate is None:
-                painrating = 6
+        startDate = None
+        endDate = None
+        if 'startDate' in eventRecord: startDate = eventRecord['startDate']
+        if 'endDate' in eventRecord: endDate = eventRecord['endDate']
+
+        if startDate is not None and endDate is not None:
+            painrating= Rating(1,Rating.ok,f'Dates,  {startDate} , {endDate} valid')
+        elif startDate is None and endDate is None:
+            painrating=Rating(3,Rating.missing,f'Dates not found')
+        elif startDate is None and endDate is not None:
+            painrating=Rating(5,Rating.missing,f'Start Date is not there while end date exists')
+        elif startDate is not None and endDate is None:
+            painrating=Rating(4,Rating.missing,f'Start Date is there but end date is not')
         return painrating
 
 
