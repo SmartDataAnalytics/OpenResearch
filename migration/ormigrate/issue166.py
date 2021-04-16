@@ -7,8 +7,6 @@ import re
 from ormigrate.fixer import PageFixer
 from difflib import SequenceMatcher
 from ormigrate.toolbox import HelperFunctions as hf
-from wikibot.wikipush import WikiPush
-import re
 from lodstorage.sql import SQLDB
 from os.path import expanduser
 

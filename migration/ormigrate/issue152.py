@@ -64,11 +64,11 @@ class AcceptanceRateFixer(PageFixer):
         if submittedPapers is not None and acceptedPapers is not None:
             painrating=Rating(1,Rating.ok,f'Both fields Submitted papers and Accepted Papers are available')
         elif submittedPapers is  None and acceptedPapers is  None:
-            painrating=Rating(2,Rating.missing,f'Both fields Submitted papers and Accepted Papers are not available')
+            painrating=Rating(3,Rating.missing,f'Both fields Submitted papers and Accepted Papers are not available')
         elif submittedPapers is not None and acceptedPapers is None:
-            painrating=Rating(3,Rating.missing,f'Submitted papers exists but Accepted Papers is not available')
+            painrating=Rating(5,Rating.missing,f'Submitted papers exists but Accepted Papers is not available')
         elif submittedPapers is None and acceptedPapers is not None:
-            painrating=Rating(4,Rating.missing,f'Accepted Papers exists but Submitted papers is not available')
+            painrating=Rating(7,Rating.missing,f'Accepted Papers exists but Submitted papers is not available')
         return painrating
 
         

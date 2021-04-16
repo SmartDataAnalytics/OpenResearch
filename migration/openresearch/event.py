@@ -17,9 +17,9 @@ import time
 from ormigrate.issue41 import AcronymLengthFixer
 from ormigrate.issue119_Ordinals import OrdinalFixer
 from ormigrate.issue71 import DateFixer
-from ormigrate.painscale import PainScale
 from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer, EventSeriesTitleFixer
 from ormigrate.issue152 import AcceptanceRateFixer
+from ormigrate.issue170_curation import CurationQualityChecker
 
 class OREntityList(JSONAbleList):
     '''
@@ -292,6 +292,10 @@ class EventSeries(JSONAble):
             {
                 "column": "provenancePainRating",
                 "fixer": EventSeriesProvenanceFixer
+            },
+            {
+                "column": "curationPainRating",
+                "fixer": CurationQualityChecker
             },
             {
                 "column": "titlePainRating",

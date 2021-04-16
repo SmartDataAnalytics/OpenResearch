@@ -48,21 +48,30 @@ class TestIssue168(unittest.TestCase):
         self.assertTrue(withSeries>4500)
             
     
-    def checkRatedLod(self,lod,errors,columns,showPainsAbove=8):
+    def checkRatedLod(self,lod,errors,showPainsAbove=11):
         if len(errors)>0:
             for error in errors:
                 print(error)
         self.assertEqual(0,len(errors))
-        for column in columns:
-            counter=Counter()
-            for record in lod:
-                rating=record[column]
-                if self.debug:
-                    if rating.pain>=showPainsAbove:
-                        print (rating)
-                counter[rating.pain]+=1
-            if self.debug:
-                print (f"rating results for {column}:")
+        columns=set()
+        counters={}
+        for record in lod:
+            for column in record.keys():
+                if column.endswith("PainRating"):
+                    if not column in columns:
+                        counters[column]=Counter()
+                    columns.add(column)
+                    rating=record[column]
+                    if self.debug:
+                        if isinstance(rating.pain,int):
+                            if rating.pain>=showPainsAbove:
+                                print (rating)
+                        else:
+                            print(rating) # what?
+                    counters[column][rating.pain]+=1
+        if self.debug:
+            for i,(column,counter) in enumerate(counters.items()):
+                print (f"{i+1}:{column}=")
                 print(counter.most_common(50))
         pass
 
@@ -72,9 +81,9 @@ class TestIssue168(unittest.TestCase):
         '''
         eventCorpus=self.getEventCorpus(debug=self.debug)
         lod,errors=eventCorpus.eventList.getRatedLod(Event.rateMigration)
-        self.checkRatedLod(lod, errors,['acronymPainRating','ordinalPainRating','datePainRating','AcceptanceRatePainRating'])
+        self.checkRatedLod(lod, errors)
         lod,errors=eventCorpus.eventSeriesList.getRatedLod(EventSeries.rateMigration)
-        self.checkRatedLod(lod, errors,['provenancePainRating'])
+        self.checkRatedLod(lod, errors)
 
 
 if __name__ == "__main__":

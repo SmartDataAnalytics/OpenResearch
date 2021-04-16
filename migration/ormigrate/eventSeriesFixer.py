@@ -22,12 +22,12 @@ class EventSeriesProvenanceFixer(PageFixer):
         hasDblp=eventRecord.get('dblpSeries') is not  None
         hasWikidata=eventRecord.get('wikidataId') is not None
         if hasDblp and hasWikidata:
-            return Rating(1,Rating.ok,'Gold Standard series')
+            return Rating(0,Rating.ok,'Gold Standard series')
         if hasDblp:
-            return Rating(4,Rating.ok,'Wikdata id missing for dblp series')
+            return Rating(4,Rating.ok,'Wikidata id missing for dblp series')
         if hasWikidata:
-            return Rating(3,Rating.ok,'Wikdata only series')
-        return Rating(5,Rating.invalid,'Series provenance data missing')
+            return Rating(3,Rating.ok,'Wikidata only series')
+        return Rating(7,Rating.invalid,'Series provenance data missing')
     
 class EventSeriesTitleFixer(PageFixer):
     '''
@@ -37,4 +37,7 @@ class EventSeriesTitleFixer(PageFixer):
     '''    
     @classmethod
     def getRating(cls,eventRecord):
-        return  Rating(7,Rating.invalid,'Rating not implemented yet')
+        if 'title' in eventRecord:
+            return Rating(1,Rating.ok,'title available')
+        else:
+            return  Rating(5,Rating.missing,'title is missing')
