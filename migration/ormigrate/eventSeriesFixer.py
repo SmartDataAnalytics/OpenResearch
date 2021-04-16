@@ -29,4 +29,12 @@ class EventSeriesProvenanceFixer(PageFixer):
             return Rating(3,Rating.ok,'Wikdata only series')
         return Rating(5,Rating.invalid,'Series provenance data missing')
     
-        
+class EventSeriesTitleFixer(PageFixer):
+    '''
+    https://github.com/SmartDataAnalytics/OpenResearch/issues/136
+    
+    Missing titles in event Series #136
+    '''    
+    @classmethod
+    def getRating(cls,eventRecord):
+        return  Rating(7,Rating.invalid,'Rating not implemented yet')

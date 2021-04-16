@@ -34,10 +34,19 @@ class TestIssue168(unittest.TestCase):
         return eventCorpus
 
 
-    def testEventsWithSeries(self):
+    def testEventCorpus(self):
         '''
         '''
         eventCorpus=self.getEventCorpus(debug=self.debug)
+        listOfEvents=eventCorpus.eventList.getList()
+        withSeries=0
+        for event in listOfEvents:
+            self.assertTrue(hasattr(event, 'lastEditor'))
+            if hasattr(event,'inEventSeries'): withSeries+=1
+        if self.debug:
+            print(f"inEventsiers: {withSeries}")
+        self.assertTrue(withSeries>4500)
+            
     
     def checkRatedLod(self,lod,errors,columns,showPainsAbove=8):
         if len(errors)>0:

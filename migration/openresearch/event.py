@@ -18,7 +18,7 @@ from ormigrate.issue41 import AcronymLengthFixer
 from ormigrate.issue119_Ordinals import OrdinalFixer
 from ormigrate.issue71 import DateFixer
 from ormigrate.painscale import PainScale
-from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer
+from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer, EventSeriesTitleFixer
 from ormigrate.issue152 import AcceptanceRateFixer
 
 class OREntityList(JSONAbleList):
@@ -293,6 +293,10 @@ class EventSeries(JSONAble):
                 "column": "provenancePainRating",
                 "fixer": EventSeriesProvenanceFixer
             },
+            {
+                "column": "titlePainRating",
+                "fixer": EventSeriesTitleFixer
+            }
         ]
         return PageFixer.rateWithFixers(pageFixerList, eventSeries,eventSeriesRecord)
         
@@ -363,6 +367,22 @@ class Event(JSONAble):
             "city": "Boston",
             "acceptedPapers": 41,
             "submittedPapers": 120
+        },
+        {
+            "acronym": "5GU 2017",
+            "city": "Melbourne",
+            "country": "Australia",
+            "creationDate": datetime.fromisoformat("2016-09-25T07:36:02"),
+            "endDate": datetime.fromisoformat("2017-06-09T00:00:00"),
+            "eventType": "Conference",
+            "homepage": "http://5guconference.org/2017/show/cf-papers",
+            "inEventSeries": "5GU",
+            "lastEditor": "Wolfgang Fahl",
+            "modificationDate": datetime.fromisoformat("2020-11-05T12:33:23"),
+            "ordinal": 2,
+            "pageTitle": "5GU 2017",
+            "startDate": datetime.fromisoformat("2017-06-08T00:00:00"),
+            "title": "2nd EAI International Conference on 5G for Ubiquitous Connectivity"
         }
         ]
         return samplesLOD
