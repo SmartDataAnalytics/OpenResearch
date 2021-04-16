@@ -288,7 +288,7 @@ class EventSeries(JSONAble):
         '''
         pageFixerList= [
             {
-                "column": "provenance",
+                "column": "provenancePainRating",
                 "fixer": EventSeriesProvenanceFixer
             },
         ]
@@ -436,11 +436,11 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
         '''
         pageFixerList= [
             {
-                "column": "acronym",
+                "column": "acronymPainRating",
                 "fixer": AcronymLengthFixer
             },
             {
-                "column": "ordinal",
+                "column": "ordinalPainRating",
                 "fixer": OrdinalFixer
             }
         ]

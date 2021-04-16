@@ -63,9 +63,9 @@ class TestIssue168(unittest.TestCase):
         '''
         eventCorpus=self.getEventCorpus(debug=self.debug)
         lod,errors=eventCorpus.eventList.getRatedLod(Event.rateMigration)
-        self.checkRatedLod(lod, errors,['acronym','ordinal'])
+        self.checkRatedLod(lod, errors,['acronymPainRating','ordinalPainRating'])
         lod,errors=eventCorpus.eventSeriesList.getRatedLod(EventSeries.rateMigration)
-        self.checkRatedLod(lod, errors,['provenance'])
+        self.checkRatedLod(lod, errors,['provenancePainRating'])
 
 
 if __name__ == "__main__":
