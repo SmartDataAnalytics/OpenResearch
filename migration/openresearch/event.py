@@ -51,6 +51,7 @@ class OREntityList(JSONAbleList):
                 if value in lookup:
                     if withDuplicates:
                         lookupResult=lookup[value]
+                        lookupResult.append(entity)
                     else:
                         duplicates.append(entity)
                 else:
@@ -219,7 +220,7 @@ class EventSeriesList(OREntityList):
             { 'prop':'Homepage',   'name': 'homepage'},
             { 'prop':'Title',      'name': 'title'},
             #{ 'prop':'Field',      'name': 'subject'},
-            { 'prop':'Wikidataid',  'name': 'wikiDataId'},
+            { 'prop':'Wikidataid',  'name': 'wikidataId'},
             { 'prop':'DblpSeries',  'name': 'dblpSeries' }
         ]
         
@@ -274,6 +275,15 @@ class EventSeries(JSONAble):
             samplesWikiSon = "..."
 
         return samplesWikiSon
+    
+    @classmethod       
+    def rateMigration(cls,eventSeries,eventSeriesRecord):
+        '''
+        get the ratings from the different fixers
+        '''
+        rating = AcronymLengthFixer.getRating(eventSeriesRecord)
+        eventSeriesRecord['acronym']=PainScale.lookupPainImage(rating)
+        eventSeriesRecord.move_to_end('acronym',last=False) 
     
     def __str__(self):
         text=self.pageTitle
@@ -415,8 +425,8 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
         get the ratings from the different fixers
         '''
         rating = AcronymLengthFixer.getRating(eventRecord)
-        eventRecord['acronym length']=PainScale.lookupPainImage(rating)
-        #eventRecord.move_to_end('acronym length',last=False) 
+        eventRecord['acronym']=PainScale.lookupPainImage(rating)
+        eventRecord.move_to_end('acronym',last=False) 
     
     def __str__(self):
         text=self.pageTitle

@@ -5,7 +5,8 @@ Created on 2021-04-13
 '''
 import unittest
 from ormigrate.toolbox import HelperFunctions as hf
-from openresearch.event import Event,EventList,EventSeriesList
+from openresearch.eventcorpus import EventCorpus
+from openresearch.event import Event
 from collections import Counter
 
 
@@ -16,55 +17,36 @@ class TestIssue168(unittest.TestCase):
 
 
     def setUp(self):
+        self.debug=True
         pass
 
 
     def tearDown(self):
         pass
     
-    def getEventsWithSeries(self,wikiUser,debug=False):
+    def getEventCorpus(self,debug=False):
         '''
         get events with series by knitting / linking the entities together
         '''
-        eventList=EventList()
-        eventList.debug=debug
-        eventList.fromCache(wikiUser)
-        
-        
-        eventSeriesList=EventSeriesList()
-        eventSeriesList.debug=debug
-        eventSeriesList.fromCache(wikiUser)
-        
-        # get foreign key hashtable
-        seriesLookup=eventList.getLookup("inEventSeries", withDuplicates=True)
-        # get "primary" key hashtable
-        seriesAcronymLookup=eventSeriesList.getLookup("acronym",withDuplicates=True)
-        
-        for seriesAcronym in seriesLookup.keys():
-            if seriesAcronym in seriesAcronymLookup:
-                seriesEvents=seriesLookup[seriesAcronym]
-                print(f"{seriesAcronym}:{len(seriesEvents):4d}" )
-            else:
-                print(f"Event Series Acronym {seriesAcronym} lookup failed")
-        if self.debug:
-            print ("%d events/%d eventSeries -> %d linked" % (len(eventList.getList()),len(eventSeriesList.getList()),len(seriesLookup)))
-        return eventList,eventSeriesList
+        wikiUser=hf.getSMW_WikiUser(save=hf.inPublicCI())
+        eventCorpus=EventCorpus(debug=debug)
+        eventCorpus.fromWikiUser(wikiUser)
+        return eventCorpus
 
 
     def testEventsWithSeries(self):
-        wikiUser=hf.getSMW_WikiUser(save=hf.inPublicCI())
-        eventList,eventSeriesList=self.getEventsWithSeries(wikiUser,debug=True)
+        eventCorpus=self.getEventCorpus(debug=self.debug)
+        
 
     def testRatingCallback(self):
         '''
         test the rating call back
         '''
-        wikiUser=hf.getSMW_WikiUser(save=hf.inPublicCI())
-        eventList,eventSeriesList=self.getEventsWithSeries(wikiUser)
-        lod=eventList.getRatedLod(Event.rateMigration)
+        eventCorpus=self.getEventCorpus(debug=self.debug)
+        lod=eventCorpus.eventList.getRatedLod(Event.rateMigration)
         counter=Counter()
         for record in lod:
-            counter[record["acronym length"]]+=1
+            counter[record["acronym"]]+=1
         print(counter.most_common(50))
         pass
 
