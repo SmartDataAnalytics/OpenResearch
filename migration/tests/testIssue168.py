@@ -17,7 +17,7 @@ class TestIssue168(unittest.TestCase):
 
 
     def setUp(self):
-        self.debug=False
+        self.debug=True
         pass
 
 
@@ -39,19 +39,22 @@ class TestIssue168(unittest.TestCase):
         '''
         eventCorpus=self.getEventCorpus(debug=self.debug)
     
-    def checkRatedLod(self,lod,errors):
+    def checkRatedLod(self,lod,errors,columns,showPainsAbove=8):
         if len(errors)>0:
             for error in errors:
                 print(error)
         self.assertEqual(0,len(errors))
-        counter=Counter()
-        for record in lod:
-            rating=record["acronym"]
+        for column in columns:
+            counter=Counter()
+            for record in lod:
+                rating=record[column]
+                if self.debug:
+                    if rating.pain>=showPainsAbove:
+                        print (rating)
+                counter[rating.pain]+=1
             if self.debug:
-                if rating.pain>=5:
-                    print (rating)
-            counter[rating.pain]+=1
-        print(counter.most_common(50))
+                print (f"rating results for {column}:")
+                print(counter.most_common(50))
         pass
 
     def testRatingCallback(self):
@@ -60,9 +63,9 @@ class TestIssue168(unittest.TestCase):
         '''
         eventCorpus=self.getEventCorpus(debug=self.debug)
         lod,errors=eventCorpus.eventList.getRatedLod(Event.rateMigration)
-        self.checkRatedLod(lod, errors)
+        self.checkRatedLod(lod, errors,['acronym','ordinal'])
         lod,errors=eventCorpus.eventSeriesList.getRatedLod(EventSeries.rateMigration)
-        self.checkRatedLod(lod, errors)
+        self.checkRatedLod(lod, errors,['provenance'])
 
 
 if __name__ == "__main__":

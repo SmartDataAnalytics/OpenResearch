@@ -9,7 +9,6 @@ class EventCorpus(object):
     Towards a gold standard event corpus ...
     '''
 
-
     def __init__(self,debug=False):
         '''
         Constructor
@@ -23,7 +22,6 @@ class EventCorpus(object):
         self.eventList=EventList()
         self.eventList.debug=self.debug
         self.eventList.fromCache(wikiUser)
-        
         
         self.eventSeriesList=EventSeriesList()
         self.eventSeriesList.debug=self.debug
