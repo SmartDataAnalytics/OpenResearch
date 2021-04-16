@@ -5,6 +5,8 @@ Created on 2021-04-02
 '''
 import re
 from ormigrate.fixer import PageFixer
+from ormigrate.toolbox import HelperFunctions as hf
+from openresearch.event import EventList
 
 class AcceptanceRateFixer(PageFixer):
 
@@ -22,8 +24,15 @@ class AcceptanceRateFixer(PageFixer):
         self.debug=debug
         self.nosub=0
         self.noacc=0
+        self.painrating= None
 
-    
+
+    def checkfromEvent(self,eventRecord):
+        if eventRecord['submittedPapers'] is None and eventRecord['acceptedPapers'] is not None:
+            self.nosub+=1
+        elif eventRecord['submittedPapers'] is None and eventRecord['acceptedPapers'] is not None:
+            self.noacc+=1
+
 
     def check(self,page,event):
         '''
@@ -40,11 +49,26 @@ class AcceptanceRateFixer(PageFixer):
         text="submitted papers missing for %d: accepted papers missing for: %d" % (self.nosub, self.noacc)
         return text
 
+    def getRating(self,eventRecord):
+        painrating=None
+        if eventRecord['submittedPapers'] is not None and eventRecord['acceptedPapers'] is not None:
+            painrating=1
+        elif eventRecord['submittedPapers'] is  None and eventRecord['acceptedPapers'] is  None:
+            painrating=2
+        elif eventRecord['submittedPapers'] is not None and eventRecord['acceptedPapers'] is None:
+            painrating=3
+        elif eventRecord['submittedPapers'] is None and eventRecord['acceptedPapers'] is not None:
+            painrating=4
+        if self.debug:
+            print(eventRecord)
+            print(painrating)
+        return painrating
+
         
 if __name__ == "__main__":
     fixer=AcceptanceRateFixer()
     fixer.debug=True
-    fixer.checkAllFiles(fixer.check)
-    print (fixer.result())
+    # fixer.checkAllFiles(fixer.check)
+    # print (fixer.result())
 
 
