@@ -52,6 +52,18 @@ class OrdinalFixer(PageFixer):
                             print(f"{ordinal_val} will changed to {cardinal_value}.")
                     return new_event
 
+    def getRating(self,eventRecord):
+        painRating = None
+        if eventRecord['Ordinal'] is None:
+            painRating = 4
+        elif type(eventRecord['Ordinal']) == int:
+            painRating = 1
+        elif type(eventRecord['Ordinal']) == str:
+            if any(char.isdigit() for char in eventRecord['Ordinal']):
+                painRating = 5
+            else:
+                painRating = 7
+        return painRating
 
 if __name__ == "__main__":
     fixer = OrdinalFixer()

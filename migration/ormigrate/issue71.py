@@ -5,7 +5,7 @@ Created on 2021-04-06
 '''
 import re
 from ormigrate.fixer import PageFixer
-from ormigrate.toolbox import HelperFunctions
+from ormigrate.toolbox import HelperFunctions as hf
 
 
 class DateFixer(PageFixer):
@@ -31,18 +31,54 @@ class DateFixer(PageFixer):
             Fixed text of the page.
         '''
         generateLink=False
+        change=False
         dates = re.findall('|.*'+datetype+'.*=.*\n', event)
         if len(dates) != 0:
             for element in dates:
                 name,value=self.getNameValue(element)
                 if name is not None and value is not None:
-                    fixedDate = HelperFunctions.parseDate(value)
+                    fixedDate = hf.parseDate(value)
                     if fixedDate is not None:
+                        if fixedDate != value:
+                            change = True
                         event = event.replace(element,'|'+name+'='+fixedDate)
                     else:
                         generateLink=True
         if self.debug and generateLink: print(self.generateLink(page))
-        return event
+        if change:
+            return event
+        else:
+            return None
+
+    def getRating(self,eventRecord):
+        painrating= None
+        if eventRecord['startDate'] is not None and eventRecord['endDate'] is not None:
+            fixedStartDate = hf.parseDate(eventRecord['startDate'])
+            fixedEndDate= hf.parseDate(eventRecord['endDate'])
+            if fixedStartDate is None and fixedEndDate is None:
+                painrating = 7
+            elif fixedStartDate is None:
+                painrating = 6
+            elif fixedEndDate is None:
+                painrating= 5
+            else:
+                painrating=1
+        elif eventRecord['startDate'] is None and eventRecord['endDate'] is None:
+            painrating=2
+        elif eventRecord['startDate'] is None and eventRecord['endDate'] is not None:
+            painrating=4
+            fixedDate=hf.parseDate(eventRecord['endDate'])
+            if fixedDate is None:
+                painrating= 6
+        elif eventRecord['startDate'] is not None and eventRecord['endDate'] is None:
+            painrating=3
+            fixedDate = hf.parseDate(eventRecord['startDate'])
+            if fixedDate is None:
+                painrating = 6
+        return painrating
+
+
+
 
 
 if __name__ == "__main__":

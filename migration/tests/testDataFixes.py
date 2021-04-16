@@ -82,7 +82,18 @@ Help:Topic"""
             test for fixing Acceptance Rate Not calculated
             https://github.com/SmartDataAnalytics/OpenResearch/issues/152
         '''
+        eventRecords= [{'submittedPapers':'test', 'acceptedPapers':'test'},
+                       {'submittedPapers': None, 'acceptedPapers':None},
+                       {'submittedPapers':'test', 'acceptedPapers':None},
+                       {'submittedPapers':None, 'acceptedPapers':'test'}]
+        painRatings=[]
         fixer=AcceptanceRateFixer(debug=self.debug)
+
+        for event in eventRecords:
+            painRating =fixer.getRating(event)
+            self.assertIsNotNone(painRating)
+            painRatings.append(painRating)
+        self.assertEqual(painRatings,[1,2,3,4])
         pages=fixer.getAllPages()
         if self.debug:
             print("Number of pages: ", len(pages))
@@ -112,7 +123,17 @@ Help:Topic"""
             test for fixing Ordinals not a number
             https://github.com/SmartDataAnalytics/OpenResearch/issues/119
         '''
+        eventRecords= [{'Ordinal':2},
+                       {'Ordinal':None},
+                       {'Ordinal':'2nd'},
+                       {'Ordinal':'test'}]
+        painRatings = []
         fixer=OrdinalFixer(debug=self.debug)
+        for event in eventRecords:
+            painRating = fixer.getRating(event)
+            self.assertIsNotNone(painRating)
+            painRatings.append(painRating)
+        self.assertEqual(painRatings,[1,4,5,7])
         types = Types("Event")
         samples = Event.getSampleWikiSon()
         lookup_dict = hf.loadDictionary()
@@ -126,7 +147,21 @@ Help:Topic"""
             test for fixing invalid dates
             https://github.com/SmartDataAnalytics/OpenResearch/issues/71
         '''
+        eventRecords = [{'startDate': '20 Feb, 2020', 'endDate': '20 Feb, 2020'},
+                        {'startDate': None, 'endDate': None},
+                        {'startDate': '20 Feb, 2020', 'endDate': None},
+                        {'startDate': None, 'endDate': '20 Feb, 2020'},
+                        {'startDate': '20 Feb, 2020', 'endDate': 'test'},
+                        {'startDate': 'test', 'endDate': '20 Feb, 2020'},
+                        {'startDate': 'test', 'endDate': 'test'}]
+        painRatings=[]
         fixer=DateFixer(debug=self.debug)
+        for event in eventRecords:
+            painRating = fixer.getRating(event)
+            self.assertIsNotNone(painRating)
+            painRatings.append(painRating)
+        self.assertEqual(painRatings,[1,2,3,4,5,6,7])
+
         types = Types("Event")
         samples = Event.getSampleWikiSon()
         fixedDates=fixer.getFixedDate('sample',samples[0])
