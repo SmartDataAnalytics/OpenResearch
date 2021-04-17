@@ -34,7 +34,7 @@ class TestIssue168(unittest.TestCase):
             self.assertTrue(hasattr(event, 'lastEditor'))
             if hasattr(event,'inEventSeries'): withSeries+=1
         if self.debug:
-            print(f"inEventsiers: {withSeries}")
+            print(f"inEventseries: {withSeries}")
         self.assertTrue(withSeries>4500)
             
     

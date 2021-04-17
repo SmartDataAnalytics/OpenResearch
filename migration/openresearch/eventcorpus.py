@@ -6,7 +6,7 @@ Created on 2021-04-16
 from openresearch.event import EventList,EventSeriesList
 class EventCorpus(object):
     '''
-    Towards a gold standard event corpus ...
+    Towards a gold standard event corpus  and observatory ...
     '''
 
     def __init__(self,debug=False):
