@@ -61,7 +61,7 @@ class TestIssue170(unittest.TestCase):
         for user in userLookup.keys():
             counter[user]+=len(userLookup[user])
         # hide personal data
-        # print (counter.most_common(50))
+        #print (counter.most_common(50))
             
         
 
