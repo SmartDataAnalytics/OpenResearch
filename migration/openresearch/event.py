@@ -20,6 +20,7 @@ from ormigrate.issue71 import DateFixer
 from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer, EventSeriesTitleFixer
 from ormigrate.issue152 import AcceptanceRateFixer
 from ormigrate.issue170_curation import CurationQualityChecker
+from ormigrate.issue195 import BiblographicFieldFixer
 
 class OREntityList(JSONAbleList):
     '''
@@ -480,6 +481,10 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
             {
                 "column": "AcceptanceRatePainRating",
                 "fixer": AcceptanceRateFixer
+            },
+            {
+                "column": "BiblographicFieldFixer",
+                "fixer": BiblographicFieldFixer
             }
         ]
         return PageFixer.rateWithFixers(pageFixerList, event,eventRecord)

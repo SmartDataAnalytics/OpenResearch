@@ -11,6 +11,8 @@ from ormigrate.issue119_Ordinals import OrdinalFixer
 from ormigrate.issue71 import DateFixer
 from ormigrate.issue163 import SeriesFixer
 from ormigrate.issue166 import WikiCFPIDFixer
+from ormigrate.issue195 import BiblographicFieldFixer
+
 
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.fixer import PageFixer
@@ -167,6 +169,24 @@ Help:Topic"""
         fixed_dic=hf.wikiSontoLOD(fixedDeadlines)
         self.assertTrue(fixed_dic[0]['Start date'] == '2020/09/27')
         self.assertTrue(fixed_dic[0]['Paper deadline'] == '2020/05/28')
+
+    def testIssue195(self):
+        '''
+            test for fixing invalid dates
+            https://github.com/SmartDataAnalytics/OpenResearch/issues/71
+        '''
+        eventRecords = [{'has Proceedings Bibliography': 'test', 'has Bibliography': 'test'},
+                        {'startDate': '20 Feb, 2020', 'endDate': '20 Feb, 2020'},
+                        {'Ordinal': 2},
+                        {'has Bibliography':'test'}
+                        ]
+        painRatings=[]
+        fixer=BiblographicFieldFixer(debug=self.debug)
+        for event in eventRecords:
+            painRating = fixer.getRating(event)
+            self.assertIsNotNone(painRating)
+            painRatings.append(painRating.pain)
+        self.assertEqual(painRatings,[7,1,1,5])
 
     def testIssue163(self):
         '''
