@@ -10,6 +10,11 @@ import re
 from fnmatch import filter
 from sys import stdin
 import ntpath
+import wikitextparser as wtp
+from wikibot.wikiclient import WikiClient
+from wikibot.wikipush import WikiPush
+from wikibot.wikiuser import WikiUser
+
 
 class PageFixer(object):
     '''
@@ -23,6 +28,21 @@ class PageFixer(object):
         self.wikiId = wikiId
         self.baseUrl = baseUrl
         self.debug=debug
+        self.wikiclient = WikiClient.ofWikiId(self.wikiId)
+
+    def getPage(self, name):
+        '''
+        Retrieves the page corresponding to the given name
+
+        Args:
+            name(str): name of the page that should be retrieved
+
+        Returns:
+            WikiPage corresponding to the given name
+        '''
+        page=self.wikiclient.getPage()
+        wikiPage=WikiPage(page)
+        return wikiPage
 
     def generateLink(self,page):
         search=r".*%s/(.*)\.wiki" % self.wikiId
@@ -38,13 +58,16 @@ class PageFixer(object):
         os.makedirs(fixedDir,exist_ok=True)
         return fixedDir + ntpath.basename(oldpath)
 
-    def getAllPages(self):
+    def getAllPages(self, folderName:str=None):
         '''
         get all wiki pages
         '''
         home = path.expanduser("~")
         allPages = []
-        for root, dirnames, filenames in walk('%s/wikibackup/%s/' % (home,self.wikiId)):
+        backupPath='%s/wikibackup/%s/' % (home,self.wikiId)
+        if folderName is not None:
+            backupPath='%s/wikibackup/%s/' % (home,folderName)
+        for root, dirnames, filenames in walk(backupPath):
             for filename in filter(filenames, '*.wiki'):
                 allPages.append(path.join(root, filename))
         return allPages
@@ -162,4 +185,49 @@ class PageFixer(object):
             except Exception as e:
                 errors.append({'error':e,'fixer':fixer,'entity':entity,'record':entityRecord})
         return errors
-        
+
+
+class WikiPage(object):
+    '''
+    Wrapper class for WikiText
+    https://github.com/tholzheim/wikirender/blob/master/wikifile/wikiFile.py
+    ToDo: If WikiPage works correctly in wikirender replace this class with the wikirender one
+    '''
+
+    def __init__(self, page):
+        self.wikiText=wtp.parse(page)
+
+    def get_template(self, template_name: str):
+        if self.wikiText is None or self.wikiText.templates is None:
+            # Wikifile has no templates
+            return None
+        for template in self.wikiText.templates:
+            name = WikiPage.get_template_name(template.name)
+            if name == WikiPage.get_template_name(template_name):
+                return template
+        return None
+
+    @staticmethod
+    def get_template_name(template_name: str):
+        name = template_name.replace('\n', '')
+        name = name.lstrip()
+        name = name.rstrip()
+        return name
+
+    def extract_template(self, name: str):
+        """
+        Extracts the template data and returns it as dict
+        Args:
+            name: name of the template that should be extracted
+        Returns:
+            Returns template content as dict
+        """
+        template = self.get_template(name)
+        if template is None:
+            return None
+        res = {}
+        for arg in template.arguments:
+            val=arg.value.strip()
+            value = val if not val.endswith("\n") else val[:-1]
+            res[arg.name.strip()] = value
+        return res

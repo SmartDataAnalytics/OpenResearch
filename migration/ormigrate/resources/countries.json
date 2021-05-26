@@ -1,319 +1,2062 @@
 {
-  "countries" : [
-    {
-      "name" : "USA",
-      "wikidataName" : "United States of America",
-      "wikidataId" : "Q30"
-    },
-    {
-      "name" : "China",
-      "wikidataName" : "People's Republic of China",
-      "wikidataId" : "Q148"
-    },
-    {
-      "name" : "Germany",
-      "wikidataName" : "Germany",
-      "wikidataId" : "Q183"
-    },
-    {
-      "name" : "Italy",
-      "wikidataName" : "Italy",
-      "wikidataId" : "Q38"
-    },
-    {
-      "name" : "France",
-      "wikidataName" : "France",
-      "wikidataId" : "Q142"
-    },
-    {
-      "name" : "Canada",
-      "wikidataName" : "Canada",
-      "wikidataId" : "Q16"
-    },
-    {
-      "name" : "Spain",
-      "wikidataName" : "Spain",
-      "wikidataId" : "Q29"
-    },
-    {
-      "name" : "Japan",
-      "wikidataName" : "Japan",
-      "wikidataId" : "Q17"
-    },
-    {
-      "name" : "Portugal",
-      "wikidataName" : "Portugal",
-      "wikidataId" : "Q45"
-    },
-    {
-      "name" : "UK",
-      "wikidataName" : "United Kingdom",
-      "wikidataId" : "Q145"
-    },
-    {
-      "name" : "Greece",
-      "wikidataName" : "Greece",
-      "wikidataId" : "Q41"
-    },
-    {
-      "name" : "Australia",
-      "wikidataName" : "Australia",
-      "wikidataId" : "Q408"
-    },
-    {
-      "name" : "Austria",
-      "wikidataName" : "Austria",
-      "wikidataId" : "Q40"
-    },
-    {
-      "name" : "Netherlands",
-      "wikidataName" : "Kingdom of the Netherlands",
-      "wikidataId" : "Q55"
-    },
-    {
-      "name" : "India",
-      "wikidataName" : "India",
-      "wikidataId" : "Q668"
-    },
-    {
-      "name" : "Singapore",
-      "wikidataName" : "Singapore",
-      "wikidataId" : "Q334"
-    },
-    {
-      "name" : "United Kingdom",
-      "wikidataName" : "United Kingdom",
-      "wikidataId" : "Q145"
-    },
-    {
-      "name" : "Poland",
-      "wikidataName" : "Poland",
-      "wikidataId" : "Q36"
-    },
-    {
-      "name" : "Thailand",
-      "wikidataName" : "Thailand",
-      "wikidataId" : "Q869"
-    },
-    {
-      "name" : "Sweden",
-      "wikidataName" : "Sweden",
-      "wikidataId" : "Q34"
-    },
-    {
-      "name" : "Czech Republic",
-      "wikidataName" : "Czech Republic",
-      "wikidataId" : "Q213"
-    },
-    {
-      "name" : "Taiwan",
-      "wikidataName" : "Taiwan",
-      "wikidataId" : "Q865"
-    },
-    {
-      "name" : "Brazil",
-      "wikidataName" : "Brazil",
-      "wikidataId" : "Q155"
-    },
-    {
-      "name" : "South Korea",
-      "wikidataName" : "South Korea",
-      "wikidataId" : "Q884"
-    },
-    {
-      "name" : "Morocco",
-      "wikidataName" : "Morocco",
-      "wikidataId" : "Q1028"
-    },
-    {
-      "name" : "Mexico",
-      "wikidataName" : "Mexico",
-      "wikidataId" : "Q96"
-    },
-    {
-      "name" : "Switzerland",
-      "wikidataName" : "Switzerland",
-      "wikidataId" : "Q39"
-    },
-    {
-      "name" : "Finland",
-      "wikidataName" : "Finland",
-      "wikidataId" : "Q33"
-    },
-    {
-      "name" : "Malaysia",
-      "wikidataName" : "Malaysia",
-      "wikidataId" : "Q833"
-    },
-    {
-      "name" : "New Zealand",
-      "wikidataName" : "New Zealand",
-      "wikidataId" : "Q664"
-    },
-    {
-      "name" : "Belgium",
-      "wikidataName" : "Belgium",
-      "wikidataId" : "Q31"
-    },
-    {
-      "name" : "Korea",
-      "wikidataName" : "South Korea",
-      "wikidataId" : "Q884"
-    },
-    {
-      "name" : "Denmark",
-      "wikidataName" : "Danish Realm",
-      "wikidataId" : "Q35"
-    },
-    {
-      "name" : "Ireland",
-      "wikidataName" : "Ireland",
-      "wikidataId" : "Q27"
-    },
-    {
-      "name" : "Russia",
-      "wikidataName" : "Russia",
-      "wikidataId" : "Q159"
-    },
-    {
-      "name" : "Turkey",
-      "wikidataName" : "Turkey",
-      "wikidataId" : "Q43"
-    },
-    {
-      "name" : "Indonesia",
-      "wikidataName" : "Indonesia",
-      "wikidataId" : "Q252"
-    },
-    {
-      "name" : "Vietnam",
-      "wikidataName" : "Vietnam",
-      "wikidataId" : "Q881"
-    },
-    {
-      "name" : "Hungary",
-      "wikidataName" : "Hungary",
-      "wikidataId" : "Q28"
-    },
-    {
-      "name" : "Cyprus",
-      "wikidataName" : "Cyprus",
-      "wikidataId" : "Q229"
-    },
-    {
-      "name" : "Norway",
-      "wikidataName" : "Norway",
-      "wikidataId" : "Q20"
-    },
-    {
-      "name" : "Romania",
-      "wikidataName" : "Romania",
-      "wikidataId" : "Q218"
-    },
-    {
-      "name" : "UAE",
-      "wikidataName" : "United Arab Emirates",
-      "wikidataId" : "Q878"
-    },
-    {
-      "name" : "Egypt",
-      "wikidataName" : "Egypt",
-      "wikidataId" : "Q79"
-    },
-    {
-      "name" : "South Africa",
-      "wikidataName" : "South Africa",
-      "wikidataId" : "Q258"
-    },
-    {
-      "name" : "Croatia",
-      "wikidataName" : "Croatia",
-      "wikidataId" : "Q224"
-    },
-    {
-      "name" : "Estonia",
-      "wikidataName" : "Estonia",
-      "wikidataId" : "Q191"
-    },
-    {
-      "name" : "Israel",
-      "wikidataName" : "Israel",
-      "wikidataId" : "Q801"
-    },
-    {
-      "name" : "Malta",
-      "wikidataName" : "Malta",
-      "wikidataId" : "Q233"
-    },
-    {
-      "name" : "United Arab Emirates",
-      "wikidataName" : "United Arab Emirates",
-      "wikidataId" : "Q878"
-    },
-    {
-      "name" : "Bulgaria",
-      "wikidataName" : "Bulgaria",
-      "wikidataId" : "Q219"
-    },
-    {
-      "name" : "Iceland",
-      "wikidataName" : "Iceland",
-      "wikidataId" : "Q189"
-    },
-    {
-      "name" : "Slovenia",
-      "wikidataName" : "Slovenia",
-      "wikidataId" : "Q215"
-    },
-    {
-      "name" : "Tunisia",
-      "wikidataName" : "Tunisia",
-      "wikidataId" : "Q948"
-    },
-    {
-      "name" : "Scotland",
-      "wikidataName" : "Kingdom of Scotland",
-      "wikidataId" : "Q230791"
-    },
-    {
-      "name" : "Chile",
-      "wikidataName" : "Chile",
-      "wikidataId" : "Q298"
-    },
-    {
-      "name" : "Slovakia",
-      "wikidataName" : "Slovakia",
-      "wikidataId" : "Q214"
-    },
-    {
-      "name" : "Ukraine",
-      "wikidataName" : "Ukraine",
-      "wikidataId" : "Q212"
-    },
-    {
-      "name" : "Argentina",
-      "wikidataName" : "Argentina",
-      "wikidataId" : "Q414"
-    },
-    {
-      "name" : "Luxembourg",
-      "wikidataName" : "Luxembourg",
-      "wikidataId" : "Q32"
-    },
-    {
-      "name" : "Philippines",
-      "wikidataName" : "Philippines",
-      "wikidataId" : "Q928"
-    },
-    {
-      "name" : "Iran",
-      "wikidataName" : "Iran",
-      "wikidataId" : "Q794"
-    },
-    {
-      "name" : "Serbia",
-      "wikidataName" : "Serbia",
-      "wikidataId" : "Q403"
-    }
-  ]
+    "countries": [
+        {
+            "name": "Afghanistan",
+            "wikidataid": "Q889",
+            "coordinates": "34,66",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AF"
+        },
+        {
+            "name": "Albania",
+            "wikidataid": "Q222",
+            "coordinates": "41,20",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AL"
+        },
+        {
+            "name": "Algeria",
+            "wikidataid": "Q262",
+            "coordinates": "28,1",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "DZ"
+        },
+        {
+            "name": "Andorra",
+            "wikidataid": "Q228",
+            "coordinates": "42.558333333333,1.5552777777778",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AD"
+        },
+        {
+            "name": "Angola",
+            "wikidataid": "Q916",
+            "coordinates": "-12.35,17.35",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AO"
+        },
+        {
+            "name": "Antigua and Barbuda",
+            "wikidataid": "Q781",
+            "coordinates": "17.116666666667,-61.85",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AG"
+        },
+        {
+            "name": "Argentina",
+            "wikidataid": "Q414",
+            "coordinates": "-34,-64",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AR"
+        },
+        {
+            "name": "Armenia",
+            "wikidataid": "Q399",
+            "coordinates": "40.383333,44.95",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AM"
+        },
+        {
+            "name": "Australia",
+            "wikidataid": "Q408",
+            "coordinates": "-28,137",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "AUS"
+            ],
+            "isocode": "AU"
+        },
+        {
+            "name": "Austria",
+            "wikidataid": "Q40",
+            "coordinates": "48,14",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "AUT"
+            ],
+            "isocode": "AT"
+        },
+        {
+            "name": "Azerbaijan",
+            "wikidataid": "Q227",
+            "coordinates": "40.3,47.7",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AZ"
+        },
+        {
+            "name": "Bahrain",
+            "wikidataid": "Q398",
+            "coordinates": "26.0675,50.551111",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BH"
+        },
+        {
+            "name": "Bangladesh",
+            "wikidataid": "Q902",
+            "coordinates": "24.016667,89.866667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BD"
+        },
+        {
+            "name": "Barbados",
+            "wikidataid": "Q244",
+            "coordinates": "13.17,-59.5525",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BB"
+        },
+        {
+            "name": "Belarus",
+            "wikidataid": "Q184",
+            "coordinates": "53.528333333333,28.046666666667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BY"
+        },
+        {
+            "name": "Belgium",
+            "wikidataid": "Q31",
+            "coordinates": "50.641111111111,4.6680555555556",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BE"
+        },
+        {
+            "name": "Belize",
+            "wikidataid": "Q242",
+            "coordinates": "17.066666666667,-88.7",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BZ"
+        },
+        {
+            "name": "Benin",
+            "wikidataid": "Q962",
+            "coordinates": "8.8333333333333,2.1833333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BJ"
+        },
+        {
+            "name": "Bhutan",
+            "wikidataid": "Q917",
+            "coordinates": "27.45,90.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BT"
+        },
+        {
+            "name": "Bolivia",
+            "wikidataid": "Q750",
+            "coordinates": "-17.056869611111,-64.991228611111",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BO"
+        },
+        {
+            "name": "Bosnia and Herzegovina",
+            "wikidataid": "Q225",
+            "coordinates": "44,18",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BA"
+        },
+        {
+            "name": "Botswana",
+            "wikidataid": "Q963",
+            "coordinates": "-22.2,23.7",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BW"
+        },
+        {
+            "name": "Brazil",
+            "wikidataid": "Q155",
+            "coordinates": "-14,-53",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BR"
+        },
+        {
+            "name": "Brunei",
+            "wikidataid": "Q921",
+            "coordinates": "4.4,114.566667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BN"
+        },
+        {
+            "name": "Bulgaria",
+            "wikidataid": "Q219",
+            "coordinates": "42.75,25.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BG"
+        },
+        {
+            "name": "Burkina Faso",
+            "wikidataid": "Q965",
+            "coordinates": "12.266667,-2.066667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BF"
+        },
+        {
+            "name": "Burundi",
+            "wikidataid": "Q967",
+            "coordinates": "-3.666667,29.816667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BI"
+        },
+        {
+            "name": "Cambodia",
+            "wikidataid": "Q424",
+            "coordinates": "12.6,105",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KH"
+        },
+        {
+            "name": "Cameroon",
+            "wikidataid": "Q1009",
+            "coordinates": "7,12",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CM"
+        },
+        {
+            "name": "Canada",
+            "wikidataid": "Q16",
+            "coordinates": "56,-109",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CA"
+        },
+        {
+            "name": "Cape Verde",
+            "wikidataid": "Q1011",
+            "coordinates": "15.916666666667,-24.083333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CV"
+        },
+        {
+            "name": "Central African Republic",
+            "wikidataid": "Q929",
+            "coordinates": "6.7,20.9",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CF"
+        },
+        {
+            "name": "Chad",
+            "wikidataid": "Q657",
+            "coordinates": "15.466667,19.4",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TD"
+        },
+        {
+            "name": "Chile",
+            "wikidataid": "Q298",
+            "coordinates": "-33,-71",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CL"
+        },
+        {
+            "name": "Colombia",
+            "wikidataid": "Q739",
+            "coordinates": "4,-74",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CO"
+        },
+        {
+            "name": "Comoros",
+            "wikidataid": "Q970",
+            "coordinates": "-12.183333,44.233333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KM"
+        },
+        {
+            "name": "Costa Rica",
+            "wikidataid": "Q800",
+            "coordinates": "10,-84",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CR"
+        },
+        {
+            "name": "Croatia",
+            "wikidataid": "Q224",
+            "coordinates": "45.25,15.466667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "HR"
+        },
+        {
+            "name": "Cuba",
+            "wikidataid": "Q241",
+            "coordinates": "22,-79.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CU"
+        },
+        {
+            "name": "Cyprus",
+            "wikidataid": "Q229",
+            "coordinates": "35,33",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CY"
+        },
+        {
+            "name": "Czech Republic",
+            "wikidataid": "Q213",
+            "coordinates": "50,16",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "Czechia"
+            ],
+            "isocode": "CZ"
+        },
+        {
+            "name": "Democratic Republic of the Congo",
+            "wikidataid": "Q974",
+            "coordinates": "-2.88,23.656",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CD"
+        },
+        {
+            "name": "Denmark",
+            "wikidataid": "Q35",
+            "coordinates": "56,10",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "DK"
+        },
+        {
+            "name": "Djibouti",
+            "wikidataid": "Q977",
+            "coordinates": "11.8,42.433333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "DJ"
+        },
+        {
+            "name": "Dominica",
+            "wikidataid": "Q784",
+            "coordinates": "15.416667,-61.333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "DM"
+        },
+        {
+            "name": "Dominican Republic",
+            "wikidataid": "Q786",
+            "coordinates": "18.8,-70.2",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "DO"
+        },
+        {
+            "name": "East Timor",
+            "wikidataid": "Q574",
+            "coordinates": "-8.966667,125.75",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TL"
+        },
+        {
+            "name": "Ecuador",
+            "wikidataid": "Q736",
+            "coordinates": "-1,-78",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "EC",
+                "ECU",
+                "Ecuador"
+            ],
+            "isocode": "EC"
+        },
+        {
+            "name": "Egypt",
+            "wikidataid": "Q79",
+            "coordinates": "27,29",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "EG"
+        },
+        {
+            "name": "El Salvador",
+            "wikidataid": "Q792",
+            "coordinates": "13.668889,-88.866111",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SV"
+        },
+        {
+            "name": "Equatorial Guinea",
+            "wikidataid": "Q983",
+            "coordinates": "1.5,10",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GQ"
+        },
+        {
+            "name": "Eritrea",
+            "wikidataid": "Q986",
+            "coordinates": "15.483333,38.25",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ER"
+        },
+        {
+            "name": "Estonia",
+            "wikidataid": "Q191",
+            "coordinates": "59,26",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "Estonia"
+            ],
+            "isocode": "EE"
+        },
+        {
+            "name": "Eswatini",
+            "wikidataid": "Q1050",
+            "coordinates": "-26.483333,31.433333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SZ"
+        },
+        {
+            "name": "Ethiopia",
+            "wikidataid": "Q115",
+            "coordinates": "9,40",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ET"
+        },
+        {
+            "name": "Federated States of Micronesia",
+            "wikidataid": "Q702",
+            "coordinates": "6.9166666666667,158.18333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "FM"
+            ],
+            "isocode": "FM"
+        },
+        {
+            "name": "Fiji",
+            "wikidataid": "Q712",
+            "coordinates": "-18,178",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "Fiji"
+            ],
+            "isocode": "FJ"
+        },
+        {
+            "name": "Finland",
+            "wikidataid": "Q33",
+            "coordinates": "65,27",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "FI"
+        },
+        {
+            "name": "France",
+            "wikidataid": "Q142",
+            "coordinates": "47,2",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "FR"
+        },
+        {
+            "name": "Gabon",
+            "wikidataid": "Q1000",
+            "coordinates": "-0.68333055555556,11.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GA"
+        },
+        {
+            "name": "Georgia",
+            "wikidataid": "Q230",
+            "coordinates": "42.016669444444,43.733330555556",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GE"
+        },
+        {
+            "name": "Germany",
+            "wikidataid": "Q183",
+            "coordinates": "51,10",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "DE"
+        },
+        {
+            "name": "Ghana",
+            "wikidataid": "Q117",
+            "coordinates": "8,-0.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GH"
+        },
+        {
+            "name": "Greece",
+            "wikidataid": "Q41",
+            "coordinates": "38.5,23",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GR"
+        },
+        {
+            "name": "Grenada",
+            "wikidataid": "Q769",
+            "coordinates": "12.116667,-61.666667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GD"
+        },
+        {
+            "name": "Greenland",
+            "wikidataid": "Q223",
+            "coordinates": "72,-40",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GL"
+        },
+        {
+            "name": "Guatemala",
+            "wikidataid": "Q774",
+            "coordinates": "15.5,-90.25",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GT"
+        },
+        {
+            "name": "Guinea",
+            "wikidataid": "Q1006",
+            "coordinates": "10,-11",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GN"
+        },
+        {
+            "name": "Guinea-Bissau",
+            "wikidataid": "Q1007",
+            "coordinates": "12,-15",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GW"
+        },
+        {
+            "name": "Guyana",
+            "wikidataid": "Q734",
+            "coordinates": "5.733333,-59.316667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GY"
+        },
+        {
+            "name": "Haiti",
+            "wikidataid": "Q790",
+            "coordinates": "19,-72.8",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "HT"
+        },
+        {
+            "name": "Honduras",
+            "wikidataid": "Q783",
+            "coordinates": "14.633333,-86.816667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "HN"
+        },
+        {
+            "name": "Hungary",
+            "wikidataid": "Q28",
+            "coordinates": "47,19",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "HU"
+        },
+        {
+            "name": "Iceland",
+            "wikidataid": "Q189",
+            "coordinates": "65,-19",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "IS"
+        },
+        {
+            "name": "India",
+            "wikidataid": "Q668",
+            "coordinates": "22.8,83",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "India"
+            ],
+            "isocode": "IN"
+        },
+        {
+            "name": "Indonesia",
+            "wikidataid": "Q252",
+            "coordinates": "-2,118",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ID"
+        },
+        {
+            "name": "Iran",
+            "wikidataid": "Q794",
+            "coordinates": "32,53",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "IR"
+        },
+        {
+            "name": "Iraq",
+            "wikidataid": "Q796",
+            "coordinates": "33,43",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "IQ"
+        },
+        {
+            "name": "Ireland",
+            "wikidataid": "Q27",
+            "coordinates": "53,-8",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "IE"
+        },
+        {
+            "name": "Israel",
+            "wikidataid": "Q801",
+            "coordinates": "31,35",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "IL"
+        },
+        {
+            "name": "Italy",
+            "wikidataid": "Q38",
+            "coordinates": "42.5,12.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "IT"
+        },
+        {
+            "name": "Ivory Coast",
+            "wikidataid": "Q1008",
+            "coordinates": "8,-6",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CI"
+        },
+        {
+            "name": "Jamaica",
+            "wikidataid": "Q766",
+            "coordinates": "18.18,-77.4",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "JM"
+        },
+        {
+            "name": "Japan",
+            "wikidataid": "Q17",
+            "coordinates": "35,136",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "Japan"
+            ],
+            "isocode": "JP"
+        },
+        {
+            "name": "Jordan",
+            "wikidataid": "Q810",
+            "coordinates": "31.2,36.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "JO"
+        },
+        {
+            "name": "Kazakhstan",
+            "wikidataid": "Q232",
+            "coordinates": "48,68",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KZ"
+        },
+        {
+            "name": "Kenya",
+            "wikidataid": "Q114",
+            "coordinates": "0.1,38",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KE"
+        },
+        {
+            "name": "Kingdom of Denmark",
+            "wikidataid": "Q756617",
+            "coordinates": "72,-40",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "DK"
+        },
+        {
+            "name": "Kingdom of the Netherlands",
+            "wikidataid": "Q29999",
+            "coordinates": "52.366666666667,4.8833333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "Netherlands",
+                "The Netherlands"
+            ],
+            "isocode": "NL"
+        },
+        {
+            "name": "Kiribati",
+            "wikidataid": "Q710",
+            "coordinates": "1.4666666666667,173.03333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "Kiribati"
+            ],
+            "isocode": "KI"
+        },
+        {
+            "name": "Kuwait",
+            "wikidataid": "Q817",
+            "coordinates": "29.166667,47.6",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KW"
+        },
+        {
+            "name": "Kyrgyzstan",
+            "wikidataid": "Q813",
+            "coordinates": "41,75",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KG"
+        },
+        {
+            "name": "Laos",
+            "wikidataid": "Q819",
+            "coordinates": "18.2,104",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LA"
+        },
+        {
+            "name": "Latvia",
+            "wikidataid": "Q211",
+            "coordinates": "57,25",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LV"
+        },
+        {
+            "name": "Lebanon",
+            "wikidataid": "Q822",
+            "coordinates": "33.833333,35.766667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LB"
+        },
+        {
+            "name": "Lesotho",
+            "wikidataid": "Q1013",
+            "coordinates": "-29.55,28.25",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LS"
+        },
+        {
+            "name": "Liberia",
+            "wikidataid": "Q1014",
+            "coordinates": "6.533333,-9.75",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LR"
+        },
+        {
+            "name": "Libya",
+            "wikidataid": "Q1016",
+            "coordinates": "27,17",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LY"
+        },
+        {
+            "name": "Liechtenstein",
+            "wikidataid": "Q347",
+            "coordinates": "47.145,9.553889",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LI"
+        },
+        {
+            "name": "Lithuania",
+            "wikidataid": "Q37",
+            "coordinates": "55.2,24",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LT"
+        },
+        {
+            "name": "Luxembourg",
+            "wikidataid": "Q32",
+            "coordinates": "49.77,6.13",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LU"
+        },
+        {
+            "name": "Madagascar",
+            "wikidataid": "Q1019",
+            "coordinates": "-20,47",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MG"
+        },
+        {
+            "name": "Malawi",
+            "wikidataid": "Q1020",
+            "coordinates": "-13,34",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MW"
+        },
+        {
+            "name": "Malaysia",
+            "wikidataid": "Q833",
+            "coordinates": "3,108",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MY"
+        },
+        {
+            "name": "Maldives",
+            "wikidataid": "Q826",
+            "coordinates": "3.2,73.22",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MV"
+        },
+        {
+            "name": "Mali",
+            "wikidataid": "Q912",
+            "coordinates": "17,-4",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ML"
+        },
+        {
+            "name": "Malta",
+            "wikidataid": "Q233",
+            "coordinates": "35.883333333333,14.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MT"
+        },
+        {
+            "name": "Marshall Islands",
+            "wikidataid": "Q709",
+            "coordinates": "7.1166666666667,171.06666666667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "MH"
+            ],
+            "isocode": "MH"
+        },
+        {
+            "name": "Mauritania",
+            "wikidataid": "Q1025",
+            "coordinates": "21,-11",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MR"
+        },
+        {
+            "name": "Mauritius",
+            "wikidataid": "Q1027",
+            "coordinates": "-20.2,57.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MU"
+        },
+        {
+            "name": "Mexico",
+            "wikidataid": "Q96",
+            "coordinates": "23,-102",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MX"
+        },
+        {
+            "name": "Moldova",
+            "wikidataid": "Q217",
+            "coordinates": "47.25,28.516667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MD"
+        },
+        {
+            "name": "Monaco",
+            "wikidataid": "Q235",
+            "coordinates": "43.733333333333,7.4166666666667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MC"
+        },
+        {
+            "name": "Mongolia",
+            "wikidataid": "Q711",
+            "coordinates": "47,104",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MN"
+        },
+        {
+            "name": "Montenegro",
+            "wikidataid": "Q236",
+            "coordinates": "42.766667,19.216667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ME"
+        },
+        {
+            "name": "Morocco",
+            "wikidataid": "Q1028",
+            "coordinates": "32,-6",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MA"
+        },
+        {
+            "name": "Mozambique",
+            "wikidataid": "Q1029",
+            "coordinates": "-19,35",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "MZ"
+        },
+        {
+            "name": "Myanmar",
+            "wikidataid": "Q836",
+            "coordinates": "22,96",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "Burma",
+                "Myanmar"
+            ],
+            "isocode": "MM"
+        },
+        {
+            "name": "Namibia",
+            "wikidataid": "Q1030",
+            "coordinates": "-23,17",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "NA"
+        },
+        {
+            "name": "Nauru",
+            "wikidataid": "Q697",
+            "coordinates": "-0.53333333333333,166.93333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "NR"
+        },
+        {
+            "name": "Nepal",
+            "wikidataid": "Q837",
+            "coordinates": "28,84",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "NP"
+        },
+        {
+            "name": "New Zealand",
+            "wikidataid": "Q664",
+            "coordinates": "-41.2,174",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "NZ"
+        },
+        {
+            "name": "Nicaragua",
+            "wikidataid": "Q811",
+            "coordinates": "13,-85",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "NI"
+        },
+        {
+            "name": "Niger",
+            "wikidataid": "Q1032",
+            "coordinates": "17,10",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "NE"
+        },
+        {
+            "name": "Nigeria",
+            "wikidataid": "Q1033",
+            "coordinates": "9,8",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "NG",
+                "Nigeria"
+            ],
+            "isocode": "NG"
+        },
+        {
+            "name": "North Korea",
+            "wikidataid": "Q423",
+            "coordinates": "40,127",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KP"
+        },
+        {
+            "name": "North Macedonia",
+            "wikidataid": "Q221",
+            "coordinates": "41.65,21.716667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "FYROM"
+            ],
+            "isocode": "MK"
+        },
+        {
+            "name": "Norway",
+            "wikidataid": "Q20",
+            "coordinates": "65,11",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "NO"
+        },
+        {
+            "name": "Oman",
+            "wikidataid": "Q842",
+            "coordinates": "21,57",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "OM"
+        },
+        {
+            "name": "Pakistan",
+            "wikidataid": "Q843",
+            "coordinates": "30,71",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "PK"
+        },
+        {
+            "name": "Palau",
+            "wikidataid": "Q695",
+            "coordinates": "7.466667,134.55",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "PW"
+            ],
+            "isocode": "PW"
+        },
+        {
+            "name": "Panama",
+            "wikidataid": "Q804",
+            "coordinates": "8.616667,-80.366667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "PA"
+        },
+        {
+            "name": "Papua New Guinea",
+            "wikidataid": "Q691",
+            "coordinates": "-6.3,147",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "PG"
+        },
+        {
+            "name": "State of Palestine",
+            "wikidataid": "Q219060",
+            "coordinates": "32,35.25",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "PS"
+        },
+        {
+            "name": "Paraguay",
+            "wikidataid": "Q733",
+            "coordinates": "-23.5,-58",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "PY"
+        },
+        {
+            "name": "People's Republic of China",
+            "wikidataid": "Q148",
+            "coordinates": "35.844722222222,103.45194444444",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "China",
+                "PRC"
+            ],
+            "isocode": "CN"
+        },
+        {
+            "name": "Peru",
+            "wikidataid": "Q419",
+            "coordinates": "-9.4,-76",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "PE"
+        },
+        {
+            "name": "Philippines",
+            "wikidataid": "Q928",
+            "coordinates": "12,123",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "PH",
+                "RP"
+            ],
+            "isocode": "PH"
+        },
+        {
+            "name": "Poland",
+            "wikidataid": "Q36",
+            "coordinates": "52,19",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "PL"
+        },
+        {
+            "name": "Portugal",
+            "wikidataid": "Q45",
+            "coordinates": "38.7,-9.1833333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "PT"
+        },
+        {
+            "name": "Qatar",
+            "wikidataid": "Q846",
+            "coordinates": "25.269535,51.212767",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "QA"
+        },
+        {
+            "name": "Republic of the Congo",
+            "wikidataid": "Q971",
+            "coordinates": "-0.75,15.383330555556",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CG"
+        },
+        {
+            "name": "Romania",
+            "wikidataid": "Q218",
+            "coordinates": "46,25",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "RO"
+        },
+        {
+            "name": "Russia",
+            "wikidataid": "Q159",
+            "coordinates": "66.416666666667,94.25",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "RU"
+        },
+        {
+            "name": "Rwanda",
+            "wikidataid": "Q1037",
+            "coordinates": "-1.9402777777778,29.873888888889",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "RW"
+        },
+        {
+            "name": "Saint Kitts and Nevis",
+            "wikidataid": "Q763",
+            "coordinates": "17.33,-62.666667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KN"
+        },
+        {
+            "name": "Saint Lucia",
+            "wikidataid": "Q760",
+            "coordinates": "13.883333,-61",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LC"
+        },
+        {
+            "name": "Saint Vincent and the Grenadines",
+            "wikidataid": "Q757",
+            "coordinates": "13.166666666667,-61.233333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "VC"
+        },
+        {
+            "name": "Samoa",
+            "wikidataid": "Q683",
+            "coordinates": "-14,-172",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "WS"
+        },
+        {
+            "name": "San Marino",
+            "wikidataid": "Q238",
+            "coordinates": "43.933333333333,12.466666666667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SM"
+        },
+        {
+            "name": "Saudi Arabia",
+            "wikidataid": "Q851",
+            "coordinates": "23.716667,44.116667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SA"
+        },
+        {
+            "name": "Senegal",
+            "wikidataid": "Q1041",
+            "coordinates": "14.366667,-14.283333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SN"
+        },
+        {
+            "name": "Serbia",
+            "wikidataid": "Q403",
+            "coordinates": "43.95,20.933333333333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "RS"
+        },
+        {
+            "name": "Seychelles",
+            "wikidataid": "Q1042",
+            "coordinates": "-7.1,52.766667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SC"
+        },
+        {
+            "name": "Sierra Leone",
+            "wikidataid": "Q1044",
+            "coordinates": "8.5,-11.916667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SL"
+        },
+        {
+            "name": "Singapore",
+            "wikidataid": "Q334",
+            "coordinates": "1.3,103.8",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SG"
+        },
+        {
+            "name": "Slovakia",
+            "wikidataid": "Q214",
+            "coordinates": "49,20",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SK"
+        },
+        {
+            "name": "Slovenia",
+            "wikidataid": "Q215",
+            "coordinates": "46,15",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SI"
+        },
+        {
+            "name": "Solomon Islands",
+            "wikidataid": "Q685",
+            "coordinates": "-9.4666666666667,159.81666666667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SB"
+        },
+        {
+            "name": "Somalia",
+            "wikidataid": "Q1045",
+            "coordinates": "6,47",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SO"
+        },
+        {
+            "name": "South Africa",
+            "wikidataid": "Q258",
+            "coordinates": "-29,24",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ZA"
+        },
+        {
+            "name": "South Korea",
+            "wikidataid": "Q884",
+            "coordinates": "36,128",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "KR",
+            "labels": ["Korea"]
+        },
+        {
+            "name": "South Sudan",
+            "wikidataid": "Q958",
+            "coordinates": "7,30",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SS"
+        },
+        {
+            "name": "Spain",
+            "wikidataid": "Q29",
+            "coordinates": "36.366588888889,-5.7303805555556",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "Spain"
+            ],
+            "isocode": "ES"
+        },
+        {
+            "name": "Sri Lanka",
+            "wikidataid": "Q854",
+            "coordinates": "7,81",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "LK"
+        },
+        {
+            "name": "Sudan",
+            "wikidataid": "Q1049",
+            "coordinates": "15,32",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SD"
+        },
+        {
+            "name": "Suriname",
+            "wikidataid": "Q730",
+            "coordinates": "4,-56",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SR"
+        },
+        {
+            "name": "Sweden",
+            "wikidataid": "Q34",
+            "coordinates": "61,15",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SE"
+        },
+        {
+            "name": "Switzerland",
+            "wikidataid": "Q39",
+            "coordinates": "46.798562,8.231973",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "CH"
+        },
+        {
+            "name": "Syria",
+            "wikidataid": "Q858",
+            "coordinates": "35.216667,38.583333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "SY"
+        },
+        {
+            "name": "São Tomé and Príncipe",
+            "wikidataid": "Q1039",
+            "coordinates": "0.316667,6.6",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ST"
+        },
+        {
+            "name": "Tajikistan",
+            "wikidataid": "Q863",
+            "coordinates": "38.583333,71.366667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TJ"
+        },
+        {
+            "name": "Tanzania",
+            "wikidataid": "Q924",
+            "coordinates": "-6.307,34.854",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TZ"
+        },
+        {
+            "name": "Thailand",
+            "wikidataid": "Q869",
+            "coordinates": "14,101",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TH"
+        },
+        {
+            "name": "The Bahamas",
+            "wikidataid": "Q778",
+            "coordinates": "23.7,-76.4",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "BS"
+        },
+        {
+            "name": "The Gambia",
+            "wikidataid": "Q1005",
+            "coordinates": "13.5,-15.5",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "GM"
+        },
+        {
+            "name": "Togo",
+            "wikidataid": "Q945",
+            "coordinates": "8.25,1.183333",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TG"
+        },
+        {
+            "name": "Tonga",
+            "wikidataid": "Q678",
+            "coordinates": "-20.587778,-174.810278",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TO"
+        },
+        {
+            "name": "Trinidad and Tobago",
+            "wikidataid": "Q754",
+            "coordinates": "10.666666666667,-61.516666666667",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TT"
+        },
+        {
+            "name": "Tunisia",
+            "wikidataid": "Q948",
+            "coordinates": "34,10",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TN"
+        },
+        {
+            "name": "Turkey",
+            "wikidataid": "Q43",
+            "coordinates": "39,36",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TR"
+        },
+        {
+            "name": "Turkmenistan",
+            "wikidataid": "Q874",
+            "coordinates": "39,60",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TM"
+        },
+        {
+            "name": "Tuvalu",
+            "wikidataid": "Q672",
+            "coordinates": "-7.475,178.005556",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TV"
+        },
+        {
+            "name": "Taiwan",
+            "wikidataid": "Q865",
+            "coordinates": "24,121",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "TW"
+        },
+        {
+            "name": "Uganda",
+            "wikidataid": "Q1036",
+            "coordinates": "1.28,32.39",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "UG"
+        },
+        {
+            "name": "Ukraine",
+            "wikidataid": "Q212",
+            "coordinates": "49,32",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "UA"
+        },
+        {
+            "name": "United Arab Emirates",
+            "wikidataid": "Q878",
+            "coordinates": "24.4,54.3",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "AE"
+        },
+        {
+            "name": "United Kingdom",
+            "wikidataid": "Q145",
+            "coordinates": "54.6,-2",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "UK"
+            ],
+            "isocode": "GB"
+        },
+        {
+            "name": "United States of America",
+            "wikidataid": "Q30",
+            "coordinates": "39.828175,-98.5795",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "America",
+                "UNITED STATES OF AMERICA",
+                "USA",
+                "United States",
+                "United States of America (the)"
+            ],
+            "isocode": "US"
+        },
+        {
+            "name": "Uruguay",
+            "wikidataid": "Q77",
+            "coordinates": "-32.733333333333,-56.65",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "UY"
+        },
+        {
+            "name": "Uzbekistan",
+            "wikidataid": "Q265",
+            "coordinates": "41,66",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "UZ"
+        },
+        {
+            "name": "Vanuatu",
+            "wikidataid": "Q686",
+            "coordinates": "-16.633330555556,168.01666944444",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "VU"
+        },
+        {
+            "name": "Vatican City",
+            "wikidataid": "Q237",
+            "coordinates": "41.904,12.453",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "VA"
+        },
+        {
+            "name": "Venezuela",
+            "wikidataid": "Q717",
+            "coordinates": "8,-67",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "VE"
+        },
+        {
+            "name": "Vietnam",
+            "wikidataid": "Q881",
+            "coordinates": "16,108",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "labels": [
+                "VN"
+            ],
+            "isocode": "VN"
+        },
+        {
+            "name": "Yemen",
+            "wikidataid": "Q805",
+            "coordinates": "15.5,48",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "YE"
+        },
+        {
+            "name": "Zambia",
+            "wikidataid": "Q953",
+            "coordinates": "-14,28",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ZM"
+        },
+        {
+            "name": "Zimbabwe",
+            "wikidataid": "Q954",
+            "coordinates": "-19,30",
+            "partOf": null,
+            "level": 3,
+            "locationKind": "Country",
+            "comment": null,
+            "isocode": "ZW"
+        }
+    ]
 }
