@@ -1,5 +1,8 @@
 from lodstorage.jsonable import JSONAble, JSONAbleList
 
+from openresearch.openresearch import OpenResearch
+
+
 class LocationCorpus(object):
     '''Contains the locations as linked objects'''
 
@@ -7,9 +10,9 @@ class LocationCorpus(object):
         self._countryList=CountryList()
         self._regionList=RegionList()
         self._cityList=CityList()
-        self.countries=self._countryList.restoreFromJsonFile('../ormigrate/resources/countries')
-        self.regions=self._regionList.restoreFromJsonFile('../ormigrate/resources/regions')
-        self.cities=self._cityList.restoreFromJsonFile('../ormigrate/resources/cities')
+        self.countries=self._countryList.restoreFromJsonFile("%s/countries" % OpenResearch.getResourcePath())
+        self.regions=self._regionList.restoreFromJsonFile("%s/regions" % OpenResearch.getResourcePath())
+        self.cities=self._cityList.restoreFromJsonFile("%s/cities" % OpenResearch.getResourcePath())
         self._linkRegionsToCountries()
         self._linkCitiesToCountries()
         self._cityLUT=self._getLUT(self.cities)

@@ -102,7 +102,7 @@ class TestCity(TestCase):
 class TestCountryList(TestCase):
 
     def testCountryListLoading(self):
-        countries = CountryList().restoreFromJsonFile('../ormigrate/resources/countries')
+        countries = CountryList().restoreFromJsonFile("%s/countries" % OpenResearch.getResourcePath())
         # USA is a country that should always be in the list test if present
         us_present = False
         for country in countries:
@@ -116,7 +116,7 @@ class TestCountryList(TestCase):
 class TestRegionList(TestCase):
 
     def testRegionListLoading(self):
-        regions = RegionList().restoreFromJsonFile('../ormigrate/resources/regions')
+        regions = RegionList().restoreFromJsonFile("%s/regions" % OpenResearch.getResourcePath())
         # California is a region that should always be in the list test if present
         ca_present = False
         for region in regions:
@@ -130,7 +130,7 @@ class TestRegionList(TestCase):
 class TestCityList(TestCase):
 
     def testCityListLoading(self):
-        cities = CityList().restoreFromJsonFile('../ormigrate/resources/cities')
+        cities = CityList().restoreFromJsonFile("%s/cities" % OpenResearch.getResourcePath())
         # Los Angeles is a city that should always be in the list test if present
         la_present = False
         for city in cities:

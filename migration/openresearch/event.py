@@ -509,7 +509,7 @@ class CountryList(OREntityList):
         ]       
         
     def getDefault(self):
-        jsonFilePrefix="%s/countries" % OpenResearch.getResourcePath()
+        jsonFilePrefix="%s/orCountries" % OpenResearch.getResourcePath()
         self.restoreFromJsonFile(jsonFilePrefix)
 
     @classmethod

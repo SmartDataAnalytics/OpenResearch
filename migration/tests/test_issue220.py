@@ -21,7 +21,7 @@ class TestLocationFixer(TestCase):
         }
         res, errors = fixer.fixEventRecord(event)
         self.assertEqual(exp_event,res)
-        self.assertEqual({}, errors)
+        self.assertTrue('complete' in errors and len(errors) == 1)
 
 
     def test_fixEventRecord_invalid_country(self):
