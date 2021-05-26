@@ -38,7 +38,8 @@ setup(name='OpenResearchMigration',
       install_requires=[
           'pylodstorage',
           'python-dateutil',
-          'py-3rdparty-mediawiki'
+          'py-3rdparty-mediawiki',
+          'wikitextparser'
 
       ],
       zip_safe=False)
