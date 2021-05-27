@@ -16,12 +16,12 @@ class AcceptanceRateFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/152
     '''
 
-    def __init__(self, wikiId="or",baseUrl="https://www.openresearch.org/wiki/",debug=False):
+    def __init__(self, wikiClient,debug=False):
         '''
         Constructor
         '''
         # call super constructor
-        super(AcceptanceRateFixer,self).__init__(wikiId,baseUrl)
+        super(AcceptanceRateFixer,self).__init__(wikiClient)
         self.debug=debug
         self.nosub=0
         self.noacc=0

@@ -1,12 +1,16 @@
 from unittest import TestCase
 
 from ormigrate.issue220 import LocationFixer
-
+from ormigrate.toolbox import HelperFunctions as hf
 
 class TestLocationFixer(TestCase):
+    
+    def getFixer(self):
+        fixer=LocationFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
+        return fixer
 
     def test_fixEventRecord(self):
-        fixer=LocationFixer()
+        fixer=self.getFixer()
         event={
             "Acronym":"Test 2020",
             "Country":"Germany",
@@ -29,7 +33,7 @@ class TestLocationFixer(TestCase):
         It is expected that the fixer can detect and correct a invalid country if city and region are correct and
         recognized.
         """
-        fixer=LocationFixer()
+        fixer=self.getFixer()
         event={
             "Acronym":"Test 2020",
             "Country":"USA",
@@ -49,7 +53,7 @@ class TestLocationFixer(TestCase):
         """
         It is expected that missing entries are detected and fixed
         """
-        fixer = LocationFixer()
+        fixer = self.getFixer()
         event = {
             "Acronym": "Test 2020",
             "Country": "USA",
@@ -69,7 +73,7 @@ class TestLocationFixer(TestCase):
         """
         It is expected that country and region entries are fixed and city entry stays missing
         """
-        fixer = LocationFixer()
+        fixer = self.getFixer()
         event = {
             "Acronym": "Test 2020",
             "Country": "Germany",
@@ -88,7 +92,7 @@ class TestLocationFixer(TestCase):
         """
         It is expected that country and region entries are fixed and city entry stays missing
         """
-        fixer = LocationFixer()
+        fixer = self.getFixer()
         event = {
             "Acronym": "Test 2020",
             "Country": "Germany",
@@ -109,7 +113,7 @@ class TestLocationFixer(TestCase):
 
     def testFixLocationType(self):
         # Misplaced region
-        fixer = LocationFixer()
+        fixer = self.getFixer()
         event = {
             "Acronym": "Test 2020",
             "Country": "Germany",

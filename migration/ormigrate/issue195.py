@@ -5,19 +5,18 @@ import re
 from ormigrate.rating import Rating
 from ormigrate.fixer import PageFixer
 
-
 class BiblographicFieldFixer(PageFixer):
     '''
         fixer for Acceptance Rate Not calculated
         https://github.com/SmartDataAnalytics/OpenResearch/issues/195
     '''
 
-    def __init__(self, wikiId="or",baseUrl="https://www.openresearch.org/wiki/",debug=False):
+    def __init__(self, wikiClient,debug=False):
         '''
                 Constructor
                 '''
         # call super constructor
-        super(BiblographicFieldFixer, self).__init__(wikiId, baseUrl)
+        super(BiblographicFieldFixer, self).__init__(wikiClient)
         self.debug = debug
         self.nosub = 0
         self.noacc = 0

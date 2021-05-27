@@ -90,7 +90,6 @@ Help:Topic"""
                        {'submittedPapers':None, 'acceptedPapers':'test'}]
         painRatings=[]
         fixer=AcceptanceRateFixer(debug=self.debug)
-
         for event in eventRecords:
             painRating =fixer.getRating(event)
             self.assertIsNotNone(painRating)

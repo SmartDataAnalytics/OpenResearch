@@ -1,4 +1,4 @@
-from lodstorage.jsonable import JSONAble, JSONAbleList
+from lodstorage.jsonable import JSONAble,JSONAbleList
 
 from openresearch.openresearch import OpenResearch
 

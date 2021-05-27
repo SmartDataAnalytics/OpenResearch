@@ -16,12 +16,12 @@ class WikiCFPIDFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/163
     '''
 
-    def __init__(self, wikiId="or", baseUrl="https://www.openresearch.org/wiki/", debug=False):
+    def __init__(self, wikiClient, debug=False):
         '''
         Constructor
         '''
         # call super constructor
-        super(WikiCFPIDFixer, self).__init__(wikiId, baseUrl)
+        super(WikiCFPIDFixer, self).__init__(wikiClient)
         self.debug = debug
         home = expanduser("~")
         dbname="%s/.ptp/Event_all.db" % home

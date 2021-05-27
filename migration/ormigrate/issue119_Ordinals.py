@@ -16,12 +16,12 @@ class OrdinalFixer(PageFixer):
        https://github.com/SmartDataAnalytics/OpenResearch/issues/119
        '''
 
-    def __init__(self, wikiId="or", baseUrl="https://www.openresearch.org/wiki/", debug=False,restoreOut=False):
+    def __init__(self, wikiClient, debug=False,restoreOut=False):
         '''
         Constructor
         '''
         # call super constructor
-        super(OrdinalFixer, self).__init__(wikiId, baseUrl)
+        super(OrdinalFixer, self).__init__(wikiClient)
         self.debug = debug
         self.restoreOut = restoreOut
 

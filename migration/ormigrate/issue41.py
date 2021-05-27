@@ -8,12 +8,12 @@ class AcronymLengthFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/41
     '''
 
-    def __init__(self, wikiId="or", baseUrl="https://www.openresearch.org/wiki/", debug=False, restoreOut=False, suspicitionLength=20):
+    def __init__(self, wikiClient, debug=False, restoreOut=False, suspicitionLength=20):
         '''
         Constructor
         '''
         # call super constructor
-        super(AcronymLengthFixer, self).__init__(wikiId, baseUrl)
+        super(AcronymLengthFixer, self).__init__(wikiClient)
         self.debug = debug
         self.restoreOut = restoreOut
         self.suspicitionLength = suspicitionLength

@@ -11,9 +11,6 @@ from fnmatch import filter
 from sys import stdin
 import ntpath
 import wikitextparser as wtp
-from wikibot.wikiclient import WikiClient
-from wikibot.wikipush import WikiPush
-from wikibot.wikiuser import WikiUser
 
 
 class PageFixer(object):
@@ -21,28 +18,12 @@ class PageFixer(object):
     helper fixing page
     '''
 
-    def __init__(self,wikiId="or",baseUrl="https://www.openresearch.org/wiki/",debug=False):
+    def __init__(self,wikiClient,debug=False):
         '''
         Constructor
         '''
-        self.wikiId = wikiId
-        self.baseUrl = baseUrl
         self.debug=debug
-        self.wikiclient = WikiClient.ofWikiId(self.wikiId)
-
-    def getPage(self, name):
-        '''
-        Retrieves the page corresponding to the given name
-
-        Args:
-            name(str): name of the page that should be retrieved
-
-        Returns:
-            WikiPage corresponding to the given name
-        '''
-        page=self.wikiclient.getPage()
-        wikiPage=WikiPage(page)
-        return wikiPage
+        self.wikiclient = wikiClient
 
     def generateLink(self,page):
         search=r".*%s/(.*)\.wiki" % self.wikiId

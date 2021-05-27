@@ -21,5 +21,6 @@ case $os in
 esac
 #$install python3-pip
 $pip --version
-$pip install -r requirements.txt
+# --force-reinstall
+$pip install  -r requirements.txt
 #python3 setup.py install --user

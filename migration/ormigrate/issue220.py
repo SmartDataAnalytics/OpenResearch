@@ -7,12 +7,12 @@ class LocationFixer(PageFixer):
     REGION = "State"
     CITY = "City"
 
-    def __init__(self, wikiId="or", baseUrl="https://www.openresearch.org/wiki/", debug=False):
+    def __init__(self, wikiClient, debug=False):
         '''
         Constructor
         '''
         # call super constructor
-        super(LocationFixer, self).__init__(wikiId, baseUrl)
+        super(LocationFixer, self).__init__(wikiClient)
         self.debug = debug
         self.locationCorpus=LocationCorpus()
 
