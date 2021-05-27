@@ -11,6 +11,7 @@ from fnmatch import filter
 from sys import stdin
 import ntpath
 import wikitextparser as wtp
+from wikibot.wikiclient import WikiClient
 
 
 class PageFixer(object):
@@ -24,6 +25,9 @@ class PageFixer(object):
         '''
         self.debug=debug
         self.wikiclient = wikiClient
+        if 'wikiUser' in self.wikiclient.__dict__:
+            if 'wikiId' in self.wikiclient.wikiUser.__dict__:
+                self.wikiId=wikiClient.wikiUser.wikiId
 
     def generateLink(self,page):
         search=r".*%s/(.*)\.wiki" % self.wikiId

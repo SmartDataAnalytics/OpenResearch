@@ -25,6 +25,38 @@ class TestDataFixes(unittest.TestCase):
         self.debug=False
         pass
 
+    def getWikiClient(self):
+        wikiClient=hf.getWikiClient(save=hf.inPublicCI())
+        return wikiClient
+
+    def getDateFixer(self):
+        fixer = DateFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
+        return fixer
+
+    def getOrdinalFixer(self):
+        fixer = OrdinalFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
+        return fixer
+
+    def getPageFixer(self):
+        fixer = PageFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
+        return fixer
+
+    def getAcceptanceRateFixer(self):
+        fixer = AcceptanceRateFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
+        return fixer
+
+    def getBiblographicFieldFixer(self):
+        fixer = BiblographicFieldFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()), debug=self.debug)
+        return fixer
+
+    def getSeriesFixer(self):
+        fixer = SeriesFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()), debug=self.debug)
+        return fixer
+
+    def getWikiCFPIDFixer(self):
+        fixer = WikiCFPIDFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()), debug=self.debug)
+        return fixer
+
 
     def tearDown(self):
         pass
@@ -49,7 +81,7 @@ class TestDataFixes(unittest.TestCase):
         test the name value helper function
         '''
         nameValues=["|a=1","|b= a=c ","|w|b",'|a=']
-        pageFixer=PageFixer()
+        pageFixer=self.getPageFixer()
         for i,nameValue in enumerate(nameValues):
             name,value=pageFixer.getNameValue(nameValue)
             if self.debug:
@@ -64,7 +96,7 @@ class TestDataFixes(unittest.TestCase):
         '''
         test utility function to get pageTitles from a file e.g. stdin
         '''
-        pageFixer=PageFixer()
+        pageFixer=self.getPageFixer()
         # we'd love to test form a string
         # see https://stackoverflow.com/a/141451/1497139
         pageTitles="""Concept:Topic
@@ -74,7 +106,7 @@ Help:Topic"""
         self.assertEqual(2,len(pageTitleList))
 
     def testFixedPath(self):
-        fixer = DateFixer(debug=self.debug)
+        fixer = self.getDateFixer()
         dirname= 'Fixed'
         fixedPath = fixer.getFixedPagePath('/asd/asd/asd/test.wiki',dirname)
         self.assertTrue(fixedPath == '%s/wikibackup/%s/%s' % (path.expanduser("~"), dirname, 'test.wiki'))
@@ -89,7 +121,7 @@ Help:Topic"""
                        {'submittedPapers':'test', 'acceptedPapers':None},
                        {'submittedPapers':None, 'acceptedPapers':'test'}]
         painRatings=[]
-        fixer=AcceptanceRateFixer(debug=self.debug)
+        fixer=self.getAcceptanceRateFixer()
         for event in eventRecords:
             painRating =fixer.getRating(event)
             self.assertIsNotNone(painRating)
@@ -129,7 +161,7 @@ Help:Topic"""
                        {'Ordinal':'2nd'},
                        {'Ordinal':'test'}]
         painRatings = []
-        fixer=OrdinalFixer(debug=self.debug)
+        fixer=self.getOrdinalFixer()
         for event in eventRecords:
             painRating = fixer.getRating(event)
             self.assertIsNotNone(painRating)
@@ -154,7 +186,7 @@ Help:Topic"""
                         {'startDate': None, 'endDate': '20 Feb, 2020'},
                         ]
         painRatings=[]
-        fixer=DateFixer(debug=self.debug)
+        fixer=self.getDateFixer()
         for event in eventRecords:
             painRating = fixer.getRating(event)
             self.assertIsNotNone(painRating)
@@ -180,7 +212,7 @@ Help:Topic"""
                         {'has Bibliography':'test'}
                         ]
         painRatings=[]
-        fixer=BiblographicFieldFixer(debug=self.debug)
+        fixer=self.getBiblographicFieldFixer()
         for event in eventRecords:
             painRating = fixer.getRating(event)
             self.assertIsNotNone(painRating)
@@ -192,7 +224,7 @@ Help:Topic"""
         Series Fixer
         '''
         #self.debug=True
-        fixer=SeriesFixer(debug=self.debug)
+        fixer=self.getSeriesFixer()
         askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
         count=fixer.checkAll(askExtra)
         # TODO: we do not test the count here  - later we want it to be zero
@@ -228,7 +260,7 @@ Help:Topic"""
             # TODO: Need the Events DB in project to run the test.
             pass
         else:
-            fixer= WikiCFPIDFixer()
+            fixer=self.getWikiCFPIDFixer()
             samples = Event.getSampleWikiSon()
             wikicfpid= fixer.getPageWithWikicfpid('test',samples[1])
             self.assertIsNotNone(wikicfpid)
