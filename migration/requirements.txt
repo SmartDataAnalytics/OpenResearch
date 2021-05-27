@@ -5,4 +5,4 @@ python-dateutil
 # https://pypi.org/project/py-3rdparty-mediawiki/
 py-3rdparty-mediawiki>=0.4.5
 # https://github.com/5j9/wikitextparser
-wikitextparser>=0.47.04
+wikitextparser>=0.47.4
