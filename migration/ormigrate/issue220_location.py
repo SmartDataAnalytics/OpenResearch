@@ -3,6 +3,9 @@ from openresearch.location import LocationCorpus, CityList, City, Region
 from ormigrate.fixer import PageFixer, WikiPage
 
 class LocationFixer(PageFixer):
+    '''
+    fixes Locations
+    '''
     COUNTRY = "Country"
     REGION = "State"
     CITY = "City"

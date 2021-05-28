@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from ormigrate.issue220 import LocationFixer
+from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import HelperFunctions as hf
 
 class TestLocationFixer(TestCase):
