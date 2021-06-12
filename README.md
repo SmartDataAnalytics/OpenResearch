@@ -40,3 +40,5 @@ We contributed to and/or created the following OpenSource projects to reach our 
 * [pyLodstorage](https://github.com/WolfgangFahl/pyLoDStorage)
 * [dblpconf](https://pypi.org/project/dblpconf/)
 * [aeon](https://github.com/tibonto/aeon)
+* [wikirender](https://github.com/tholzheim/wikirender)
+* [pymediawikidocker](https://github.com/WolfgangFahl/pymediawikidocker)
