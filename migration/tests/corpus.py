@@ -12,11 +12,11 @@ class Corpus(object):
     '''
 
     @classmethod
-    def getEventCorpus(self,debug=False):
+    def getEventCorpus(self,wikiId='or',debug=False):
         '''
         get events with series by knitting / linking the entities together
         '''
-        wikiUser=hf.getSMW_WikiUser(save=hf.inPublicCI())
+        wikiUser=hf.getSMW_WikiUser(wikiId=wikiId,save=hf.inPublicCI())
         eventCorpus=EventCorpus(debug=debug)
         eventCorpus.fromWikiUser(wikiUser)
         return eventCorpus

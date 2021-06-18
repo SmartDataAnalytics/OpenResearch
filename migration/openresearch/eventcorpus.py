@@ -15,12 +15,14 @@ class EventCorpus(object):
         '''
         self.debug=debug
         
-    def fromWikiUser(self,wikiUser):
+    def fromWikiUser(self,wikiUser,propertyList=[]):
         '''
         get events with series by knitting / linking the entities together
         '''
         self.eventList=EventList()
         self.eventList.debug=self.debug
+        if len(propertyList) != 0:
+            self.eventList.propertyLookupList=propertyList
         self.eventList.fromCache(wikiUser)
         
         self.eventSeriesList=EventSeriesList()
@@ -40,5 +42,3 @@ class EventCorpus(object):
                 print(f"Event Series Acronym {seriesAcronym} lookup failed")
         if self.debug:
             print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
-    
-    

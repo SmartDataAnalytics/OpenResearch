@@ -10,6 +10,7 @@ from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 from wikibot.wikipush import WikiPush
 from ormigrate.fixer import PageFixer
+import inspect
 import os
 import time
 from openresearch.openresearch import OpenResearch
@@ -21,6 +22,33 @@ from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer, EventSeriesTi
 from ormigrate.issue152 import AcceptanceRateFixer
 from ormigrate.issue170_curation import CurationQualityChecker
 from ormigrate.issue195 import BiblographicFieldFixer
+
+
+class OREntity(JSONAble):
+    def __init__(self):
+        '''
+        Constructor
+        '''
+
+
+    def fixRecord(self, record):
+        '''
+        fix my dict representation
+        '''
+        invalidKeys = []
+        for key in record.keys():
+            value = record[key]
+            if type(value) == list:
+                # TODO: handle properly e.g. by marking and converting list to
+                # comma separated list
+
+                invalidKeys.append(key)
+                print("invalid list %s=%s in %s" % (key, record[key], record))
+            if value is None:
+                invalidKeys.append(key)
+
+        for key in invalidKeys:
+            record.pop(key)
 
 class OREntityList(JSONAbleList):
     '''
@@ -36,6 +64,23 @@ class OREntityList(JSONAbleList):
         
     def getList(self):
         return self.__dict__[self.listName]
+
+    def updateEntity(self,entity,identifier='pageTitle'):
+        '''
+        Add/Update the given entity in the entityList
+        '''
+        if hasattr(entity,identifier):
+            attributes = [*entity.__dict__]
+            for origEntity in self.getList():
+                if origEntity.pageTitle == entity.pageTitle:
+                    origAttributes = [*origEntity.__dict__]
+                    difference = set(attributes) - set(origAttributes)
+                    for attr in difference:
+                        setattr(origEntity,attr,getattr(entity,attr))
+                    return
+            self.getList().append(entity)
+        else:
+            raise Exception('identifier not found in entity given')
     
     def getLookup(self,attrName:str,withDuplicates:bool=False):
         '''
@@ -127,6 +172,11 @@ class OREntityList(JSONAbleList):
         else:
             self.fromWiki(wikiuser,askExtra=self.askExtra,profile=self.profile)
             self.storeToJsonFile(jsonPrefix)
+
+    def toCache(self):
+        jsonFilePath = self.getJsonFile()
+        jsonPrefix = jsonFilePath.replace(".json", "")
+        self.storeToJsonFile(jsonPrefix)
             
     def fromWiki(self,wikiuser:WikiUser,askExtra="",profile=False):
         '''
@@ -222,7 +272,7 @@ class EventSeriesList(OREntityList):
             { 'prop':'DblpSeries',  'name': 'dblpSeries' }
         ]
         
-class EventSeries(JSONAble):
+class EventSeries(OREntity):
     '''
     '''
     def __init__(self):
@@ -334,8 +384,10 @@ class EventList(OREntityList):
             { 'prop':'Accepted_papers',     'name': 'acceptedPapers'},
             { 'prop':'Submitted_papers',    'name': 'submittedPapers'}
         ]               
-    
-class Event(JSONAble):
+
+
+
+class Event(OREntity):
     '''
     I represent an Event
     
@@ -438,23 +490,7 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
         
         return samplesWikiSon
     
-    def fixRecord(self,record):
-        '''
-        fix my dict representation
-        '''
-        invalidKeys=[]
-        for key in record.keys():
-            value=record[key]
-            if type(value)==list:
-                # TODO: handle properly e.g. by marking and converting list to 
-                # comma separated list
-                invalidKeys.append(key)
-                print ("invalid list %s=%s in %s"  % (key,record[key],record ))
-            if value is None:
-                invalidKeys.append(key)
-                
-        for key in invalidKeys:
-            record.pop(key)
+
             
     @classmethod       
     def rateMigration(cls,event,eventRecord):
