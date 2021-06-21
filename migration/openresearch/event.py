@@ -10,9 +10,15 @@ from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 from wikibot.wikipush import WikiPush
 from ormigrate.fixer import PageFixer
+from ormigrate.toolbox import HelperFunctions as hf
+from wikifile.wikiFileManager import WikiFileManager
+from wikifile.wikiFile import WikiFile
+from wikifile.wikiRender import WikiRender
 import inspect
 import os
 import time
+import ntpath
+from pathlib import Path
 from openresearch.openresearch import OpenResearch
 
 from ormigrate.issue41 import AcronymLengthFixer
@@ -61,7 +67,7 @@ class OREntityList(JSONAbleList):
         self.wikiClient=None
         self.wikiPush=None
         self.askExtra=""
-        
+
     def getList(self):
         return self.__dict__[self.listName]
 
@@ -81,15 +87,15 @@ class OREntityList(JSONAbleList):
             self.getList().append(entity)
         else:
             raise Exception('identifier not found in entity given')
-    
+
     def getLookup(self,attrName:str,withDuplicates:bool=False):
         '''
         create a lookup dictionary by the given attribute name
-        
+
         Args:
             attrName(str): the attribute to lookup
             withDuplicates(bool): whether to retain single values or lists
-        
+
         Return:
             a dictionary for lookup
         '''
@@ -109,26 +115,26 @@ class OREntityList(JSONAbleList):
                         lookupResult=[entity]
                     else:
                         lookupResult=entity
-                lookup[value]=lookupResult  
+                lookup[value]=lookupResult
         if withDuplicates:
-            return lookup  
+            return lookup
         else:
             return lookup,duplicates
-    
+
     def getEntityName(self):
         '''
         get my entity name
         '''
         return self.clazz.__name__
-    
+
     def getAskQuery(self,askExtra="",propertyLookupList=None):
         '''
         get the query that will ask for all my events
-        
+
         Args:
            askExtra(str): any additional SMW ask query constraints
            propertyLookupList:  a list of dicts for propertyLookup
-           
+
         Return:
             str: the SMW ask query
         '''
@@ -148,7 +154,7 @@ class OREntityList(JSONAbleList):
             ask+="|?%s=%s\n" % (propName,name)
         ask+="}}"
         return ask
-    
+
     def getJsonFile(self):
         '''
         get the json File for me
@@ -158,11 +164,11 @@ class OREntityList(JSONAbleList):
         jsonPrefix="%s/%s" % (cachePath,self.getEntityName())
         jsonFilePath="%s.json" % jsonPrefix
         return jsonFilePath
-    
+
     def fromCache(self,wikiuser:WikiUser):
         '''
         Args:
-            wikiuser: the wikiuser to use 
+            wikiuser: the wikiuser to use
         '''
         jsonFilePath=self.getJsonFile()
         # TODO: fix upstream pyLodStorage
@@ -177,7 +183,7 @@ class OREntityList(JSONAbleList):
         jsonFilePath = self.getJsonFile()
         jsonPrefix = jsonFilePath.replace(".json", "")
         self.storeToJsonFile(jsonPrefix)
-            
+
     def fromWiki(self,wikiuser:WikiUser,askExtra="",profile=False):
         '''
         read me from a wiki using the givne WikiUser configuration
@@ -196,17 +202,17 @@ class OREntityList(JSONAbleList):
             print("query of %d %s records took %5.1f s" % (len(records),entityName,elapsed))
         self.fromLoD(records)
         return records
-    
+
     def fromSQLTable(self,sqlDB,entityInfo):
         lod=sqlDB.queryAll(entityInfo)
         self.fromLoD(lod)
-        
-    def fromLoD(self,lod): 
+
+    def fromLoD(self,lod):
         '''
         create me from the given list of dicts
         '''
-        errors=[] 
-        entityList=self.getList()  
+        errors=[]
+        entityList=self.getList()
         for record in lod:
             # call the constructor to get a new instance
             try:
@@ -226,14 +232,47 @@ class OREntityList(JSONAbleList):
                 if self.debug:
                     print(error)
         return errors
-    
+
+
+    def fromWikiSonBackupFiles(self,wikiSonName,backupdir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId= 'or',listOfItems=[]):
+        """
+        Create me from the backup wiki files of OR Entity
+
+        """
+        filepaths = list(hf.absoluteFilePaths(backupdir))
+        wikiRender = WikiRender()
+        wikiFileList=[]
+        for file in filepaths:
+            filename = ntpath.basename(file).replace('.wiki','')
+            filepath = ntpath.dirname(file)
+            if len(listOfItems) > 0:
+                if filename in listOfItems:
+                    wikiFile = WikiFile(filename, filepath, wikiRender)
+                    wikiFileList.append(wikiFile)
+            else:
+                wikiFile = WikiFile(filename,filepath,wikiRender)
+                wikiFileList.append(wikiFile)
+        wikiFileManger= WikiFileManager(wikiId)
+        LOD=wikiFileManger.convertWikiFilesToLOD(wikiFileList,wikiSonName)
+        self.fromLoD(LOD)
+
+    def getLoD(self):
+        """
+        Return the LoD of the entities in the list
+        """
+        LoD= []
+        for entity in self.getList():
+            LoD.append(entity.__dict__)
+        return LoD
+
+
     def getRatedLod(self,ratingCallback=None):
         '''
         get the list of dicts with a potential rating
-        
+
         Args:
             ratingCallback(func): a function to be called for rating of this entity
-            
+
         Returns:
             list: a list of dicts with the rating
         '''
@@ -250,12 +289,12 @@ class OREntityList(JSONAbleList):
                 if hasattr(entity,name):
                     entityRecord[name]=getattr(entity,name)
             if ratingCallback is not None:
-                ratingErrors=ratingCallback(entity,entityRecord)   
+                ratingErrors=ratingCallback(entity,entityRecord)
                 if len(ratingErrors)>0:
-                    errors.append(ratingErrors) 
+                    errors.append(ratingErrors)
             lod.append(entityRecord)
         return lod,errors
-        
+
 class EventSeriesList(OREntityList):
     '''
     i represent a list of EventSeries

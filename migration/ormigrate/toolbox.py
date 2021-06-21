@@ -28,7 +28,17 @@ class HelperFunctions:
     @classmethod
     def getResourcePath(cls):
         path = os.path.dirname(__file__) + "/resources"
-        return path
+        return
+
+    @classmethod
+    def absoluteFilePaths(cls,directory):
+        """
+        Get all file paths in the given directory.
+        """
+        #https://stackoverflow.com/questions/9816816/get-absolute-paths-of-all-files-in-a-directory
+        for dirpath, _, filenames in os.walk(directory):
+            for f in filenames:
+                yield os.path.abspath(os.path.join(dirpath, f))
 
     @classmethod
     def getSMW_WikiUser(cls,wikiId="or",save=False):

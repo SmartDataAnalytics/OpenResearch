@@ -7,7 +7,8 @@ import unittest
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.issue170_curation import CurationQualityChecker
 from tests.corpus import Corpus
-from openresearch.event import Event,EventList
+from openresearch.eventcorpus import EventCorpus
+from openresearch.event import Event,EventList, EventSeriesList
 from collections import Counter
 
 
@@ -25,7 +26,35 @@ class TestIssue236(unittest.TestCase):
     def tearDown(self):
         pass
 
+
+    def testGetEventSeries(self):
+        if hf.inPublicCI():return
+        eventCorpus = EventCorpus(debug=self.debug)
+        eventCorpus.fromWikiSonBackupFiles(wikiId='orcp')
+        eventsLinked=eventCorpus.getEventsInSeries('3DUI')
+        self.assertGreaterEqual(len(eventsLinked), 2)
+
+    def testDictConversion(self):
+        if hf.inPublicCI(): return
+        eventList2 = EventList()
+        eventList2.fromWikiSonBackupFiles('Event', wikiId='orcp', listOfItems=['3DUI 2020', '3DUI 2016'])
+        self.assertGreaterEqual(len(eventList2.getList()), 2)
+
+
+    def testFromBackupFile(self):
+        if hf.inPublicCI():return
+        eventSeriesList=EventSeriesList()
+        eventSeriesList.fromWikiSonBackupFiles('Event series',wikiId='orcp')
+        self.assertGreater(len(eventSeriesList.getList()), 100)
+        eventList= EventList()
+        eventList.fromWikiSonBackupFiles('Event',wikiId='orcp')
+        self.assertGreater(len(eventList.getList()),8000)
+        eventList2= EventList()
+        eventList2.fromWikiSonBackupFiles('Event',wikiId='orcp',listOfItems=['3DUI 2020','3DUI 2016'])
+        self.assertGreaterEqual(len(eventList2.getList()), 2)
+
     def testUpdateEntity(self):
+        if hf.inPublicCI(): return
         eventList = EventList()
         eventSamples=Event.getSamples()
         eventSamples.pop()
