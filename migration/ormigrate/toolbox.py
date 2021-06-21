@@ -25,10 +25,6 @@ class HelperFunctions:
         '''
         return getpass.getuser() in [ "travis", "runner" ];
     
-    @classmethod
-    def getResourcePath(cls):
-        path = os.path.dirname(__file__) + "/resources"
-        return
 
     @classmethod
     def absoluteFilePaths(cls,directory):
