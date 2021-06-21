@@ -16,7 +16,7 @@ class EventCorpus(object):
         '''
         self.debug=debug
 
-    def fromWikiSonBackupFiles(self,backupDir=str(Path.home() / 'wikibackup'/ 'orcp' ),wikiId='orcp',listOfItems=[]):
+    def fromWikiSonBackupFiles(self,backupDir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId='or',listOfItems=[]):
         '''
                get events with series by knitting / linking the entities together
         '''

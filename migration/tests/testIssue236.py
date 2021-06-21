@@ -45,10 +45,10 @@ class TestIssue236(unittest.TestCase):
         eventSeriesList.fromWikiSonBackupFiles('Event series',wikiId=self.wikiId)
         self.assertGreater(len(eventSeriesList.getList()), 100)
         eventList= EventList()
-        eventList.fromWikiSonBackupFiles('Event',wikiId='orcp')
+        eventList.fromWikiSonBackupFiles('Event',wikiId='or')
         self.assertGreater(len(eventList.getList()),8000)
         eventList2= EventList()
-        eventList2.fromWikiSonBackupFiles('Event',wikiId='orcp',listOfItems=['3DUI 2020','3DUI 2016'])
+        eventList2.fromWikiSonBackupFiles('Event',wikiId='or',listOfItems=['3DUI 2020','3DUI 2016'])
         self.assertGreaterEqual(len(eventList2.getList()), 2)
 
     def testUpdateEntity(self):
