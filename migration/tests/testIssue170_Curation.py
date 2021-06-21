@@ -8,7 +8,6 @@ from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.issue170_curation import CurationQualityChecker
 from tests.corpus import Corpus
 from collections import Counter
-from openresearch.openresearch import OpenResearch
 
 class TestIssue170(unittest.TestCase):
     '''
@@ -31,7 +30,7 @@ class TestIssue170(unittest.TestCase):
         
         Curation quality check
         '''
-        path=OpenResearch.getResourcePath() if hf.inPublicCI() else None
+        path=hf.getResourcePath() if hf.inPublicCI() else None
         userRating=CurationQualityChecker.loadUserRating(path)
         self.assertTrue("Wolfgang Fahl" in userRating)
         if self.debug:

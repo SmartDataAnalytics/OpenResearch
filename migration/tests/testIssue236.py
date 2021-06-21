@@ -18,7 +18,7 @@ class TestIssue236(unittest.TestCase):
 
     def setUp(self):
         self.debug = False
-        self.wikiId='orcopy'
+        self.wikiId='orclone'
         pass
 
     def tearDown(self):

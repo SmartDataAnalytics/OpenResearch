@@ -25,7 +25,11 @@ class HelperFunctions:
         '''
         return getpass.getuser() in [ "travis", "runner" ];
     
-
+    @classmethod
+    def getResourcePath(cls):
+        path = os.path.dirname(__file__) + "/resources"
+        return path
+    
     @classmethod
     def absoluteFilePaths(cls,directory):
         """
@@ -47,6 +51,8 @@ class HelperFunctions:
             wikiDict=None
             if wikiId=="or":
                 wikiDict={"wikiId": wikiId,"email":"noreply@nouser.com","url":"https://www.openresearch.org","scriptPath":"/mediawiki/","version":"MediaWiki 1.31.1"}
+            if wikiId=="orclone":
+                wikiDict={"wikiId": wikiId,"email":"noreply@nouser.com","url":"https://confident.dbis.rwth-aachen.de","scriptPath":"/or/","version":"MediaWiki 1.35.1"}
             if wikiId=="cr":
                 wikiDict={"wikiId": wikiId,"email":"noreply@nouser.com","url":"https://cr.bitplan.com","scriptPath":"/","version":"MediaWiki 1.33.4"}
                 
