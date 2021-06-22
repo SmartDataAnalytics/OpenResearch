@@ -36,7 +36,7 @@ class TestIssue236(unittest.TestCase):
     def testDictConversion(self):
         if hf.inPublicCI(): return
         eventList2 = EventList()
-        eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId,backupdir=self.backupdir)
+        eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020', '3DUI 2016'])
         self.assertGreaterEqual(len(eventList2.getList()), 2)
 
 
