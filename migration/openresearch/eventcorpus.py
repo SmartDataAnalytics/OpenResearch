@@ -16,17 +16,17 @@ class EventCorpus(object):
         '''
         self.debug=debug
 
-    def fromWikiSonBackupFiles(self,backupDir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId='or',listOfItems=[]):
+    def fromWikiSonBackupFiles(self,backupdir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId='or',listOfItems=[]):
         '''
                get events with series by knitting / linking the entities together
         '''
         self.eventList = EventList()
         self.eventList.debug = self.debug
-        self.eventList.fromWikiSonBackupFiles("Event",backupDir,wikiId=wikiId,listOfItems=listOfItems)
+        self.eventList.fromWikiSonBackupFiles("Event",backupdir=backupdir,wikiId=wikiId,listOfItems=listOfItems)
 
         self.eventSeriesList = EventSeriesList()
         self.eventSeriesList.debug = self.debug
-        self.eventSeriesList.fromWikiSonBackupFiles("Event series",backupDir,wikiId=wikiId,listOfItems=listOfItems)
+        self.eventSeriesList.fromWikiSonBackupFiles("Event series",backupdir=backupdir,wikiId=wikiId,listOfItems=listOfItems)
 
         # get foreign key hashtable
         self.seriesLookup = self.eventList.getLookup("Series", withDuplicates=True)
