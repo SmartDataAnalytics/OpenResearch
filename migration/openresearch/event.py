@@ -165,7 +165,7 @@ class OREntityList(JSONAbleList):
         jsonFilePath="%s.json" % jsonPrefix
         return jsonFilePath
 
-    def fromCache(self,wikiuser:WikiUser):
+    def fromCache(self,wikiuser:WikiUser,force=False):
         '''
         Args:
             wikiuser: the wikiuser to use
@@ -173,7 +173,7 @@ class OREntityList(JSONAbleList):
         jsonFilePath=self.getJsonFile()
         # TODO: fix upstream pyLodStorage
         jsonPrefix=jsonFilePath.replace(".json","")
-        if os.path.isfile(jsonFilePath):
+        if os.path.isfile(jsonFilePath) and not force:
             self.restoreFromJsonFile(jsonPrefix)
         else:
             self.fromWiki(wikiuser,askExtra=self.askExtra,profile=self.profile)
