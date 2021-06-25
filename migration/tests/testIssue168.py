@@ -27,7 +27,7 @@ class TestIssue168(unittest.TestCase):
         '''
         test the event corpus
         '''
-        eventCorpus=Corpus.getEventCorpus(debug=self.debug)
+        eventCorpus=Corpus.getEventCorpus(debug=self.debug,force=True)
         listOfEvents=eventCorpus.eventList.getList()
         withSeries=0
         for event in listOfEvents:

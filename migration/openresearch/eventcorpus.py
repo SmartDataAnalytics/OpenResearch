@@ -42,7 +42,7 @@ class EventCorpus(object):
         if self.debug:
             print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
         
-    def fromWikiUser(self,wikiUser,propertyList=[]):
+    def fromWikiUser(self,wikiUser,propertyList=[],force=False):
         '''
         get events with series by knitting / linking the entities together
         '''
@@ -50,11 +50,11 @@ class EventCorpus(object):
         self.eventList.debug=self.debug
         if len(propertyList) != 0:
             self.eventList.propertyLookupList=propertyList
-        self.eventList.fromCache(wikiUser)
+        self.eventList.fromCache(wikiUser,force=force)
         
         self.eventSeriesList=EventSeriesList()
         self.eventSeriesList.debug=self.debug
-        self.eventSeriesList.fromCache(wikiUser)
+        self.eventSeriesList.fromCache(wikiUser,force=force)
         
         # get foreign key hashtable
         self.seriesLookup=self.eventList.getLookup("inEventSeries", withDuplicates=True)
