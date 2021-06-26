@@ -11,9 +11,11 @@ installAndGetMediaWikiDocker() {
      --basePort 9780 --sqlBasePort 9736 --wikiIdList myor \
      --extensionList "Admin Links"  "BreadCrumbs2" "Cargo" "CategoryTree" \
       "ConfirmEdit"  "Data Transfer" "Header Tabs" \
-      "ImageMap", "InputBox" "LanguageSelector" "MagicNoCache" "Maps" "Page Forms" \
-      "ParserFunctions" "PDFEmbed" "Semantic Result Formats" "SyntaxHighlight" "Variables"
-  # "Confirm User Accounts"    
+      "ImageMap", "InputBox" "LanguageSelector" "MagicNoCache" "Maps7" "Nuke" "Page Forms" \
+      "ParserFunctions" "PDFEmbed" "Renameuser" "Replace Text" "Semantic Result Formats" "SyntaxHighlight" \
+      "TitleBlacklist" "Variables"
+  #  "UrlGetParameters"
+  # "Confirm User Accounts"   
   pip install -U py-3rdparty-mediawiki
 }
 
@@ -44,19 +46,21 @@ EOF
 # copy OPENRESEARCH Wiki
 #
 copyWiki() {
+  local l_source="$1"
   # get all pages that are semantified
   # wikipush -s or -t myor -q "[[Modification date::+]]" --progress -qd 10
-  wikipush -s or -t myor -q "[[Property:+]]"
-  wikipush -s or -t myor -q "[[Form:+]]"
-  wikipush -s or -t myor -q "[[Help:+]]"
-  wikipush -s or -t myor -q "[[Concept:+]]"
-  wikipush -s or -t myor -q "[[Template:+]]"
-  wikipush -s or -t myor -p "Template:Event" "Template:Tablelongrow" "Template:Tablerow" "Template:Tablesection"
-  wikipush -s or -t myor -q "[[isA::Event]][[Modification date::>2021]]" --progress -qd 10
-  wikipush -s or -t myor -q "[[Category:Event series]][[Modification date::>2021]]" 
+  wikipush -s $l_source -t myor -q "[[Property:+]]"
+  wikipush -s $l_source -t myor -q "[[Form:+]]"
+  wikipush -s $l_source -t myor -q "[[Help:+]]"
+  wikipush -s $l_source -t myor -q "[[Concept:+]]"
+  wikipush -s $l_source -t myor -q "[[Template:+]]"
+  wikipush -s $l_source -t myor -p "Template:Event" "Template:Event series" "Template:Tablelongrow" "Template:Tablerow" "Template:Tablesection"
+  wikipush -s $l_source -t myor -q "[[isA::Event]][[Modification date::>2021]]" --progress -qd 10
+  wikipush -s $l_source -t myor -q "[[Category:Event series]][[Modification date::>2021]]" 
 }
 
 
 installAndGetMediaWikiDocker
 setupWikiUser
 copyWiki
+  
