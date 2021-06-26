@@ -123,10 +123,11 @@ class TestEvent(unittest.TestCase):
             listOfRecords=entityList.fromWiki(wikiuser,askExtra=askExtra)
             entityList=self.getEntityListViaSQL(listOfRecords,entityListClass)
             entities=entityList.getList()
-            print(f"samples for {entityName}:")
-            for entity in entities[:5]:
-                print(entity)
-                print(entity.toJSON())
+            if self.debug:
+                print(f"samples for {entityName}:")
+                for entity in entities[:5]:
+                    print(entity)
+                    print(entity.toJSON())
             self.assertTrue(len(entities)>=expectedCount[entityName])
             
     def testFromCache(self):

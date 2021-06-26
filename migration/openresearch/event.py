@@ -237,7 +237,7 @@ class OREntityList(JSONAbleList):
     def fromWikiSonBackupFiles(self,wikiSonName,backupdir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId= 'or',listOfItems=[]):
         """
         Create me from the backup wiki files of OR Entity
-
+        ToDo: Migrate this functionality to WikiFileManager class in wikirender
         """
         filepaths = list(hf.absoluteFilePaths(backupdir))
         wikiRender = WikiRender()

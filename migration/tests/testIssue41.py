@@ -14,6 +14,9 @@ class TestIssue41(unittest.TestCase):
     Check pages where Acronym is different from PAGENAME 
     '''
 
+    def setUp(self) -> None:
+        self.debug=False
+
     def testgetPainRating(self):
         painList = [
             (1,"IEEE 2020"),
@@ -25,5 +28,6 @@ class TestIssue41(unittest.TestCase):
         eventRecord = lambda acronym: {"acronym": acronym }
         for (painRating, sample) in painList:
             rating=AcronymLengthFixer.getRating(eventRecord(sample))
-            print (rating)
+            if self.debug:
+                print (rating)
             self.assertTrue(rating.pain == painRating)
