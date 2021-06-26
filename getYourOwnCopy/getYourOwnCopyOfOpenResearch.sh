@@ -10,12 +10,12 @@ installAndGetMediaWikiDocker() {
   mwcluster --forceRebuild --versionList 1.31.14 --smwVersion 3.2.3 \
      --basePort 9780 --sqlBasePort 9736 --wikiIdList myor \
      --extensionList "Admin Links"  "BreadCrumbs2" "Cargo" "CategoryTree" \
-      "ConfirmEdit"  "Data Transfer" "Header Tabs" \
+      "ConfirmEdit" "Data Transfer" "Header Tabs" \
       "ImageMap", "InputBox" "LanguageSelector" "MagicNoCache" "Maps7" "Nuke" "Page Forms" \
       "ParserFunctions" "PDFEmbed" "Renameuser" "Replace Text" "Semantic Result Formats" "SyntaxHighlight" \
-      "TitleBlacklist" "Variables"
-  #  "UrlGetParameters"
-  # "Confirm User Accounts"   
+      "TitleBlacklist"  "Variables"
+  # "ConfirmAccount"   
+  # "UrlGetParameters"
   pip install -U py-3rdparty-mediawiki
 }
 
@@ -62,5 +62,5 @@ copyWiki() {
 
 installAndGetMediaWikiDocker
 setupWikiUser
-copyWiki
+copyWiki or
   
