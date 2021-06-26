@@ -1,16 +1,19 @@
 from unittest import TestCase
+from geograpy.locator import LocationContext
 
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import HelperFunctions as hf
 
 class TestLocationFixer(TestCase):
+
+    def setUp(self) -> None:
+        self.fixer=self.getFixer()
     
     def getFixer(self):
         fixer=LocationFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
         return fixer
 
     def test_fixEventRecord(self):
-        fixer=self.getFixer()
         event={
             "Acronym":"Test 2020",
             "Country":"Germany",
@@ -23,7 +26,7 @@ class TestLocationFixer(TestCase):
             "State":"DE/BY",   #ToDo: Change to Region once template argument is changed
             "City": "DE/BY/Munich"
         }
-        res, errors = fixer.fixEventRecord(event)
+        res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event,res)
         self.assertTrue('complete' in errors and len(errors) == 1)
 
@@ -33,7 +36,6 @@ class TestLocationFixer(TestCase):
         It is expected that the fixer can detect and correct a invalid country if city and region are correct and
         recognized.
         """
-        fixer=self.getFixer()
         event={
             "Acronym":"Test 2020",
             "Country":"USA",
@@ -46,14 +48,13 @@ class TestLocationFixer(TestCase):
             "State":"CA/BC",   #ToDo: Change to Region once template argument is changed
             "City": "CA/BC/Vancouver"
         }
-        res, errors = fixer.fixEventRecord(event)
+        res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event,res)
 
     def test_fixEventRecord_missing_entries(self):
         """
         It is expected that missing entries are detected and fixed
         """
-        fixer = self.getFixer()
         event = {
             "Acronym": "Test 2020",
             "Country": "USA",
@@ -65,7 +66,7 @@ class TestLocationFixer(TestCase):
             "State": "US/CA",  # ToDo: Change to Region once template argument is changed
             "City": "US/CA/Los Angeles"
         }
-        res, errors = fixer.fixEventRecord(event)
+        res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event, res)
         self.assertTrue("region_missing" in errors)
 
@@ -73,7 +74,6 @@ class TestLocationFixer(TestCase):
         """
         It is expected that country and region entries are fixed and city entry stays missing
         """
-        fixer = self.getFixer()
         event = {
             "Acronym": "Test 2020",
             "Country": "Germany",
@@ -84,7 +84,7 @@ class TestLocationFixer(TestCase):
             "Country": "DE",
             "State": "DE/BY",  # ToDo: Change to Region once template argument is changed
         }
-        res, errors = fixer.fixEventRecord(event)
+        res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event, res)
         self.assertTrue("city_missing" in errors)
 
@@ -92,7 +92,6 @@ class TestLocationFixer(TestCase):
         """
         It is expected that country and region entries are fixed and city entry stays missing
         """
-        fixer = self.getFixer()
         event = {
             "Acronym": "Test 2020",
             "Country": "Germany",
@@ -105,7 +104,7 @@ class TestLocationFixer(TestCase):
             "State": "DE/BY",  # ToDo: Change to Region once template argument is changed
             "City": "invalid city name!!!"
         }
-        res, errors = fixer.fixEventRecord(event)
+        res, errors = self.fixer.fixEventRecord(event)
         print(errors)
         self.assertEqual(exp_event, res)
         self.assertTrue("city_unrecognized" in errors)
@@ -113,7 +112,6 @@ class TestLocationFixer(TestCase):
 
     def testFixLocationType(self):
         # Misplaced region
-        fixer = self.getFixer()
         event = {
             "Acronym": "Test 2020",
             "Country": "Germany",
@@ -124,7 +122,7 @@ class TestLocationFixer(TestCase):
             "Country": "Germany",
             "State": "Bavaria"
         }
-        fixer.fixLocationType(event)
+        self.fixer.fixLocationType(event)
         self.assertEqual(exp_event, event)
 
         # Misplaced city
@@ -138,7 +136,7 @@ class TestLocationFixer(TestCase):
             "Country": "Germany",
             "City": "Munich"
         }
-        fixer.fixLocationType(event)
+        self.fixer.fixLocationType(event)
         self.assertEqual(exp_event, event)
 
         # Misplaced city, location, country
@@ -154,8 +152,25 @@ class TestLocationFixer(TestCase):
             "State": "CA",
             "City": "Los Angeles"
         }
-        hasChangedPositions=fixer.fixLocationType(event)
+        hasChangedPositions=self.fixer.fixLocationType(event)
         self.assertTrue(hasChangedPositions)
         self.assertEqual(exp_event["City"], event["City"])
         self.assertEqual(exp_event["State"], event["State"])
         self.assertEqual(exp_event["Country"], event["Country"])
+
+    def test_get_page_title(self):
+        '''tests the generation of the wiki page titles for location entities'''
+        locationContext=LocationContext.fromJSONBackup()
+        la=None
+        for city in locationContext.cities:
+            if 'wikidataid' in city.__dict__ and city.wikidataid=="Q65":
+                la=city
+                break
+        if la is not None:
+            ca=la.region
+            us=la.country
+            self.assertEqual("US", LocationFixer.getPageTitle(us))
+            self.assertEqual("US/CA", LocationFixer.getPageTitle(ca))
+            self.assertEqual("US/CA/Los Angeles", LocationFixer.getPageTitle(la))
+        else:
+            self.fail("City Q65 (Los Angeles) is missing in the locationContext")
