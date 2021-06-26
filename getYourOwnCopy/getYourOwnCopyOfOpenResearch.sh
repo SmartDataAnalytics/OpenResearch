@@ -55,6 +55,8 @@ copyWiki() {
   wikipush -s $l_source -t myor -p "Template:Event" "Template:Event series" "Template:Tablelongrow" "Template:Tablerow" "Template:Tablesection"
   wikipush -s $l_source -t myor -q "[[isA::Event]][[Modification date::>2021]]" --progress -qd 10
   wikipush -s $l_source -t myor -q "[[Category:Event series]][[Modification date::>2021]]" 
+  wikipush -s $l_source -t myor -p "Template:Col-begin" "Template:Col-1-of-3" "Template:Col-2-of-3" "Template:Col-3-of-3" "Template:Col-end" "Template:Research_field_tpl" "Template:Yearly_calendar" 
+  wikipush -s $l_source -t myor -f -p "Main Page" "MediaWiki:Sidebar"
 }
 
 
