@@ -27,7 +27,7 @@ class TestIssue170(unittest.TestCase):
     def testCurationQualityCheck170(self):
         '''
         https://github.com/SmartDataAnalytics/OpenResearch/issues/170
-        
+
         Curation quality check
         '''
         path=hf.getResourcePath() if hf.inPublicCI() else None
@@ -51,11 +51,12 @@ class TestIssue170(unittest.TestCase):
         
     def testUserCount(self):
         # only needed to setup userrating yaml file
-        eventCorpus=Corpus.getEventCorpus(debug=self.debug)
+        eventCorpus=Corpus.getEventCorpus(debug=self.debug,force=True)
         userLookup=eventCorpus.eventList.getLookup("lastEditor",withDuplicates=True)
         if self.debug:
             print (f"{len(userLookup)} users")
         expected=1 if hf.inPublicCI() else 140
+        print(len(userLookup))
         self.assertTrue(len(userLookup)>expected)
         counter=Counter()
         for user in userLookup.keys():

@@ -7,7 +7,8 @@ import unittest
 from ormigrate.toolbox import HelperFunctions as hf
 from openresearch.eventcorpus import EventCorpus
 from openresearch.event import Event,EventList, EventSeriesList
-
+from pathlib import Path
+import getpass
 
 class TestIssue236(unittest.TestCase):
     '''
@@ -18,7 +19,8 @@ class TestIssue236(unittest.TestCase):
 
     def setUp(self):
         self.debug = False
-        self.wikiId='orclone'
+        self.wikiId='or'
+        self.backupdir= str(Path.home() / 'wikibackup'/ self.wikiId )
         pass
 
     def tearDown(self):
@@ -26,33 +28,37 @@ class TestIssue236(unittest.TestCase):
 
 
     def testGetEventSeries(self):
-        if hf.inPublicCI():return
+        if getpass.getuser() != "mk":
+            return
         eventCorpus = EventCorpus(debug=self.debug)
-        eventCorpus.fromWikiSonBackupFiles(wikiId=self.wikiId)
+        eventCorpus.fromWikiSonBackupFiles(wikiId=self.wikiId,backupdir=self.backupdir)
         eventsLinked=eventCorpus.getEventsInSeries('3DUI')
         self.assertGreaterEqual(len(eventsLinked), 2)
 
     def testDictConversion(self):
-        if hf.inPublicCI(): return
+        if getpass.getuser() != "mk":
+            return
         eventList2 = EventList()
-        eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId, listOfItems=['3DUI 2020', '3DUI 2016'])
+        eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020', '3DUI 2016'])
         self.assertGreaterEqual(len(eventList2.getList()), 2)
 
 
     def testFromBackupFile(self):
-        if hf.inPublicCI():return
+        if getpass.getuser() != "mk":
+            return
         eventSeriesList=EventSeriesList()
-        eventSeriesList.fromWikiSonBackupFiles('Event series',wikiId=self.wikiId)
-        self.assertGreater(len(eventSeriesList.getList()), 100)
+        eventSeriesList.fromWikiSonBackupFiles('Event series',wikiId=self.wikiId,backupdir=self.backupdir)
+        # self.assertGreater(len(eventSeriesList.getList()), 100)
         eventList= EventList()
-        eventList.fromWikiSonBackupFiles('Event',wikiId='or')
+        eventList.fromWikiSonBackupFiles('Event',wikiId=self.wikiId,backupdir=self.backupdir)
         self.assertGreater(len(eventList.getList()),8000)
         eventList2= EventList()
-        eventList2.fromWikiSonBackupFiles('Event',wikiId='or',listOfItems=['3DUI 2020','3DUI 2016'])
+        eventList2.fromWikiSonBackupFiles('Event',wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020','3DUI 2016'])
         self.assertGreaterEqual(len(eventList2.getList()), 2)
 
     def testUpdateEntity(self):
-        if hf.inPublicCI(): return
+        if getpass.getuser() != "mk":
+            return
         eventList = EventList()
         eventSamples=Event.getSamples()
         eventSamples.pop()

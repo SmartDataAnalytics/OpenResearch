@@ -16,17 +16,17 @@ class EventCorpus(object):
         '''
         self.debug=debug
 
-    def fromWikiSonBackupFiles(self,backupDir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId='or',listOfItems=[]):
+    def fromWikiSonBackupFiles(self,backupdir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId='or',listOfItems=[]):
         '''
                get events with series by knitting / linking the entities together
         '''
         self.eventList = EventList()
         self.eventList.debug = self.debug
-        self.eventList.fromWikiSonBackupFiles("Event",backupDir,wikiId=wikiId,listOfItems=listOfItems)
+        self.eventList.fromWikiSonBackupFiles("Event",backupdir=backupdir,wikiId=wikiId,listOfItems=listOfItems)
 
         self.eventSeriesList = EventSeriesList()
         self.eventSeriesList.debug = self.debug
-        self.eventSeriesList.fromWikiSonBackupFiles("Event series",backupDir,wikiId=wikiId,listOfItems=listOfItems)
+        self.eventSeriesList.fromWikiSonBackupFiles("Event series",backupdir=backupdir,wikiId=wikiId,listOfItems=listOfItems)
 
         # get foreign key hashtable
         self.seriesLookup = self.eventList.getLookup("Series", withDuplicates=True)
@@ -44,7 +44,7 @@ class EventCorpus(object):
         if self.debug:
             print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
         
-    def fromWikiUser(self,wikiUser,propertyList=[]):
+    def fromWikiUser(self,wikiUser,propertyList=[],force=False):
         '''
         get events with series by knitting / linking the entities together
         '''
@@ -52,11 +52,11 @@ class EventCorpus(object):
         self.eventList.debug=self.debug
         if len(propertyList) != 0:
             self.eventList.propertyLookupList=propertyList
-        self.eventList.fromCache(wikiUser)
+        self.eventList.fromCache(wikiUser,force=force)
         
         self.eventSeriesList=EventSeriesList()
         self.eventSeriesList.debug=self.debug
-        self.eventSeriesList.fromCache(wikiUser)
+        self.eventSeriesList.fromCache(wikiUser,force=force)
         
         # get foreign key hashtable
         self.seriesLookup=self.eventList.getLookup("inEventSeries", withDuplicates=True)
