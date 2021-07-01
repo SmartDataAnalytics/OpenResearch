@@ -1,3 +1,4 @@
+from openresearch.event import Event
 from ormigrate.fixer import PageFixer
 from geograpy.locator import LocationContext, Location, City, Country, Region
 
@@ -35,6 +36,22 @@ class LocationFixer(PageFixer):
                     else:
                         stats[error]=1
         print(stats)
+
+    def fixEvents(self, events:list):
+        '''
+        fixes the location of the given events
+
+        Args:
+            events(list): list of Event objects that should be fixed
+        '''
+        for event in events:
+            self.fixEvent(event)
+
+    def fixEvent(self, event:Event):
+        '''
+        fixes the location of the given event
+        '''
+        self.fixEventRecord(event.__dict__)
 
     def fixEventRecord(self, event:dict, errors=None):
         # event location values

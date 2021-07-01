@@ -1,6 +1,6 @@
 from unittest import TestCase
 from geograpy.locator import LocationContext
-
+from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import HelperFunctions as hf
 
@@ -29,6 +29,29 @@ class TestLocationFixer(TestCase):
         res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event,res)
         self.assertTrue('complete' in errors and len(errors) == 1)
+
+    def test_fixEvent(self):
+        """
+        tests location fixing on event object
+        """
+        eventRecord = {
+            "Acronym": "Test 2020",
+            "Country": "Germany",
+            "State": "Bavaria",  # ToDo: Change to Region once template argument is changed
+            "City": "Munich"
+        }
+        exp_event = {
+            "Acronym": "Test 2020",
+            "Country": "DE",
+            "State": "DE/BY",  # ToDo: Change to Region once template argument is changed
+            "City": "DE/BY/Munich"
+        }
+        event=Event()
+        event.fromDict(eventRecord)
+        self.fixer.fixEvent(event)
+        self.assertEqual(exp_event.get("Country"), event.Country)
+        self.assertEqual(exp_event.get("State"), event.State)
+        self.assertEqual(exp_event.get("City"), event.City)
 
 
     def test_fixEventRecord_invalid_country(self):
