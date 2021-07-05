@@ -24,8 +24,26 @@ class DateFixer(PageFixer):
         self.debug = debug
         self.restoreOut = restoreOut
 
+    def getFixedRecord(self,event,datelist=['Start date' , 'End date'],errors=None):
+        if errors is None:
+            errors={}
+        for element in datelist:
+            eventDate = event.get(element)
+            if eventDate is not None:
+                fixedDate = hf.parseDate(eventDate)
+                if fixedDate is not None:
+                    if fixedDate != eventDate:
+                        event[element] = fixedDate
+                else:
+                    errors['fixNotPossible']=True
+            else:
+                key= element+'notFound'
+                errors[key]= True
+        if self.debug and errors.get('fixNotPossible'): print(self.generateLink(event['pageTitle']))
+        return event,errors
 
-    def getFixedDate(self, page, event, datetype='date'):
+
+    def getFixedDateWikiFile(self, page, event, datetype='date'):
         '''
         fix the date of the given page and event and mark unfixable pages
         Returns:
@@ -77,5 +95,5 @@ if __name__ == "__main__":
     fixer = DateFixer()
     fixer.debug = True
     # fixer.checkAllFiles(fixer.getFixedDate, 'deadline')
-    fixer.fixAllFiles(fixer.getFixedDate, "Date", 'date')
-    fixer.fixAllFiles(fixer.getFixedDate, "Deadline", 'deadline')
+    fixer.fixAllFiles(fixer.getFixedDateWikiFile, "Date", 'date')
+    fixer.fixAllFiles(fixer.getFixedDateWikiFile, "Deadline", 'deadline')

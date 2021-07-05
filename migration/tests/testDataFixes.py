@@ -156,21 +156,27 @@ Help:Topic"""
             test for fixing Ordinals not a number
             https://github.com/SmartDataAnalytics/OpenResearch/issues/119
         '''
+        lookup_dict = hf.loadDictionary()
         eventRecords= [{'Ordinal':2},
                        {'Ordinal':None},
                        {'Ordinal':'2nd'},
                        {'Ordinal':'test'}]
+        expectedPainRatings=[1, 4, 5, 7]
+        expectedOrdinals= [2, None, 2, 'test']
         painRatings = []
+        ordinals=[]
         fixer=self.getOrdinalFixer()
         for event in eventRecords:
             painRating = fixer.getRating(event)
+            res, err = fixer.fixEventRecord(event,lookup_dict)
+            ordinals.append(res['Ordinal'])
             self.assertIsNotNone(painRating)
             painRatings.append(painRating.pain)
-        self.assertEqual(painRatings,[1,4,5,7])
+        self.assertEqual(expectedPainRatings,painRatings)
+        self.assertEqual(expectedOrdinals, ordinals)
         types = Types("Event")
         samples = Event.getSampleWikiSon()
-        lookup_dict = hf.loadDictionary()
-        fixed=fixer.convert_ordinal_to_cardinal('sample',samples[0],lookup_dict)
+        fixed=fixer.convertOrdinaltoCardinalWikiFile('sample', samples[0], lookup_dict)
         fixed_dic=hf.wikiSontoLOD(fixed)
         types.getTypes("events", fixed_dic, 1)
         self.assertTrue(types.typeMap['events']['Ordinal'] == 'int')
@@ -185,18 +191,28 @@ Help:Topic"""
                         {'startDate': '20 Feb, 2020', 'endDate': None},
                         {'startDate': None, 'endDate': '20 Feb, 2020'},
                         ]
+        expectedPainRatings=[1,3,4,5]
+        expectedStartDates=['2020/02/20', None, '2020/02/20', None]
+        expectedEndDates=['2020/02/20', None, None, '2020/02/20']
         painRatings=[]
+        fixedStartDates=[]
+        fixedEndDates=[]
         fixer=self.getDateFixer()
         for event in eventRecords:
             painRating = fixer.getRating(event)
+            event,err = fixer.getFixedRecord(event,['startDate','endDate'])
             self.assertIsNotNone(painRating)
             painRatings.append(painRating.pain)
-        self.assertEqual(painRatings,[1,3,4,5])
+            fixedStartDates.append(event['startDate'])
+            fixedEndDates.append(event['endDate'])
+        self.assertEqual(expectedPainRatings,painRatings)
+        self.assertEqual(expectedStartDates, fixedStartDates)
+        self.assertEqual(expectedEndDates, fixedEndDates)
 
         types = Types("Event")
         samples = Event.getSampleWikiSon()
-        fixedDates=fixer.getFixedDate('sample',samples[0])
-        fixedDeadlines=fixer.getFixedDate('sample',fixedDates,'deadline')
+        fixedDates=fixer.getFixedDateWikiFile('sample', samples[0])
+        fixedDeadlines=fixer.getFixedDateWikiFile('sample', fixedDates, 'deadline')
         fixed_dic=hf.wikiSontoLOD(fixedDeadlines)
         self.assertTrue(fixed_dic[0]['Start date'] == '2020/09/27')
         self.assertTrue(fixed_dic[0]['Paper deadline'] == '2020/05/28')

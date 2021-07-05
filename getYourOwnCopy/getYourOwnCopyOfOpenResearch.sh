@@ -1,7 +1,5 @@
 #!/bin/bash
 # WF 2021-09-26
-
-
 #
 # get a pymediawiki docker copy
 #

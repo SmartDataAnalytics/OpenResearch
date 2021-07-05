@@ -11,7 +11,6 @@ from fnmatch import filter
 from sys import stdin
 import ntpath
 import wikitextparser as wtp
-from wikibot.wikiclient import WikiClient
 
 
 class PageFixer(object):
@@ -92,6 +91,46 @@ class PageFixer(object):
                     return name,None
                 return name,value
         return None,None
+
+    def fixEventRecord(self):
+        '''Base function to be overwritten by fixing class'''
+        return
+
+    def fixEventRecords(self, events:list):
+        """
+        Gets list of dicts (list of events) and tries to apply a fix
+        """
+        count=0
+        stats={}
+        for event_unfixed in events:
+            event, errors = self.fixEventRecord(event_unfixed)
+            if self.debug:
+                print(errors)
+            if errors is not None:
+                for error in errors.keys():
+                    if error in stats:
+                        stats[error]+=1
+                    else:
+                        stats[error]=1
+        print(stats)
+
+    def fixEvents(self, events:list):
+        '''
+        apply a fix on the event list
+
+        Args:
+            events(list): list of Event objects that should be fixed
+        '''
+        for event in events:
+            self.fixEvent(event)
+
+    def fixEvent(self, event):
+        '''
+        Applies a fixer to the given event
+        Args:
+            event(Event):Event object
+        '''
+        self.fixEventRecord(event.__dict__)
 
     def fixFile(self, filePath, new_file_content,fixType='Fixer'):
         '''

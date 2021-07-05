@@ -25,7 +25,27 @@ class OrdinalFixer(PageFixer):
         self.debug = debug
         self.restoreOut = restoreOut
 
-    def convert_ordinal_to_cardinal(self, page, event, lookup_dict: Dictionary):
+    def fixEventRecord(self,event:dict,lookup_dict: Dictionary, errors=None):
+        if errors is None:
+            errors={}
+        ordinal_val = str(event.get('Ordinal'))
+        if not ordinal_val.isnumeric():
+            cardinal_dict = lookup_dict.getToken(ordinal_val)
+            if cardinal_dict is None:
+                errors['lookupnotfound'] = True
+                CRED = '\033[91m'
+                CEND = '\033[0m'
+                if self.debug:
+                    print(f"{CRED}:\t Lookup failed! {ordinal_val} is missing in the dictionary. {CEND}")
+            else:
+                cardinal_value = cardinal_dict['value']
+                event['Ordinal'] = cardinal_value
+                if self.debug:
+                    print(f"{ordinal_val} will changed to {cardinal_value}.")
+        return event,errors
+
+
+    def convertOrdinaltoCardinalWikiFile(self, page, event, lookup_dict: Dictionary):
         '''
         Converts the ordinal value to cardinal value in the given event
         Args:
@@ -79,4 +99,4 @@ class OrdinalFixer(PageFixer):
 if __name__ == "__main__":
     fixer = OrdinalFixer()
     fixer.debug = True
-    fixer.fixAllFiles(fixer.convert_ordinal_to_cardinal, "Ordinal", HelperFunctions.loadDictionary())
+    fixer.fixAllFiles(fixer.convertOrdinaltoCardinalWikiFile, "Ordinal", HelperFunctions.loadDictionary())
