@@ -13,6 +13,8 @@ installAndGetMediaWikiDocker() {
       "ParserFunctions" "PDFEmbed" "Renameuser" "Replace Text" "Semantic Result Formats" "SyntaxHighlight" \
       "TitleBlacklist"  "UrlGetParameters" "Variables" 
   pip install -U py-3rdparty-mediawiki
+  pip install -U OpenResearchMigration
+  pip install -U wikirender
 }
 
 #
