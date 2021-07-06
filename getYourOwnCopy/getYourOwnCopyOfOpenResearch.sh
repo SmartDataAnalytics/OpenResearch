@@ -5,7 +5,7 @@
 #
 installAndGetMediaWikiDocker() {
   pip install -U pymediawikidocker
-  mwcluster --forceRebuild --versionList 1.31.14 --smwVersion 3.2.3 \
+  mwcluster --forceRebuild --versionList 1.31.15 --smwVersion 3.2.3 \
      --basePort 9780 --sqlBasePort 9736 --wikiIdList myor \
      --extensionList "Admin Links"  "BreadCrumbs2" "Cargo" "CategoryTree" \
       "ConfirmAccount" "ConfirmEdit" "Data Transfer" "Header Tabs" \
@@ -30,7 +30,7 @@ setupWikiUser() {
 # 2021-06-26
 user=$USER
 scriptPath=/mediawiki/
-version=MediaWiki 1.31.7
+version=MediaWiki 1.31.15
 email=
 url=https\://www.openresearch.org
 wikiId=or
