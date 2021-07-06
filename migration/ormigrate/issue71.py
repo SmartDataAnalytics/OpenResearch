@@ -24,7 +24,7 @@ class DateFixer(PageFixer):
         self.debug = debug
         self.restoreOut = restoreOut
 
-    def getFixedRecord(self,event,datelist=['Start date' , 'End date'],errors=None):
+    def fixEventRecord(self, event, datelist=['Start date' , 'End date'], errors=None):
         if errors is None:
             errors={}
         for element in datelist:

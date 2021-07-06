@@ -200,7 +200,7 @@ Help:Topic"""
         fixer=self.getDateFixer()
         for event in eventRecords:
             painRating = fixer.getRating(event)
-            event,err = fixer.getFixedRecord(event,['startDate','endDate'])
+            event,err = fixer.fixEventRecord(event, ['startDate', 'endDate'])
             self.assertIsNotNone(painRating)
             painRatings.append(painRating.pain)
             fixedStartDates.append(event['startDate'])
