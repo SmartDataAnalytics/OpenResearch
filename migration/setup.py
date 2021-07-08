@@ -41,4 +41,9 @@ setup(name='OpenResearchMigration',
           'py-3rdparty-mediawiki',
           'wikitextparser'
       ],
+      entry_points={
+         'console_scripts': [
+         'eventfix = ormigrate.eventFixer:mainEventFix',
+      ],
+    },
       zip_safe=False)

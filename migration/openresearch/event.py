@@ -374,25 +374,35 @@ class EventSeries(OREntity):
         return samplesWikiSon
     
     @classmethod       
-    def rateMigration(cls,eventSeries,eventSeriesRecord):
+    def rateMigration(cls,eventSeries,eventSeriesRecord,pageFixerList=None,limit=None):
         '''
         get the ratings from the different fixers
         '''
-        pageFixerList= [
-            {
-                "column": "provenancePainRating",
-                "fixer": EventSeriesProvenanceFixer
-            },
-            {
-                "column": "curationPainRating",
-                "fixer": CurationQualityChecker
-            },
-            {
-                "column": "titlePainRating",
-                "fixer": EventSeriesTitleFixer
-            }
-        ]
-        return PageFixer.rateWithFixers(pageFixerList, eventSeries,eventSeriesRecord)
+        if pageFixerList is None:
+            pageFixerList= [
+                {
+                    "column": "provenancePainRating",
+                    "fixer": EventSeriesProvenanceFixer
+                },
+                {
+                    "column": "curationPainRating",
+                    "fixer": CurationQualityChecker
+                },
+                {
+                    "column": "titlePainRating",
+                    "fixer": EventSeriesTitleFixer
+                }
+            ]
+        if limit is None:
+            return PageFixer.rateWithFixers(pageFixerList, eventSeries, eventSeriesRecord)
+        else:
+            for record in pageFixerList:
+                fixer = record["fixer"]
+                column = record["column"]
+                error = PageFixer.rateWithFixers(pageFixerList, eventSeries, eventSeriesRecord)
+                if eventSeriesRecord[column].pain >= limit:
+                    return error
+            return None
         
     
     def __str__(self):
@@ -532,37 +542,47 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
 
             
     @classmethod       
-    def rateMigration(cls,event,eventRecord):
+    def rateMigration(cls,event,eventRecord,pageFixerList=None,limit= None):
         '''
         get the ratings from the different fixers
         '''
-        pageFixerList= [
-            {
-                "column": "curationPainRating",
-                "fixer": CurationQualityChecker
-            },
-            {
-                "column": "acronymPainRating",
-                "fixer": AcronymLengthFixer
-            },
-            {
-                "column": "ordinalPainRating",
-                "fixer": OrdinalFixer
-            },
-            {
-                "column": "datePainRating",
-                "fixer": DateFixer
-            },
-            {
-                "column": "AcceptanceRatePainRating",
-                "fixer": AcceptanceRateFixer
-            },
-            {
-                "column": "BiblographicFieldFixer",
-                "fixer": BiblographicFieldFixer
-            }
-        ]
-        return PageFixer.rateWithFixers(pageFixerList, event,eventRecord)
+        if pageFixerList is None:
+            pageFixerList= [
+                {
+                    "column": "curationPainRating",
+                    "fixer": CurationQualityChecker
+                },
+                {
+                    "column": "acronymPainRating",
+                    "fixer": AcronymLengthFixer
+                },
+                {
+                    "column": "ordinalPainRating",
+                    "fixer": OrdinalFixer
+                },
+                {
+                    "column": "datePainRating",
+                    "fixer": DateFixer
+                },
+                {
+                    "column": "AcceptanceRatePainRating",
+                    "fixer": AcceptanceRateFixer
+                },
+                {
+                    "column": "BiblographicFieldFixer",
+                    "fixer": BiblographicFieldFixer
+                }
+            ]
+        if limit is None:
+            return PageFixer.rateWithFixers(pageFixerList, event,eventRecord)
+        else:
+            for record in pageFixerList:
+                column = record["column"]
+                error = PageFixer.rateWithFixers(pageFixerList, event, eventRecord)
+                if eventRecord[column].pain >= limit:
+                    return error
+            return None
+
     
     def __str__(self):
         text=self.pageTitle
