@@ -15,6 +15,8 @@ from ormigrate.toolbox import HelperFunctions as hf
 
 class EventFixer(PageFixer):
 
+    fixerNameList= ['curation','acronym','ordinal','date','acceptancerate','biblographic']
+
     def __init__(self,fromWikiId=None,login=False,debug=False):
         self.debug = debug
         self.login = login
@@ -94,10 +96,10 @@ __date__ = '2020-10-31'
 __updated__ = '2021-05-27'
 DEBUG=False
 
-def mainEventFix(argv=None):
-    main(argv,mode='eventfix')
+def mainEventCount(argv=None):
+    main(argv,mode='eventcount')
 
-def main(argv=None,mode='eventfix'):
+def main(argv=None,mode='eventcount'):
     if argv is None:
         argv = sys.argv[1:]
 
@@ -105,7 +107,7 @@ def main(argv=None,mode='eventfix'):
     program_version = "v%s" % __version__
     program_build_date = str(__updated__)
     program_version_message = '%%(prog)s %s (%s)' % (program_version, program_build_date)
-    program_shortdesc = "eventfix"
+    program_shortdesc = "eventfixer"
     user_name = "Musaab Khan"
     program_license = '''%s
 
@@ -118,19 +120,21 @@ def main(argv=None,mode='eventfix'):
         parser.add_argument("-d", "--debug", dest="debug", action="store_true",
                             help="set debug level [default: %(default)s]")
         parser.add_argument('-V', '--version', action='version', version=program_version_message)
-        if mode == "eventfix":
+        if mode == "eventcount":
             parser.add_argument("-s", "--source", dest="source", help="source wiki id", required=True)
             parser.add_argument("-pr", "--painRating", default=9, dest="painRating", type=int,
-                                help="give the painrating number for events to get under",
+                                help="give the painrating number for events to get under. [default: %(default)s]",
                                 required=True)
+            parser.add_argument("-ic", "--ignoreCache", dest="ignoreCache", action="store_true",
+                                help="set to get data directly from the source wiki and ignore cache [default: %(default)s]")
             parser.add_argument("-fn", "--fixerNames", dest="fixerNames", type=str, nargs='+',
-                                help="List of fixers to check for rating",default=None)
+                                help="List of fixers to check for rating  [default: %(default)s]",default=EventFixer.fixerNameList)
         args = parser.parse_args(argv)
-        if mode == 'eventfix':
+        if mode == 'eventcount':
             eventFixer = EventFixer(args.source)
 
-            eventListFixed = eventFixer.getEventsForPainRating(args.painRating,fixerNames=args.fixerNames)
-            eventListJson= eventListFixed.toJSON()
+            eventListFixed = eventFixer.getEventsForPainRating(args.painRating,fixerNames=args.fixerNames,cache=not args.ignoreCache)
+            # eventListJson= eventListFixed.toJSON() #added for future requirement if applicable.
             print(len(eventListFixed.getList()))
     except KeyboardInterrupt:
         ### handle keyboard interrupt ###
@@ -147,5 +151,5 @@ def main(argv=None,mode='eventfix'):
 if __name__ == "__main__":
     if DEBUG:
         sys.argv.append("-d")
-    sys.exit(mainEventFix())
+    sys.exit(mainEventCount())
 

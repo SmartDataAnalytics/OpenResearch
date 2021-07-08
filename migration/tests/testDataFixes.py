@@ -191,7 +191,7 @@ Help:Topic"""
                         {'startDate': '20 Feb, 2020', 'endDate': None},
                         {'startDate': None, 'endDate': '20 Feb, 2020'},
                         ]
-        expectedPainRatings=[1,3,4,5]
+        expectedPainRatings=[1, 5, 3, 7]
         expectedStartDates=['2020/02/20', None, '2020/02/20', None]
         expectedEndDates=['2020/02/20', None, None, '2020/02/20']
         painRatings=[]

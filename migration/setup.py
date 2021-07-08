@@ -43,7 +43,7 @@ setup(name='OpenResearchMigration',
       ],
       entry_points={
          'console_scripts': [
-         'eventfix = ormigrate.eventFixer:mainEventFix',
+         'eventcount = ormigrate.eventFixer:mainEventCount',
       ],
     },
       zip_safe=False)
