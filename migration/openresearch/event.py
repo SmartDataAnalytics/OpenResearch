@@ -21,13 +21,13 @@ import ntpath
 from pathlib import Path
 from openresearch.openresearch import OpenResearch
 
-from ormigrate.issue41 import AcronymLengthFixer
-from ormigrate.issue119_Ordinals import OrdinalFixer
-from ormigrate.issue71 import DateFixer
+from ormigrate.issue41_acronym import AcronymLengthFixer
+from ormigrate.issue119_ordinal import OrdinalFixer
+from ormigrate.issue71_date import DateFixer
 from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer, EventSeriesTitleFixer
-from ormigrate.issue152 import AcceptanceRateFixer
+from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
 from ormigrate.issue170_curation import CurationQualityChecker
-from ormigrate.issue195 import BiblographicFieldFixer
+from ormigrate.issue195_biblographic import BiblographicFieldFixer
 
 
 class OREntity(JSONAble):

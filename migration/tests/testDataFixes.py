@@ -6,12 +6,12 @@ Created on 2021-04-02
 import unittest
 import io
 from os import path
-from ormigrate.issue152 import AcceptanceRateFixer
-from ormigrate.issue119_Ordinals import OrdinalFixer
-from ormigrate.issue71 import DateFixer
-from ormigrate.issue163 import SeriesFixer
-from ormigrate.issue166 import WikiCFPIDFixer
-from ormigrate.issue195 import BiblographicFieldFixer
+from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
+from ormigrate.issue119_ordinal import OrdinalFixer
+from ormigrate.issue71_date import DateFixer
+from ormigrate.issue163_series import SeriesFixer
+from ormigrate.issue166_cfp import WikiCFPIDFixer
+from ormigrate.issue195_biblographic import BiblographicFieldFixer
 
 
 from ormigrate.toolbox import HelperFunctions as hf

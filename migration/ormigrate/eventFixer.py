@@ -3,13 +3,13 @@ import sys
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
 from ormigrate.fixer import PageFixer
-from ormigrate.issue41 import AcronymLengthFixer
-from ormigrate.issue119_Ordinals import OrdinalFixer
-from ormigrate.issue163 import SeriesFixer
-from ormigrate.issue71 import DateFixer
-from ormigrate.issue152 import AcceptanceRateFixer
+from ormigrate.issue41_acronym import AcronymLengthFixer
+from ormigrate.issue119_ordinal import OrdinalFixer
+from ormigrate.issue163_series import SeriesFixer
+from ormigrate.issue71_date import DateFixer
+from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
 from ormigrate.issue170_curation import CurationQualityChecker
-from ormigrate.issue195 import BiblographicFieldFixer
+from ormigrate.issue195_biblographic import BiblographicFieldFixer
 from openresearch.event import EventList,Event
 from ormigrate.toolbox import HelperFunctions as hf
 
@@ -119,8 +119,6 @@ def main(argv=None,mode='eventfix'):
                             help="set debug level [default: %(default)s]")
         parser.add_argument('-V', '--version', action='version', version=program_version_message)
         if mode == "eventfix":
-            parser.add_argument("-l", "--login", dest="login", action='store_true',
-                                help="login to source wiki for access permission")
             parser.add_argument("-s", "--source", dest="source", help="source wiki id", required=True)
             parser.add_argument("-pr", "--painRating", default=9, dest="painRating", type=int,
                                 help="give the painrating number for events to get under",

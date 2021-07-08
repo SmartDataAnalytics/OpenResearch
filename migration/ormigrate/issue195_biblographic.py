@@ -7,7 +7,7 @@ from ormigrate.fixer import PageFixer
 
 class BiblographicFieldFixer(PageFixer):
     '''
-        fixer for Acceptance Rate Not calculated
+        fixer for Biblographic fields
         https://github.com/SmartDataAnalytics/OpenResearch/issues/195
     '''
 

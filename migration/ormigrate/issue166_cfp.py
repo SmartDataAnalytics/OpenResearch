@@ -12,8 +12,8 @@ from os.path import expanduser
 
 class WikiCFPIDFixer(PageFixer):
     '''
-    fixer for Acceptance Rate Not calculated
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/163
+    fixer for getting WikiCFP id from free text
+    https://github.com/SmartDataAnalytics/OpenResearch/issues/166
     '''
 
     def __init__(self, wikiClient, debug=False):

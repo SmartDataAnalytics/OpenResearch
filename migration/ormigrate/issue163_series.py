@@ -10,7 +10,7 @@ from openresearch.event import EventList
 
 class SeriesFixer(PageFixer):
     '''
-    fixer for Acceptance Rate Not calculated
+    fixer for event having multiple series marked
     https://github.com/SmartDataAnalytics/OpenResearch/issues/163
     '''
 
@@ -49,8 +49,6 @@ class SeriesFixer(PageFixer):
             # print(str(i['series']) + ":", str(type(i['series'])))
             if 'inEventSeries' in eventRecord:
                 value=eventRecord['inEventSeries']
-                if eventRecord['pageTitle'] == 'IJCAI-PRICAI 2020':
-                    print(eventRecord)
                 if type(value)==list:
                     # print (i)
                     count +=1
