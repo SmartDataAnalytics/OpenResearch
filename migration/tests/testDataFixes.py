@@ -256,6 +256,8 @@ Help:Topic"""
         # TODO: we do not test the count here  - later we want it to be zero
         # TODO: Records obtained with fromWiki already filter the list
 
+
+
     def testdictToWikison(self):
         """
         Test the helper function to create wikison from a given dict
@@ -288,16 +290,35 @@ Help:Topic"""
             pass
         else:
             fixer=self.getWikiCFPIDFixer()
-            samples = Event.getSampleWikiSon()
-            wikicfpid= fixer.getPageWithWikicfpid('test',samples[1])
+            samplesWikiSon = Event.getSampleWikiSon()
+            wikicfpid= fixer.getWikiCFPIdFromPage(samplesWikiSon[1])
             self.assertIsNotNone(wikicfpid)
             self.assertEqual(wikicfpid,'3845')
-            fixedPage= fixer.fixPageWithDplp('test',samples[1],wikicfpid)
+
+
+            samplesDict=Event.getSamples()
+            count=0
+            for sample in samplesDict:
+                wikiFile= fixer.fixEventFileFromWiki(sample['pageTitle'])
+                if wikiFile is not None:
+                    count+=1
+            self.assertGreaterEqual(count,1)
+
+
+            count= 0
+            for path, event in fixer.getAllPageTitles4Topic():
+                fixedEvent=fixer.fixEventFile(path, event)
+                if fixedEvent is not None:
+                    count +=1
+            self.assertGreaterEqual(count,1000)
+
+
+            fixedPage= fixer.fixPageWithDBCrosscheck('test', samplesWikiSon[1], wikicfpid)
             if self.debug:
                 print(fixedPage)
-            fixedDict=hf.wikiSontoLOD(fixedPage)[0]
-            self.assertIsNotNone(fixedDict['WikiCFP-ID'])
-            self.assertEqual(fixedDict['WikiCFP-ID'],3845)
+            fixedDict=fixedPage.extract_template('Event')
+            self.assertIsNotNone(fixedDict['wikicfpId'])
+            self.assertEqual(fixedDict['wikicfpId'],'3845')
 
 
 if __name__ == "__main__":

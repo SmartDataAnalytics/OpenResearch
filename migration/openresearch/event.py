@@ -489,7 +489,13 @@ class Event(OREntity):
             "pageTitle": "5GU 2017",
             "startDate": datetime.fromisoformat("2017-06-08T00:00:00"),
             "title": "2nd EAI International Conference on 5G for Ubiquitous Connectivity"
+        },
+        {
+            'acronym': "IDC 2009",
+            'title': "The 8th International Conference on Interaction Design and Children",
+            'pageTitle': 'IDC 2009'
         }
+
         ]
         return samplesLOD
     
