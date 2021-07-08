@@ -97,7 +97,7 @@ DEBUG=False
 def mainEventFix(argv=None):
     main(argv,mode='eventfix')
 
-def main(argv=None,mode='wikipush'):
+def main(argv=None,mode='eventfix'):
     if argv is None:
         argv = sys.argv[1:]
 
