@@ -19,7 +19,7 @@ class EventFixer(PageFixer):
         self.debug = debug
         self.login = login
         self.wikiId= fromWikiId
-        self.wikiUser= hf.getSMW_WikiUser(self.wikiId)
+        self.wikiUser= hf.getSMW_WikiUser(self.wikiId,save=True)
         self.fixerLookup = {
                     "curation": {
                         "column": "curationPainRating",
