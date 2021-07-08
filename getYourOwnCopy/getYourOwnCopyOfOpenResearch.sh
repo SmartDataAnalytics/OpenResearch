@@ -128,13 +128,13 @@ copyWiki() {
   wikipush -s $l_source -t myor -q "[[Help:+]]"
   wikipush -s $l_source -t myor -q "[[Concept:+]]"
   wikipush -s $l_source -t myor -q "[[Template:+]]"
-  wikipush -s $l_source -t myor -q "[[Category:Template]]"  
+  wikipush -s $l_source -t myor -q "[[Category:Template]]"
   wikipush -s $l_source -t myor -p "Template:Event" "Template:Event series" "Template:Tablelongrow" "Template:TableRow" "Template:Tablesection"
-  wikipush -s $l_source -t myor -q "[[isA::Event]][[Modification date::>$l_since]]" --progress -qd 10
-  wikipush -s $l_source -t myor -q "[[Category:Event series]][[Modification date::>$l_since]]" --progress -qd 10
+  wikipush -s $l_source -t myor -q "[[isA::Event]][[Modification date::>$l_since]]" --withImages --progress -qd 10
+  wikipush -s $l_source -t myor -q "[[Category:Event series]][[Modification date::>$l_since]]" --withImages --progress -qd 10
   wikipush -s $l_source -t myor -p "List of Events"
   wikipush -s $l_source -t myor -p "Template:Col-begin" "Template:Col-1-of-3" "Template:Col-2-of-3" "Template:Col-3-of-3" "Template:Col-end" "Template:Research_field_tpl" "Template:Yearly_calendar"
-  wikipush -s $l_source -t myor -f -p "Main Page" "MediaWiki:Sidebar"
+  wikipush -s $l_source -t myor -f -p "Main Page" "MediaWiki:Sidebar" --withImages
 }
 
 since=2006
