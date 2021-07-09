@@ -453,7 +453,7 @@ class Event(OREntity):
             "pageTitle": "ICSME 2020",
             "acronym":"ICSME 2020",
             "ordinal": 36,
-            "evenType": "Conference",
+            "eventType": "Conference",
             "subject": "Software engineering",
             "startDate":  datetime.fromisoformat("2020-09-27"),
             "endDate":  datetime.fromisoformat("2020-09-27")

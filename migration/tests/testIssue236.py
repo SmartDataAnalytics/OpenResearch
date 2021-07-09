@@ -22,13 +22,26 @@ class TestIssue236(unittest.TestCase):
         self.wikiId='or'
         self.backupdir= str(Path.home() / 'wikibackup'/ self.wikiId )
         pass
-
+    
+    
+    def runInCi(self):
+        '''
+        should these test run in the continuous integration environment
+        '''
+        #runit=  getpass.getuser() != "mk"
+        runit=True
+        return runit
+  
     def tearDown(self):
         pass
 
 
     def testGetEventSeries(self):
-        if getpass.getuser() != "mk":
+        '''
+        get getting the events in a certain series
+        e.g. 3DUI
+        '''
+        if not self.runInCi():
             return
         eventCorpus = EventCorpus(debug=self.debug)
         eventCorpus.fromWikiSonBackupFiles(wikiId=self.wikiId,backupdir=self.backupdir)
@@ -36,7 +49,9 @@ class TestIssue236(unittest.TestCase):
         self.assertGreaterEqual(len(eventsLinked), 2)
 
     def testDictConversion(self):
-        if getpass.getuser() != "mk":
+        '''
+        '''
+        if not self.runInCi():
             return
         eventList2 = EventList()
         eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020', '3DUI 2016'])
@@ -44,7 +59,7 @@ class TestIssue236(unittest.TestCase):
 
 
     def testFromBackupFile(self):
-        if getpass.getuser() != "mk":
+        if not self.runInCi():
             return
         eventSeriesList=EventSeriesList()
         eventSeriesList.fromWikiSonBackupFiles('Event series',wikiId=self.wikiId,backupdir=self.backupdir)
@@ -57,7 +72,7 @@ class TestIssue236(unittest.TestCase):
         self.assertGreaterEqual(len(eventList2.getList()), 2)
 
     def testUpdateEntity(self):
-        if getpass.getuser() != "mk":
+        if not self.runInCi():
             return
         eventList = EventList()
         eventSamples=Event.getSamples()
@@ -76,9 +91,6 @@ class TestIssue236(unittest.TestCase):
         updatedList = eventList.getList()
         self.assertEqual(updatedList[0].testAttr,'test')
         self.assertEqual(len(updatedList),len(eventSamples))
-
-
-
 
 
 if __name__ == "__main__":
