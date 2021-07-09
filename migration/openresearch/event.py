@@ -14,7 +14,6 @@ from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.wikiFile import WikiFile
 from wikifile.wikiRender import WikiRender
-import inspect
 import os
 import time
 import ntpath
@@ -66,6 +65,7 @@ class OREntityList(JSONAbleList):
         self.debug=False
         self.wikiClient=None
         self.wikiPush=None
+        self.wikiFileManger=None
         self.askExtra=""
 
     def getList(self):
@@ -252,8 +252,8 @@ class OREntityList(JSONAbleList):
             else:
                 wikiFile = WikiFile(filename,filepath,wikiRender)
                 wikiFileList.append(wikiFile)
-        wikiFileManger= WikiFileManager(wikiId)
-        LOD=wikiFileManger.convertWikiFilesToLOD(wikiFileList,wikiSonName)
+        self.wikiFileManger= WikiFileManager(wikiId,login=False)
+        LOD=self.wikiFileManger.convertWikiFilesToLOD(wikiFileList,wikiSonName)
         self.fromLoD(LOD)
 
     def getLoD(self):
