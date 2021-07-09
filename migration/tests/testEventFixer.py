@@ -1,6 +1,6 @@
 import unittest
 from ormigrate.eventFixer import EventFixer
-from ormigrate.issue71 import DateFixer
+from ormigrate.issue71_date import DateFixer
 from ormigrate.toolbox import HelperFunctions as hf
 
 

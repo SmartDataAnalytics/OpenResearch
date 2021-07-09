@@ -11,8 +11,8 @@ from ormigrate.toolbox import HelperFunctions as hf
 
 class DateFixer(PageFixer):
     '''
-    fixer for Acceptance Rate Not calculated
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/152
+    fixer for Date being incorrect
+    https://github.com/SmartDataAnalytics/OpenResearch/issues/71
     '''
 
     def __init__(self, wikiClient, debug=False,restoreOut=False):
@@ -80,11 +80,11 @@ class DateFixer(PageFixer):
         if startDate is not None and endDate is not None:
             painrating= Rating(1,Rating.ok,f'Dates,  {startDate} , {endDate} valid')
         elif startDate is None and endDate is None:
-            painrating=Rating(3,Rating.missing,f'Dates not found')
+            painrating=Rating(5,Rating.missing,f'Dates not found')
         elif startDate is None and endDate is not None:
-            painrating=Rating(5,Rating.missing,f'Start Date is not there while end date exists')
+            painrating=Rating(7,Rating.missing,f'Start Date is not there while end date exists')
         elif startDate is not None and endDate is None:
-            painrating=Rating(4,Rating.missing,f'Start Date is there but end date is not')
+            painrating=Rating(3,Rating.missing,f'Start Date is there but end date is not')
         return painrating
 
 

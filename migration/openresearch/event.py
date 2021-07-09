@@ -21,13 +21,13 @@ import ntpath
 from pathlib import Path
 from openresearch.openresearch import OpenResearch
 
-from ormigrate.issue41 import AcronymLengthFixer
-from ormigrate.issue119_Ordinals import OrdinalFixer
-from ormigrate.issue71 import DateFixer
+from ormigrate.issue41_acronym import AcronymLengthFixer
+from ormigrate.issue119_ordinal import OrdinalFixer
+from ormigrate.issue71_date import DateFixer
 from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer, EventSeriesTitleFixer
-from ormigrate.issue152 import AcceptanceRateFixer
+from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
 from ormigrate.issue170_curation import CurationQualityChecker
-from ormigrate.issue195 import BiblographicFieldFixer
+from ormigrate.issue195_biblographic import BiblographicFieldFixer
 
 
 class OREntity(JSONAble):
@@ -489,7 +489,13 @@ class Event(OREntity):
             "pageTitle": "5GU 2017",
             "startDate": datetime.fromisoformat("2017-06-08T00:00:00"),
             "title": "2nd EAI International Conference on 5G for Ubiquitous Connectivity"
+        },
+        {
+            'acronym': "IDC 2009",
+            'title': "The 8th International Conference on Interaction Design and Children",
+            'pageTitle': 'IDC 2009'
         }
+
         ]
         return samplesLOD
     

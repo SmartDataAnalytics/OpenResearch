@@ -6,12 +6,12 @@ Created on 2021-04-02
 import unittest
 import io
 from os import path
-from ormigrate.issue152 import AcceptanceRateFixer
-from ormigrate.issue119_Ordinals import OrdinalFixer
-from ormigrate.issue71 import DateFixer
-from ormigrate.issue163 import SeriesFixer
-from ormigrate.issue166 import WikiCFPIDFixer
-from ormigrate.issue195 import BiblographicFieldFixer
+from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
+from ormigrate.issue119_ordinal import OrdinalFixer
+from ormigrate.issue71_date import DateFixer
+from ormigrate.issue163_series import SeriesFixer
+from ormigrate.issue166_cfp import WikiCFPIDFixer
+from ormigrate.issue195_biblographic import BiblographicFieldFixer
 
 
 from ormigrate.toolbox import HelperFunctions as hf
@@ -191,7 +191,7 @@ Help:Topic"""
                         {'startDate': '20 Feb, 2020', 'endDate': None},
                         {'startDate': None, 'endDate': '20 Feb, 2020'},
                         ]
-        expectedPainRatings=[1,3,4,5]
+        expectedPainRatings=[1, 5, 3, 7]
         expectedStartDates=['2020/02/20', None, '2020/02/20', None]
         expectedEndDates=['2020/02/20', None, None, '2020/02/20']
         painRatings=[]
@@ -256,6 +256,8 @@ Help:Topic"""
         # TODO: we do not test the count here  - later we want it to be zero
         # TODO: Records obtained with fromWiki already filter the list
 
+
+
     def testdictToWikison(self):
         """
         Test the helper function to create wikison from a given dict
@@ -288,16 +290,35 @@ Help:Topic"""
             pass
         else:
             fixer=self.getWikiCFPIDFixer()
-            samples = Event.getSampleWikiSon()
-            wikicfpid= fixer.getPageWithWikicfpid('test',samples[1])
+            samplesWikiSon = Event.getSampleWikiSon()
+            wikicfpid= fixer.getWikiCFPIdFromPage(samplesWikiSon[1])
             self.assertIsNotNone(wikicfpid)
             self.assertEqual(wikicfpid,'3845')
-            fixedPage= fixer.fixPageWithDplp('test',samples[1],wikicfpid)
+
+
+            samplesDict=Event.getSamples()
+            count=0
+            for sample in samplesDict:
+                wikiFile= fixer.fixEventFileFromWiki(sample['pageTitle'])
+                if wikiFile is not None:
+                    count+=1
+            self.assertGreaterEqual(count,1)
+
+
+            count= 0
+            for path, event in fixer.getAllPageTitles4Topic():
+                fixedEvent=fixer.fixEventFile(path, event)
+                if fixedEvent is not None:
+                    count +=1
+            self.assertGreaterEqual(count,1000)
+
+
+            fixedPage= fixer.fixPageWithDBCrosscheck('test', samplesWikiSon[1], wikicfpid)
             if self.debug:
                 print(fixedPage)
-            fixedDict=hf.wikiSontoLOD(fixedPage)[0]
-            self.assertIsNotNone(fixedDict['WikiCFP-ID'])
-            self.assertEqual(fixedDict['WikiCFP-ID'],3845)
+            fixedDict=fixedPage.extract_template('Event')
+            self.assertIsNotNone(fixedDict['wikicfpId'])
+            self.assertEqual(fixedDict['wikicfpId'],'3845')
 
 
 if __name__ == "__main__":

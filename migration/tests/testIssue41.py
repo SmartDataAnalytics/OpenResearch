@@ -1,5 +1,5 @@
 import unittest
-from ormigrate.issue41 import AcronymLengthFixer
+from ormigrate.issue41_acronym import AcronymLengthFixer
 
 
 class TestIssue41(unittest.TestCase):

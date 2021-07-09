@@ -12,7 +12,7 @@ except:
     long_description = open('../README.md').read()
 
 setup(name='OpenResearchMigration',
-      version='0.0.22',
+      version='0.0.23',
       description='python api to access OPENRESEARCH data',
       long_description=long_description,
       long_description_content_type='text/markdown',
@@ -43,6 +43,7 @@ setup(name='OpenResearchMigration',
       ],
       entry_points={
          'console_scripts': [
+         'eventcount = ormigrate.eventFixer:mainEventCount',
          'eventfix = ormigrate.eventFixer:mainEventFix',
       ],
     },
