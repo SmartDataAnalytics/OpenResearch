@@ -154,6 +154,10 @@ do
   shift
 done
 
+echo "Starting to create a local docker copy of OPENRESEARCH ..."
+date
 installAndGetMediaWikiDocker
 setupWikiUser $wikiId
 copyWiki $wikiId $since
+echo "Done with creating a local docker copy of OPENRESEARCH."
+date
