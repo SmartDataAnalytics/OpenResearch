@@ -48,8 +48,9 @@ class TestIssue236(unittest.TestCase):
         eventsLinked=eventCorpus.getEventsInSeries('3DUI')
         self.assertGreaterEqual(len(eventsLinked), 2)
 
-    def testDictConversion(self):
+    def testLimitingEventsFromBackup(self):
         '''
+        tests loading of limited events from backup files.
         '''
         if not self.runInCi():
             return
@@ -59,6 +60,9 @@ class TestIssue236(unittest.TestCase):
 
 
     def testFromBackupFile(self):
+        """
+        Test loading of event series and eventlist from backup files.
+        """
         if not self.runInCi():
             return
         eventSeriesList=EventSeriesList()
@@ -72,13 +76,14 @@ class TestIssue236(unittest.TestCase):
         self.assertGreaterEqual(len(eventList2.getList()), 2)
 
     def testUpdateEntity(self):
+        """
+        tests updating an event from EventList
+        """
         if not self.runInCi():
             return
         eventList = EventList()
         eventSamples=Event.getSamples()
-        eventSamples.pop()
         eventList.fromLoD(eventSamples)
-        eventSamples= Event.getSamples()
         eventDict1=eventSamples[0]
         eventDict1['testAttr']='test'
         event= Event()
