@@ -112,6 +112,56 @@ EOF
 	fi
 }
 
+
+#
+# get the IsoTime
+#
+getIsoTime() {
+  date "+%Y-%m-%d %H:%M:%S"
+}
+
+#
+# get a backup of the given wiki
+#
+# params:
+#    #1: l_wikiId - the id of the wiki to backup
+#
+getBackup() {
+  local l_wikiId="$1"
+  wikibackupdir=$HOME/wikibackup
+  timestamp=$(getIsoTime)
+
+  # check the backup directory
+  if [ ! -d $wikibackupdir/$l_wikiId ]
+  then
+    color_msg $blue "starting initial wiki backup for $l_wikiId at $timestamp... "
+    wikibackup --source $l_wikiId --progress --query "[[Modification date::+]]" -qd 10 --git
+    timestamp=$(getIsoTime)
+    color_msg $green "initial wiki backup for $l_wikiId done at $timestamp"
+  else
+    color_msg $blue "starting incremental backup for $l_wikiId at $timestamp ..."
+    timestamp=$(getIsoTime)
+    # https://stackoverflow.com/questions/4561895/how-to-recursively-find-the-latest-modified-file-in-a-director
+pythonCode=/tmp/getLastModified.py
+cat << EOF > $pythonCode
+import glob
+import os
+import datetime
+import sys
+root=sys.argv[1]
+list_of_files = glob.glob(f'{root}/*.wiki') # * means all if need specific format then *.csv
+if len(list_of_files)>0:
+    latest_file = max(list_of_files, key=os.path.getctime)
+    lastModified=os.stat(latest_file).st_mtime
+    print(datetime.datetime.fromtimestamp(lastModified))
+EOF
+    latestModificationDate=$(python $pythonCode $wikibackupdir/$l_wikiId)
+    echo "latest backup file: $latestModificationDate"
+    wikibackup --source $l_wikiId --progress --query "[[Modification date::>$latestModificationDate]]" -qd 10 --git
+    color_msg $green "incremental wiki backup for $l_wikiId done at $timestamp"
+  fi
+}
+
 #
 # copy OPENRESEARCH Wiki
 # params
@@ -130,8 +180,8 @@ copyWiki() {
   wikipush -s $l_source -t myor -q "[[Template:+]]"
   wikipush -s $l_source -t myor -q "[[Category:Template]]"
   wikipush -s $l_source -t myor -p "Template:Event" "Template:Event series" "Template:Tablelongrow" "Template:TableRow" "Template:Tablesection"
-  wikipush -s $l_source -t myor -q "[[isA::Event]][[Modification date::>$l_since]]" --withImages --progress -qd 10
-  wikipush -s $l_source -t myor -q "[[Category:Event series]][[Modification date::>$l_since]]" --withImages --progress -qd 10
+  #wikipush -s $l_source -t myor -q "[[isA::Event]][[Modification date::>$l_since]]" --withImages --progress -qd 10
+  #wikipush -s $l_source -t myor -q "[[Category:Event series]][[Modification date::>$l_since]]" --withImages --progress -qd 10
   wikipush -s $l_source -t myor -p "List of Events"
   wikipush -s $l_source -t myor -p "Template:Col-begin" "Template:Col-1-of-3" "Template:Col-2-of-3" "Template:Col-3-of-3" "Template:Col-end" "Template:Research_field_tpl" "Template:Yearly_calendar"
   wikipush -s $l_source -t myor -f -p "Main Page" "MediaWiki:Sidebar" --withImages
@@ -156,6 +206,7 @@ done
 
 echo "Starting to create a local docker copy of OPENRESEARCH ..."
 date
+getBackup $wikiId
 installAndGetMediaWikiDocker
 setupWikiUser $wikiId
 copyWiki $wikiId $since
