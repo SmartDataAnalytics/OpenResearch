@@ -4,7 +4,12 @@ Created on 2021-04-16
 @author: wf
 '''
 from openresearch.event import EventList,EventSeriesList
+from ormigrate.toolbox import HelperFunctions as hf
 from pathlib import Path
+from os.path import expanduser
+from lodstorage.csv import CSV
+
+
 class EventCorpus(object):
     '''
     Towards a gold standard event corpus  and observatory ...
@@ -74,7 +79,47 @@ class EventCorpus(object):
         if self.debug:
             print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
 
+
+    def generateCSV(self,pageTitles,filename,filepath= "%s/.ptp/csvs/" % (expanduser("~"))):
+        """
+        Generate a csv with the given pageTitles
+        Args:
+            pageTitles(list):List of pageTitles to generate CSV from
+            filename(str):CSV file name
+            filepath(str):filepath to create csv. Default: ~/.ptp/csvs/
+        """
+        wikiFileMananger = self.eventList.wikiFileManger
+        LoD = wikiFileMananger.exportWikiSonToLOD(pageTitles, 'Event')
+        if self.debug:
+            print(pageTitles)
+            print(LoD)
+
+        savepath = filepath + filename
+        hf.ensureDirectoryExists(savepath)
+        CSV.storeToCSVFile(LoD, savepath)
+        return savepath
+
+    def getEventCsv(self,eventTitle):
+        """
+        Gives a csv file for the eventTitle
+        """
+        return self.generateCSV([eventTitle],eventTitle)
+
+    def getEventSeriesCsv(self,eventSeriesTitle):
+        """
+        Gives a csv file for all the events the given eventSeriesTitle
+        """
+        eventsInSeries = self.getEventsInSeries(eventSeriesTitle)
+        pageTitles = []
+        for event in eventsInSeries:
+            if hasattr(event, 'pageTitle'):
+                pageTitles.append(event.pageTitle)
+        return self.generateCSV(pageTitles,eventSeriesTitle)
+
     def getEventsInSeries(self,seriesAcronym):
+        """
+        Return all the events in a given series.
+        """
         if seriesAcronym in self.seriesAcronymLookup:
             seriesEvents = self.seriesLookup[seriesAcronym]
             if self.debug:

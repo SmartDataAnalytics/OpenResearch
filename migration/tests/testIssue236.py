@@ -19,7 +19,7 @@ class TestIssue236(unittest.TestCase):
 
     def setUp(self):
         self.debug = False
-        self.wikiId='or'
+        self.wikiId='orclone'
         self.backupdir= str(Path.home() / 'wikibackup'/ self.wikiId )
         pass
     
@@ -41,7 +41,7 @@ class TestIssue236(unittest.TestCase):
         get getting the events in a certain series
         e.g. 3DUI
         '''
-        if not self.runInCi():
+        if hf.inPublicCI():
             return
         eventCorpus = EventCorpus(debug=self.debug)
         eventCorpus.fromWikiSonBackupFiles(wikiId=self.wikiId,backupdir=self.backupdir)
@@ -52,7 +52,7 @@ class TestIssue236(unittest.TestCase):
         '''
         tests loading of limited events from backup files.
         '''
-        if not self.runInCi():
+        if hf.inPublicCI():
             return
         eventList2 = EventList()
         eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020', '3DUI 2016'])
@@ -63,7 +63,7 @@ class TestIssue236(unittest.TestCase):
         """
         Test loading of event series and eventlist from backup files.
         """
-        if not self.runInCi():
+        if hf.inPublicCI():
             return
         eventSeriesList=EventSeriesList()
         eventSeriesList.fromWikiSonBackupFiles('Event series',wikiId=self.wikiId,backupdir=self.backupdir)
@@ -75,11 +75,24 @@ class TestIssue236(unittest.TestCase):
         eventList2.fromWikiSonBackupFiles('Event',wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020','3DUI 2016'])
         self.assertGreaterEqual(len(eventList2.getList()), 2)
 
+    def testCsvGeneration(self):
+        """
+        Test the module for csv generation module in Event Corpus
+        """
+        if hf.inPublicCI():
+            return
+        eventCorpus=EventCorpus()
+        eventCorpus.fromWikiSonBackupFiles(self.backupdir,self.wikiId,['3DUI 2020','3DUI'])
+        file = eventCorpus.getEventCsv('3DUI 2020')
+        self.assertIsNotNone(file)
+        file2= eventCorpus.getEventSeriesCsv('3DUI')
+        self.assertIsNotNone(file2)
+
     def testUpdateEntity(self):
         """
         tests updating an event from EventList
         """
-        if not self.runInCi():
+        if hf.inPublicCI():
             return
         eventList = EventList()
         eventSamples=Event.getSamples()
