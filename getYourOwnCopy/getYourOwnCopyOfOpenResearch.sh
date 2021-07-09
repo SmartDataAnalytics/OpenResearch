@@ -45,6 +45,7 @@ usage() {
   echo "-h | --help: show this usage"
   echo "--since: get entities from the given date/iso date e.g. 2008"
   echo "--wikiId: retrieve data from the wiki with the given wikiId e.g. or/orclone"
+  echo "--fix: use migration/fix mode when creating the copy"
   exit 1
 }
 
@@ -167,10 +168,12 @@ EOF
 # params
 #   1: source wiki
 #   2: entries to be copied since when
+#   3: mode
 #
 copyWiki() {
   local l_source="$1"
   local l_since="$2"
+  local l_mode="$3"
   # get all pages that are semantified
   # wikipush -s or -t myor -q "[[Modification date::+]]" --progress -qd 10
   wikipush -s $l_source -t myor -q "[[Property:+]]"
@@ -180,15 +183,22 @@ copyWiki() {
   wikipush -s $l_source -t myor -q "[[Template:+]]"
   wikipush -s $l_source -t myor -q "[[Category:Template]]"
   wikipush -s $l_source -t myor -p "Template:Event" "Template:Event series" "Template:Tablelongrow" "Template:TableRow" "Template:Tablesection"
-  #wikipush -s $l_source -t myor -q "[[isA::Event]][[Modification date::>$l_since]]" --withImages --progress -qd 10
-  #wikipush -s $l_source -t myor -q "[[Category:Event series]][[Modification date::>$l_since]]" --withImages --progress -qd 10
   wikipush -s $l_source -t myor -p "List of Events"
   wikipush -s $l_source -t myor -p "Template:Col-begin" "Template:Col-1-of-3" "Template:Col-2-of-3" "Template:Col-3-of-3" "Template:Col-end" "Template:Research_field_tpl" "Template:Yearly_calendar"
   wikipush -s $l_source -t myor -f -p "Main Page" "MediaWiki:Sidebar" --withImages
+  case $l_mode in
+    copy)
+      wikipush -s $l_source -t myor -q "[[isA::Event]][[Modification date::>$l_since]]" --withImages --progress -qd 10
+      wikipush -s $l_source -t myor -q "[[Category:Event series]][[Modification date::>$l_since]]" --withImages --progress -qd 10
+    ;;
+    fix)
+    ;;
+  esac
 }
 
 since=2006
 wikiId=orclone
+mode=copy
 while [  "$1" != ""  ]
 do
   option="$1"
@@ -200,15 +210,20 @@ do
     --wikiId)
       wikiId=$option
       ;;
+    --fix)
+      mode=fix
+      ;;
   esac
   shift
 done
-
-echo "Starting to create a local docker copy of OPENRESEARCH ..."
-date
+timestamp=$(getIsoTime)
+echo "Starting to create a local docker copy of OPENRESEARCH  at $timestamp ..."
 getBackup $wikiId
+timestamp=$(getIsoTime)
+echo "Installing docker SemanticMediaWiki with extensions at $timestamp ..."
 installAndGetMediaWikiDocker
 setupWikiUser $wikiId
-copyWiki $wikiId $since
+echo "copying wiki content in mode $mode"
+copyWiki $wikiId $since $mode
 echo "Done with creating a local docker copy of OPENRESEARCH."
 date
