@@ -41,6 +41,12 @@ class HelperFunctions:
                 yield os.path.abspath(os.path.join(dirpath, f))
 
     @classmethod
+    def ensureDirectoryExists(cls,file_path):
+        directory = os.path.dirname(file_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+    @classmethod
     def getSMW_WikiUser(cls,wikiId="or",save=False):
         '''
         get semantic media wiki users for SemanticMediawiki.org and openresearch.org
