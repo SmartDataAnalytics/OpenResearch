@@ -106,7 +106,7 @@ class HelperFunctions:
 
     @classmethod
     def wikiSontoLOD(self, wiki_sample, entity="Event"):
-        regex= '{{ *%s(?:.|\r|\n)*\}}' % entity
+        regex= r'{{ *%s(?:.|\r|\n)*\}}' % entity
         re_groups=re.search(regex,wiki_sample)
         if re_groups is not None:
             property_list = re_groups.group().replace('}}', '').split('|')[1:]
