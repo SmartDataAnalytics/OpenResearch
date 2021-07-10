@@ -47,7 +47,7 @@ class TestIssue170(unittest.TestCase):
                 print(f"{editingRecord}->{rating}")
             foundPains.append(rating.pain)
         #print(foundPains)
-        self.assertEquals([3, 7, 7],foundPains)
+        self.assertEqual([3, 7, 7],foundPains)
         
     def testUserCount(self):
         # only needed to setup userrating yaml file
