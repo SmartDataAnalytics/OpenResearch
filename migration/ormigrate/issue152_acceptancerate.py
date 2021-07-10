@@ -8,7 +8,6 @@ from ormigrate.rating import Rating
 from ormigrate.fixer import PageFixer
 
 
-
 class AcceptanceRateFixer(PageFixer):
 
     '''

@@ -59,7 +59,7 @@ class WikiCFPIDFixer(PageFixer):
         Returns:
             wikiFile(WikiFile): A WikiFile object if fixer is applied, None otherwise
         """
-        wikiFileManager = WikiFileManager(self.wikiId)
+        wikiFileManager = WikiFileManager(self.wikiId,login=False)
         wikiFile = wikiFileManager.getWikiFile(pageTitle)
         event = str(wikiFile.wikiText)
         wikicfpid= self.getWikiCFPIdFromPage(event)
