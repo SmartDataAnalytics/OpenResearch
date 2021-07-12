@@ -9,4 +9,4 @@ wikitextparser>=0.47.4
 # https://pypi.org/project/wikirender/
 wikirender>=0.0.12
 # https://github.com/somnathrakshit/geograpy3
-geograpy3>=0.1.28
+geograpy3>=0.1.29

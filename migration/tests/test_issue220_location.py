@@ -5,6 +5,9 @@ from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import HelperFunctions as hf
 
 class TestLocationFixer(TestCase):
+    '''
+    test location fixer
+    '''
 
     def setUp(self) -> None:
         self.fixer=self.getFixer()
@@ -14,6 +17,9 @@ class TestLocationFixer(TestCase):
         return fixer
 
     def test_fixEventRecord(self):
+        '''
+        test fixing a single event record
+        '''
         event={
             "Acronym":"Test 2020",
             "Country":"Germany",
