@@ -11,7 +11,6 @@ class OpenResearch(object):
     OpenResearch Infrastructur definitions
     '''
 
-
     def __init__(self):
         '''
         Constructor

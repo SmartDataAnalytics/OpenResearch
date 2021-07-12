@@ -9,7 +9,6 @@ from pathlib import Path
 from os.path import expanduser
 from lodstorage.csv import CSV
 
-
 class EventCorpus(object):
     '''
     Towards a gold standard event corpus  and observatory ...
@@ -20,10 +19,11 @@ class EventCorpus(object):
         Constructor
         '''
         self.debug=debug
+                
 
     def fromWikiSonBackupFiles(self,backupdir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId='or',listOfItems=[]):
         '''
-               get events with series by knitting / linking the entities together
+            get events with series by knitting / linking the entities together
         '''
         self.eventList = EventList()
         self.eventList.debug = self.debug
