@@ -1,21 +1,33 @@
 #!/bin/bash
 #WF 2021-04-06
 # -rw-r--r--  1 wf  wheel  16632545 12 Jul 00:01 openresearchwikibackup.tgz
-wb=openresearchwikibackup.tgz
-cd /tmp
-if [ ! -f $wb ]
+
+getBackup() {
+  local l_wiki="$1"
+  local l_wb="$2"
+  local l_cd=$(pwd)
+  if [ ! -f $l_wb ]
+  then
+    curl https://confident.dbis.rwth-aachen.de/orintegrate/images/$l_wb -o $l_wb
+  else
+    echo "$l_cd/$l_wb exists"
+  fi
+  local l_wbd="wikibackup/$l_wiki"
+  if [ -d $l_wbd ]
+  then
+    echo "$l_cd/$l_wbd exists"
+  else
+    mkdir -p $l_wbd
+    cd $l_wbd
+    tar xfz $l_cd/$l_wb
+  fi
+}
+orroot=$HOME/.or
+if [ ! -d orroot ]
 then
-  curl https://confident.dbis.rwth-aachen.de/orintegrate/images/$wb -o $wb
-else
-  echo "$wb exists"
+  mkdir -p $orroot
 fi
-wbd=$HOME/wikibackup
-wiki=or
-if [ -d $wbd/$wiki ]
-then
-  echo "$wbd/$wiki exists"
-else
-  mkdir -p $wbd
-  cd $wbd
-  tar xfz /tmp/$wb
-fi
+cd $orroot
+getBackup or openresearchwikibackup.tgz
+cd $orroot
+getBackup orclone orclonewikibackup.tgz
