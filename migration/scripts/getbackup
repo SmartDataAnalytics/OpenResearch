@@ -1,5 +1,6 @@
 #!/bin/bash
 #WF 2021-04-06
+# -rw-r--r--  1 wf  wheel  16632545 12 Jul 00:01 openresearchwikibackup.tgz
 wb=openresearchwikibackup.tgz
 cd /tmp
 if [ ! -f $wb ]
