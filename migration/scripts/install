@@ -3,7 +3,7 @@
 os=$(uname -a)
 case $os in
   Darwin*)
-   pip="sudo -H pip"
+   pip="pip"
    install="sudo port install"
    ;;
   *)

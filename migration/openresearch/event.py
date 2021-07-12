@@ -65,7 +65,7 @@ class OREntityList(JSONAbleList):
         self.debug=False
         self.wikiClient=None
         self.wikiPush=None
-        self.wikiFileManger=None
+        self.wikiFileManager=None
         self.askExtra=""
 
     def getList(self):
@@ -252,8 +252,8 @@ class OREntityList(JSONAbleList):
             else:
                 wikiFile = WikiFile(filename,filepath,wikiRender)
                 wikiFileList.append(wikiFile)
-        self.wikiFileManger= WikiFileManager(wikiId,login=False)
-        LOD=self.wikiFileManger.convertWikiFilesToLOD(wikiFileList,wikiSonName)
+        self.wikiFileManager= WikiFileManager(wikiId,login=False)
+        LOD=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList,wikiSonName)
         self.fromLoD(LOD)
 
     def getLoD(self):
