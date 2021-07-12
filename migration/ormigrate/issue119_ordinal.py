@@ -24,6 +24,15 @@ class OrdinalFixer(PageFixer):
         super(OrdinalFixer, self).__init__(wikiClient)
         self.debug = debug
         self.restoreOut = restoreOut
+        
+    @staticmethod 
+    def fromWikiFileManager(wikiFileManager):
+        '''
+        construct me from the given wikiFileManager
+        '''
+        wikiClient=wikiFileManager.getWikiClient()
+        
+        pass
 
     def fixEventRecord(self,event:dict,lookup_dict: Dictionary, errors=None):
         if errors is None:

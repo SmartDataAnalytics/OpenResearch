@@ -4,14 +4,6 @@ Created on 06.04.2021
 @author: wf
 '''
 
-import os
-from os import walk,path
-import re
-from fnmatch import filter
-from sys import stdin
-import ntpath
-
-
 class PageFixer(object):
     '''
     helper fixing pages
@@ -27,69 +19,7 @@ class PageFixer(object):
             if 'wikiId' in self.wikiclient.wikiUser.__dict__:
                 self.wikiId=wikiClient.wikiUser.wikiId
 
-    def generateLink(self,page):
-        search=r".*%s/(.*)\.wiki" % self.wikiId
-        replace=r"%s\1" % self.baseUrl
-        alink=re.sub(search,replace,page)
-        alink=alink.replace(" ","_")
-        return alink
-
-    def getFixedPagePath(self,oldpath,fixType='Fixer'):
-        oldpath
-        home = path.expanduser("~")
-        fixedDir = '%s/wikibackup/%s/' % (home,fixType)
-        os.makedirs(fixedDir,exist_ok=True)
-        return fixedDir + ntpath.basename(oldpath)
-
-    def getAllPages(self, folderName:str=None):
-        '''
-        get all wiki pages
-        '''
-        home = path.expanduser("~")
-        allPages = []
-        backupPath='%s/wikibackup/%s/' % (home,self.wikiId)
-        if folderName is not None:
-            backupPath='%s/wikibackup/%s/' % (home,folderName)
-        for root, dirnames, filenames in walk(backupPath):
-            for filename in filter(filenames, '*.wiki'):
-                allPages.append(path.join(root, filename))
-        return allPages
-
-    def getAllPagesFromFile(self,file=stdin):
-        '''
-        Args:
-            file(obj): IO object to read file paths from
-        Returns:
-            listOfFiles(list): list of all file paths
-        '''
-        listOfFiles = file.readlines()
-        return listOfFiles
     
-    
-    def getNameValue(self,element,dostrip=True,separator="="):
-        '''
-        get a name value pair from a wikison element like |a=b
-        
-        Args:
-            element(str): the element to check
-            strip(bool): should spaces be removed
-            separator(str): the separator - default is "="
-        
-        Returns:
-            name(str): the name
-            value(str): the value
-        '''
-        if element.startswith("|"):
-            parts = element[1:].split(separator,1)
-            if len(parts)==2:
-                name=parts[0]
-                value=parts[1]
-                if dostrip:
-                    value=value.strip()
-                if len(value) == 0:
-                    return name,None
-                return name,value
-        return None,None
 
     def fixEventRecord(self):
         '''Base function to be overwritten by fixing class'''

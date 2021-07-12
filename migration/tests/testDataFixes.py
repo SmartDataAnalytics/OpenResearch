@@ -4,10 +4,9 @@ Created on 2021-04-02
 @author: wf
 '''
 import unittest
-import io
 from os import path
 from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
-from ormigrate.issue119_ordinal import OrdinalFixer
+
 from ormigrate.issue71_date import DateFixer
 from ormigrate.issue163_series import SeriesFixer
 from ormigrate.issue166_cfp import WikiCFPIDFixer
@@ -31,10 +30,6 @@ class TestDataFixes(unittest.TestCase):
 
     def getDateFixer(self):
         fixer = DateFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
-        return fixer
-
-    def getOrdinalFixer(self):
-        fixer = OrdinalFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
         return fixer
 
     def getPageFixer(self):
@@ -69,41 +64,10 @@ class TestDataFixes(unittest.TestCase):
         for date in sampledates:
             self.assertEqual('2020/02/20',hf.parseDate(date))
 
-    '''
-     @TODO       
-    # def testDirectoryExists(self):
-    #     ensureDirectoryExists('./test')
-    #     self.assertTrue(os.path.exists('./test'))
-    #     os.remove('./test')
-    '''
-    def testNameValue(self):
-        '''
-        test the name value helper function
-        '''
-        nameValues=["|a=1","|b= a=c ","|w|b",'|a=']
-        pageFixer=self.getPageFixer()
-        for i,nameValue in enumerate(nameValues):
-            name,value=pageFixer.getNameValue(nameValue)
-            if self.debug:
-                print("%d: %s=%s" % (i,name,value))
-            if i==0: self.assertEqual(name,"a") 
-            if i==1: self.assertEqual(value,"a=c")
-            if i==2: self.assertIsNone(value)
-            if i==3: self.assertIsNone(value)
-        
 
-    def testGetAllPagesFromFile(self):
-        '''
-        test utility function to get pageTitles from a file e.g. stdin
-        '''
-        pageFixer=self.getPageFixer()
-        # we'd love to test form a string
-        # see https://stackoverflow.com/a/141451/1497139
-        pageTitles="""Concept:Topic
-Help:Topic"""
-        fstdin = io.StringIO(pageTitles)
-        pageTitleList=pageFixer.getAllPagesFromFile(fstdin)
-        self.assertEqual(2,len(pageTitleList))
+    
+
+    
 
 
     def testIssue152(self):
@@ -146,36 +110,7 @@ Help:Topic"""
         lookup_dict=hf.loadDictionary
         self.assertIsNotNone(lookup_dict)
 
-    def testIssue119(self):
-        '''
-            test for fixing Ordinals not a number
-            https://github.com/SmartDataAnalytics/OpenResearch/issues/119
-        '''
-        lookup_dict = hf.loadDictionary()
-        eventRecords= [{'Ordinal':2},
-                       {'Ordinal':None},
-                       {'Ordinal':'2nd'},
-                       {'Ordinal':'test'}]
-        expectedPainRatings=[1, 4, 5, 7]
-        expectedOrdinals= [2, None, 2, 'test']
-        painRatings = []
-        ordinals=[]
-        fixer=self.getOrdinalFixer()
-        for event in eventRecords:
-            painRating = fixer.getRating(event)
-            res, err = fixer.fixEventRecord(event,lookup_dict)
-            ordinals.append(res['Ordinal'])
-            self.assertIsNotNone(painRating)
-            painRatings.append(painRating.pain)
-        self.assertEqual(expectedPainRatings,painRatings)
-        self.assertEqual(expectedOrdinals, ordinals)
-        types = Types("Event")
-        samples = Event.getSampleWikiSon()
-        fixed=fixer.convertOrdinaltoCardinalWikiFile('sample', samples[0], lookup_dict)
-        fixed_dic=hf.wikiSontoLOD(fixed)
-        types.getTypes("events", fixed_dic, 1)
-        self.assertTrue(types.typeMap['events']['Ordinal'] == 'int')
-
+  
     def testIssue71(self):
         '''
             test for fixing invalid dates
