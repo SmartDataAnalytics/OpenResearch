@@ -105,11 +105,6 @@ Help:Topic"""
         pageTitleList=pageFixer.getAllPagesFromFile(fstdin)
         self.assertEqual(2,len(pageTitleList))
 
-    def testFixedPath(self):
-        fixer = self.getDateFixer()
-        dirname= 'Fixed'
-        fixedPath = fixer.getFixedPagePath('/asd/asd/asd/test.wiki',dirname)
-        self.assertTrue(fixedPath == '%s/wikibackup/%s/%s' % (path.expanduser("~"), dirname, 'test.wiki'))
 
     def testIssue152(self):
         '''

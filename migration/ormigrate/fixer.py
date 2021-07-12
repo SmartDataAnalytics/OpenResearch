@@ -10,12 +10,11 @@ import re
 from fnmatch import filter
 from sys import stdin
 import ntpath
-import wikitextparser as wtp
 
 
 class PageFixer(object):
     '''
-    helper fixing page
+    helper fixing pages
     '''
 
     def __init__(self,wikiClient,debug=False):
