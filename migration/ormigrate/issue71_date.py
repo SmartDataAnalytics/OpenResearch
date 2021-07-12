@@ -87,10 +87,6 @@ class DateFixer(PageFixer):
             painrating=Rating(3,Rating.missing,f'Start Date is there but end date is not')
         return painrating
 
-
-
-
-
 if __name__ == "__main__":
     fixer = DateFixer()
     fixer.debug = True
