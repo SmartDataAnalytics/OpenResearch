@@ -3,22 +3,29 @@ Created on 06.04.2021
 
 @author: wf
 '''
-
-class PageFixer(object):
+from wikifile.wikiFileManager import WikiFileManager
+from wikifile.cmdline import CmdLineAble
+class PageFixer(CmdLineAble):
     '''
-    helper fixing pages
+    general fixer for wiki pages
     '''
 
-    def __init__(self,wikiClient,debug=False):
+    def __init__(self,wikiFileManager:WikiFileManager,debug=False):
         '''
         Constructor
         '''
         self.debug=debug
-        self.wikiclient = wikiClient
+        self.wikiclient = wikiFileManager.getWikiClient()
         if 'wikiUser' in self.wikiclient.__dict__:
             if 'wikiId' in self.wikiclient.wikiUser.__dict__:
-                self.wikiId=wikiClient.wikiUser.wikiId
-
+                self.wikiId=self.wikiClient.wikiUser.wikiId
+                
+    def cmdLine(self,pageFixerList:list):
+        '''
+        Args:
+            pageFixerList(list): a list of page fixers to apply
+        '''
+        
     
 
     def fixEventRecord(self):
@@ -97,23 +104,7 @@ class PageFixer(object):
         for page, event in self.getAllPageTitles4Topic("Event"):
             checkFunc(page, event,*args)
 
-    def getAllPageTitles4Topic(self,topicName="Event"):
-        '''
-        get all pages for the given topicName
-        
-        Args:
-            topicName(str): the topic to "query" for
-            
-        Returns:
-            list: the list of pageTitles
-        '''
-        for page in self.getAllPages():
-            with open(page,'r') as f:
-                event =f.read()
-                wikison="{{%s" % topicName
-                if wikison in event:
-                    yield page,event
-
+    
     @classmethod
     def rateWithFixers(cls,pageFixerList,entity,entityRecord):
         '''
