@@ -5,7 +5,6 @@ Created on 2021-04-16
 '''
 from openresearch.event import EventList,EventSeriesList
 from ormigrate.toolbox import HelperFunctions as hf
-from pathlib import Path
 from os.path import expanduser
 from lodstorage.csv import CSV
 
@@ -21,7 +20,7 @@ class EventCorpus(object):
         self.debug=debug
                 
 
-    def fromWikiSonBackupFiles(self,backupdir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId='or',listOfItems=[]):
+    def fromWikiFileManager(self,wikiFileManager):
         '''
             get events with series by knitting / linking the entities together
         '''

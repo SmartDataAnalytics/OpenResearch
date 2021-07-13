@@ -234,25 +234,12 @@ class OREntityList(JSONAbleList):
         return errors
 
 
-    def fromWikiSonBackupFiles(self,wikiSonName,backupdir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId= 'or',listOfItems=[]):
+    def fromWikiFileManager(self,wikiFileManager):
         """
         Create me from the backup wiki files of OR Entity
         ToDo: Migrate this functionality to WikiFileManager class in wikirender
         """
-        filepaths = list(hf.absoluteFilePaths(backupdir))
-        wikiRender = WikiRender()
-        wikiFileList=[]
-        for file in filepaths:
-            filename = ntpath.basename(file).replace('.wiki','')
-            filepath = ntpath.dirname(file)
-            if len(listOfItems) > 0:
-                if filename in listOfItems:
-                    wikiFile = WikiFile(filename, filepath, wikiRender)
-                    wikiFileList.append(wikiFile)
-            else:
-                wikiFile = WikiFile(filename,filepath,wikiRender)
-                wikiFileList.append(wikiFile)
-        self.wikiFileManager= WikiFileManager(wikiId,login=False)
+        self.wikiFileManager= wikiFileManager
         LOD=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList,wikiSonName)
         self.fromLoD(LOD)
 
