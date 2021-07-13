@@ -31,25 +31,33 @@ class PageFixer(object):
         cmdLine=CmdLineAble()
         cmdLine.getParser()
         if argv is None:
-            argv=sys.argv[:1]
+            argv=sys.argv[1:]
         args = cmdLine.parser.parse_args(argv)
         cmdLine.initLogging(args)
+        if args.debug:
+            print("Starting pageFixer")
         wikiFileManager=WikiFileManager(sourceWikiId=args.source,wikiTextPath=args.backupPath,login=False,debug=args.debug)
-        wikiFiles=wikiFileManager.getAllWikiFiles(wikiFileManager.wikiTextPath)
-        # TODO remove this work around
-        #wikiFiles=wikiFileManager.getAllWikiFilesForArgs(args)
-        wikiFilesToWorkon={}
-        for wikiFile in wikiFiles.values():
-            pageTitle=wikiFile.getPageTitle().replace(".wiki","")
-            if pageTitle in args.pages:
-                wikiFilesToWorkon[pageTitle]=wikiFile
-        
+        wikiFilesToWorkon=wikiFileManager.getAllWikiFilesForArgs(args)
+        if args.debug:
+            print(f"found {len(wikiFilesToWorkon)} pages to work on")
+       
+        errors=[]
+        ratings={}
         for pageFixerClass in pageFixerClassList:
             pageFixer=pageFixerClass(wikiFileManager=wikiFileManager)
             for wikiFile in wikiFilesToWorkon.values():
-                # call pageFixer with wikiFile argument ...
-                pass
-
+                try:
+                    rating = pageFixer.getRatingFromWikiFile(wikiFile)
+                    ratings[wikiFile.getPageTitle()]=rating
+                except Exception as e:
+                    errors.append({'error':e,'fixer':pageFixer,'pageTitle':wikiFile.getPageTitle()})
+        if len(errors)>0 and args.debug:
+            print(errors) 
+        if args.debug:
+            for i,pageTitle in enumerate(ratings):
+                print(f"{i+1}:{pageTitle}->{ratings[pageTitle]}")
+        return ratings,errors
+     
     def fixEventRecord(self):
         '''Base function to be overwritten by fixing class'''
         return

@@ -13,15 +13,12 @@ class TestNullValueFixer(unittest.TestCase):
     Test the fixer for Fixer for https://github.com/SmartDataAnalytics/OpenResearch/issues/150
     '''
 
-
     def setUp(self):
         self.debug=True
         pass
 
-
     def tearDown(self):
         pass
-
 
     def testNullValueFixer(self):
         '''
@@ -41,9 +38,14 @@ class TestNullValueFixer(unittest.TestCase):
         args.append(wikiTextPath)
         if self.debug:
             print(args)
-        PageFixer.cmdLine([NullValueFixer],args)    
-        pass
-
+        ratings,errors=PageFixer.cmdLine([NullValueFixer],args)   
+        if len(errors)>0:
+            print(errors) 
+        self.assertEqual(0,len(errors))
+        if self.debug:
+            for i,pageTitle in enumerate(ratings):
+                print(f"{i+1}:{pageTitle}->{ratings[pageTitle]}")
+    
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
