@@ -10,15 +10,21 @@ class LocationFixer(PageFixer):
     REGION = "State"
     CITY = "City"
 
-    def __init__(self, wikiClient, debug=False):
+    def __init__(self, wikiClient, debug=False, locationContext:LocationContext=None):
         '''
         Constructor
+
+        Args:
+            locationContext(LocationContext): Provide a LocationContext the fixer should. If not provided a default LocationContext is used.
+            debug(bool): If True additional debug messages will be printed. Default is False
         '''
         # call super constructor
         super(LocationFixer, self).__init__(wikiClient)
         self.debug = debug
-        #self.locationCorpus=LocationCorpus()
-        self.locationContext=LocationContext.fromJSONBackup()
+        if locationContext is None:
+            self.locationContext=LocationContext.fromJSONBackup()
+        else:
+            self.locationContext=locationContext
 
     def fixEventRecords(self, events:list):
         """
