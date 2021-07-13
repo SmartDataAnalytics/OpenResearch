@@ -34,11 +34,13 @@ class PageFixer(object):
             argv=sys.argv[:1]
         args = cmdLine.parser.parse_args(argv)
         cmdLine.initLogging(args)
-        wikiFileManager=WikiFileManager(sourceWikiId=args.wikiId,login=False,debug=args.debug)
+        wikiFileManager=WikiFileManager(sourceWikiId=args.wikiId,wikiTextPath=args.wikiTextPath,login=False,debug=args.debug)
+        wikiFiles=wikiFileManager.getAllWikiFilesForArgs(args)
         for pageFixerClass in pageFixerClassList:
-            
-        
-    
+            pageFixer=pageFixerClass(wikiFileManager=wikiFileManager)
+            for wikiFile in wikiFiles:
+                # call pageFixer with wikiFile argument ...
+                pass
 
     def fixEventRecord(self):
         '''Base function to be overwritten by fixing class'''
