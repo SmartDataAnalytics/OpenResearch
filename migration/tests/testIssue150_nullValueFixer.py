@@ -5,6 +5,8 @@ Created on 2021-07-13
 '''
 import unittest
 import os
+from ormigrate.fixer import PageFixer
+from ormigrate.issue150_nullvalue import NullValueFixer
 
 class TestNullValueFixer(unittest.TestCase):
     '''
@@ -39,8 +41,8 @@ class TestNullValueFixer(unittest.TestCase):
         args.append(wikiTextPath)
         if self.debug:
             print(args)
+        PageFixer.cmdLine([NullValueFixer],args)    
         pass
-
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

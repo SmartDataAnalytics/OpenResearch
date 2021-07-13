@@ -20,7 +20,7 @@ class PageFixer(object):
         self.wikiclient = wikiFileManager.getWikiClient()
         if 'wikiUser' in self.wikiclient.__dict__:
             if 'wikiId' in self.wikiclient.wikiUser.__dict__:
-                self.wikiId=self.wikiClient.wikiUser.wikiId
+                self.wikiId=self.wikiclient.wikiUser.wikiId
     
     @classmethod            
     def cmdLine(cls,pageFixerClassList:list,argv=None):
@@ -34,11 +34,19 @@ class PageFixer(object):
             argv=sys.argv[:1]
         args = cmdLine.parser.parse_args(argv)
         cmdLine.initLogging(args)
-        wikiFileManager=WikiFileManager(sourceWikiId=args.wikiId,wikiTextPath=args.wikiTextPath,login=False,debug=args.debug)
-        wikiFiles=wikiFileManager.getAllWikiFilesForArgs(args)
+        wikiFileManager=WikiFileManager(sourceWikiId=args.source,wikiTextPath=args.backupPath,login=False,debug=args.debug)
+        wikiFiles=wikiFileManager.getAllWikiFiles(wikiFileManager.wikiTextPath)
+        # TODO remove this work around
+        #wikiFiles=wikiFileManager.getAllWikiFilesForArgs(args)
+        wikiFilesToWorkon={}
+        for wikiFile in wikiFiles.values():
+            pageTitle=wikiFile.getPageTitle().replace(".wiki","")
+            if pageTitle in args.pages:
+                wikiFilesToWorkon[pageTitle]=wikiFile
+        
         for pageFixerClass in pageFixerClassList:
             pageFixer=pageFixerClass(wikiFileManager=wikiFileManager)
-            for wikiFile in wikiFiles:
+            for wikiFile in wikiFilesToWorkon.values():
                 # call pageFixer with wikiFile argument ...
                 pass
 
