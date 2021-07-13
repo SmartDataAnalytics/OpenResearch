@@ -5,7 +5,9 @@ Created on 06.04.2021
 '''
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
-class PageFixer(CmdLineAble):
+import sys
+
+class PageFixer(object):
     '''
     general fixer for wiki pages
     '''
@@ -19,12 +21,22 @@ class PageFixer(CmdLineAble):
         if 'wikiUser' in self.wikiclient.__dict__:
             if 'wikiId' in self.wikiclient.wikiUser.__dict__:
                 self.wikiId=self.wikiClient.wikiUser.wikiId
-                
-    def cmdLine(self,pageFixerList:list):
+    
+    @classmethod            
+    def cmdLine(cls,pageFixerClassList:list,argv=None):
         '''
         Args:
             pageFixerList(list): a list of page fixers to apply
         '''
+        cmdLine=CmdLineAble()
+        cmdLine.getParser()
+        if argv is None:
+            argv=sys.argv[:1]
+        args = cmdLine.parser.parse_args(argv)
+        cmdLine.initLogging(args)
+        wikiFileManager=WikiFileManager(sourceWikiId=args.wikiId,login=False,debug=args.debug)
+        for pageFixerClass in pageFixerClassList:
+            
         
     
 

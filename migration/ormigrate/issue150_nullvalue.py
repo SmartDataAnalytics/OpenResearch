@@ -17,4 +17,4 @@ class NullValueFixer(PageFixer):
         super(NullValueFixer, self).__init__(wikiFileManager)
         
 if __name__ == '__main__':
-    PageFixer.mainInstance([NullValueFixer])
+    PageFixer.cmdLine([NullValueFixer])

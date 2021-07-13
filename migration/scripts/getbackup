@@ -17,6 +17,10 @@ getBackup() {
   then
     echo "$l_cd/$l_wbd exists"
   else
+    if [ ! -d wikibackup ]
+    then
+      mkdir wikibackup
+    fi
     cd wikibackup
     echo "extracting $l_cd/$l_wb"
     tar xfz $l_cd/$l_wb
