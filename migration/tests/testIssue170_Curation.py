@@ -51,7 +51,7 @@ class TestIssue170(unittest.TestCase):
         
     def testUserCount(self):
         # only needed to setup userrating yaml file
-        eventCorpus=Corpus.getEventCorpus(debug=self.debug,force=True)
+        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
         userLookup=eventCorpus.eventList.getLookup("lastEditor",withDuplicates=True)
         if self.debug:
             print (f"{len(userLookup)} users")
