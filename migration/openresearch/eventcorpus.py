@@ -7,6 +7,7 @@ from openresearch.event import EventList,EventSeriesList
 from ormigrate.toolbox import HelperFunctions as hf
 from os.path import expanduser
 from lodstorage.csv import CSV
+from lodstorage.lod import LOD
 
 class EventCorpus(object):
     '''
@@ -26,16 +27,16 @@ class EventCorpus(object):
         '''
         self.eventList = EventList()
         self.eventList.debug = self.debug
-        self.eventList.fromWikiSonBackupFiles("Event",backupdir=backupdir,wikiId=wikiId,listOfItems=listOfItems)
+        self.eventList.fromWikiFileManager(wikiFileManager)
 
         self.eventSeriesList = EventSeriesList()
         self.eventSeriesList.debug = self.debug
-        self.eventSeriesList.fromWikiSonBackupFiles("Event series",backupdir=backupdir,wikiId=wikiId,listOfItems=listOfItems)
-
+        self.eventSeriesList.fromWikiFileManager(wikiFileManager)
+        
         # get foreign key hashtable
-        self.seriesLookup = self.eventList.getLookup("Series", withDuplicates=True)
+        self.seriesLookup = LOD.getLookup(self.eventList,"Series", withDuplicates=True)
         # get "primary" key hashtable
-        self.seriesAcronymLookup = self.eventSeriesList.getLookup("acronym", withDuplicates=True)
+        self.seriesAcronymLookup = LOD.getLookup(self.eventSeriesList,"acronym", withDuplicates=True)
 
         for seriesAcronym in self.seriesLookup.keys():
             if seriesAcronym in self.seriesAcronymLookup:
