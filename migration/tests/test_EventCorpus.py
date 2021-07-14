@@ -19,13 +19,11 @@ class TestEventCorpus(unittest.TestCase):
 
     def tearDown(self):
         pass
-
-
-    def testEventCorpusFromWikiUser(self):
+    
+    def checkEventCorpus(self,eventCorpus):
         '''
-        test the event corpus
+        check the given eventCorpus
         '''
-        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
         listOfEvents=eventCorpus.eventList.getList()
         withSeries=0
         for event in listOfEvents:
@@ -34,6 +32,14 @@ class TestEventCorpus(unittest.TestCase):
         if self.debug:
             print(f"inEventseries: {withSeries}")
         self.assertTrue(withSeries>4500)
+
+    def testEventCorpusFromWikiUser(self):
+        '''
+        test the event corpus
+        '''
+        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
+        self.checkEventCorpus(eventCorpus)
+        
         
     def testEventCorpusFromWikiUserCache(self):
         """
@@ -47,7 +53,8 @@ class TestEventCorpus(unittest.TestCase):
         elapsed = time.time() - startTime
         if profile:
             print(f"getting EventCorpus from Cache took {elapsed:5.1f} s")
-
+        self.checkEventCorpus(eventCorpus)
+        
 
     def testEventCorpusFromWikiFileManager(self):
         """
@@ -59,6 +66,7 @@ class TestEventCorpus(unittest.TestCase):
         elapsed = time.time() - startTime
         if profile:
             print(f"getting EventCorpus from wikiText files took {elapsed:5.1f} s")
+        self.checkEventCorpus(eventCorpus)
 
     def testMatchingSetsForEventCorpus(self):
         """
