@@ -3,7 +3,7 @@ Created on 13.07.2021
 
 @author: wf
 '''
-from ormigrate.fixer import PageFixer
+from ormigrate.fixer import PageFixerManager,PageFixer
 from wikifile.wikiRender import WikiFile
 from ormigrate.rating import Rating
 
@@ -43,4 +43,4 @@ class NullValueFixer(PageFixer):
         return rating
         
 if __name__ == '__main__':
-    PageFixer.cmdLine([NullValueFixer])
+    PageFixerManager.runCmdLine([NullValueFixer])
