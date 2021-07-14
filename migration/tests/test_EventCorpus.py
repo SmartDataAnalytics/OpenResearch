@@ -60,6 +60,13 @@ class TestEventCorpus(unittest.TestCase):
         if profile:
             print(f"getting EventCorpus from wikiText files took {elapsed:5.1f} s")
 
+    def testMatchingSetsForEventCorpus(self):
+        """
+        test the different sets of Event Corpus and check the similarities between them
+        """
+        pass
+
+    
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
