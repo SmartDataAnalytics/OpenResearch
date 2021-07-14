@@ -6,6 +6,8 @@ Created on 2021-04-06
 from lodstorage.jsonable import JSONAble,JSONAbleList
 from collections import OrderedDict
 from datetime import datetime
+
+from lodstorage.lod import LOD
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 from wikibot.wikipush import WikiPush
@@ -207,8 +209,26 @@ class OREntityList(JSONAbleList):
         """
         self.wikiFileManager= wikiFileManager
         wikiFileList=wikiFileManager.getAllWikiFiles()
-        LOD=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList,self.getEntityName())
+        LOD=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList.values(),self.getEntityName())
+        self.noramlizeLOD(LOD)
         self.fromLoD(LOD)
+
+    def noramlizeLOD(self, lod:list):
+        '''
+        normalize the given LOD to the properties in the propertyLookupList
+        '''
+        if 'propertyLookupList' in self.__dict__:
+            propertyLookupList=self.__dict__['propertyLookupList']
+            lookup=LOD.getLookup(propertyLookupList, 'prop')[0]
+            for record in lod:
+                if not isinstance(record, dict):
+                    continue
+                for key in lookup:
+                    if key in record:
+                        newKey=lookup[key].get('name')
+                        if newKey is not None:
+                            record[newKey]=record[key]
+                            del record[key]
 
     def getLoD(self):
         """
@@ -384,6 +404,9 @@ class EventList(OREntityList):
             { 'prop':'Has_location_country','name': 'country'},
             { 'prop':'Has_location_state',  'name': 'region'},
             { 'prop':'Has_location_city',   'name': 'city'},
+            {'prop': 'Country', 'name': 'country'},
+            {'prop': 'State', 'name': 'region'},
+            {'prop': 'City', 'name': 'city'},
             { 'prop':'Accepted_papers',     'name': 'acceptedPapers'},
             { 'prop':'Submitted_papers',    'name': 'submittedPapers'}
         ]               
