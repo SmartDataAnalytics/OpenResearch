@@ -1,21 +1,37 @@
-from unittest import TestCase
-from tests.corpus import Corpus
+import os
+
 from openresearch.eventcorpus import EventCorpus
 from ormigrate.EventLocationContext import EventLocationContext
+from wikifile.wikiFileManager import WikiFileManager
+from tests.corpus import Corpus
+from unittest import TestCase
+from ormigrate.toolbox import HelperFunctions as hf
 
 
 class TestEventLocationContext(TestCase):
 
-    def setUp(self) -> None:
-        self.eventCorpus=Corpus.getEventCorpus()
-        self.eventLocationContext=EventLocationContext()
+    def setUp(self, wikiId='or') -> None:
+        home = os.path.expanduser("~")
+        wikiTextPath = f"{home}/.or/wikibackup/{wikiId}"
+        targetWikiTextPath = f"{home}/.or/generated/Location"
+        self.wikiFileManager = WikiFileManager(sourceWikiId=wikiId,
+                                               wikiTextPath=wikiTextPath,
+                                               targetWikiTextPath=targetWikiTextPath)
+        eventCorpus = EventCorpus(debug=True)
+        eventCorpus.fromWikiFileManager(self.wikiFileManager)
+
+        self.eventCorpus=eventCorpus
+        eventCorpus.eventList.storeToJsonFile(f"{home}/.or/Event_wikiFileBackup")
+
+        self.eventLocationContext=EventLocationContext(wikiFileManager=self.wikiFileManager)
 
     def test_generateLocationPages(self):
         """
         tests if the location page is generated correctly
         """
+        print("Generate country location pages")
         countries=self.eventLocationContext.locationContext.countries
-        self.eventLocationContext.generateLocationPages(countries, "/tmp/wikirender", overwrite=True)
+        self.eventLocationContext.generateLocationPages(countries, overwrite=True)
         # ToDo: test if country pages are generated correctly
 
     def test_generateORLocationPages(self):
@@ -24,7 +40,8 @@ class TestEventLocationContext(TestCase):
         Difference to LocationContext is the reduced amount of cities that are generated
         Note: Not running in CI since it generates a lot of pages and uses functionalities which are test in the other tests
         """
-        self.eventLocationContext.generateORLocationPages(self.eventCorpus.eventList,"/tmp/wikirender",True, 10)
+        print("Generate OPENRESEARCH location pages (Limited to 100 events)")
+        self.eventLocationContext.generateORLocationPages(self.eventCorpus.eventList.events[:100], overwrite=True)
         # ToDo: test if generated correctly
 
     def test__add_page_title_to_labels(self):

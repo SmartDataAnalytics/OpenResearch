@@ -1,10 +1,10 @@
 from geograpy.locator import LocationContext, Location, City, Country, Region
-from lodstorage.lod import LOD
-from wikifile.wikiFile import WikiFile
-from wikifile.wikiRender import WikiRender
-from collections import Counter
 from ormigrate.issue220_location import LocationFixer
+from wikifile.wikiFileManager import WikiFileManager
 from ormigrate.toolbox import HelperFunctions as hf
+from wikifile.wikiFile import WikiFile
+from collections import Counter
+from lodstorage.lod import LOD
 
 
 class EventLocationContext(object):
@@ -12,13 +12,14 @@ class EventLocationContext(object):
     Extends the geograpy3 LocationContext with methods required to fix the events and location entries in OPENRESEARCH
     '''
 
-    def __init__(self):
+    def __init__(self, wikiFileManager:WikiFileManager):
         '''
         Initalize the object by creating a LocationContext and enhancing it with the openresearch location nameing
         convention (or names assigned as label to each location)
         '''
         self.locationContext=LocationContext.fromJSONBackup()
-        self.locationFixer=LocationFixer(hf.getWikiClient(save=hf.inPublicCI()))
+        self.wikiFileManager=wikiFileManager
+        self.locationFixer=LocationFixer(self.wikiFileManager)
         self._addORLocationLabels()
 
     def getSamples(self)->list:
@@ -44,18 +45,18 @@ class EventLocationContext(object):
         for locations in self.locationContext.countries, self.locationContext.regions, self.locationContext.cities:
             for location in locations:
                 EventLocationContext._addPageTitleToLabels((location))
+                EventLocationContext._addCommonNamesToLabels((location))
 
-    def generateORLocationPages(self, events:list, path:str, overwrite:bool=False, limit:int=None):
+    def generateORLocationPages(self, events:list, overwrite:bool=False, limit:int=None):
         '''
 
         Args:
             events(list): List of events for which the needed Location pages are generated
-            path(str): Path were the generated page should be stored
             overwrite(bool): If False the generated page is only saved if the page already exists. Otherwise save the file even if it does not exist already.
-            limit(bool): Number of most used cities for which the citites and regions should be generated. Does not affect the generated countries. If None generate city and region for all used cities.
+            limit(bool): Number of most used cities for which the cities and regions should be generated. Does not affect the generated countries. If None generate city and region for all used cities.
         '''
         # Generate country location pages
-        self.generateLocationPages(self.locationContext.countries, path, overwrite)
+        self.generateLocationPages(self.locationContext.countries, overwrite)
         # Fix locations of the event → Normalized location names afterwards
         self.locationFixer.fixEvents(events)
 
@@ -70,46 +71,41 @@ class EventLocationContext(object):
         # Generate city location page if city is recognized and add region of the city to regions
         for cityName in usedCities:
             possibleCities=self.locationContext.getCities(cityName)
-            if possibleCities is None:
+            if possibleCities is None or possibleCities == []:
                 print(f"City {cityName} not recognized by LocationContext")
                 pass
-            elif len(possibleCities)==1:
-                location=possibleCities.pop(0)
-                regions.add(location.region)
-                self.generateLocationPage(location, path, overwrite)
             else:
-                print(f"City name '{cityName}' should be fixed and thus unique")
+                location=max(possibleCities, key=lambda city: int(city.population) if 'population' in city.__dict__ and city.population is not None else 0)
+                regions.add(location.region)
+                self.generateLocationPage(location, overwrite)
         # Generate region pages
         for region in regions:
-            self.generateLocationPage(region, path, overwrite)
+            self.generateLocationPage(region, overwrite)
 
 
 
-    def generateLocationPages(self, data:list, path:str, overwrite:bool=False):
+    def generateLocationPages(self, data:list,overwrite:bool=False):
         '''
         Generates for the given list of locations the corresponding location wiki pages and saves it under the given path.
 
         Args:
             data(list): List of Locations for which the pages should be generated
-            path(str): Path were the generated page should be stored
             overwrite(bool): If False the generated page is only saved if the page already exists. Otherwise save the file even if it does not exist already.
         '''
         for location in data:
-            self.generateLocationPage(location, path, overwrite)
+            self.generateLocationPage(location, overwrite)
 
 
-    def generateLocationPage(self, location:Location, path:str, overwrite:bool=False):
+    def generateLocationPage(self, location:Location, overwrite:bool=False):
         '''
         Generates the wiki page corresponding to the given location and saves it under the given path.
 
         Args:
             location(Location): Location for which the page should be generated
-            path(str): Path were the generated page should be stored
             overwrite(bool): If False the generated page is only saved if the page already exists. Otherwise save the file even if it does not exist already.
         '''
-        wikiRender = WikiRender()
         pageTitle = LocationFixer.getPageTitle(location)
-        wikiFile = WikiFile(name=pageTitle, wikiText="", path=path, wiki_render=wikiRender)
+        wikiFile = WikiFile(name=pageTitle, wikiText="", wikiFileManager=self.wikiFileManager)
         locationFields = LOD.getFields(self.getSamples())
         locationData = {}
         for field in locationFields:
@@ -127,10 +123,10 @@ class EventLocationContext(object):
                 elif isinstance(location, Region):
                     partOf = location.country.iso
                 elif isinstance(location, City):
-                    partof = location.region.iso.replace('-', '/')
+                    partOf = location.region.iso.replace('-', '/')
                 locationData[field] = partOf
         wikiFile.add_template(template_name="Location", data=locationData)
-        wikiFile.save_to_file(overwrite=True)
+        wikiFile.save_to_file(overwrite=overwrite)
 
     @staticmethod
     def getFieldCounter(lod: list, *field:str):
@@ -161,11 +157,29 @@ class EventLocationContext(object):
         Adds the pageTitle of the given location to the labels of the given location
         '''
         pageTitle=LocationFixer.getPageTitle(location)
-        if 'labels' in location.__dict__:
-            labels=location.__dict__['labels']
-            if isinstance(labels, list):
-                labels.append(pageTitle)
+        EventLocationContext._addLabelToLocation(location, pageTitle)
+
+    @staticmethod
+    def _addCommonNamesToLabels(location:Location):
+        '''
+        Add commonly used names to the labels
+        '''
+        if isinstance(location, Country):
+            label=f"Category:{location.name}"
+            EventLocationContext._addLabelToLocation(location, label)
+
+    @staticmethod
+    def _addLabelToLocation(location:Location, *label:str):
+        '''
+        Adds the given labels to the given location
+        '''
+        for l in label:
+            if 'labels' in location.__dict__:
+                labels=location.__dict__['labels']
+                if isinstance(labels, list):
+                    labels.append(l)
+                else:
+                    labels=[l, labels]
+                location.__dict__['labels']=labels
             else:
-                labels=[pageTitle, labels]
-        else:
-            location.__dict__['labels']=[pageTitle]
+                location.__dict__['labels']=[l]

@@ -1,6 +1,8 @@
+from geograpy.locator import LocationContext, Location, City, Country, Region
+from wikifile.wikiFileManager import WikiFileManager
 from openresearch.event import Event
 from ormigrate.fixer import PageFixer
-from geograpy.locator import LocationContext, Location, City, Country, Region
+
 
 class LocationFixer(PageFixer):
     '''
@@ -10,16 +12,17 @@ class LocationFixer(PageFixer):
     REGION = "State"
     CITY = "City"
 
-    def __init__(self, wikiClient, debug=False, locationContext:LocationContext=None):
+    def __init__(self, wikiFileManager:WikiFileManager, debug=False, locationContext:LocationContext=None):
         '''
         Constructor
 
         Args:
+            wikiFileManager(WikiFileManager): WikiFileManager defining source and target location of the WikiTextFiles
             locationContext(LocationContext): Provide a LocationContext the fixer should. If not provided a default LocationContext is used.
             debug(bool): If True additional debug messages will be printed. Default is False
         '''
         # call super constructor
-        super(LocationFixer, self).__init__(wikiClient)
+        super(LocationFixer, self).__init__(wikiFileManager)
         self.debug = debug
         if locationContext is None:
             self.locationContext=LocationContext.fromJSONBackup()

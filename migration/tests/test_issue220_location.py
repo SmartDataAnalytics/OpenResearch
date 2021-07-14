@@ -1,8 +1,9 @@
+import os
 from unittest import TestCase
 from geograpy.locator import LocationContext
+from wikifile.wikiFileManager import WikiFileManager
 from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
-from ormigrate.toolbox import HelperFunctions as hf
 
 class TestLocationFixer(TestCase):
     '''
@@ -13,7 +14,11 @@ class TestLocationFixer(TestCase):
         self.fixer=self.getFixer()
     
     def getFixer(self):
-        fixer=LocationFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
+        wikiId = 'or'
+        home = os.path.expanduser("~")
+        wikiTextPath = f"{home}/.or/wikibackup/{wikiId}"
+        wikiFileManager = WikiFileManager(sourceWikiId=wikiId, wikiTextPath=wikiTextPath)
+        fixer=LocationFixer(wikiFileManager=wikiFileManager)
         return fixer
 
     def test_fixEventRecord(self):
