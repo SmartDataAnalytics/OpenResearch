@@ -19,7 +19,7 @@ class TestEventCorpus(unittest.TestCase):
         pass
 
 
-    def testEventCorpus(self):
+    def testEventCorpusFromWikiUser(self):
         '''
         test the event corpus
         '''
@@ -32,6 +32,13 @@ class TestEventCorpus(unittest.TestCase):
         if self.debug:
             print(f"inEventseries: {withSeries}")
         self.assertTrue(withSeries>4500)
+        
+    def testEventCorpusFromWikiUserCache(self):
+        pass
+        
+        
+    def testEventCorpusFromWikiFileManager(self):
+        pass
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
