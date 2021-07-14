@@ -1,9 +1,11 @@
 import os
 from unittest import TestCase
 from geograpy.locator import LocationContext
-from wikifile.wikiFileManager import WikiFileManager
 from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
+from ormigrate.toolbox import Profiler
+from tests.corpusfortesting import CorpusForTesting
+
 
 class TestLocationFixer(TestCase):
     '''
@@ -11,13 +13,11 @@ class TestLocationFixer(TestCase):
     '''
 
     def setUp(self) -> None:
+        self.profile=True
         self.fixer=self.getFixer()
     
     def getFixer(self):
-        wikiId = 'or'
-        home = os.path.expanduser("~")
-        wikiTextPath = f"{home}/.or/wikibackup/{wikiId}"
-        wikiFileManager = WikiFileManager(sourceWikiId=wikiId, wikiTextPath=wikiTextPath)
+        wikiFileManager = CorpusForTesting.getWikiFileManager()
         fixer=LocationFixer(wikiFileManager=wikiFileManager)
         return fixer
 
@@ -70,6 +70,7 @@ class TestLocationFixer(TestCase):
         It is expected that the fixer can detect and correct a invalid country if city and region are correct and
         recognized.
         """
+        profile = Profiler("Testing the correction invalid countries", self.profile)
         event={
             "Acronym":"Test 2020",
             "Country":"USA",
@@ -84,11 +85,13 @@ class TestLocationFixer(TestCase):
         }
         res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event,res)
+        profile.time()
 
     def test_fixEventRecord_missing_entries(self):
         """
         It is expected that missing entries are detected and fixed
         """
+        profile = Profiler("Testing detecting and fixing of missing location entries in event records", self.profile)
         event = {
             "Acronym": "Test 2020",
             "Country": "USA",
@@ -103,6 +106,7 @@ class TestLocationFixer(TestCase):
         res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event, res)
         self.assertTrue("region_missing" in errors)
+        profile.time()
 
     def test_fixEventRecord_missing_city(self):
         """
@@ -145,6 +149,10 @@ class TestLocationFixer(TestCase):
 
 
     def testFixLocationType(self):
+        '''
+        tests the correction of misplaced locations
+        '''
+        profile = Profiler("Testing the correction of misplaced locations", self.profile)
         # Misplaced region
         event = {
             "Acronym": "Test 2020",
@@ -191,9 +199,11 @@ class TestLocationFixer(TestCase):
         self.assertEqual(exp_event["City"], event["City"])
         self.assertEqual(exp_event["State"], event["State"])
         self.assertEqual(exp_event["Country"], event["Country"])
+        profile.time()
 
     def test_get_page_title(self):
         '''tests the generation of the wiki page titles for location entities'''
+        profile = Profiler("Testing generation of location page titles", self.profile)
         locationContext=LocationContext.fromJSONBackup()
         la=None
         for city in locationContext.cities:
@@ -208,3 +218,4 @@ class TestLocationFixer(TestCase):
             self.assertEqual("US/CA/Los Angeles", LocationFixer.getPageTitle(la))
         else:
             self.fail("City Q65 (Los Angeles) is missing in the locationContext")
+        profile.time()
