@@ -4,7 +4,8 @@ Created on 2021-07-14
 @author: wf
 '''
 import unittest
-from tests.corpus import Corpus
+from tests.corpusfortesting import CorpusForTesting as Corpus
+import time
 
 class TestEventCorpus(unittest.TestCase):
     '''
@@ -12,6 +13,7 @@ class TestEventCorpus(unittest.TestCase):
     '''
 
     def setUp(self):
+        self.debug = True
         pass
 
 
@@ -23,7 +25,7 @@ class TestEventCorpus(unittest.TestCase):
         '''
         test the event corpus
         '''
-        eventCorpus=Corpus.getEventCorpus(debug=self.debug,force=True)
+        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
         listOfEvents=eventCorpus.eventList.getList()
         withSeries=0
         for event in listOfEvents:
@@ -34,11 +36,29 @@ class TestEventCorpus(unittest.TestCase):
         self.assertTrue(withSeries>4500)
         
     def testEventCorpusFromWikiUserCache(self):
-        pass
-        
-        
+        """
+        test the Event Corpus from the wikiUser(API) cache.
+        """
+        profile = True
+        startTime = time.time()
+        debug = False
+        #TODO: Only test when json is available. Expects to run less than 1 sec
+        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=debug, force=False)
+        elapsed = time.time() - startTime
+        if profile:
+            print(f"getting EventCorpus from Cache took {elapsed:5.1f} s")
+
+
     def testEventCorpusFromWikiFileManager(self):
-        pass
+        """
+        test the Event Corpus from the wiki file manager(wikiFiles).
+        """
+        profile=True
+        startTime = time.time()
+        eventCorpus = Corpus.getEventCorpusFromWikiText(debug=self.debug)
+        elapsed = time.time() - startTime
+        if profile:
+            print(f"getting EventCorpus from wikiText files took {elapsed:5.1f} s")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

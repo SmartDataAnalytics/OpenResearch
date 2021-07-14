@@ -34,9 +34,9 @@ class EventCorpus(object):
         self.eventSeriesList.fromWikiFileManager(wikiFileManager)
         
         # get foreign key hashtable
-        self.seriesLookup = LOD.getLookup(self.eventList,"Series", withDuplicates=True)
+        self.seriesLookup = LOD.getLookup(self.eventList.getList(),"Series", withDuplicates=True)
         # get "primary" key hashtable
-        self.seriesAcronymLookup = LOD.getLookup(self.eventSeriesList,"acronym", withDuplicates=True)
+        self.seriesAcronymLookup = LOD.getLookup(self.eventSeriesList.getList(),"acronym", withDuplicates=True)
 
         for seriesAcronym in self.seriesLookup.keys():
             if seriesAcronym in self.seriesAcronymLookup:
