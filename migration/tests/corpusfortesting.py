@@ -7,13 +7,26 @@ from openresearch.eventcorpus import EventCorpus
 from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
 from os import path
-
+from openresearch.event import OREntityList
+import os
 class CorpusForTesting(object):
     '''
     Simplify initializing an EventCorpus for tests
     '''
 
     wikiId='orclone'
+    
+    @classmethod
+    def hasCache(cls):
+        '''
+        check whether the cache is available
+        '''
+        hasCache=True
+        for entityName in ["Event","EventSeries"]:
+            jsonFile=OREntityList.getJsonFile(entityName)
+            hasCache=hasCache and os.path.isfile(jsonFile)
+        return hasCache
+        
 
     @classmethod
     def getWikiFileManager(cls,wikiId=None,debug=False):

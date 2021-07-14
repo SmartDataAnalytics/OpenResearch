@@ -6,6 +6,7 @@ Created on 2021-07-14
 import unittest
 from tests.corpusfortesting import CorpusForTesting as Corpus
 import time
+from ormigrate.toolbox import Profiler
 
 class TestEventCorpus(unittest.TestCase):
     '''
@@ -13,9 +14,9 @@ class TestEventCorpus(unittest.TestCase):
     '''
 
     def setUp(self):
-        self.debug = True
+        self.debug = False
+        self.profile=True
         pass
-
 
     def tearDown(self):
         pass
@@ -37,7 +38,9 @@ class TestEventCorpus(unittest.TestCase):
         '''
         test the event corpus
         '''
+        profile=Profiler("getting EventCorpus from WikiUser")
         eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
+        profile.time()
         self.checkEventCorpus(eventCorpus)
         
         
@@ -45,27 +48,22 @@ class TestEventCorpus(unittest.TestCase):
         """
         test the Event Corpus from the wikiUser(API) cache.
         """
-        profile = True
-        startTime = time.time()
         debug = False
         #TODO: Only test when json is available. Expects to run less than 1 sec
-        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=debug, force=False)
-        elapsed = time.time() - startTime
-        if profile:
-            print(f"getting EventCorpus from Cache took {elapsed:5.1f} s")
-        self.checkEventCorpus(eventCorpus)
+        if Corpus.hasCache():
+            profile=Profiler(f"getting EventCorpus for {Corpus.wikiId} from WikiUser Cache",self.profile)
+            eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=debug, force=False)
+            profile.time()
+            self.checkEventCorpus(eventCorpus)
         
 
     def testEventCorpusFromWikiFileManager(self):
         """
         test the Event Corpus from the wiki file manager(wikiFiles).
         """
-        profile=True
-        startTime = time.time()
+        profile=Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
         eventCorpus = Corpus.getEventCorpusFromWikiText(debug=self.debug)
-        elapsed = time.time() - startTime
-        if profile:
-            print(f"getting EventCorpus from wikiText files took {elapsed:5.1f} s")
+        profile.time()
         self.checkEventCorpus(eventCorpus)
 
     def testMatchingSetsForEventCorpus(self):

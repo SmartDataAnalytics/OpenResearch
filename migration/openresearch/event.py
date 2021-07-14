@@ -122,13 +122,14 @@ class OREntityList(JSONAbleList):
         ask+="}}"
         return ask
 
-    def getJsonFile(self):
+    @classmethod
+    def getJsonFile(cls,entityName):
         '''
-        get the json File for me
+        get the json File for the given entityName
         '''
         cachePath=OpenResearch.getCachePath()
         os.makedirs(cachePath,exist_ok=True)
-        jsonPrefix="%s/%s" % (cachePath,self.getEntityName())
+        jsonPrefix="%s/%s" % (cachePath,entityName)
         jsonFilePath="%s.json" % jsonPrefix
         return jsonFilePath
 
@@ -137,7 +138,7 @@ class OREntityList(JSONAbleList):
         Args:
             wikiuser: the wikiuser to use
         '''
-        jsonFilePath=self.getJsonFile()
+        jsonFilePath=OREntityList.getJsonFile(self.getEntityName())
         # TODO: fix upstream pyLodStorage
         jsonPrefix=jsonFilePath.replace(".json","")
         if os.path.isfile(jsonFilePath) and not force:
@@ -147,7 +148,10 @@ class OREntityList(JSONAbleList):
             self.storeToJsonFile(jsonPrefix)
 
     def toCache(self):
-        jsonFilePath = self.getJsonFile()
+        '''
+        store my content to the cache
+        '''
+        jsonFilePath = OREntityList.getJsonFile(self.getEntityName())
         jsonPrefix = jsonFilePath.replace(".json", "")
         self.storeToJsonFile(jsonPrefix)
 
