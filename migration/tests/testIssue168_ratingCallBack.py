@@ -20,23 +20,7 @@ class TestIssue168(unittest.TestCase):
 
 
     def tearDown(self):
-        pass
-
-
-    def testEventCorpus(self):
-        '''
-        test the event corpus
-        '''
-        eventCorpus=Corpus.getEventCorpus(debug=self.debug,force=True)
-        listOfEvents=eventCorpus.eventList.getList()
-        withSeries=0
-        for event in listOfEvents:
-            self.assertTrue(hasattr(event, 'lastEditor'))
-            if hasattr(event,'inEventSeries'): withSeries+=1
-        if self.debug:
-            print(f"inEventseries: {withSeries}")
-        self.assertTrue(withSeries>4500)
-            
+        pass            
     
     def checkRatedLod(self,lod,errors,showPainsAbove=11):
         if len(errors)>0:

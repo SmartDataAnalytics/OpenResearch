@@ -7,6 +7,95 @@ from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 import sys
 
+class PageFixerManager(object):
+    '''
+    manage a list of PageFixers
+    '''
+    
+    def __init__(self,pageFixerClassList,wikiFileManager):
+        ''' 
+        construct me 
+        
+        Args:
+            pageFixerClassList(list): a list of pageFixers
+            wikiFileManager(WikiFileManager): the wikiFile manager to use
+        '''
+        self.pageFixerClassList=pageFixerClassList
+        self.wikiFileManager=wikiFileManager
+        self.pageFixers=[]
+        for pageFixerClass in pageFixerClassList:
+            pageFixer=pageFixerClass(wikiFileManager=wikiFileManager)
+            self.pageFixers.append(pageFixer)
+    
+    @staticmethod
+    def runCmdLine(pageFixerClassList:list,argv=None):
+        '''
+        Args:
+            pageFixerList(list): a list of page fixers to apply
+            argv(list): the command line arguments to use
+        Returns:
+            a pageFixerManager that has completed the work as specified
+            in the arguments
+        '''
+        pageFixerManager=PageFixerManager.fromCommandLine(pageFixerClassList, argv)
+        pageFixerManager.workOnArgs()
+        return pageFixerManager
+     
+    @staticmethod
+    def fromCommandLine(pageFixerClassList,argv=None):
+        '''
+        construct a pageFixerList from the command line with the given Arguments
+        '''
+        cmdLine=CmdLineAble()
+        cmdLine.getParser()
+        cmdLine.parser.add_argument("--stats", action="store_true",
+                            help="calculate and show rating statistics")
+        cmdLine.parser.add_argument("--verbose", action="store_true",
+                            help="shows verbose output")
+        if argv is None:
+            argv=sys.argv[1:]
+        args = cmdLine.parser.parse_args(argv)
+        cmdLine.initLogging(args)
+        if args.verbose:
+            print(f"Starting pagefixers for {args.source}")
+        wikiFileManager=WikiFileManager(sourceWikiId=args.source,wikiTextPath=args.backupPath,login=False,debug=args.debug)
+        pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager)
+        pageFixerManager.args=args
+        return pageFixerManager
+        
+    def workOnArgs(self):    
+        '''
+        work as specified by my arguments
+        '''    
+        self.wikiFilesToWorkon=self.wikiFileManager.getAllWikiFilesForArgs(self.args)
+        if self.args.debug:
+            print(f"found {len(self.wikiFilesToWorkon)} pages to work on")
+        if self.args.stats:
+            self.getRatings(debug=self.args.debug)
+            self.showRatingStats()
+                
+            
+    def getRatings(self,debug):
+        self.errors=[]
+        self.ratings={}
+        for pageFixer in self.pageFixers:
+            for wikiFile in self.wikiFilesToWorkon.values():
+                try:
+                    rating = pageFixer.getRatingFromWikiFile(wikiFile)
+                    self.ratings[wikiFile.getPageTitle()]=rating
+                except Exception as e:
+                    self.errors.append({'error':e,'fixer':pageFixer,'pageTitle':wikiFile.getPageTitle()})
+        if len(self.errors)>0 and debug:
+            print(self.errors)
+    
+    def showRatingStats(self): 
+        '''
+        show the rating statistics
+        '''
+        for i,pageTitle in enumerate(self.ratings):
+            print(f"{i+1}:{pageTitle}->{self.ratings[pageTitle]}")
+    
+    
 class PageFixer(object):
     '''
     general fixer for wiki pages
@@ -21,35 +110,7 @@ class PageFixer(object):
         if 'wikiUser' in self.wikiclient.__dict__:
             if 'wikiId' in self.wikiclient.wikiUser.__dict__:
                 self.wikiId=self.wikiclient.wikiUser.wikiId
-    
-    @classmethod            
-    def cmdLine(cls,pageFixerClassList:list,argv=None):
-        '''
-        Args:
-            pageFixerList(list): a list of page fixers to apply
-        '''
-        cmdLine=CmdLineAble()
-        cmdLine.getParser()
-        if argv is None:
-            argv=sys.argv[:1]
-        args = cmdLine.parser.parse_args(argv)
-        cmdLine.initLogging(args)
-        wikiFileManager=WikiFileManager(sourceWikiId=args.source,wikiTextPath=args.backupPath,login=False,debug=args.debug)
-        wikiFiles=wikiFileManager.getAllWikiFiles(wikiFileManager.wikiTextPath)
-        # TODO remove this work around
-        #wikiFiles=wikiFileManager.getAllWikiFilesForArgs(args)
-        wikiFilesToWorkon={}
-        for wikiFile in wikiFiles.values():
-            pageTitle=wikiFile.getPageTitle().replace(".wiki","")
-            if pageTitle in args.pages:
-                wikiFilesToWorkon[pageTitle]=wikiFile
-        
-        for pageFixerClass in pageFixerClassList:
-            pageFixer=pageFixerClass(wikiFileManager=wikiFileManager)
-            for wikiFile in wikiFilesToWorkon.values():
-                # call pageFixer with wikiFile argument ...
-                pass
-
+     
     def fixEventRecord(self):
         '''Base function to be overwritten by fixing class'''
         return

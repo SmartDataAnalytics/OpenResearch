@@ -1,4 +1,4 @@
-from ormigrate.fixer import PageFixer
+from ormigrate.fixer import PageFixer,PageFixerManager
 from ormigrate.rating import Rating
 import re
 
@@ -8,14 +8,11 @@ class AcronymLengthFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/41
     '''
 
-    def __init__(self, wikiClient, debug=False, restoreOut=False, suspicitionLength=20):
+    def __init__(self, wikiFileManager,suspicitionLength=20):
         '''
         Constructor
         '''
-        # call super constructor
-        super(AcronymLengthFixer, self).__init__(wikiClient)
-        self.debug = debug
-        self.restoreOut = restoreOut
+        super(AcronymLengthFixer, self).__init__(wikiFileManager)
         self.suspicitionLength = suspicitionLength
 
     @staticmethod
@@ -51,3 +48,5 @@ class AcronymLengthFixer(PageFixer):
         else:
             return Rating(2,Rating.ok,f'non standard acronym with {msg}')
 
+if __name__ == '__main__':
+    PageFixerManager.runCmdLine([AcronymLengthFixer])

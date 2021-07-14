@@ -88,39 +88,6 @@ class OREntityList(JSONAbleList):
         else:
             raise Exception('identifier not found in entity given')
 
-    def getLookup(self,attrName:str,withDuplicates:bool=False):
-        '''
-        create a lookup dictionary by the given attribute name
-
-        Args:
-            attrName(str): the attribute to lookup
-            withDuplicates(bool): whether to retain single values or lists
-
-        Return:
-            a dictionary for lookup
-        '''
-        lookup={}
-        duplicates=[]
-        for entity in self.getList():
-            if hasattr(entity, attrName):
-                value=getattr(entity,attrName)
-                if value in lookup:
-                    if withDuplicates:
-                        lookupResult=lookup[value]
-                        lookupResult.append(entity)
-                    else:
-                        duplicates.append(entity)
-                else:
-                    if withDuplicates:
-                        lookupResult=[entity]
-                    else:
-                        lookupResult=entity
-                lookup[value]=lookupResult
-        if withDuplicates:
-            return lookup
-        else:
-            return lookup,duplicates
-
     def getEntityName(self):
         '''
         get my entity name
@@ -234,26 +201,13 @@ class OREntityList(JSONAbleList):
         return errors
 
 
-    def fromWikiSonBackupFiles(self,wikiSonName,backupdir=str(Path.home() / 'wikibackup'/ 'or' ),wikiId= 'or',listOfItems=[]):
+    def fromWikiFileManager(self,wikiFileManager):
         """
-        Create me from the backup wiki files of OR Entity
-        ToDo: Migrate this functionality to WikiFileManager class in wikirender
+        initialize me from the given WikiFileManager
         """
-        filepaths = list(hf.absoluteFilePaths(backupdir))
-        wikiRender = WikiRender()
-        wikiFileList=[]
-        for file in filepaths:
-            filename = ntpath.basename(file).replace('.wiki','')
-            filepath = ntpath.dirname(file)
-            if len(listOfItems) > 0:
-                if filename in listOfItems:
-                    wikiFile = WikiFile(filename, filepath, wikiRender)
-                    wikiFileList.append(wikiFile)
-            else:
-                wikiFile = WikiFile(filename,filepath,wikiRender)
-                wikiFileList.append(wikiFile)
-        self.wikiFileManager= WikiFileManager(wikiId,login=False)
-        LOD=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList,wikiSonName)
+        self.wikiFileManager= wikiFileManager
+        wikiFileList=wikiFileManager.getAllWikiFiles()
+        LOD=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList,self.getEntityName())
         self.fromLoD(LOD)
 
     def getLoD(self):
