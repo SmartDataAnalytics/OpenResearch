@@ -7,7 +7,7 @@ import unittest
 from openresearch.event import Event, EventList, EventSeries, EventSeriesList
 from lodstorage.jsonable import  Types
 from lodstorage.sql import SQLDB
-from ormigrate.toolbox import HelperFunctions as hf
+from ormigrate.toolbox import HelperFunctions as hf, Profiler
 
 class TestEvent(unittest.TestCase):
     '''
@@ -114,6 +114,7 @@ class TestEvent(unittest.TestCase):
         wikiuser=self.getWikiUser()
         expectedCount={"Event":100,"EventSeries":20}
         for entityListClass in EventList,EventSeriesList:
+            profile=Profiler(f"testLoDtoSQL for {entityListClass.__name__}")
             entityList=entityListClass()
             entityName=entityList.getEntityName()
             entityList.debug=self.debug
@@ -129,6 +130,7 @@ class TestEvent(unittest.TestCase):
                     print(entity)
                     print(entity.toJSON())
             self.assertTrue(len(entities)>=expectedCount[entityName])
+            profile.time(f" read {len(entities)} from SQL")
             
     def testFromCache(self):
         '''

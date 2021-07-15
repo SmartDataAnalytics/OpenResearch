@@ -6,18 +6,17 @@ Created on 2021-04-13
 import unittest
 from openresearch.event import Event,EventSeries
 from collections import Counter
-from tests.corpus import Corpus
+from tests.corpusfortesting import CorpusForTesting as Corpus
+from ormigrate.toolbox import Profiler
 
 class TestIssue168(unittest.TestCase):
     '''
     add Rating Callback option #168
     '''
 
-
     def setUp(self):
-        self.debug=False
+        self.debug=True
         pass
-
 
     def tearDown(self):
         pass            
@@ -53,11 +52,13 @@ class TestIssue168(unittest.TestCase):
         '''
         test the rating call back
         '''
+        profile=Profiler("test rating call back")
         eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug)
         lod,errors=eventCorpus.eventList.getRatedLod(Event.rateMigration)
         self.checkRatedLod(lod, errors)
         lod,errors=eventCorpus.eventSeriesList.getRatedLod(EventSeries.rateMigration)
         self.checkRatedLod(lod, errors)
+        profile.time()
 
 
 if __name__ == "__main__":

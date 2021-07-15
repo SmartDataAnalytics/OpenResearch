@@ -12,31 +12,32 @@ from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 from wikibot.wikipush import WikiPush
 from ormigrate.fixer import PageFixer
-from ormigrate.toolbox import HelperFunctions as hf
-from wikifile.wikiFileManager import WikiFileManager
-from wikifile.wikiFile import WikiFile
-from wikifile.wikiRender import WikiRender
+
 import os
 import time
-import ntpath
-from pathlib import Path
 from openresearch.openresearch import OpenResearch
 
+# TODO/FIXME refactor to PagePixerManager and do not use
+# hard coded imports but a less coupled approach that allows
+# adding fixers at runtime
 from ormigrate.issue41_acronym import AcronymLengthFixer
 from ormigrate.issue119_ordinal import OrdinalFixer
 from ormigrate.issue71_date import DateFixer
-from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer, EventSeriesTitleFixer
+from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer
+from ormigrate.issue136_MissingTitle import  EventSeriesTitleFixer
 from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
 from ormigrate.issue170_curation import CurationQualityChecker
 from ormigrate.issue195_biblographic import BiblographicFieldFixer
 
 
 class OREntity(JSONAble):
+    '''
+    base class for OpenResearch entities
+    '''
     def __init__(self):
         '''
         Constructor
         '''
-
 
     def fixRecord(self, record):
         '''
@@ -177,6 +178,9 @@ class OREntityList(JSONAbleList):
         return records
 
     def fromSQLTable(self,sqlDB,entityInfo):
+        '''
+        reaad me from the given sqlTable
+        '''
         lod=sqlDB.queryAll(entityInfo)
         self.fromLoD(lod)
 
@@ -526,8 +530,7 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
         
         return samplesWikiSon
     
-
-            
+   
     @classmethod       
     def rateMigration(cls,event,eventRecord,pageFixerList=None,limit= None):
         '''

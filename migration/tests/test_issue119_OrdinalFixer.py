@@ -15,7 +15,6 @@ class TestOrdinalFixer(unittest.TestCase):
     test the ordinal fixer
     '''
 
-
     def setUp(self):
         pass
 
@@ -54,7 +53,6 @@ class TestOrdinalFixer(unittest.TestCase):
         fixed_dic=hf.wikiSontoLOD(fixed)
         types.getTypes("events", fixed_dic, 1)
         self.assertTrue(types.typeMap['events']['Ordinal'] == 'int')
-
 
 
 if __name__ == "__main__":

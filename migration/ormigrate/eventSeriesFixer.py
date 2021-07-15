@@ -11,7 +11,6 @@ class EventSeriesProvenanceFixer(PageFixer):
     fixes Event Series
     '''
 
-
     def __init__(self):
         '''
         Constructor
@@ -29,15 +28,3 @@ class EventSeriesProvenanceFixer(PageFixer):
             return Rating(3,Rating.ok,'Wikidata only series')
         return Rating(7,Rating.invalid,'Series provenance data missing')
     
-class EventSeriesTitleFixer(PageFixer):
-    '''
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/136
-    
-    Missing titles in event Series #136
-    '''    
-    @classmethod
-    def getRating(cls,eventRecord):
-        if 'title' in eventRecord:
-            return Rating(1,Rating.ok,'title available')
-        else:
-            return  Rating(5,Rating.missing,'title is missing')

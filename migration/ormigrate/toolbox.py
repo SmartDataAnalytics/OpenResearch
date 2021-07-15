@@ -25,13 +25,13 @@ class Profiler:
         if profile:
             print(f"Starting {msg} ...")
     
-    def time(self):
+    def time(self,extraMsg=""):
         '''
         time the action and print if profile is active
         '''
         elapsed=time.time()-self.starttime
         if self.profile:
-            print(f"{self.msg} took {elapsed:5.1f} s")
+            print(f"{self.msg}{extraMsg} took {elapsed:5.1f} s")
         
         
 class HelperFunctions:
