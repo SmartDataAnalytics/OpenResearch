@@ -47,16 +47,14 @@ class OREntity(JSONAble):
         Args:
             record(dict): the original record in WikiSon format
             lookup(dict): the mapping of keys/names for the name/value pairs
-        '''
-        if not isinstance(record, dict):
-            continue
-            # replace name,value pairs with lookup[name],value pairs
-            for key in lookup:
-                if key in record:
-                    newKey=lookup[key].get('name')
-                    if newKey is not None:
-                        record[newKey]=record[key]
-                        del record[key]
+        '''  
+        # replace name,value pairs with lookup[name],value pairs
+        for key in lookup:
+            if key in record:
+                newKey=lookup[key].get('name')
+                if newKey is not None:
+                    record[newKey]=record[key]
+                    del record[key]
 
     def fixRecord(self, record):
         '''
@@ -239,7 +237,8 @@ class OREntityList(JSONAbleList):
         self.normalizeLodFromWikiSonToLod(lod)
         self.fromLoD(lod)
         
-    def getPropertyLookup(self)->dict:
+    @classmethod    
+    def getPropertyLookup(cls)->dict:
         '''
         get my PropertyLookupList as a map 
         
@@ -247,23 +246,26 @@ class OREntityList(JSONAbleList):
             dict: my mapping from wiki property names to LoD attribute Names or None if no mapping is defined
         '''
         lookup=None
-        if 'propertyLookupList' in self.__dict__:
-            propertyLookupList=self.__dict__['propertyLookupList']
+        if 'propertyLookupList' in cls.__dict__:
+            propertyLookupList=cls.__dict__['propertyLookupList']
             lookup,_duplicates=LOD.getLookup(propertyLookupList, 'prop')
         return lookup
       
 
-    def normalizeLodFromWikiSonToLod(self, lod:list):
+    @classmethod
+    def normalizeLodFromWikiSonToLod(cls, lod:list):
         '''
         normalize the given LOD to the properties in the propertyLookupList
         
         Args:
             lod(list): the list of dicts to normalize/convert
         '''
-        lookup=self.getPropertyLookup()
+        lookup=cls.getPropertyLookup()
         if lookup is not None:
             # convert all my records (in place)
             for record in lod:
+                if not isinstance(record, dict):
+                    continue
                 OREntity.fromWikiSonToLod(record)
 
     def getLoD(self):
@@ -309,17 +311,21 @@ class EventSeriesList(OREntityList):
     '''
     i represent a list of EventSeries
     '''
-    def __init__(self):
-        self.eventSeries=[]
-        super(EventSeriesList, self).__init__("eventSeries",EventSeries)
-        self.propertyLookupList=[
+    propertyLookupList=[
             { 'prop':'EventSeries acronym', 'name': 'acronym'},
             { 'prop':'Homepage',   'name': 'homepage'},
             { 'prop':'Title',      'name': 'title'},
             #{ 'prop':'Field',      'name': 'subject'},
             { 'prop':'Wikidataid',  'name': 'wikidataId'},
             { 'prop':'DblpSeries',  'name': 'dblpSeries' }
-        ]
+    ]
+    
+    def __init__(self):
+        '''
+        construct me
+        '''
+        self.eventSeries=[]
+        super(EventSeriesList, self).__init__("eventSeries",EventSeries)
         
 class EventSeries(OREntity):
     '''
@@ -422,13 +428,7 @@ class EventSeries(OREntity):
         return text
 
 class EventList(OREntityList):
-    '''
-    i represent a list of Events
-    '''
-    def __init__(self):
-        self.events=[]
-        super(EventList, self).__init__("events",Event)
-        self.propertyLookupList=[
+    propertyLookupList=[
             { 'prop':'Acronym',             'name': 'acronym'},
             { 'prop':'Ordinal',             'name': 'ordinal'},
             { 'prop':'Homepage',            'name': 'homepage'},
@@ -440,13 +440,19 @@ class EventList(OREntityList):
             { 'prop':'Has_location_country','name': 'country'},
             { 'prop':'Has_location_state',  'name': 'region'},
             { 'prop':'Has_location_city',   'name': 'city'},
-            {'prop': 'Country', 'name': 'country'},
-            {'prop': 'State', 'name': 'region'},
-            {'prop': 'City', 'name': 'city'},
+            { 'prop': 'Country', 'name': 'country'},
+            { 'prop': 'State', 'name': 'region'},
+            { 'prop': 'City', 'name': 'city'},
             { 'prop':'Accepted_papers',     'name': 'acceptedPapers'},
             { 'prop':'Submitted_papers',    'name': 'submittedPapers'}
-        ]               
+    ]               
 
+    '''
+    i represent a list of Events
+    '''
+    def __init__(self):
+        self.events=[]
+        super(EventList, self).__init__("events",Event)
 
 
 class Event(OREntity):

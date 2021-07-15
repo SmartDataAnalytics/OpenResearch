@@ -131,27 +131,3 @@ class HelperFunctions:
         path="%s/dictionary.yaml" %resourcePath
         lookup_dict = Dictionary(path)
         return lookup_dict
-
-    @classmethod
-    def wikiSontoLOD(self, wiki_sample, entity="Event"):
-        regex= r'{{ *%s(?:.|\r|\n)*\}}' % entity
-        re_groups=re.search(regex,wiki_sample)
-        if re_groups is not None:
-            property_list = re_groups.group().replace('}}', '').split('|')[1:]
-            wikidict = {}
-            for i in property_list:
-                mapping = i.strip().split('=')
-                try:
-                    wikidict[mapping[0].strip()] = int(mapping[1].strip())
-                except:
-                    wikidict[mapping[0].strip()] = mapping[1].strip()
-            return [wikidict]
-        return []
-
-    @classmethod
-    def dicttoWikiSon(self, dic, entity="Event"):
-        wikiSon= "{{%s\n" % entity
-        for key in dic:
-            wikiSon += "|%s = %s \n" %(str(key),str(dic[key]))
-        wikiSon+= "}}"
-        return wikiSon

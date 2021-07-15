@@ -5,13 +5,6 @@ Created on 2021-04-02
 '''
 import unittest
 from os import path
-from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
-
-from ormigrate.issue71_date import DateFixer
-from ormigrate.issue163_series import SeriesFixer
-from ormigrate.issue166_cfp import WikiCFPIDFixer
-from ormigrate.issue195_biblographic import BiblographicFieldFixer
-
 
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.fixer import PageFixer
@@ -24,35 +17,6 @@ class TestDataFixes(unittest.TestCase):
         self.debug=False
         pass
 
-    def getWikiClient(self):
-        wikiClient=hf.getWikiClient(save=hf.inPublicCI())
-        return wikiClient
-
-    def getDateFixer(self):
-        fixer = DateFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
-        return fixer
-
-    def getPageFixer(self):
-        fixer = PageFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
-        return fixer
-
-    def getAcceptanceRateFixer(self):
-        fixer = AcceptanceRateFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()))
-        return fixer
-
-    def getBiblographicFieldFixer(self):
-        fixer = BiblographicFieldFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()), debug=self.debug)
-        return fixer
-
-    def getSeriesFixer(self):
-        fixer = SeriesFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()), debug=self.debug)
-        return fixer
-
-    def getWikiCFPIDFixer(self):
-        fixer = WikiCFPIDFixer(wikiClient=hf.getWikiClient(save=hf.inPublicCI()), debug=self.debug)
-        return fixer
-
-
     def tearDown(self):
         pass
 
@@ -63,11 +27,6 @@ class TestDataFixes(unittest.TestCase):
         sampledates=['2020-02-20','2020/02/20','2020.02.20','20/02/2020','02/20/2020','20.02.2020','02.20.2020','20 Feb, 2020','2020, Feb 20','2020 20 Feb','2020 Feb 20']
         for date in sampledates:
             self.assertEqual('2020/02/20',hf.parseDate(date))
-
-
-    
-
-    
 
 
     def testIssue152(self):
@@ -111,59 +70,8 @@ class TestDataFixes(unittest.TestCase):
         self.assertIsNotNone(lookup_dict)
 
   
-    def testIssue71(self):
-        '''
-            test for fixing invalid dates
-            https://github.com/SmartDataAnalytics/OpenResearch/issues/71
-        '''
-        eventRecords = [{'startDate': '20 Feb, 2020', 'endDate': '20 Feb, 2020'},
-                        {'startDate': None, 'endDate': None},
-                        {'startDate': '20 Feb, 2020', 'endDate': None},
-                        {'startDate': None, 'endDate': '20 Feb, 2020'},
-                        ]
-        expectedPainRatings=[1, 5, 3, 7]
-        expectedStartDates=['2020/02/20', None, '2020/02/20', None]
-        expectedEndDates=['2020/02/20', None, None, '2020/02/20']
-        painRatings=[]
-        fixedStartDates=[]
-        fixedEndDates=[]
-        fixer=self.getDateFixer()
-        for event in eventRecords:
-            painRating = fixer.getRating(event)
-            event,err = fixer.fixEventRecord(event, ['startDate', 'endDate'])
-            self.assertIsNotNone(painRating)
-            painRatings.append(painRating.pain)
-            fixedStartDates.append(event['startDate'])
-            fixedEndDates.append(event['endDate'])
-        self.assertEqual(expectedPainRatings,painRatings)
-        self.assertEqual(expectedStartDates, fixedStartDates)
-        self.assertEqual(expectedEndDates, fixedEndDates)
-
-        types = Types("Event")
-        samples = Event.getSampleWikiSon()
-        fixedDates=fixer.getFixedDateWikiFile('sample', samples[0])
-        fixedDeadlines=fixer.getFixedDateWikiFile('sample', fixedDates, 'deadline')
-        fixed_dic=hf.wikiSontoLOD(fixedDeadlines)
-        self.assertTrue(fixed_dic[0]['Start date'] == '2020/09/27')
-        self.assertTrue(fixed_dic[0]['Paper deadline'] == '2020/05/28')
-
-    def testIssue195(self):
-        '''
-            test for fixing invalid dates
-            https://github.com/SmartDataAnalytics/OpenResearch/issues/71
-        '''
-        eventRecords = [{'has Proceedings Bibliography': 'test', 'has Bibliography': 'test'},
-                        {'startDate': '20 Feb, 2020', 'endDate': '20 Feb, 2020'},
-                        {'Ordinal': 2},
-                        {'has Bibliography':'test'}
-                        ]
-        painRatings=[]
-        fixer=self.getBiblographicFieldFixer()
-        for event in eventRecords:
-            painRating = fixer.getRating(event)
-            self.assertIsNotNone(painRating)
-            painRatings.append(painRating.pain)
-        self.assertEqual(painRatings,[7,1,1,5])
+    
+    
 
     def testIssue163(self):
         '''
@@ -185,30 +93,6 @@ class TestDataFixes(unittest.TestCase):
         count=fixer.checkAll(askExtra)
         # TODO: we do not test the count here  - later we want it to be zero
         # TODO: Records obtained with fromWiki already filter the list
-
-
-
-    def testdictToWikison(self):
-        """
-        Test the helper function to create wikison from a given dict
-        """
-        samples= Event.getSamples()
-        for sample in samples:
-            dic=hf.dicttoWikiSon(sample)
-            self.assertEqual(type(dic),str)
-            self.assertIsNotNone(dic)
-            self.assertIn('acronym', dic)
-
-    def testWikisontoDict(self):
-        """
-        Test the helper function to create wikison from a given dict
-        """
-        samples= Event.getSampleWikiSon()
-        for sample in samples:
-            dic=hf.wikiSontoLOD(sample)
-            self.assertEqual(type(dic[0]),dict)
-            self.assertIsNotNone(dic[0])
-            self.assertIn('Acronym', dic[0])
 
 
     def testIssue166(self):
