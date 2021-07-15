@@ -1,7 +1,6 @@
 from geograpy.locator import LocationContext, Location, City, Country, Region
 from ormigrate.issue220_location import LocationFixer
 from wikifile.wikiFileManager import WikiFileManager
-from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFile import WikiFile
 from collections import Counter
 from lodstorage.lod import LOD

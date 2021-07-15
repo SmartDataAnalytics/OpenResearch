@@ -1,8 +1,7 @@
 from geograpy.locator import LocationContext, Location, City, Country, Region
 from wikifile.wikiFileManager import WikiFileManager
 from openresearch.event import Event
-from ormigrate.fixer import PageFixer
-
+from ormigrate.fixer import PageFixer, PageFixerManager
 
 class LocationFixer(PageFixer):
     '''
@@ -318,3 +317,6 @@ class LocationFixer(PageFixer):
         else:
             pageTitle=location.name
         return pageTitle
+    
+if __name__ == '__main__':
+    PageFixerManager.runCmdLine([LocationFixer])

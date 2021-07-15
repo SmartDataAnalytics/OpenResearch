@@ -5,6 +5,8 @@ Created on 06.04.2021
 '''
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
+from wikifile.wikiRender import WikiFile
+from ormigrate.rating import Rating
 import sys
 
 class PageFixerManager(object):
@@ -112,8 +114,22 @@ class PageFixer(object):
                 self.wikiId=self.wikiclient.wikiUser.wikiId
      
     def fixEventRecord(self):
-        '''Base function to be overwritten by fixing class'''
+        ''' abstract base function to be overwritten by fixing class'''
         return
+    
+    def getRatingFromWikiFile(self,wikiFile:WikiFile)->Rating:
+        '''
+        abstract base function to be overwritten for rating a wikiFile
+        
+        Args:
+            wikiFile(WikiFile): the wikiFile to work on
+            
+        Return:
+            Rating: The rating for this WikiFile
+        
+        '''
+        rating=Rating(6,Rating.invalid,f"{self.__class__.__name__} has not rating implementation")
+        return rating
 
     def fixEventRecords(self, events:list):
         """

@@ -1,4 +1,3 @@
-import os
 from unittest import TestCase
 from geograpy.locator import LocationContext
 from openresearch.event import Event
