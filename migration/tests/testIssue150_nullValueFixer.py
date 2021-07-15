@@ -25,7 +25,7 @@ class TestNullValueFixer(unittest.TestCase):
         test fixing https://confident.dbis.rwth-aachen.de/or/index.php?title=ECIR
         '''
         pageTitles=["ECIR 2019","ECIR 2018","ECIR 2017","ECIR 2009"]
-        argv=PageFixerToolbox.getArgs(pageTitles,["--stats"])
+        argv=PageFixerToolbox.getArgs(pageTitles,["--stats"],self.debug)
         pageFixerManager=PageFixerManager.runCmdLine([NullValueFixer],argv)
         self.assertEqual(0,len(pageFixerManager.errors))
         self.assertEqual(4,len(pageFixerManager.ratings))

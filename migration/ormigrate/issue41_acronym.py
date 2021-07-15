@@ -1,5 +1,6 @@
 from ormigrate.fixer import PageFixer,PageFixerManager
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating,PageRating
+from wikifile.wikiFile import WikiFile
 import re
 
 class AcronymLengthFixer(PageFixer):
@@ -8,12 +9,26 @@ class AcronymLengthFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/41
     '''
 
-    def __init__(self, wikiFileManager,suspicitionLength=20):
+    def __init__(self, wikiFileManager):
         '''
         Constructor
         '''
         super(AcronymLengthFixer, self).__init__(wikiFileManager)
-        self.suspicitionLength = suspicitionLength
+        
+    def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
+        '''
+        Args:
+            wikiFile(WikiFile): the wikiFile to work on
+            
+        Return:
+            Rating: The rating for this WikiFile
+        
+        '''
+        # prepare rating
+        _wikiText,eventRecord,rating=self.prepareWikiFileRating(wikiFile,"Event")
+        arating=AcronymLengthFixer.getRating(eventRecord)
+        rating.set(arating.pain,arating.reason,arating.hint)
+        return rating
 
     @staticmethod
     def getRating(eventRecord):

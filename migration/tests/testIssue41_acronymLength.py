@@ -1,5 +1,5 @@
 import unittest
-from ormigrate.fixer import PageFixer
+from ormigrate.fixer import PageFixer,PageFixerManager
 from ormigrate.issue41_acronym import AcronymLengthFixer
 from tests.pagefixtoolbox import PageFixerToolbox
 
@@ -21,9 +21,10 @@ class TestIssue41(unittest.TestCase):
         
     def testPagesAcronym(self):
         '''
+        test pages acronym fixing
         '''
         args=PageFixerToolbox.getArgs(None,["--stats","--debug"])
-        ratings,errors=PageFixer.cmdLine([AcronymLengthFixer],args)       
+        pageFixerManager=PageFixerManager.runCmdLine([AcronymLengthFixer],args)       
 
     def testgetPainRating(self):
         painList = [

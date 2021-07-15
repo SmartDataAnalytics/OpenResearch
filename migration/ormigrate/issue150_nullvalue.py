@@ -5,7 +5,7 @@ Created on 13.07.2021
 '''
 from ormigrate.fixer import PageFixerManager,PageFixer
 from wikifile.wikiRender import WikiFile
-from ormigrate.rating import Rating
+from ormigrate.rating import PageRating,Rating
 
 class NullValueFixer(PageFixer):
     '''
@@ -18,7 +18,7 @@ class NullValueFixer(PageFixer):
         '''
         super(NullValueFixer, self).__init__(wikiFileManager)
         
-    def getRatingFromWikiFile(self,wikiFile:WikiFile)->Rating:
+    def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
         '''
         Args:
             wikiFile(WikiFile): the wikiFile to work on
@@ -27,19 +27,20 @@ class NullValueFixer(PageFixer):
             Rating: The rating for this WikiFile
         
         '''
-        eventDict=wikiFile.extract_template("Event")
+        # prepare rating
+        wikiText,eventDict,rating=self.prepareWikiFileRating(wikiFile,"Event")
+        # start rating
         if eventDict is None:
-            rating=Rating(7,Rating.missing,"no event record found")
+            rating.set(7,Rating.missing,"no event record found")
         else:
             nullValues=0
-            wikiText=str(wikiFile)
             nullValues=wikiText.lower().count("::some person")
             if nullValues==0:
-                rating=Rating(1,Rating.ok,"no nullValue found")
+                rating.set(1,Rating.ok,"no nullValue found")
             elif (nullValues==1):
-                rating=Rating(3,Rating.invalid,"found an improper nullValue")
+                rating.set(3,Rating.invalid,"found an improper nullValue")
             else:
-                rating=Rating(5,Rating.invalid,f"found {nullValues} improper nullValues")    
+                rating.set(5,Rating.invalid,f"found {nullValues} improper nullValues")    
         return rating
         
 if __name__ == '__main__':

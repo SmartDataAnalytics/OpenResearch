@@ -38,6 +38,25 @@ class OREntity(JSONAble):
         '''
         Constructor
         '''
+        
+    @staticmethod
+    def fromWikiSonToLod(record:dict,lookup:dict):
+        '''
+        convert the given record from wikiSon to list of dict with the given lookup map
+        
+        Args:
+            record(dict): the original record in WikiSon format
+            lookup(dict): the mapping of keys/names for the name/value pairs
+        '''
+        if not isinstance(record, dict):
+            continue
+            # replace name,value pairs with lookup[name],value pairs
+            for key in lookup:
+                if key in record:
+                    newKey=lookup[key].get('name')
+                    if newKey is not None:
+                        record[newKey]=record[key]
+                        del record[key]
 
     def fixRecord(self, record):
         '''
@@ -60,7 +79,7 @@ class OREntity(JSONAble):
 
 class OREntityList(JSONAbleList):
     '''
-    wrapper for JSONAble
+    OpenResearch entity list
     '''
     def __init__(self,listName:str=None,clazz=None,tableName:str=None):
         super(OREntityList, self).__init__(listName,clazz,tableName)
@@ -210,33 +229,42 @@ class OREntityList(JSONAbleList):
                     print(error)
         return errors
 
-
     def fromWikiFileManager(self,wikiFileManager):
         """
         initialize me from the given WikiFileManager
         """
         self.wikiFileManager= wikiFileManager
         wikiFileList=wikiFileManager.getAllWikiFiles()
-        LOD=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList.values(),self.getEntityName())
-        self.noramlizeLOD(LOD)
-        self.fromLoD(LOD)
-
-    def noramlizeLOD(self, lod:list):
+        lod=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList.values(),self.getEntityName())
+        self.normalizeLodFromWikiSonToLod(lod)
+        self.fromLoD(lod)
+        
+    def getPropertyLookup(self)->dict:
         '''
-        normalize the given LOD to the properties in the propertyLookupList
+        get my PropertyLookupList as a map 
+        
+        Returns:
+            dict: my mapping from wiki property names to LoD attribute Names or None if no mapping is defined
         '''
+        lookup=None
         if 'propertyLookupList' in self.__dict__:
             propertyLookupList=self.__dict__['propertyLookupList']
-            lookup=LOD.getLookup(propertyLookupList, 'prop')[0]
+            lookup,_duplicates=LOD.getLookup(propertyLookupList, 'prop')
+        return lookup
+      
+
+    def normalizeLodFromWikiSonToLod(self, lod:list):
+        '''
+        normalize the given LOD to the properties in the propertyLookupList
+        
+        Args:
+            lod(list): the list of dicts to normalize/convert
+        '''
+        lookup=self.getPropertyLookup()
+        if lookup is not None:
+            # convert all my records (in place)
             for record in lod:
-                if not isinstance(record, dict):
-                    continue
-                for key in lookup:
-                    if key in record:
-                        newKey=lookup[key].get('name')
-                        if newKey is not None:
-                            record[newKey]=record[key]
-                            del record[key]
+                OREntity.fromWikiSonToLod(record)
 
     def getLoD(self):
         """

@@ -6,7 +6,8 @@ Created on 06.04.2021
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating,PageRating
+from collections import Counter
 import sys
 
 class PageFixerManager(object):
@@ -78,6 +79,9 @@ class PageFixerManager(object):
                 
             
     def getRatings(self,debug):
+        '''
+        get the ratings for my pageFixers
+        '''
         self.errors=[]
         self.ratings={}
         for pageFixer in self.pageFixers:
@@ -130,6 +134,13 @@ class PageFixer(object):
         '''
         rating=Rating(6,Rating.invalid,f"{self.__class__.__name__} has not rating implementation")
         return rating
+    
+    def prepareWikiFileRating(self,wikiFile,templateName):
+        wikiText=str(wikiFile)
+        eventDict=wikiFile.extract_template(templateName)
+        pageTitle=wikiFile.getPageTitle()
+        rating=PageRating(pageTitle,templateName,7,Rating.missing,"rating error")
+        return wikiText,eventDict,rating
 
     def fixEventRecords(self, events:list):
         """
