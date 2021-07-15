@@ -69,9 +69,6 @@ class TestDataFixes(unittest.TestCase):
         lookup_dict=hf.loadDictionary
         self.assertIsNotNone(lookup_dict)
 
-  
-    
-    
 
     def testIssue163(self):
         '''

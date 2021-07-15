@@ -266,7 +266,7 @@ class OREntityList(JSONAbleList):
             for record in lod:
                 if not isinstance(record, dict):
                     continue
-                OREntity.fromWikiSonToLod(record)
+                OREntity.fromWikiSonToLod(record,lookup)
 
     def getLoD(self):
         """
