@@ -40,21 +40,24 @@ class OREntity(JSONAble):
         '''
         
     @staticmethod
-    def fromWikiSonToLod(record:dict,lookup:dict):
+    def fromWikiSonToLod(record:dict,lookup:dict)->dict:
         '''
         convert the given record from wikiSon to list of dict with the given lookup map
         
         Args:
             record(dict): the original record in WikiSon format
             lookup(dict): the mapping of keys/names for the name/value pairs
+        Return:
+            dict: a dict which replaces name,value pairs with lookup[name],value pairs
         '''  
-        # replace name,value pairs with lookup[name],value pairs
+        result={}
         for key in lookup:
             if key in record:
                 newKey=lookup[key].get('name')
                 if newKey is not None:
-                    record[newKey]=record[key]
-                    del record[key]
+                    result[newKey]=record[key]
+                    #del record[key]
+        return result
 
     def fixRecord(self, record):
         '''
@@ -253,20 +256,26 @@ class OREntityList(JSONAbleList):
       
 
     @classmethod
-    def normalizeLodFromWikiSonToLod(cls, lod:list):
+    def normalizeLodFromWikiSonToLod(cls, wikiSonRecords:list)->list:
         '''
         normalize the given LOD to the properties in the propertyLookupList
         
         Args:
-            lod(list): the list of dicts to normalize/convert
+            wikiSonRecords(list): the list of dicts to normalize/convert
+            
+        Return:
+            list: a list of dict to retrieve entities from
         '''
         lookup=cls.getPropertyLookup()
+        lod=[]
         if lookup is not None:
             # convert all my records (in place)
-            for record in lod:
+            for record in wikiSonRecords:
                 if not isinstance(record, dict):
                     continue
-                OREntity.fromWikiSonToLod(record,lookup)
+                normalizedDict=OREntity.fromWikiSonToLod(record,lookup)
+                lod.append(normalizedDict)
+        return lod
 
     def getLoD(self):
         """
@@ -313,11 +322,14 @@ class EventSeriesList(OREntityList):
     '''
     propertyLookupList=[
             { 'prop':'EventSeries acronym', 'name': 'acronym'},
+            { 'prop':'Acronym', 'name': 'acronym'},
             { 'prop':'Homepage',   'name': 'homepage'},
             { 'prop':'Title',      'name': 'title'},
             #{ 'prop':'Field',      'name': 'subject'},
             { 'prop':'Wikidataid',  'name': 'wikidataId'},
-            { 'prop':'DblpSeries',  'name': 'dblpSeries' }
+            { 'prop':'DblpSeries',  'name': 'dblpSeries' },
+            { 'prop':'Period',      'name': 'period'},
+            { 'prop':'Unit',        'name': 'unit'},
     ]
     
     def __init__(self):
@@ -357,6 +369,8 @@ class EventSeries(OREntity):
             "modificationDate": datetime.fromisoformat("2021-02-13T06:56:46"),
             "pageTitle": "3DUI",
             "title": "IEEE Symposium on 3D User Interfaces",
+            "period": "year",
+            "unit": 1,
             "wikidataId": "Q105456162"
         },]
         return samplesLOD
@@ -524,18 +538,18 @@ class Event(OREntity):
             samplesWikiSon=["""{{Event
 |Acronym=ICSME 2020
 |Title=36th IEEE International Conference on Software Maintenance and Evolution
+|Ordinal=36
 |Series=ICSME
-|Ordinal=36th
 |Type=Conference
 |Field=Software engineering
-|Start date=27th Sept, 2020
+|Start date=2020/09/27
 |End date=2020/10/03
 |Homepage=https://icsme2020.github.io/
 |City=Adelaide
-|State=Online
+|presence=online
 |Country=Australia
 |Abstract deadline=2020/05/22
-|Paper deadline=28th May, 2020
+|Paper deadline=2020/05/28
 |Notification=2020/08/04
 |Camera ready=2020/08/25
 |Has host organization=Institute of Electrical and Electronics Engineers
@@ -543,7 +557,8 @@ class Event(OREntity):
 |has general chair=Christoph Treude, Hongyu Zhang
 |has program chair=Kelly Blincoe, Zhenchang Xing
 |has demo chair=Mario Linares Vasquez, Hailong Sun
-}}""","""{{Event
+}}''',
+'''36th IEEE International Conference on Software Maintenance and Evolution (ICSME)'''""","""{{Event
 |Acronym=AISB 2009
 |Title=AISB Symposium: New Frontiers in Human-Robot Interaction
 |Type=Conference

@@ -34,14 +34,14 @@ class TestRefactoring(unittest.TestCase):
             #propertyLookup=entityList.getPropertyLookup()
             #print(propertyLookup)
             listOfSampleWikiSon=entity.getSampleWikiSon()
-            lod=[]
+            wikiSonRecords=[]
             for sampleWikiSon in listOfSampleWikiSon:
                 wikiFile=WikiFile(name="noname",wikiFileManager=wikiFileManager,wikiText=sampleWikiSon)
                 #print(str(wikiFile))
                 record=wikiFile.extract_template(templateName)
                 print(record)
-                lod.append(record)
-            entityList.normalizeLodFromWikiSonToLod(lod)            
+                wikiSonRecords.append(record)
+            lod=entityList.normalizeLodFromWikiSonToLod(wikiSonRecords)            
             print(lod)
         pass
 
