@@ -3,7 +3,6 @@ from geograpy.locator import LocationContext
 from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import Profiler
-from tests.corpusfortesting import CorpusForTesting
 from tests.pagefixtoolbox import PageFixerToolbox
 from ormigrate.fixer import PageFixerManager
 
@@ -21,7 +20,7 @@ class TestLocationFixer(TestCase):
     def getFixer(self):
         argv=PageFixerToolbox.getArgs(None,["--stats"],debug=self.debug)
         pageFixerManager=PageFixerManager.fromCommandLine([LocationFixer], argv)
-        fixer=pageFixerManager.get
+        fixer=pageFixerManager.pageFixers["LocationFixer"]
         return fixer
 
     def test_fixEventRecord(self):

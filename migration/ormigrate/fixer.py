@@ -29,7 +29,8 @@ class PageFixerManager(object):
         self.wikiFileManager=wikiFileManager
         for pageFixerClass in pageFixerClassList:
             pageFixer=pageFixerClass(self)
-            self.pageFixers[pageFixerClass]=pageFixer
+            pageFixerClassName=pageFixerClass.__name__
+            self.pageFixers[pageFixerClassName]=pageFixer
     
     @staticmethod
     def runCmdLine(pageFixerClassList:list,argv=None):
@@ -64,7 +65,7 @@ class PageFixerManager(object):
             print(f"Starting pagefixers for {args.source}")
         wikiFileManager=WikiFileManager(sourceWikiId=args.source,wikiTextPath=args.backupPath,login=False,debug=args.debug)
         pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager=wikiFileManager)
-        for pageFixer in pageFixerManager.pageFixers:
+        for pageFixer in pageFixerManager.pageFixers.values():
             pageFixer.templateName=args.template
         pageFixerManager.args=args
         return pageFixerManager
