@@ -65,7 +65,6 @@ class TestOrdinalFixer(unittest.TestCase):
             painRatings.append(painRating.pain)
         self.assertEqual(expectedPainRatings,painRatings)
         self.assertEqual(expectedOrdinals, ordinals)
-      
 
 
 if __name__ == "__main__":
