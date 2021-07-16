@@ -7,7 +7,7 @@ from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
 from openresearch.event import OREntity,EventList,EventSeriesList
-from ormigrate.rating import Rating,RatingType,PageRating
+from ormigrate.rating import RatingType,PageRating
 from collections import Counter
 import sys
 import traceback

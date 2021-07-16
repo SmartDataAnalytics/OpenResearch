@@ -185,7 +185,7 @@ class OREntityList(JSONAbleList):
 
     def fromWiki(self,wikiuser:WikiUser,askExtra="",profile=False):
         '''
-        read me from a wiki using the givne WikiUser configuration
+        read me from a wiki using the given WikiUser configuration
         '''
         if self.wikiClient is None:
             self.wikiclient=WikiClient.ofWikiUser(wikiuser)
