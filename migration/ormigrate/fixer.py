@@ -65,6 +65,8 @@ class PageFixerManager(object):
             print(f"Starting pagefixers for {args.source}")
         wikiFileManager=WikiFileManager(sourceWikiId=args.source,wikiTextPath=args.backupPath,login=False,debug=args.debug)
         pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager)
+        for pageFixer in pageFixerManager.pageFixers:
+            pageFixer.templateName=args.template
         pageFixerManager.args=args
         return pageFixerManager
         
@@ -135,7 +137,7 @@ class PageFixerManager(object):
         counter=counters["pain"]
         total=sum(counter.values())    
         print("Pain:")
-        for pain in counters["pain"]:
+        for pain in sorted(counter):
             painCount=counter[pain]
             print(f"{pain:2d}:{painCount:5d} ({painCount/total*100:5.1f}%)")    
             
@@ -166,10 +168,8 @@ class PageFixer(object):
         ''' abstract base function to be overwritten by fixing class'''
         return
     
-    def getRatingFromWikiFile(self,wikiFile:WikiFile)->Rating:
+    def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
         '''
-        abstract base function to be overwritten for rating a wikiFile
-        
         Args:
             wikiFile(WikiFile): the wikiFile to work on
             
@@ -177,7 +177,11 @@ class PageFixer(object):
             Rating: The rating for this WikiFile
         
         '''
-        rating=Rating(6,RatingType.invalid,f"{self.__class__.__name__} has no rating implementation for {wikiFile.getPageTitle()}")
+        # prepare rating
+        _wikiText,eventRecord,rating=self.prepareWikiFileRating(wikiFile,self.templateName)
+        #      rating=Rating(6,RatingType.invalid,f"{self.__class__.__name__} has no rating implementation for {wikiFile.getPageTitle()}")
+        arating=self.getRating(eventRecord)
+        rating.set(arating.pain,arating.reason,arating.hint)
         return rating
     
     def prepareWikiFileRating(self,wikiFile,templateName):

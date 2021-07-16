@@ -14,21 +14,6 @@ class AcronymLengthFixer(PageFixer):
         Constructor
         '''
         super(AcronymLengthFixer, self).__init__(wikiFileManager)
-        
-    def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
-        '''
-        Args:
-            wikiFile(WikiFile): the wikiFile to work on
-            
-        Return:
-            Rating: The rating for this WikiFile
-        
-        '''
-        # prepare rating
-        _wikiText,eventRecord,rating=self.prepareWikiFileRating(wikiFile,"Event")
-        arating=AcronymLengthFixer.getRating(eventRecord)
-        rating.set(arating.pain,arating.reason,arating.hint)
-        return rating
 
     @staticmethod
     def getRating(eventRecord):

@@ -21,7 +21,7 @@ class TestIssue57(unittest.TestCase):
         pass
 
 
-    def testMarkingProvenance(self):
+    def testProvenanceCheck(self):
         
         pass
 

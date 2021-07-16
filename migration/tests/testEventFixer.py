@@ -1,6 +1,4 @@
 import unittest
-from ormigrate.eventFixer import EventFixer
-from ormigrate.issue71_date import DateFixer
 from ormigrate.toolbox import HelperFunctions as hf
 
 
@@ -12,7 +10,10 @@ class TestEventFixer(unittest.TestCase):
     def setUp(self) -> None:
         self.debug = False
 
-    def testgetPainRating(self):
+    def testGetTotalPainRating(self):
+        '''
+        get the total pain rating for all available fixers
+        '''
         pageFixerNames= ['date']
         cache= not hf.inPublicCI()
         eventFixer= EventFixer('orclone')

@@ -5,7 +5,8 @@ Created on 13.07.2021
 '''
 from ormigrate.fixer import PageFixerManager,PageFixer
 from wikifile.wikiRender import WikiFile
-from ormigrate.rating import PageRating,Rating,RatingType
+from ormigrate.rating import PageRating,RatingType
+
 
 class NullValueFixer(PageFixer):
     '''

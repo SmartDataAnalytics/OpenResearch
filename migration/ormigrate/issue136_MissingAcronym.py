@@ -6,7 +6,7 @@ Created on 2021-07-15
 from ormigrate.fixer import PageFixerManager,PageFixer
 from ormigrate.rating import Rating,RatingType
 
-class EventSeriesTitleFixer(PageFixer):
+class EventSeriesAcronymFixer(PageFixer):
     '''
     https://github.com/SmartDataAnalytics/OpenResearch/issues/136
     
@@ -17,15 +17,15 @@ class EventSeriesTitleFixer(PageFixer):
         '''
         Constructor
         '''
-        super(EventSeriesTitleFixer, self).__init__(wikiFileManager)
+        super(EventSeriesAcronymFixer, self).__init__(wikiFileManager)
            
     @classmethod
     def getRating(cls,eventRecord):
-        if 'title' in eventRecord:
-            return Rating(1,RatingType.ok,'title available')
+        if 'acronym' in eventRecord:
+            return Rating(1,RatingType.ok,'acronym available')
         else:
-            return  Rating(5,RatingType.missing,'title is missing')
+            return  Rating(5,RatingType.missing,'acronym is missing')
         
         
 if __name__ == '__main__':
-    PageFixerManager.runCmdLine([EventSeriesTitleFixer])
+    PageFixerManager.runCmdLine([EventSeriesAcronymFixer])

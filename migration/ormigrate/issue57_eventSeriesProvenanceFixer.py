@@ -26,5 +26,5 @@ class EventSeriesProvenanceFixer(PageFixer):
             return Rating(4,RatingType.ok,'Wikidata id missing for dblp series')
         if hasWikidata:
             return Rating(3,RatingType.ok,'Wikidata only series')
-        return Rating(7,Rating.invalid,'Series provenance data missing')
+        return Rating(7,RatingType.invalid,'Series provenance data missing')
     

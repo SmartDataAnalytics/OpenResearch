@@ -5,10 +5,9 @@ Created on 2021-04-07
 '''
 
 import re
-from ormigrate.rating import Rating, RatingType
-from ormigrate.fixer import PageFixer
+from ormigrate.fixer import PageFixerManager,PageFixer
+from ormigrate.rating import Rating,RatingType
 from ormigrate.dictionary import Dictionary
-from ormigrate.toolbox import HelperFunctions
 
 class OrdinalFixer(PageFixer):
     '''
@@ -16,23 +15,11 @@ class OrdinalFixer(PageFixer):
        https://github.com/SmartDataAnalytics/OpenResearch/issues/119
        '''
 
-    def __init__(self, wikiClient, debug=False,restoreOut=False):
+    def __init__(self, wikiFileManager):
         '''
         Constructor
         '''
-        # call super constructor
-        super(OrdinalFixer, self).__init__(wikiClient)
-        self.debug = debug
-        self.restoreOut = restoreOut
-        
-    @staticmethod 
-    def fromWikiFileManager(wikiFileManager):
-        '''
-        construct me from the given wikiFileManager
-        '''
-        wikiClient=wikiFileManager.getWikiClient()
-        
-        pass
+        super(OrdinalFixer, self).__init__(wikiFileManager)
 
     def fixEventRecord(self,event:dict,lookup_dict: Dictionary, errors=None):
         if errors is None:
@@ -105,7 +92,5 @@ class OrdinalFixer(PageFixer):
                 painRating = Rating(7,RatingType.invalid,f'Ordinal {value} is not a number')
         return painRating
 
-if __name__ == "__main__":
-    fixer = OrdinalFixer()
-    fixer.debug = True
-    fixer.fixAllFiles(fixer.convertOrdinaltoCardinalWikiFile, "Ordinal", HelperFunctions.loadDictionary())
+if __name__ == '__main__':
+    PageFixerManager.runCmdLine([OrdinalFixer])

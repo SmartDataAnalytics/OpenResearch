@@ -5,10 +5,11 @@ Created on 12.07.2021
 '''
 import unittest
 from ormigrate.issue119_ordinal import OrdinalFixer
+from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import HelperFunctions as hf
-from openresearch.event import Event
-from lodstorage.jsonable import Types
-from wikifile.wikiFileManager import WikiFileManager
+from tests.pagefixtoolbox import PageFixerToolbox
+from ormigrate.fixer import PageFixerManager
+from ormigrate.toolbox import Profiler
 
 class TestOrdinalFixer(unittest.TestCase):
     '''
@@ -16,20 +17,37 @@ class TestOrdinalFixer(unittest.TestCase):
     '''
 
     def setUp(self):
+        self.testAll=True
         pass
 
 
     def tearDown(self):
         pass
 
-
     def testOrdinalFixer(self):
+        '''
+        test the ordinal Fixer on pageTitle examples
+        '''
+        pageLists=PageFixerToolbox.getPageTitleLists("IEAI 2021","AIAT 2021",testAll=self.testAll)
+        for pageList in pageLists:
+            pageCount="all" if pageList is None else len(pageList)
+            profile=Profiler(f"testing ordinals for {pageCount} pages")
+            args=PageFixerToolbox.getArgs(pageList,["--stats"],debug=self.debug)
+            pageFixerManager=PageFixerManager.runCmdLine([OrdinalFixer],args)
+            profile.time()
+            counters=pageFixerManager.getRatingCounters()
+            painCounter=counters["pain"]
+            debug=self.debug
+            if debug:
+                print (painCounter)
+
+    def testOrdinalFixerExamples(self):
         '''
             test for fixing Ordinals not a number
             https://github.com/SmartDataAnalytics/OpenResearch/issues/119
         '''
-        wikiFileManager=WikiFileManager('orclone')
-        fixer=OrdinalFixer.fromWikiFileManager(wikiFileManager)
+        wikiFileManager=Corpus.getWikiFileManager()
+        fixer=OrdinalFixer(wikiFileManager)
         lookup_dict = hf.loadDictionary()
         eventRecords= [{'Ordinal':2},
                        {'Ordinal':None},
@@ -41,18 +59,13 @@ class TestOrdinalFixer(unittest.TestCase):
         ordinals=[]
         for event in eventRecords:
             painRating = fixer.getRating(event)
-            res, err = fixer.fixEventRecord(event,lookup_dict)
+            res, _err = fixer.fixEventRecord(event,lookup_dict)
             ordinals.append(res['Ordinal'])
             self.assertIsNotNone(painRating)
             painRatings.append(painRating.pain)
         self.assertEqual(expectedPainRatings,painRatings)
         self.assertEqual(expectedOrdinals, ordinals)
-        types = Types("Event")
-        samples = Event.getSampleWikiSon()
-        fixed=fixer.convertOrdinaltoCardinalWikiFile('sample', samples[0], lookup_dict)
-        fixed_dic=hf.wikiSontoLOD(fixed)
-        types.getTypes("events", fixed_dic, 1)
-        self.assertTrue(types.typeMap['events']['Ordinal'] == 'int')
+      
 
 
 if __name__ == "__main__":

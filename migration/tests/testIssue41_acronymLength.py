@@ -1,5 +1,5 @@
 import unittest
-from ormigrate.fixer import PageFixer,PageFixerManager
+from ormigrate.fixer import PageFixerManager
 from ormigrate.issue41_acronym import AcronymLengthFixer
 from tests.pagefixtoolbox import PageFixerToolbox
 from ormigrate.toolbox import HelperFunctions as hf
