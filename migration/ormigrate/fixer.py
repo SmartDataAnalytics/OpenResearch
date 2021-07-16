@@ -17,7 +17,7 @@ class PageFixerManager(object):
     manage a list of PageFixers
     '''
     
-    def __init__(self,pageFixerClassList):
+    def __init__(self,pageFixerClassList,wikiFileManager):
         ''' 
         construct me 
         
@@ -26,6 +26,7 @@ class PageFixerManager(object):
         '''
         self.pageFixerClassList=pageFixerClassList
         self.pageFixers={}
+        self.wikiFileManager=wikiFileManager
         for pageFixerClass in pageFixerClassList:
             pageFixer=pageFixerClass(self)
             self.pageFixers[pageFixerClass]=pageFixer
@@ -62,7 +63,7 @@ class PageFixerManager(object):
         if args.verbose:
             print(f"Starting pagefixers for {args.source}")
         wikiFileManager=WikiFileManager(sourceWikiId=args.source,wikiTextPath=args.backupPath,login=False,debug=args.debug)
-        pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager)
+        pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager=wikiFileManager)
         for pageFixer in pageFixerManager.pageFixers:
             pageFixer.templateName=args.template
         pageFixerManager.args=args
@@ -154,7 +155,7 @@ class PageFixer(object):
         Constructor
         '''
         self.debug=debug
-        self.wikiFileManager=pageFixerManager.wikiFileManagers
+        self.wikiFileManager=pageFixerManager.wikiFileManager
         self.wikiclient = self.wikiFileManager.getWikiClient()
         if 'wikiUser' in self.wikiclient.__dict__:
             if 'wikiId' in self.wikiclient.wikiUser.__dict__:
