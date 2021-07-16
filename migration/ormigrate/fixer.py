@@ -17,20 +17,18 @@ class PageFixerManager(object):
     manage a list of PageFixers
     '''
     
-    def __init__(self,pageFixerClassList,wikiFileManager):
+    def __init__(self,pageFixerClassList):
         ''' 
         construct me 
         
         Args:
             pageFixerClassList(list): a list of pageFixers
-            wikiFileManager(WikiFileManager): the wikiFile manager to use
         '''
         self.pageFixerClassList=pageFixerClassList
-        self.wikiFileManager=wikiFileManager
-        self.pageFixers=[]
+        self.pageFixers={}
         for pageFixerClass in pageFixerClassList:
-            pageFixer=pageFixerClass(wikiFileManager=wikiFileManager)
-            self.pageFixers.append(pageFixer)
+            pageFixer=pageFixerClass(self)
+            self.pageFixers[pageFixerClass]=pageFixer
     
     @staticmethod
     def runCmdLine(pageFixerClassList:list,argv=None):
@@ -91,7 +89,7 @@ class PageFixerManager(object):
         '''
         self.errors=[]
         self.ratings={}
-        for pageFixer in self.pageFixers:
+        for pageFixer in self.pageFixers.values():
             for wikiFile in self.wikiFilesToWorkon.values():
                 try:
                     rating = pageFixer.getRatingFromWikiFile(wikiFile)
@@ -151,12 +149,13 @@ class PageFixer(object):
     general fixer for wiki pages
     '''
 
-    def __init__(self,wikiFileManager:WikiFileManager,debug=False):
+    def __init__(self,pageFixerManager:PageFixerManager,debug=False):
         '''
         Constructor
         '''
         self.debug=debug
-        self.wikiclient = wikiFileManager.getWikiClient()
+        self.wikiFileManager=pageFixerManager.wikiFileManagers
+        self.wikiclient = self.wikiFileManager.getWikiClient()
         if 'wikiUser' in self.wikiclient.__dict__:
             if 'wikiId' in self.wikiclient.wikiUser.__dict__:
                 self.wikiId=self.wikiclient.wikiUser.wikiId

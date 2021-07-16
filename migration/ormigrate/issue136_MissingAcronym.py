@@ -13,11 +13,11 @@ class EventSeriesAcronymFixer(PageFixer):
     fix Missing titles in event Series #136
     ''' 
     
-    def __init__(self, wikiFileManager):
+    def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
-        super(EventSeriesAcronymFixer, self).__init__(wikiFileManager)
+        super(EventSeriesAcronymFixer, self).__init__(pageFixerManager)
            
     @classmethod
     def getRating(cls,eventRecord):

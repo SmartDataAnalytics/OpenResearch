@@ -7,7 +7,6 @@ import re
 import ntpath
 from ormigrate.fixer import PageFixer
 from difflib import SequenceMatcher
-from ormigrate.toolbox import HelperFunctions as hf
 from lodstorage.sql import SQLDB
 from os.path import expanduser
 from wikifile.wikiFile import WikiFile
@@ -20,13 +19,12 @@ class WikiCFPIDFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/166
     '''
 
-    def __init__(self, wikiClient, debug=False):
+    def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
-        # call super constructor
-        super(WikiCFPIDFixer, self).__init__(wikiClient)
-        self.debug = debug
+        super(WikiCFPIDFixer, self).__init__(pageFixerManager)
+        self.debug = pageFixerManager.debug
         home = expanduser("~")
         self.wikiRender= WikiRender()
         dbname="%s/.ptp/Event_all.db" % home

@@ -34,7 +34,6 @@ class TestOrdinalFixer(unittest.TestCase):
         ord61=lookup_dict.getToken("61st")
         self.assertEqual("enum",ord61["type"])
         self.assertEqual(61,ord61["value"])
-        
 
     def testOrdinalFixer(self):
         '''

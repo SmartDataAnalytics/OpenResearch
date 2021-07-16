@@ -11,10 +11,11 @@ class EventSeriesProvenanceFixer(PageFixer):
     fixes Event Series
     '''
 
-    def __init__(self):
+    def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
+        super(EventSeriesProvenanceFixer, self).__init__(pageFixerManager)
         
     @classmethod
     def getRating(cls,eventRecord):

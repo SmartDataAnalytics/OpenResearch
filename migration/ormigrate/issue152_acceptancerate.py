@@ -14,13 +14,11 @@ class AcceptanceRateFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/152
     '''
 
-    def __init__(self, wikiClient,debug=False):
+    def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
-        # call super constructor
-        super(AcceptanceRateFixer,self).__init__(wikiClient)
-        self.debug=debug
+        super(AcceptanceRateFixer, self).__init__(pageFixerManager)
         self.nosub=0
         self.noacc=0
         self.painrating= None

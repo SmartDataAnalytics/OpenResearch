@@ -17,6 +17,12 @@ class CurationQualityChecker(PageFixer):
     '''
     userrating={}
     
+    def __init__(self,pageFixerManager):
+        '''
+        Constructor
+        '''
+        super(CurationQualityChecker, self).__init__(pageFixerManager)
+    
     @classmethod
     def loadUserRating(cls,path=None):
         '''

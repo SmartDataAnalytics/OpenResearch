@@ -27,7 +27,6 @@ class CorpusForTesting(object):
             hasCache=hasCache and os.path.isfile(jsonFile)
         return hasCache
         
-
     @classmethod
     def getWikiFileManager(cls,wikiId=None,debug=False):
         if wikiId is None:

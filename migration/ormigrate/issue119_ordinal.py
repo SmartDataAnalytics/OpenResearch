@@ -15,11 +15,11 @@ class OrdinalFixer(PageFixer):
        https://github.com/SmartDataAnalytics/OpenResearch/issues/119
        '''
 
-    def __init__(self, wikiFileManager):
+    def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
-        super(OrdinalFixer, self).__init__(wikiFileManager)
+        super(OrdinalFixer, self).__init__(pageFixerManager)
 
     def fixEventRecord(self,event:dict,lookup_dict: Dictionary, errors=None):
         if errors is None:

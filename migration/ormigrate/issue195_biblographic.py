@@ -1,7 +1,6 @@
 '''
 @author: mk
 '''
-import re
 from ormigrate.rating import Rating,RatingType
 from ormigrate.fixer import PageFixer
 
@@ -11,16 +10,11 @@ class BiblographicFieldFixer(PageFixer):
         https://github.com/SmartDataAnalytics/OpenResearch/issues/195
     '''
 
-    def __init__(self, wikiClient,debug=False):
+    def __init__(self,pageFixerManager):
         '''
-                Constructor
-                '''
-        # call super constructor
-        super(BiblographicFieldFixer, self).__init__(wikiClient)
-        self.debug = debug
-        self.nosub = 0
-        self.noacc = 0
-        self.painrating = None
+        Constructor
+        '''
+        super(BiblographicFieldFixer, self).__init__(pageFixerManager)
 
     @classmethod
     def getRating(self, eventRecord):

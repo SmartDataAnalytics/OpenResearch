@@ -13,11 +13,11 @@ class NullValueFixer(PageFixer):
     Fixer for https://github.com/SmartDataAnalytics/OpenResearch/issues/150
     '''
 
-    def __init__(self, wikiFileManager):
+    def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
-        super(NullValueFixer, self).__init__(wikiFileManager)
+        super(NullValueFixer, self).__init__(pageFixerManager)
         
     def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
         '''

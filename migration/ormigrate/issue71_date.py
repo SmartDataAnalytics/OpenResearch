@@ -14,11 +14,11 @@ class DateFixer(PageFixer):
     fixer for Date being incorrect
     https://github.com/SmartDataAnalytics/OpenResearch/issues/71
     '''
-    def __init__(self, wikiFileManager):
+    def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
-        super(DateFixer, self).__init__(wikiFileManager)
+        super(DateFixer, self).__init__(pageFixerManager)
         
 
     def fixEventRecord(self, event, datelist=['Start date' , 'End date'], errors=None):

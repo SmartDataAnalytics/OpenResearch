@@ -14,11 +14,11 @@ class SeriesFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/163
     '''
 
-    def __init__(self, wikiFileManager):
+    def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
-        super(SeriesFixer, self).__init__(wikiFileManager)
+        super(SeriesFixer, self).__init__(pageFixerManager)
 
 
     def getRating(self,eventRecord):

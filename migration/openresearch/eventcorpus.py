@@ -19,12 +19,12 @@ class EventCorpus(object):
         Constructor
         '''
         self.debug=debug
-                
 
     def fromWikiFileManager(self,wikiFileManager):
         '''
             get events with series by knitting / linking the entities together
         '''
+        self.wikiFileManager=wikiFileManager
         self.eventList = EventList()
         self.eventList.debug = self.debug
         self.eventList.fromWikiFileManager(wikiFileManager)
@@ -80,7 +80,7 @@ class EventCorpus(object):
             print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
 
 
-    def generateCSV(self,pageTitles,filename,filepath= "%s/.ptp/csvs/" % (expanduser("~"))):
+    def generateCSV(self,pageTitles,filename,filepath=None):
         """
         Generate a csv with the given pageTitles
         Args:
@@ -88,15 +88,17 @@ class EventCorpus(object):
             filename(str):CSV file name
             filepath(str):filepath to create csv. Default: ~/.ptp/csvs/
         """
-        wikiFileMananger = self.eventList.wikiFileManger
-        LoD = wikiFileMananger.exportWikiSonToLOD(pageTitles, 'Event')
+        if filepath is None:
+            home=expanduser("~")
+            filepath= f"{home}/.or/csvs/"
+        lod = self.wikiFileMananger.exportWikiSonToLOD(pageTitles, 'Event')
         if self.debug:
             print(pageTitles)
-            print(LoD)
+            print(lod)
 
         savepath = filepath + filename
         hf.ensureDirectoryExists(savepath)
-        CSV.storeToCSVFile(LoD, savepath)
+        CSV.storeToCSVFile(lod, savepath)
         return savepath
 
     def getEventCsv(self,eventTitle):

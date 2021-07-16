@@ -4,18 +4,23 @@ from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import Profiler
 from tests.corpusfortesting import CorpusForTesting
-
+from tests.pagefixtoolbox import PageFixerToolbox
+from ormigrate.fixer import PageFixerManager
 
 class TestLocationFixer(TestCase):
     '''
     test location fixer
     '''
 
-    def setUp(self) -> None:
-        self.profile=True
-        self.fixer=self.getFixer()
+    @classmethod
+    def setUpClass(cls):
+        cls.profile=True
+        cls.fixer=cls.getFixer()
     
+    @classmethod
     def getFixer(self):
+        argv=PageFixerToolbox.getArgs(None,["--stats"],debug=self.debug)
+        pageFixerManager=PageFixerManager.fromCommandLine([LocationFixer], argv)
         wikiFileManager = CorpusForTesting.getWikiFileManager()
         fixer=LocationFixer(wikiFileManager=wikiFileManager)
         return fixer
