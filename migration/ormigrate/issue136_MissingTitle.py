@@ -4,7 +4,7 @@ Created on 2021-07-15
 @author: wf
 '''
 from ormigrate.fixer import PageFixerManager,PageFixer
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating,RatingType
 
 class EventSeriesTitleFixer(PageFixer):
     '''
@@ -22,9 +22,9 @@ class EventSeriesTitleFixer(PageFixer):
     @classmethod
     def getRating(cls,eventRecord):
         if 'title' in eventRecord:
-            return Rating(1,Rating.ok,'title available')
+            return Rating(1,RatingType.ok,'title available')
         else:
-            return  Rating(5,Rating.missing,'title is missing')
+            return  Rating(5,RatingType.missing,'title is missing')
         
         
 if __name__ == '__main__':

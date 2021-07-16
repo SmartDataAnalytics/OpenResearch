@@ -4,7 +4,7 @@ Created on 2021-04-15
 @author: wf
 '''
 from ormigrate.fixer import PageFixer
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating,RatingType
 from openresearch.openresearch import OpenResearch
 import yaml
 import os
@@ -38,8 +38,8 @@ class CurationQualityChecker(PageFixer):
             userName=entityRecord['lastEditor'].replace('User:','')
             if userName in userRating:
                 painRecord=userRating[userName]
-                return Rating(painRecord['pain'],Rating.ok,painRecord['hint'])
+                return Rating(painRecord['pain'],RatingType.ok,painRecord['hint'])
             else:
-                return Rating(7,Rating.invalid,'last edited by unrated curator')
+                return Rating(7,RatingType.invalid,'last edited by unrated curator')
         else:   
-            return Rating(10,Rating.missing,'bug: lastEditor not set')
+            return Rating(10,RatingType.missing,'bug: lastEditor not set')

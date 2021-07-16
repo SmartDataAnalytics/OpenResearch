@@ -2,7 +2,7 @@
 @author: mk
 '''
 import re
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating,RatingType
 from ormigrate.fixer import PageFixer
 
 class BiblographicFieldFixer(PageFixer):
@@ -35,9 +35,9 @@ class BiblographicFieldFixer(PageFixer):
                 else:
                     hasBiblographic= True
         if hasProceedings:
-            painrating = Rating(7, Rating.ok,f'Has Proceedings Bibliography field exists which is not defined as a property in OR')
+            painrating = Rating(7, RatingType.ok,f'Has Proceedings Bibliography field exists which is not defined as a property in OR')
         elif hasBiblographic:
-            painrating = Rating(5, Rating.ok,f'Has Bibliography field exists which is defined as a property in OR but is not used properly')
+            painrating = Rating(5, RatingType.ok,f'Has Bibliography field exists which is defined as a property in OR but is not used properly')
         else:
-            painrating = Rating(1, Rating.ok, f'Bibliography field not found in event')
+            painrating = Rating(1, RatingType.ok, f'Bibliography field not found in event')
         return painrating

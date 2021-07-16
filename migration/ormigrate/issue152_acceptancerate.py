@@ -4,7 +4,7 @@ Created on 2021-04-02
 @author: wf
 '''
 import re
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating,RatingType
 from ormigrate.fixer import PageFixer
 
 
@@ -61,13 +61,13 @@ class AcceptanceRateFixer(PageFixer):
         if 'submittedPapers' in eventRecord: submittedPapers = eventRecord['submittedPapers']
         if 'acceptedPapers' in eventRecord: acceptedPapers = eventRecord['acceptedPapers']
         if submittedPapers is not None and acceptedPapers is not None:
-            painrating=Rating(1,Rating.ok,f'Both fields Submitted papers and Accepted Papers are available')
+            painrating=Rating(1,RatingType.ok,f'Both fields Submitted papers and Accepted Papers are available')
         elif submittedPapers is  None and acceptedPapers is  None:
-            painrating=Rating(3,Rating.missing,f'Both fields Submitted papers and Accepted Papers are not available')
+            painrating=Rating(3,RatingType.missing,f'Both fields Submitted papers and Accepted Papers are not available')
         elif submittedPapers is not None and acceptedPapers is None:
-            painrating=Rating(5,Rating.missing,f'Submitted papers exists but Accepted Papers is not available')
+            painrating=Rating(5,RatingType.missing,f'Submitted papers exists but Accepted Papers is not available')
         elif submittedPapers is None and acceptedPapers is not None:
-            painrating=Rating(7,Rating.missing,f'Accepted Papers exists but Submitted papers is not available')
+            painrating=Rating(7,RatingType.missing,f'Accepted Papers exists but Submitted papers is not available')
         return painrating
 
         

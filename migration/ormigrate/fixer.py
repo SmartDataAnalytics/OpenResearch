@@ -6,9 +6,11 @@ Created on 06.04.2021
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
-from ormigrate.rating import Rating,PageRating
+from openresearch.event import OREntity,EventList,EventSeriesList
+from ormigrate.rating import Rating,RatingType,PageRating
 from collections import Counter
 import sys
+import traceback
 
 class PageFixerManager(object):
     '''
@@ -76,11 +78,14 @@ class PageFixerManager(object):
         if self.args.stats:
             self.getRatings(debug=self.args.debug)
             self.showRatingStats()
-                
             
-    def getRatings(self,debug):
+    def getRatings(self,debug:bool,debugLimit:int=10):
         '''
         get the ratings for my pageFixers
+        
+        Args:
+            debug(bool): should debug information be printed
+            debugLimit(int): maximum number of debug message to be printed
         '''
         self.errors=[]
         self.ratings={}
@@ -92,12 +97,49 @@ class PageFixerManager(object):
                 except Exception as e:
                     self.errors.append({'error':e,'fixer':pageFixer,'pageTitle':wikiFile.getPageTitle()})
         if len(self.errors)>0 and debug:
-            print(self.errors)
-    
+            print(f"there are {len(self.errors)} errors")
+            for i,errorRecord in enumerate(self.errors):
+                if i>debugLimit:
+                    break
+                error=errorRecord["error"]
+                traceback.print_tb(error.__traceback__)
+                pageFixer=errorRecord["fixer"]
+                pageTitle=errorRecord["pageTitle"]
+                print(f"{i:3d}: error {error} for fixer {pageFixer.__class__.__name__} on pageTitle {pageTitle}")
+                
+    def getRatingCounters(self):
+        '''
+        get the ratingCounter
+        '''
+        counters={}
+        for attr in ["reason","pain"]:
+            counter=Counter()
+            counters[attr]=counter
+            for rating in self.ratings.values():
+                counter[rating.__dict__[attr]]+=1
+        return counters
+        
     def showRatingStats(self): 
         '''
         show the rating statistics
         '''
+        # TODO use list of dicts and pyLodStorage stats and tabulate options
+        # to allow to transfer results to github,wiki and papers
+        counters=self.getRatingCounters()
+        counter=counters["reason"]
+        print("Rating:")
+        total=sum(counter.values())
+        for ratingType in counter:
+            ratingTypeCount=counter[ratingType]
+            print(f"{ratingType.value}:{ratingTypeCount:5d} ({ratingTypeCount/total*100:5.1f}%)")
+        counter=counters["pain"]
+        total=sum(counter.values())    
+        print("Pain:")
+        for pain in counters["pain"]:
+            painCount=counter[pain]
+            print(f"{pain:2d}:{painCount:5d} ({painCount/total*100:5.1f}%)")    
+            
+    def showAllRatings(self):
         for i,pageTitle in enumerate(self.ratings):
             print(f"{i+1}:{pageTitle}->{self.ratings[pageTitle]}")
     
@@ -116,6 +158,9 @@ class PageFixer(object):
         if 'wikiUser' in self.wikiclient.__dict__:
             if 'wikiId' in self.wikiclient.wikiUser.__dict__:
                 self.wikiId=self.wikiclient.wikiUser.wikiId
+        self.propertyLookups={}
+        self.propertyLookups["Event"]=EventList.getPropertyLookup()
+        self.propertyLookups["Event series"]=EventSeriesList.getPropertyLookup()
      
     def fixEventRecord(self):
         ''' abstract base function to be overwritten by fixing class'''
@@ -132,15 +177,29 @@ class PageFixer(object):
             Rating: The rating for this WikiFile
         
         '''
-        rating=Rating(6,Rating.invalid,f"{self.__class__.__name__} has not rating implementation")
+        rating=Rating(6,RatingType.invalid,f"{self.__class__.__name__} has no rating implementation for {wikiFile.getPageTitle()}")
         return rating
     
     def prepareWikiFileRating(self,wikiFile,templateName):
+        '''
+        prepare the rating of an entity record directly from the wikiFile
+        '''
+        # get the markup
         wikiText=str(wikiFile)
-        eventDict=wikiFile.extract_template(templateName)
+        # retrieve the name/value list
+        entityDict=wikiFile.extract_template(templateName)
+        # retrieve the page Title
         pageTitle=wikiFile.getPageTitle()
-        rating=PageRating(pageTitle,templateName,7,Rating.missing,"rating error")
-        return wikiText,eventDict,rating
+        if entityDict:
+            # convert the content according to the property lookup
+            propertyLookup=self.propertyLookups[templateName]
+            # create a proper entity record
+            entityRecord=OREntity.fromWikiSonToLod(entityDict,propertyLookup)
+        else:
+            entityRecord={}
+        # create a default bad rating
+        rating=PageRating(pageTitle,templateName,7,RatingType.missing,"rating error")
+        return wikiText,entityRecord,rating
 
     def fixEventRecords(self, events:list):
         """

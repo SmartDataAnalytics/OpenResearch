@@ -5,7 +5,7 @@ Created on 2021-04-07
 '''
 
 import re
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating, RatingType
 from ormigrate.fixer import PageFixer
 from ormigrate.dictionary import Dictionary
 from ormigrate.toolbox import HelperFunctions
@@ -93,16 +93,16 @@ class OrdinalFixer(PageFixer):
         if 'Ordinal' in eventRecord: value=eventRecord['Ordinal']
         if 'ordinal' in eventRecord: value=eventRecord['ordinal']
         if value is None:
-            painRating = Rating(4,Rating.missing,'Ordinal is missing')
+            painRating = Rating(4,RatingType.missing,'Ordinal is missing')
         elif type(value) == int:
             if value<1 or value>100:
-                painRating=Rating(7,Rating.invalid,f'Ordinal {value} out of range 1-100')
-            painRating = Rating(1,Rating.ok,f'Ordinal {value} valid and in range 1-100')
+                painRating=Rating(7,RatingType.invalid,f'Ordinal {value} out of range 1-100')
+            painRating = Rating(1,RatingType.ok,f'Ordinal {value} valid and in range 1-100')
         elif type(value) == str:
             if any(char.isdigit() for char in value):
-                painRating = Rating(5,Rating.invalid,f'Ordinal {value} is not a number')
+                painRating = Rating(5,RatingType.invalid,f'Ordinal {value} is not a number')
             else:
-                painRating = Rating(7,Rating.invalid,f'Ordinal {value} is not a number')
+                painRating = Rating(7,RatingType.invalid,f'Ordinal {value} is not a number')
         return painRating
 
 if __name__ == "__main__":

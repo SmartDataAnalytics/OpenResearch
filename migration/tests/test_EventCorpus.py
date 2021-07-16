@@ -5,7 +5,6 @@ Created on 2021-07-14
 '''
 import unittest
 from tests.corpusfortesting import CorpusForTesting as Corpus
-import time
 from ormigrate.toolbox import Profiler
 
 class TestEventCorpus(unittest.TestCase):

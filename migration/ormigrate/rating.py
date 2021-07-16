@@ -3,13 +3,20 @@ Created on 2021-04-16
 
 @author: wf
 '''
-class Rating(object):
+from enum import Enum
+
+class RatingType(Enum):
     '''
-    I am rating
+    the rating type
     '''
     missing='❌'
     invalid='👎'
     ok='👍'
+    
+class Rating(object):
+    '''
+    I am rating
+    '''
 
     def __init__(self,pain:int,reason:str,hint:str):
         '''

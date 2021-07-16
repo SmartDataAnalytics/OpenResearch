@@ -18,8 +18,6 @@ class TestInvalidDatesFixer(unittest.TestCase):
     def tearDown(self):
         pass
 
-
-    
         
     def testIssue71(self):
         '''
@@ -48,6 +46,7 @@ class TestInvalidDatesFixer(unittest.TestCase):
         self.assertEqual(expectedPainRatings,painRatings)
         self.assertEqual(expectedStartDates, fixedStartDates)
         self.assertEqual(expectedEndDates, fixedEndDates)
+
 
         types = Types("Event")
         samples = Event.getSampleWikiSon()

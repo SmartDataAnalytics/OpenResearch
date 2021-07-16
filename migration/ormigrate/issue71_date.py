@@ -5,7 +5,7 @@ Created on 2021-04-06
 '''
 import re
 from ormigrate.fixer import PageFixer
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating,RatingType
 from ormigrate.toolbox import HelperFunctions as hf
 
 
@@ -78,13 +78,13 @@ class DateFixer(PageFixer):
         if 'endDate' in eventRecord: endDate = eventRecord['endDate']
 
         if startDate is not None and endDate is not None:
-            painrating= Rating(1,Rating.ok,f'Dates,  {startDate} , {endDate} valid')
+            painrating= Rating(1,RatingType.ok,f'Dates,  {startDate} , {endDate} valid')
         elif startDate is None and endDate is None:
-            painrating=Rating(5,Rating.missing,f'Dates not found')
+            painrating=Rating(5,RatingType.missing,f'Dates not found')
         elif startDate is None and endDate is not None:
-            painrating=Rating(7,Rating.missing,f'Start Date is not there while end date exists')
+            painrating=Rating(7,RatingType.missing,f'Start Date is not there while end date exists')
         elif startDate is not None and endDate is None:
-            painrating=Rating(3,Rating.missing,f'Start Date is there but end date is not')
+            painrating=Rating(3,RatingType.missing,f'Start Date is there but end date is not')
         return painrating
 
 if __name__ == "__main__":

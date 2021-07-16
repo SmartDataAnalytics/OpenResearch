@@ -11,24 +11,10 @@ from lodstorage.lod import LOD
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 from wikibot.wikipush import WikiPush
-from ormigrate.fixer import PageFixer
 
 import os
 import time
 from openresearch.openresearch import OpenResearch
-
-# TODO/FIXME refactor to PagePixerManager and do not use
-# hard coded imports but a less coupled approach that allows
-# adding fixers at runtime
-from ormigrate.issue41_acronym import AcronymLengthFixer
-from ormigrate.issue119_ordinal import OrdinalFixer
-from ormigrate.issue71_date import DateFixer
-from ormigrate.eventSeriesFixer import EventSeriesProvenanceFixer
-from ormigrate.issue136_MissingTitle import  EventSeriesTitleFixer
-from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
-from ormigrate.issue170_curation import CurationQualityChecker
-from ormigrate.issue195_biblographic import BiblographicFieldFixer
-
 
 class OREntity(JSONAble):
     '''
@@ -49,14 +35,16 @@ class OREntity(JSONAble):
             lookup(dict): the mapping of keys/names for the name/value pairs
         Return:
             dict: a dict which replaces name,value pairs with lookup[name],value pairs
-        '''  
-        result={}
-        for key in lookup:
-            if key in record:
-                newKey=lookup[key].get('name')
-                if newKey is not None:
-                    result[newKey]=record[key]
-                    #del record[key]
+        ''' 
+        result=None 
+        if record:
+            result={}
+            for key in lookup:
+                if key in record:
+                    newKey=lookup[key].get('name')
+                    if newKey is not None:
+                        result[newKey]=record[key]
+                        #del record[key]
         return result
 
     def fixRecord(self, record):
@@ -403,37 +391,7 @@ class EventSeries(OREntity):
 
         return samplesWikiSon
     
-    @classmethod       
-    def rateMigration(cls,eventSeries,eventSeriesRecord,pageFixerList=None,limit=None):
-        '''
-        get the ratings from the different fixers
-        '''
-        if pageFixerList is None:
-            pageFixerList= [
-                {
-                    "column": "provenancePainRating",
-                    "fixer": EventSeriesProvenanceFixer
-                },
-                {
-                    "column": "curationPainRating",
-                    "fixer": CurationQualityChecker
-                },
-                {
-                    "column": "titlePainRating",
-                    "fixer": EventSeriesTitleFixer
-                }
-            ]
-        if limit is None:
-            return PageFixer.rateWithFixers(pageFixerList, eventSeries, eventSeriesRecord)
-        else:
-            for record in pageFixerList:
-                fixer = record["fixer"]
-                column = record["column"]
-                error = PageFixer.rateWithFixers(pageFixerList, eventSeries, eventSeriesRecord)
-                if eventSeriesRecord[column].pain >= limit:
-                    return error
-            return None
-        
+  
     
     def __str__(self):
         text=self.pageTitle
@@ -580,48 +538,7 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
         return samplesWikiSon
     
    
-    @classmethod       
-    def rateMigration(cls,event,eventRecord,pageFixerList=None,limit= None):
-        '''
-        get the ratings from the different fixers
-        '''
-        if pageFixerList is None:
-            pageFixerList= [
-                {
-                    "column": "curationPainRating",
-                    "fixer": CurationQualityChecker
-                },
-                {
-                    "column": "acronymPainRating",
-                    "fixer": AcronymLengthFixer
-                },
-                {
-                    "column": "ordinalPainRating",
-                    "fixer": OrdinalFixer
-                },
-                {
-                    "column": "datePainRating",
-                    "fixer": DateFixer
-                },
-                {
-                    "column": "AcceptanceRatePainRating",
-                    "fixer": AcceptanceRateFixer
-                },
-                {
-                    "column": "BiblographicFieldFixer",
-                    "fixer": BiblographicFieldFixer
-                }
-            ]
-        if limit is None:
-            return PageFixer.rateWithFixers(pageFixerList, event,eventRecord)
-        else:
-            for record in pageFixerList:
-                column = record["column"]
-                error = PageFixer.rateWithFixers(pageFixerList, event, eventRecord)
-                if eventRecord[column].pain >= limit:
-                    return error
-            return None
-
+   
     
     def __str__(self):
         text=self.pageTitle

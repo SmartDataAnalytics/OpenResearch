@@ -1,5 +1,5 @@
 from ormigrate.fixer import PageFixer,PageFixerManager
-from ormigrate.rating import Rating,PageRating
+from ormigrate.rating import Rating,PageRating,RatingType
 from wikifile.wikiFile import WikiFile
 import re
 
@@ -43,25 +43,25 @@ class AcronymLengthFixer(PageFixer):
             int: pain rating of the acronym
         '''
         if 'acronym' not in eventRecord:
-            return Rating(7,Rating.missing,'software issue acronym info missing')
+            return Rating(7,RatingType.missing,'software issue acronym info missing')
         acronym = eventRecord['acronym']
         if acronym is None:
-            return Rating(6,Rating.missing,'acronym missing')
+            return Rating(6,RatingType.missing,'acronym missing')
         if '"' in acronym:
-            return Rating(10,Rating.invalid,'acronym contains double quotes')
+            return Rating(10,RatingType.invalid,'acronym contains double quotes')
         alen=len(acronym)
         if alen < 5:
-            return Rating(5,Rating.invalid,f'acronym length {alen}<5')
+            return Rating(5,RatingType.invalid,f'acronym length {alen}<5')
         elif alen > 45:
-            return Rating(4,Rating.invalid,f'acronym length {alen}>45')
+            return Rating(4,RatingType.invalid,f'acronym length {alen}>45')
         else:
             msg=f'acronym length {alen} in valid range 5-45'
             
         if re.match(r'[A-Z]+\s*[0-9]+', acronym):
             # Regex based on the results of https://cr.bitplan.com/index.php/Acronyms
-            return Rating(1,Rating.ok,f'standard acronym with {msg}')
+            return Rating(1,RatingType.ok,f'standard acronym with {msg}')
         else:
-            return Rating(2,Rating.ok,f'non standard acronym with {msg}')
+            return Rating(2,RatingType.ok,f'non standard acronym with {msg}')
 
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([AcronymLengthFixer])

@@ -5,7 +5,7 @@ Created on 2021-04-06
 '''
 from ormigrate.fixer import PageFixer
 from ormigrate.toolbox import HelperFunctions as hf
-from ormigrate.rating import Rating
+from ormigrate.rating import Rating,RatingType
 from openresearch.event import EventList
 
 class SeriesFixer(PageFixer):
@@ -28,11 +28,11 @@ class SeriesFixer(PageFixer):
         if 'inEventSeries' in eventRecord:
             value=eventRecord['inEventSeries']
             if type(value)==list:
-                painRating = Rating(9, Rating.invalid, f'Event Series {value} has multiple objects')
+                painRating = Rating(9, RatingType.invalid, f'Event Series {value} has multiple objects')
             else:
-                painRating = Rating(1, Rating.ok, f'Event Series is correct for the Event')
+                painRating = Rating(1, RatingType.ok, f'Event Series is correct for the Event')
         else:
-            painRating = Rating(7, Rating.missing, f'No series found in Event')
+            painRating = Rating(7, RatingType.missing, f'No series found in Event')
         return painRating
 
     def checkAll(self,askExtra):
