@@ -88,8 +88,4 @@ class DateFixer(PageFixer):
         return painrating
 
 if __name__ == "__main__":
-    fixer = DateFixer()
-    fixer.debug = True
-    # fixer.checkAllFiles(fixer.getFixedDate, 'deadline')
-    fixer.fixAllFiles(fixer.getFixedDateWikiFile, "Date", 'date')
-    fixer.fixAllFiles(fixer.getFixedDateWikiFile, "Deadline", 'deadline')
+    PageFixerManager.runCmdLine([DateFixer])

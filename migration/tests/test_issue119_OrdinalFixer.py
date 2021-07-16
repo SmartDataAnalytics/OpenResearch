@@ -23,6 +23,17 @@ class TestOrdinalFixer(unittest.TestCase):
 
     def tearDown(self):
         pass
+    
+    def testDictionaryLoad(self):
+        """
+        test for loading the lookup Dictionary
+        """
+        lookup_dict=hf.loadDictionary()
+        self.assertIsNotNone(lookup_dict)
+        ord61=lookup_dict.getToken("61st")
+        self.assertEqual("enum",ord61["type"])
+        self.assertEqual(61,ord61["value"])
+        
 
     def testOrdinalFixer(self):
         '''

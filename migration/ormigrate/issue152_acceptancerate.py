@@ -4,9 +4,8 @@ Created on 2021-04-02
 @author: wf
 '''
 import re
+from ormigrate.fixer import PageFixerManager,PageFixer
 from ormigrate.rating import Rating,RatingType
-from ormigrate.fixer import PageFixer
-
 
 class AcceptanceRateFixer(PageFixer):
 
@@ -71,10 +70,7 @@ class AcceptanceRateFixer(PageFixer):
         return painrating
 
         
-if __name__ == "__main__":
-    fixer=AcceptanceRateFixer()
-    fixer.debug=True
-    # fixer.checkAllFiles(fixer.check)
-    # print (fixer.result())
+if __name__ == '__main__':
+    PageFixerManager.runCmdLine([AcceptanceRateFixer])
 
 

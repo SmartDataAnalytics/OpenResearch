@@ -34,10 +34,11 @@ class TestEvent(unittest.TestCase):
             eventSeriesList.fromLoD(lod)
             self.assertTrue(len(eventSeriesList.getList())>0)
             for eventSeries in eventSeriesList.getList():
-                self.assertTrue(isinstance(eventSeries,EventSeries))
-                self.assertTrue(eventSeries.acronym is not None)
                 if self.debug:
                     print(eventSeries)
+                self.assertTrue(isinstance(eventSeries,EventSeries))
+                self.assertTrue(eventSeries.acronym is not None)
+                
       
     def testEvent(self):
         '''
@@ -51,11 +52,12 @@ class TestEvent(unittest.TestCase):
             eventList.fromLoD(lod)
             self.assertTrue(len(eventList.getList())>0)
             for event in eventList.getList():
+                if self.debug:
+                    print(event)
                 self.assertTrue(isinstance(event,Event))
                 self.assertTrue(event.acronym is not None)
                 self.assertTrue(event.ordinal is not None)
-                if self.debug:
-                    print(event)
+               
        
         
     def getSQLDB(self,path=None):

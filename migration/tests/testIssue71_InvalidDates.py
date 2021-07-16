@@ -4,7 +4,7 @@ Created on 15.07.2021
 @author: wf
 '''
 import unittest
-
+from ormigrate.toolbox import HelperFunctions as hf
 
 class TestInvalidDatesFixer(unittest.TestCase):
     '''
@@ -17,6 +17,14 @@ class TestInvalidDatesFixer(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def testDateParser(self):
+        '''
+        test the date parser used to convert dates in issue 71
+        '''
+        sampledates=['2020-02-20','2020/02/20','2020.02.20','20/02/2020','02/20/2020','20.02.2020','02.20.2020','20 Feb, 2020','2020, Feb 20','2020 20 Feb','2020 Feb 20']
+        for date in sampledates:
+            self.assertEqual('2020/02/20',hf.parseDate(date))
 
         
     def testIssue71(self):

@@ -364,7 +364,7 @@ class EventSeries(OREntity):
         return samplesLOD
 
     @classmethod
-    def getSampleWikiSon(cls, mode='legacy'):
+    def getSampleWikiTextList(cls, mode='legacy'):
         '''
         Returns a sample of Event Series in wikison format
         Args:
@@ -390,7 +390,6 @@ class EventSeries(OREntity):
             samplesWikiSon = "..."
 
         return samplesWikiSon
-    
   
     
     def __str__(self):
@@ -484,14 +483,15 @@ class Event(OREntity):
         {
             'acronym': "IDC 2009",
             'title': "The 8th International Conference on Interaction Design and Children",
-            'pageTitle': 'IDC 2009'
+            'pageTitle': 'IDC 2009',
+            'ordinal': 8
         }
 
         ]
         return samplesLOD
     
     @classmethod
-    def getSampleWikiSon(cls,mode='legacy'):
+    def getSampleWikiTextList(cls,mode='legacy'):
         if mode=='legacy':
             samplesWikiSon=["""{{Event
 |Acronym=ICSME 2020
@@ -518,6 +518,7 @@ class Event(OREntity):
 }}''',
 '''36th IEEE International Conference on Software Maintenance and Evolution (ICSME)'''""","""{{Event
 |Acronym=AISB 2009
+|Ordinal=36
 |Title=AISB Symposium: New Frontiers in Human-Robot Interaction
 |Type=Conference
 |Field=Uncategorized
