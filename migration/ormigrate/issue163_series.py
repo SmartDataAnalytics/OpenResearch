@@ -3,7 +3,7 @@ Created on 2021-04-06
 
 @author: wf
 '''
-from ormigrate.fixer import PageFixer
+from ormigrate.fixer import PageFixer, PageFixerManager
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.rating import Rating,RatingType
 from openresearch.event import EventList
@@ -14,17 +14,17 @@ class SeriesFixer(PageFixer):
     https://github.com/SmartDataAnalytics/OpenResearch/issues/163
     '''
 
-    def __init__(self, wikiClient, debug=False):
+    def __init__(self, wikiFileManager):
         '''
         Constructor
         '''
-        # call super constructor
-        super(SeriesFixer, self).__init__(wikiClient)
-        self.debug = debug
+        super(SeriesFixer, self).__init__(wikiFileManager)
 
 
     def getRating(self,eventRecord):
-        painrating = None
+        '''
+        get the pain Rating for the given event Record
+        '''
         if 'inEventSeries' in eventRecord:
             value=eventRecord['inEventSeries']
             if type(value)==list:
@@ -58,6 +58,4 @@ class SeriesFixer(PageFixer):
 
 
 if __name__ == "__main__":
-    fixer = SeriesFixer(debug=True)
-    count=fixer.checkAll("")
-    print(count)
+    PageFixerManager.runCmdLine([SeriesFixer])

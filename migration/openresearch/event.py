@@ -443,13 +443,13 @@ class EventList(OREntityList):
             { 'prop':'Event type',          'name': 'eventType'},
             { 'prop':'Start date',          'name': 'startDate'},
             { 'prop':'End date',            'name': 'endDate'},
-            { 'prop':'Event in series',     'name': 'inEventSeries'},
+            { 'prop':'Series',              'name': 'inEventSeries'},
             { 'prop':'Has_location_country','name': 'country'},
             { 'prop':'Has_location_state',  'name': 'region'},
             { 'prop':'Has_location_city',   'name': 'city'},
-            { 'prop': 'Country', 'name': 'country'},
-            { 'prop': 'State', 'name': 'region'},
-            { 'prop': 'City', 'name': 'city'},
+            { 'prop':'Country',             'name': 'country'},
+            { 'prop':'State',               'name': 'region'},
+            { 'prop':'City',                'name': 'city'},
             { 'prop':'Accepted_papers',     'name': 'acceptedPapers'},
             { 'prop':'Submitted_papers',    'name': 'submittedPapers'}
     ]               

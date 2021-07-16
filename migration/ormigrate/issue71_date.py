@@ -4,7 +4,7 @@ Created on 2021-04-06
 @author: wf
 '''
 import re
-from ormigrate.fixer import PageFixer
+from ormigrate.fixer import PageFixer,PageFixerManager
 from ormigrate.rating import Rating,RatingType
 from ormigrate.toolbox import HelperFunctions as hf
 
@@ -14,15 +14,12 @@ class DateFixer(PageFixer):
     fixer for Date being incorrect
     https://github.com/SmartDataAnalytics/OpenResearch/issues/71
     '''
-
-    def __init__(self, wikiClient, debug=False,restoreOut=False):
+    def __init__(self, wikiFileManager):
         '''
         Constructor
         '''
-        # call super constructor
-        super(DateFixer, self).__init__(wikiClient)
-        self.debug = debug
-        self.restoreOut = restoreOut
+        super(DateFixer, self).__init__(wikiFileManager)
+        
 
     def fixEventRecord(self, event, datelist=['Start date' , 'End date'], errors=None):
         if errors is None:
