@@ -18,6 +18,7 @@ class TestOrdinalFixer(unittest.TestCase):
 
     def setUp(self):
         self.testAll=True
+        self.debug=False
         pass
 
 
@@ -51,6 +52,8 @@ class TestOrdinalFixer(unittest.TestCase):
             debug=self.debug
             if debug:
                 print (painCounter)
+            if pageList is None:
+                self.assertTrue(painCounter[5]>800)
 
     def testOrdinalFixerExamples(self):
         '''

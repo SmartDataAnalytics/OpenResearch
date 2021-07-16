@@ -11,6 +11,8 @@ from lodstorage.lod import LOD
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 from wikibot.wikipush import WikiPush
+from wikifile.wikiFileManager import WikiFileManager
+from wikifile.wikiFile import WikiFile
 
 import os
 import time
@@ -24,6 +26,21 @@ class OREntity(JSONAble):
         '''
         Constructor
         '''
+        pass
+    
+    def __str__(self):
+        '''
+        return my
+        '''
+        text=self.__class__.__name__
+        attrs=["pageTitle","acronym","title"]
+        delim=":"
+        for attr in attrs:
+            if hasattr(self, attr):
+                value=getattr(self,attr)
+                text+=f"{delim}{value}"
+                delim=":" 
+        return text
         
     @staticmethod
     def fromWikiSonToLod(record:dict,lookup:dict)->dict:
@@ -202,10 +219,11 @@ class OREntityList(JSONAbleList):
             # call the constructor to get a new instance
             try:
                 entity=self.clazz()
-                if hasattr(entity,"fixRecord"):
-                    fixRecord=getattr(entity,'fixRecord');
-                    if callable(fixRecord):
-                        fixRecord(record)
+                # TODO callBacks should be more generic (if any)
+                #if hasattr(entity,"fixRecord"):
+                #    fixRecord=getattr(entity,'fixRecord');
+                #    if callable(fixRecord):
+                #        fixRecord(record)
                 entity.fromDict(record)
                 entityList.append(entity)
             except Exception as ex:
@@ -223,9 +241,16 @@ class OREntityList(JSONAbleList):
         initialize me from the given WikiFileManager
         """
         self.wikiFileManager= wikiFileManager
-        wikiFileList=wikiFileManager.getAllWikiFiles()
-        lod=self.wikiFileManager.convertWikiFilesToLOD(wikiFileList.values(),self.getEntityName())
-        self.normalizeLodFromWikiSonToLod(lod)
+        wikiFileDict=wikiFileManager.getAllWikiFiles()
+        self.fromWikiFiles(wikiFileDict.values())
+        
+    def fromWikiFiles(self,wikiFileList:list):
+        '''
+        initialize me from the given list of wiki files
+        '''
+        templateName=self.clazz.templateName
+        wikiSonLod=WikiFileManager.convertWikiFilesToLOD(wikiFileList,templateName)
+        lod=self.normalizeLodFromWikiSonToLod(wikiSonLod)
         self.fromLoD(lod)
         
     @classmethod    
@@ -242,6 +267,19 @@ class OREntityList(JSONAbleList):
             lookup,_duplicates=LOD.getLookup(propertyLookupList, 'prop')
         return lookup
       
+    def fromSampleWikiSonLod(self,entityClass):
+        '''
+        get a list of dicts derived form the wikiSonSamples
+        
+        Returns:
+            list: a list of dicts for my sampleWikiText in WikiSon notation
+        '''
+        wikiFileList=[]
+        for sampleWikiText in entityClass.getSampleWikiTextList():
+            pageTitle=None
+            wikiFile=WikiFile(name=pageTitle,wikiText=sampleWikiText)
+            wikiFileList.append(wikiFile)
+        self.fromWikiFiles(wikiFileList)
 
     @classmethod
     def normalizeLodFromWikiSonToLod(cls, wikiSonRecords:list)->list:
@@ -329,7 +367,12 @@ class EventSeriesList(OREntityList):
         
 class EventSeries(OREntity):
     '''
+    an event Series
     '''
+    # TODO - this is the legacy templateName - make sure after / during migration
+    # this is handled properly
+    templateName="Event series"
+    
     def __init__(self):
         '''
         Constructor
@@ -390,13 +433,6 @@ class EventSeries(OREntity):
             samplesWikiSon = "..."
 
         return samplesWikiSon
-  
-    
-    def __str__(self):
-        text=self.pageTitle
-        if hasattr(self, "acronym"):
-            text+="(%s)" %self.acronym
-        return text
 
 class EventList(OREntityList):
     propertyLookupList=[
@@ -432,6 +468,8 @@ class Event(OREntity):
     
     see https://rq.bitplan.com/index.php/Event
     '''
+    templateName="Event"
+    
     def __init__(self):
         '''
         Constructor
@@ -537,15 +575,6 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
             samplesWikiSon="..."
         
         return samplesWikiSon
-    
-   
-   
-    
-    def __str__(self):
-        text=self.pageTitle
-        if hasattr(self, "acronym"):
-            text+="(%s)" %self.acronym
-        return text
     
 class CountryList(OREntityList):
     '''

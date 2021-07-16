@@ -5,7 +5,6 @@ Created on 2021-04-06
 '''
 import unittest
 from openresearch.event import Event, EventList, EventSeries, EventSeriesList
-from lodstorage.jsonable import  Types
 from lodstorage.sql import SQLDB
 from ormigrate.toolbox import HelperFunctions as hf, Profiler
 
@@ -27,7 +26,7 @@ class TestEvent(unittest.TestCase):
         test eventseries handling
         '''
         samples= EventSeries.getSamples()
-        wikiSonRecords=EventSeries.getSampleWikiSon()
+        wikiSonRecords=EventSeriesList.getSampleWikiSonLod()
         wikiSonLod=EventSeriesList.normalizeLodFromWikiSonToLod(wikiSonRecords)
         for lod in (samples,wikiSonLod):
             eventSeriesList=EventSeriesList()

@@ -6,7 +6,6 @@ Created on 2021-07-15
 import unittest
 from openresearch.eventcorpus import EventList,EventSeriesList
 from openresearch.event import EventSeries,Event
-from wikifile.wikiFile import WikiFile
 
 class TestRefactoring(unittest.TestCase):
     '''
@@ -26,24 +25,16 @@ class TestRefactoring(unittest.TestCase):
         '''
         test the mapping
         '''
-        for entityList,entity,templateName in [
-                (EventList,Event,"Event"),
-                (EventSeriesList,EventSeries,"Event series")
-            ]:
+        for entityListClass,entityClass in (EventList,Event),(EventSeriesList,EventSeries):
+            entityList=entityListClass()
+            entityList.fromSampleWikiSonLod(entityClass)
             #propertyLookup=entityList.getPropertyLookup()
             #print(propertyLookup)
-            listOfSampleWikiSon=entity.getSampleWikiSon()
-            wikiSonRecords=[]
-            for sampleWikiSon in listOfSampleWikiSon:
-                wikiFile=WikiFile(name="noname",wikiText=sampleWikiSon)
-                #print(str(wikiFile))
-                record=wikiFile.extract_template(templateName)
-                if self.debug:
-                    print(record)
-                wikiSonRecords.append(record)
-            lod=entityList.normalizeLodFromWikiSonToLod(wikiSonRecords)    
-            if self.debug:        
-                print(lod)
+            self.assertTrue(len(entityList.getList())>0)    
+            for entity in entityList.getList():
+                self.assertTrue(isinstance(entity,entityClass))
+                if self.debug: 
+                    print(entity)
         pass
 
 
