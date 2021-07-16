@@ -21,8 +21,7 @@ class TestLocationFixer(TestCase):
     def getFixer(self):
         argv=PageFixerToolbox.getArgs(None,["--stats"],debug=self.debug)
         pageFixerManager=PageFixerManager.fromCommandLine([LocationFixer], argv)
-        wikiFileManager = CorpusForTesting.getWikiFileManager()
-        fixer=LocationFixer(wikiFileManager=wikiFileManager)
+        fixer=pageFixerManager.get
         return fixer
 
     def test_fixEventRecord(self):
