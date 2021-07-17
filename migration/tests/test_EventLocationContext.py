@@ -10,8 +10,10 @@ from tests.corpusfortesting import CorpusForTesting
 
 
 class TestEventLocationContext(TestCase):
-
-    def setUp(self, wikiId='or') -> None:
+    '''
+    test the event Location context
+    '''
+    def setUp(self) -> None:
         self.profile = True
         home = os.path.expanduser("~")
         targetWikiTextPath = f"{home}/.or/generated/Location"

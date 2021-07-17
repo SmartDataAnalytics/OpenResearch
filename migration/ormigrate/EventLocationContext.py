@@ -1,6 +1,7 @@
 from geograpy.locator import LocationContext, Location, City, Country, Region
 from ormigrate.issue220_location import LocationFixer
 from wikifile.wikiFileManager import WikiFileManager
+from ormigrate.fixer import PageFixerManager
 from wikifile.wikiFile import WikiFile
 from collections import Counter
 from lodstorage.lod import LOD
@@ -18,7 +19,8 @@ class EventLocationContext(object):
         '''
         self.locationContext=LocationContext.fromJSONBackup()
         self.wikiFileManager=wikiFileManager
-        self.locationFixer=LocationFixer(self.wikiFileManager)
+        pageFixerManager=PageFixerManager([LocationFixer],wikiFileManager)
+        self.locationFixer=LocationFixer(pageFixerManager)
         self._addORLocationLabels()
 
     def getSamples(self)->list:
@@ -80,8 +82,6 @@ class EventLocationContext(object):
         # Generate region pages
         for region in regions:
             self.generateLocationPage(region, overwrite)
-
-
 
     def generateLocationPages(self, data:list,overwrite:bool=False):
         '''
