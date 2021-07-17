@@ -20,15 +20,18 @@ class TestEventCorpus(unittest.TestCase):
     def tearDown(self):
         pass
     
-    def checkEventCorpus(self,eventCorpus):
+    def checkEventCorpus(self,eventCorpus,expectedAttrs=['lastEditor']):
         '''
         check the given eventCorpus
         '''
         listOfEvents=eventCorpus.eventList.getList()
         withSeries=0
         for event in listOfEvents:
-            self.assertTrue(hasattr(event, 'lastEditor'))
-            if hasattr(event,'inEventSeries'): withSeries+=1
+            for attr in expectedAttrs:
+                self.assertTrue(hasattr(event, attr))
+            if hasattr(event,'inEventSeries'): 
+                if event.inEventSeries:
+                    withSeries+=1
         if self.debug:
             print(f"inEventseries: {withSeries}")
         self.assertTrue(withSeries>4500)
@@ -63,12 +66,13 @@ class TestEventCorpus(unittest.TestCase):
         profile=Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
         eventCorpus = Corpus.getEventCorpusFromWikiText(debug=self.debug)
         profile.time()
-        self.checkEventCorpus(eventCorpus)
+        self.checkEventCorpus(eventCorpus,[])
 
     def testMatchingSetsForEventCorpus(self):
         """
         test the different sets of Event Corpus and check the similarities between them
         """
+        # TODO implement
         pass
 
     
