@@ -21,7 +21,6 @@ class TestOrdinalFixer(unittest.TestCase):
         self.debug=False
         pass
 
-
     def tearDown(self):
         pass
     
@@ -60,7 +59,8 @@ class TestOrdinalFixer(unittest.TestCase):
             https://github.com/SmartDataAnalytics/OpenResearch/issues/119
         '''
         wikiFileManager=Corpus.getWikiFileManager()
-        fixer=OrdinalFixer(wikiFileManager)
+        pageFixerManager=PageFixerManager([OrdinalFixer],wikiFileManager)
+        fixer=OrdinalFixer(pageFixerManager)
         lookup_dict = hf.loadDictionary()
         eventRecords= [{'Ordinal':2},
                        {'Ordinal':None},
