@@ -25,39 +25,29 @@ class TestEvent(unittest.TestCase):
         '''
         test eventseries handling
         '''
-        samples= EventSeries.getSamples()
-        wikiSonRecords=EventSeriesList.getSampleWikiSonLod()
-        wikiSonLod=EventSeriesList.normalizeLodFromWikiSonToLod(wikiSonRecords)
-        for lod in (samples,wikiSonLod):
-            eventSeriesList=EventSeriesList()
-            eventSeriesList.fromLoD(lod)
-            self.assertTrue(len(eventSeriesList.getList())>0)
-            for eventSeries in eventSeriesList.getList():
-                if self.debug:
-                    print(eventSeries)
-                self.assertTrue(isinstance(eventSeries,EventSeries))
-                self.assertTrue(eventSeries.acronym is not None)
-                
+        eventSeriesList=EventSeriesList()
+        eventSeriesList.fromSampleWikiSonLod(EventSeries)
+        self.assertTrue(len(eventSeriesList.getList())>0)
+        for eventSeries in eventSeriesList.getList():
+            if self.debug:
+                print(eventSeries)
+            self.assertTrue(isinstance(eventSeries,EventSeries))
+            self.assertTrue(eventSeries.acronym is not None)
+            
       
     def testEvent(self):
         '''
         Tests the event object
         '''
-        samples=Event.getSamples()
-        wikiSonRecords=Event.getSampleWikiSon()
-        wikiSonLod=EventList.normalizeLodFromWikiSonToLod(wikiSonRecords)
-        for lod in (samples,wikiSonLod):
-            eventList=EventList()
-            eventList.fromLoD(lod)
-            self.assertTrue(len(eventList.getList())>0)
-            for event in eventList.getList():
-                if self.debug:
-                    print(event)
-                self.assertTrue(isinstance(event,Event))
-                self.assertTrue(event.acronym is not None)
-                self.assertTrue(event.ordinal is not None)
-               
-       
+        eventList=EventList()
+        eventList.fromSampleWikiSonLod(Event)
+        self.assertTrue(len(eventList.getList())>0)
+        for event in eventList.getList():
+            if self.debug:
+                print(event)
+            self.assertTrue(isinstance(event,Event))
+            self.assertTrue(event.acronym is not None)
+            self.assertTrue(event.ordinal is not None)
         
     def getSQLDB(self,path=None):
         if path is not None:

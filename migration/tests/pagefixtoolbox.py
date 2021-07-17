@@ -4,6 +4,8 @@ Created on 2021-07-14
 @author: wf
 '''
 import os
+from ormigrate.fixer import PageFixerManager
+from tests.corpusfortesting import CorpusForTesting as Corpus
 
 class PageFixerToolbox(object):
     '''
@@ -14,6 +16,17 @@ class PageFixerToolbox(object):
         '''
         Constructor
         '''
+        
+    @staticmethod
+    def getPageFixer(pageFixerClass):
+        '''
+        get a page fixer for the given pageFixerClass
+        '''
+        wikiFileManager=Corpus.getWikiFileManager()
+        pageFixerManager=PageFixerManager([pageFixerClass],wikiFileManager)
+        fixer=pageFixerClass(pageFixerManager)
+        return fixer
+        pass
         
     @staticmethod 
     def getPageTitleLists(*pageTitles,testAll:bool):

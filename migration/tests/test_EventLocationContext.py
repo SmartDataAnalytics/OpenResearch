@@ -1,8 +1,6 @@
 import os
 
-from openresearch.eventcorpus import EventCorpus
 from ormigrate.EventLocationContext import EventLocationContext
-from wikifile.wikiFileManager import WikiFileManager
 from unittest import TestCase
 
 from ormigrate.toolbox import Profiler

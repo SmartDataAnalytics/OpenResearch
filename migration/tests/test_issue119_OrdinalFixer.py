@@ -58,9 +58,7 @@ class TestOrdinalFixer(unittest.TestCase):
             test for fixing Ordinals not a number
             https://github.com/SmartDataAnalytics/OpenResearch/issues/119
         '''
-        wikiFileManager=Corpus.getWikiFileManager()
-        pageFixerManager=PageFixerManager([OrdinalFixer],wikiFileManager)
-        fixer=OrdinalFixer(pageFixerManager)
+        fixer=PageFixerToolbox.getPageFixer(OrdinalFixer)
         lookup_dict = hf.loadDictionary()
         eventRecords= [{'Ordinal':2},
                        {'Ordinal':None},
