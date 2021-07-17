@@ -47,6 +47,7 @@ class CorpusForTesting(object):
         wikiUser=hf.getSMW_WikiUser(wikiId=wikiId,save=hf.inPublicCI())
         eventCorpus=EventCorpus(debug=debug)
         eventCorpus.fromWikiUser(wikiUser,force=force)
+        eventCorpus.wikiFileManager=cls.getWikiFileManager(wikiId, debug)
         return eventCorpus
 
     @classmethod

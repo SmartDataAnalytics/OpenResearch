@@ -137,9 +137,9 @@ class OREntityList(JSONAbleList):
         selector="IsA::%s" % entityName
         ask="""{{#ask:[[%s]]%s
 |mainlabel=pageTitle
-|?_CDAT=creationDate
-|?_MDAT=modificationDate
-|?_LEDT=lastEditor
+|?Creation date=creationDate
+|?Modification date=modificationDate
+|?Last editor is=lastEditor
 """ % (selector,askExtra)
         if propertyLookupList is None:
             propertyLookupList=self.propertyLookupList
@@ -348,14 +348,18 @@ class EventSeriesList(OREntityList):
     '''
     propertyLookupList=[
             { 'prop':'EventSeries acronym', 'name': 'acronym'},
-            { 'prop':'Acronym', 'name': 'acronym'},
-            { 'prop':'Homepage',   'name': 'homepage'},
-            { 'prop':'Title',      'name': 'title'},
+            { 'prop':'Homepage',            'name': 'homepage'},
+            { 'prop':'Logo',                'name': 'logo'},
+            { 'prop':'Title',               'name': 'title'},
+            # TODO enable and handle
             #{ 'prop':'Field',      'name': 'subject'},
-            { 'prop':'Wikidataid',  'name': 'wikidataId'},
-            { 'prop':'DblpSeries',  'name': 'dblpSeries' },
-            { 'prop':'Period',      'name': 'period'},
-            { 'prop':'Unit',        'name': 'unit'},
+            { 'prop':'Wikidataid',          'name': 'wikidataId'},
+            { 'prop':'WikiCfpSeries',       'name': 'wikiCfpSeries'},
+            { 'prop':'DblpSeries',          'name': 'dblpSeries' },
+            { 'prop':'Period',              'name': 'period'},
+            { 'prop':'Unit',                'name': 'unit'},
+            # TODO add more fields according to
+            # https://confident.dbis.rwth-aachen.de/or/index.php?title=Template:Event_series&action=edit
     ]
     
     def __init__(self):

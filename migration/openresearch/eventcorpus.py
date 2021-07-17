@@ -5,6 +5,7 @@ Created on 2021-04-16
 '''
 from openresearch.event import EventList,EventSeriesList
 from ormigrate.toolbox import HelperFunctions as hf
+from wikifile.wikiFileManager import WikiFileManager
 from os.path import expanduser
 from lodstorage.csv import CSV
 from lodstorage.lod import LOD
@@ -19,12 +20,34 @@ class EventCorpus(object):
         Constructor
         '''
         self.debug=debug
+        self._wikiFileManager=None
+        self.wikiUser=None
+        
+    @property
+    def wikiFileManager(self):
+        '''
+        access to wikiFileManager
+        '''
+        if self._wikiFileManager is not None:
+            return self._wikiFileManager
+        else:
+            if self.wikiUser is None:
+                return None
+            else:
+                if self.debug:
+                    print(f"Creating WikiFileManager for {self.wikiUser.wikiId}")
+                self._wikiFileManager = WikiFileManager(wikiId=self.wikiUser.wikiId,debug=self.debug)
+                return self._wikiFileManager   
+            
+    @wikiFileManager.setter
+    def wikiFileManager(self,value):
+        self._wikiFileManager=value                                       
 
     def fromWikiFileManager(self,wikiFileManager):
         '''
             get events with series by knitting / linking the entities together
         '''
-        self.wikiFileManager=wikiFileManager
+        self._wikiFileManager=wikiFileManager
         self.eventList = EventList()
         self.eventList.debug = self.debug
         self.eventList.fromWikiFileManager(wikiFileManager)
@@ -49,18 +72,21 @@ class EventCorpus(object):
         if self.debug:
             print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
         
-    def fromWikiUser(self,wikiUser,propertyList=[],force=False):
+    def fromWikiUser(self,wikiUser,force=False):
         '''
         get events with series by knitting / linking the entities together
         '''
+        self.wikiUser=wikiUser
         self.eventList=EventList()
         self.eventList.debug=self.debug
-        if len(propertyList) != 0:
-            self.eventList.propertyLookupList=propertyList
+        if self.debug:
+            self.eventList.profile=True
         self.eventList.fromCache(wikiUser,force=force)
         
         self.eventSeriesList=EventSeriesList()
         self.eventSeriesList.debug=self.debug
+        if self.debug:
+            self.eventSeriesList.profile=True
         self.eventSeriesList.fromCache(wikiUser,force=force)
         
         # get foreign key hashtable
@@ -79,7 +105,6 @@ class EventCorpus(object):
         if self.debug:
             print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
 
-
     def generateCSV(self,pageTitles,filename,filepath=None):
         """
         Generate a csv with the given pageTitles
@@ -91,14 +116,14 @@ class EventCorpus(object):
         if filepath is None:
             home=expanduser("~")
             filepath= f"{home}/.or/csvs/"
-        lod = self.wikiFileMananger.exportWikiSonToLOD(pageTitles, 'Event')
+        lod = self.wikiFileManager.exportWikiSonToLOD(pageTitles, 'Event')
         if self.debug:
             print(pageTitles)
             print(lod)
 
-        savepath = filepath + filename
+        savepath =f"{filepath}{filename}.csv"
         hf.ensureDirectoryExists(savepath)
-        CSV.storeToCSVFile(lod, savepath)
+        CSV.storeToCSVFile(lod, savepath,withPostfix=True)
         return savepath
 
     def getEventCsv(self,eventTitle):
