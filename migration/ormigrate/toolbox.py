@@ -1,10 +1,8 @@
-from dateutil import parser
 import os
 from ormigrate.dictionary import Dictionary
 from wikibot.wikiuser import WikiUser
 from wikibot.wikiclient import WikiClient
 import getpass
-import re
 import time
 
 class Profiler:
@@ -107,23 +105,6 @@ class HelperFunctions:
         wikiuser=HelperFunctions.getSMW_WikiUser(wikiId,save=save)
         wikiclient=WikiClient.ofWikiUser(wikiuser)
         return wikiclient
-
-    @classmethod
-    def parseDate(self,date):
-        '''
-        parses the date in any format to the format YYYY/MM/DD
-        Args:
-            date: Given date in any format
-        Returns:
-            date(str): Date in YYYY/MM/DD format. None if date cannot be converted
-        '''
-        try:
-            parseToDatetime = parser.parse(date)
-        except ValueError as e:
-            return None
-        datetimeToDate = parseToDatetime.date()
-        datetimetoString = datetimeToDate.strftime("%Y/%m/%d")
-        return datetimetoString
 
     @classmethod
     def loadDictionary(cls):
