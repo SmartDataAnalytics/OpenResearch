@@ -57,7 +57,7 @@ class TestIssue163(unittest.TestCase):
                         {'Ordinal': 2},
                         ]
         expectedPainRatings=[1, 9, 7]
-        fixer=SeriesFixer()
+        fixer=PageFixerToolbox.getPageFixer(SeriesFixer)
         painRatings=[]
         for eventRecord in eventRecords:
             painRating=fixer.getRating(eventRecord)
