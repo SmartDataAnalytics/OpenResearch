@@ -6,8 +6,6 @@ Created on 2021-07-15
 import unittest
 from ormigrate.issue136_MissingAcronym import EventSeriesAcronymFixer
 from tests.pagefixtoolbox import PageFixerToolbox
-from ormigrate.fixer import PageFixerManager
-from ormigrate.toolbox import Profiler
 
 class TestIssue136(unittest.TestCase):
     '''
@@ -19,33 +17,22 @@ class TestIssue136(unittest.TestCase):
         self.testAll=True
         pass
 
-
     def tearDown(self):
         pass
-
 
     def testIssue136(self):
         '''
         TestEventSeriesTitleFixer
         '''
-        pageLists=PageFixerToolbox.getPageTitleLists("CSR","DB","DELFI","EISTA","DEBS","ISS",testAll=self.testAll)
-        for pageList in pageLists:
-            pageCount="all" if pageList is None else len(pageList)
-            profile=Profiler(f"testing missing Acronyms for {pageCount} pages")
-            args=PageFixerToolbox.getArgs(pageList,["--stats"],template="Event series",debug=self.debug)
-            pageFixerManager=PageFixerManager.runCmdLine([EventSeriesAcronymFixer],args)
-            profile.time()
-            counters=pageFixerManager.getRatingCounters()
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("CSR","DB","DELFI","EISTA","DEBS","ISS",testAll=self.testAll)
+        for pageTitleList in pageTitleLists:
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, EventSeriesAcronymFixer,template="Event series",debug=self.debug)
             painCounter=counters["pain"]
-            debug=self.debug
-            if debug:
-                print (painCounter)
-            if pageList is not None:
-                self.assertEqual(0,len(pageFixerManager.errors))
-                self.assertEqual(6,len(pageFixerManager.ratings))
-     
+            if pageTitleList is None:
+                self.assertTrue(painCounter[5]>1000)
+            else:
+                self.assertEqual(6,painCounter[5])
         pass
-
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

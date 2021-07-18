@@ -10,8 +10,10 @@ from ormigrate.rating import PageRating,RatingType
 
 class NullValueFixer(PageFixer):
     '''
-    Fixer for https://github.com/SmartDataAnalytics/OpenResearch/issues/150
+    see purpose and issue
     '''
+    purpose="fix invalid null values"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/150"
 
     def __init__(self,pageFixerManager):
         '''

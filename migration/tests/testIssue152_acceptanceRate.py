@@ -4,10 +4,13 @@ Created on 2021-07-16
 @author: wf
 '''
 import unittest
+from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
+from tests.pagefixtoolbox import PageFixerToolbox
 
-
-class TestIssue153AcceptanceRate(unittest.TestCase):
-
+class TestIssue152AcceptanceRate(unittest.TestCase):
+    '''
+    tests for Issue 152 Acceptance Rate Not calculated 
+    '''
 
     def setUp(self):
         pass
@@ -17,7 +20,7 @@ class TestIssue153AcceptanceRate(unittest.TestCase):
         pass
 
 
-    def testIssue152(self):
+    def testIssue152ForRecords(self):
         '''
             test for fixing Acceptance Rate Not calculated
             https://github.com/SmartDataAnalytics/OpenResearch/issues/152
@@ -27,29 +30,25 @@ class TestIssue153AcceptanceRate(unittest.TestCase):
                        {'submittedPapers':'test', 'acceptedPapers':None},
                        {'submittedPapers':None, 'acceptedPapers':'test'}]
         painRatings=[]
-        fixer=self.getAcceptanceRateFixer()
+        fixer=PageFixerToolbox.getPageFixer(AcceptanceRateFixer)
         for event in eventRecords:
             painRating =fixer.getRating(event)
             self.assertIsNotNone(painRating)
             painRatings.append(painRating.pain)
         self.assertEqual(painRatings,[1,3,5,7])
-        pages=fixer.getAllPages()
-        if self.debug:
-            print("Number of pages: ", len(pages))
-        expectedPages=0 if hf.inPublicCI() else 8000
-        self.assertTrue(len(pages)>=expectedPages)
-        events=list(fixer.getAllPageTitles4Topic("Event"))
-        expectedEvents=0 if hf.inPublicCI() else 5500
-        if self.debug:
-            print("Number of events: ", len(events))
-        self.assertTrue(len(events)>=expectedEvents)
-        fixer.checkAllFiles(fixer.check)
-        if self.debug:
-            print(fixer.result())
-            print(expectedEvents)
-        self.assertTrue(fixer.nosub>=0 if hf.inPublicCI() else 50)
-        self.assertTrue(fixer.nosub>=0 if hf.inPublicCI() else 50)
-
+        
+    def testIssue152Rating(self):
+        '''
+        
+        '''
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("",testAll=self.testAll)
+        for pageTitleList in pageTitleLists:
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, AcceptanceRateFixer,debug=self.debug)
+            painCounter=counters["pain"]
+            if pageTitleList is None:
+                self.assertTrue(painCounter[5]>1000)
+            else:
+                self.assertEqual(6,painCounter[5])
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

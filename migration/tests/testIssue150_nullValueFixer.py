@@ -4,10 +4,8 @@ Created on 2021-07-13
 @author: wf
 '''
 import unittest
-from ormigrate.fixer import PageFixerManager
 from ormigrate.issue150_nullvalue import NullValueFixer
 from tests.pagefixtoolbox import PageFixerToolbox
-from ormigrate.toolbox import Profiler
 
 class TestNullValueFixer(unittest.TestCase):
     '''
@@ -26,21 +24,11 @@ class TestNullValueFixer(unittest.TestCase):
         '''
         test fixing https://confident.dbis.rwth-aachen.de/or/index.php?title=ECIR
         '''
-        pageLists=PageFixerToolbox.getPageTitleLists("ECIR 2019","ECIR 2018","ECIR 2017","ECIR 2009",testAll=self.testAll)
-        for pageList in pageLists:
-            pageCount="all" if pageList is None else len(pageList)
-            profile=Profiler(f"testing null Values for {pageCount} pages")
-            args=PageFixerToolbox.getArgs(pageList,["--stats"],debug=self.debug)
-            pageFixerManager=PageFixerManager.runCmdLine([NullValueFixer],args)
-            profile.time()
-            counters=pageFixerManager.getRatingCounters()
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("ECIR 2019","ECIR 2018","ECIR 2017","ECIR 2009",testAll=self.testAll)
+        for pageTitleList in pageTitleLists:
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, NullValueFixer, debug=self.debug)
             painCounter=counters["pain"]
-            debug=self.debug
-            if debug:
-                print (painCounter)
-            if pageList is not None:
-                self.assertEqual(0,len(pageFixerManager.errors))
-                self.assertEqual(4,len(pageFixerManager.ratings))
+            if pageTitleList is not None:
                 self.assertEqual(1,painCounter[1])
             else:
                 self.assertTrue(painCounter[5]>350)

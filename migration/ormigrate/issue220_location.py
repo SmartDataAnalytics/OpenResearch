@@ -4,8 +4,12 @@ from ormigrate.fixer import PageFixer, PageFixerManager
 
 class LocationFixer(PageFixer):
     '''
-    fixes Locations
+    see purpose and issue
     '''
+    purpose="fixes Locations"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/220"
+    
+    # value of type attribute of Locations to be fixed
     COUNTRY = "Country"
     REGION = "State"
     CITY = "City"

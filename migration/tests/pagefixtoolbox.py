@@ -6,6 +6,7 @@ Created on 2021-07-14
 import os
 from ormigrate.fixer import PageFixerManager
 from tests.corpusfortesting import CorpusForTesting as Corpus
+from ormigrate.toolbox import Profiler
 
 class PageFixerToolbox(object):
     '''
@@ -27,6 +28,32 @@ class PageFixerToolbox(object):
         fixer=pageFixerClass(pageFixerManager)
         return fixer
         pass
+    
+    def getRatingCounters(self,pageTitleList:list,pageFixerClass,template="Event",debug=True):
+        '''
+        get the rating counters for the given pageFixerClass and template
+        
+        Args:
+            pageTitleList(list): a list of pageTitles - if None will be replaced by a list of all pages
+            pageFixerClass(): the class of the pageFixer to be instantiated and tested
+            template(str): the template to filter the WikiSon entities
+            debug(bool): if True show the pain Counters
+        Returns:
+            the rating/pain counters as per the given pageTitleList 
+        '''
+        pageCount="all" if pageTitleList is None else len(pageTitleList)
+        profile=Profiler(f"{pageFixerClass.purpose} for {pageCount} pages")
+        args=PageFixerToolbox.getArgs(pageTitleList,["--stats"],template=template,debug=self.debug)
+        pageFixerManager=PageFixerManager.runCmdLine([pageFixerClass],args)
+        profile.time()
+        counters=pageFixerManager.getRatingCounters()
+        painCounter=counters["pain"]
+        if debug:
+            print (painCounter)
+        if pageTitleList is not None:
+            self.assertEqual(0,len(pageFixerManager.errors))
+            self.assertEqual(len(pageTitleList),len(pageFixerManager.ratings))
+        return counters
         
     @staticmethod 
     def getPageTitleLists(*pageTitles,testAll:bool):

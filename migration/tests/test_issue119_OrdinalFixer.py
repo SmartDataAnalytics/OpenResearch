@@ -1,19 +1,18 @@
 '''
-Created on 12.07.2021
+Created on 2021-07-12
 
 @author: wf
 '''
 import unittest
 from ormigrate.issue119_ordinal import OrdinalFixer
-from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import HelperFunctions as hf
 from tests.pagefixtoolbox import PageFixerToolbox
-from ormigrate.fixer import PageFixerManager
-from ormigrate.toolbox import Profiler
 
 class TestOrdinalFixer(unittest.TestCase):
     '''
-    test the ordinal fixer
+    test the
+    fixer for Ordinal not being an integer
+    https://github.com/SmartDataAnalytics/OpenResearch/issues/119
     '''
 
     def setUp(self):
@@ -33,26 +32,7 @@ class TestOrdinalFixer(unittest.TestCase):
         ord61=lookup_dict.getToken("61st")
         self.assertEqual("enum",ord61["type"])
         self.assertEqual(61,ord61["value"])
-
-    def testOrdinalFixer(self):
-        '''
-        test the ordinal Fixer on pageTitle examples
-        '''
-        pageLists=PageFixerToolbox.getPageTitleLists("IEAI 2021","AIAT 2021",testAll=self.testAll)
-        for pageList in pageLists:
-            pageCount="all" if pageList is None else len(pageList)
-            profile=Profiler(f"testing ordinals for {pageCount} pages")
-            args=PageFixerToolbox.getArgs(pageList,["--stats"],debug=self.debug)
-            pageFixerManager=PageFixerManager.runCmdLine([OrdinalFixer],args)
-            profile.time()
-            counters=pageFixerManager.getRatingCounters()
-            painCounter=counters["pain"]
-            debug=self.debug
-            if debug:
-                print (painCounter)
-            if pageList is None:
-                self.assertTrue(painCounter[5]>800)
-
+        
     def testOrdinalFixerExamples(self):
         '''
             test for fixing Ordinals not a number
@@ -76,6 +56,19 @@ class TestOrdinalFixer(unittest.TestCase):
             painRatings.append(painRating.pain)
         self.assertEqual(expectedPainRatings,painRatings)
         self.assertEqual(expectedOrdinals, ordinals)
+
+    def testOrdinalFixerRating(self):
+        '''
+        test the ordinal Fixer on pageTitle examples
+        '''
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("ICKE 2022","IEAI 2021","AIAT 2021",testAll=self.testAll)
+        for pageTitleList in pageTitleLists:
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, OrdinalFixer,debug=self.debug)
+            painCounter=counters["pain"]
+            if pageTitleList is None:
+                self.assertTrue(painCounter[5]>800)
+            else:
+                self.assertEqual(3,painCounter[5])
 
 
 if __name__ == "__main__":

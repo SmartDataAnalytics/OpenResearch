@@ -8,10 +8,10 @@ from ormigrate.rating import Rating,RatingType
 
 class EventSeriesAcronymFixer(PageFixer):
     '''
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/136
-    
-    fix Missing titles in event Series #136
+    see purpose and issue
     ''' 
+    purpose="fix missing acronyms in event Series"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/136"
     
     def __init__(self,pageFixerManager):
         '''
@@ -25,6 +25,9 @@ class EventSeriesAcronymFixer(PageFixer):
             return Rating(1,RatingType.ok,'acronym available')
         else:
             return  Rating(5,RatingType.missing,'acronym is missing')
+        
+    #TODO
+    # implement fixer e.g. by getting the acronym of the series elements and removing the year    
         
         
 if __name__ == '__main__':

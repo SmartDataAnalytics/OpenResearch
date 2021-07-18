@@ -22,8 +22,12 @@ class TestLocationFixer(TestCase):
         pageFixerManager=PageFixerManager.fromCommandLine([LocationFixer], argv)
         fixer=pageFixerManager.pageFixers["LocationFixer"]
         return fixer
+    
+    def setUp(self):
+        self.debug=False
+        self.testAll=True
 
-    def test_fixEventRecord(self):
+    def testFixEventRecordExample(self):
         '''
         test fixing a single event record
         '''
@@ -43,7 +47,7 @@ class TestLocationFixer(TestCase):
         self.assertEqual(exp_event,res)
         self.assertTrue('complete' in errors and len(errors) == 1)
 
-    def test_fixEvent(self):
+    def testFixEventRecordExamples(self):
         """
         tests location fixing on event object
         """
@@ -221,3 +225,17 @@ class TestLocationFixer(TestCase):
         else:
             self.fail("City Q65 (Los Angeles) is missing in the locationContext")
         profile.time()
+        
+    def testRating(self):
+        '''
+        test the rating
+        '''
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("ICKE 2022",testAll=self.testAll)
+        for pageTitleList in pageTitleLists:
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, LocationFixer,debug=self.debug)
+            painCounter=counters["pain"]
+            if pageTitleList is None:
+                self.assertTrue(painCounter[5]>1000)
+            else:
+                self.assertEqual(6,painCounter[5])
+        

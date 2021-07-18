@@ -11,10 +11,11 @@ from ormigrate.dictionary import Dictionary
 
 class OrdinalFixer(PageFixer):
     '''
-       fixer for Ordinal not being an integer
-       https://github.com/SmartDataAnalytics/OpenResearch/issues/119
-       '''
-
+    see purpose and issue     
+    '''
+    purpose="fixer for Ordinal not being an integer"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/119"
+    
     def __init__(self,pageFixerManager):
         '''
         Constructor
