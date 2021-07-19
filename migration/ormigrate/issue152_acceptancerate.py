@@ -10,9 +10,11 @@ from ormigrate.rating import Rating,RatingType
 class AcceptanceRateFixer(PageFixer):
 
     '''
-    fixer for Acceptance Rate Not calculated
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/152
+    see purpose and issue
+    
     '''
+    purpose="fixer for Acceptance Rate Not calculated"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/152"
 
     def __init__(self,pageFixerManager):
         '''
@@ -70,5 +72,3 @@ class AcceptanceRateFixer(PageFixer):
         
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([AcceptanceRateFixer])
-
-

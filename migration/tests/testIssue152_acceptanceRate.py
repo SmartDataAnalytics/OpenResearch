@@ -13,6 +13,8 @@ class TestIssue152AcceptanceRate(unittest.TestCase):
     '''
 
     def setUp(self):
+        self.debug=False
+        self.testAll=True
         pass
 
 
