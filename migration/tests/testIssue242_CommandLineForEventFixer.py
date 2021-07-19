@@ -13,7 +13,7 @@ class TestIssue242_CommandLineForEventFixer(unittest.TestCase):
     '''
 
     def setUp(self):
-        self.debug=True
+        self.debug=False
         pass
 
 
@@ -27,8 +27,16 @@ class TestIssue242_CommandLineForEventFixer(unittest.TestCase):
         '''
         #args=PageFixerToolbox.getArgs(pageTitles, moreArgs, template, verbose, debug)
         args=PageFixerToolbox.getArgs(["ECIR 2017"])
-        print(args)
+        if self.debug:
+            print(args)
+        self.assertTrue("--template" in args)
         pass
+    
+    def testListRatings(self):
+        '''
+        test getting a list of Ratings
+        '''
+        
 
 
 if __name__ == "__main__":

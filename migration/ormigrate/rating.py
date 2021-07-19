@@ -60,3 +60,6 @@ class PageRating(Rating):
         self.pageTitle=pageTitle
         self.templateName=templateName
         
+    def __str__(self):
+        return f"{self.templateName} {self.pageTitle}: {self.pain} - {self.reason}: {self.hint}"
+        
