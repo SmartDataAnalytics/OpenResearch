@@ -13,7 +13,6 @@ from os.path import expanduser
 from wikifile.wikiFile import WikiFile
 from wikifile.wikiRender import WikiRender
 
-
 class WikiCFPIDFixer(PageFixer):
     '''
     see purpose and issue

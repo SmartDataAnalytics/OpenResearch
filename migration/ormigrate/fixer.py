@@ -199,10 +199,12 @@ class PageFixer(object):
         rating.set(arating.pain,arating.reason,arating.hint)
         return rating
     
-    def prepareWikiFileRating(self,wikiFile,templateName):
+    def prepareWikiFileRating(self,wikiFile,templateName=None):
         '''
         prepare the rating of an entity record directly from the wikiFile
         '''
+        if templateName is None:
+            templateName=self.templateName
         # get the markup
         wikiText=str(wikiFile)
         # retrieve the name/value list

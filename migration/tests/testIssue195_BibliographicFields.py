@@ -19,7 +19,7 @@ class TestBiblographicFieldFixer(PageFixerTest):
         self.template="Event series"
 
         
-    def testRating(self):
+    def testRatingOfEventSeries(self):
         '''
         test the rating
         '''
@@ -28,9 +28,23 @@ class TestBiblographicFieldFixer(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[10]>9000)
+                self.assertTrue(painCounter[7]>30)
             else:
-                self.assertEqual(1,painCounter[1])
+                self.assertEqual(1,painCounter[7])
+                
+    def testRatingOfEvent(self):
+        '''
+        test the rating
+        '''
+        self.template="Event"
+        pageTitleLists=self.getPageTitleLists("Web3D 2019")
+        for pageTitleList in pageTitleLists:
+            counters=self.getRatingCounters(pageTitleList)
+            painCounter=counters["pain"]
+            if pageTitleList is None:
+                self.assertTrue(painCounter[7]>300)
+            else:
+                self.assertEqual(1,painCounter[7])
 
 
 if __name__ == "__main__":

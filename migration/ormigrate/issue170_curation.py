@@ -3,7 +3,7 @@ Created on 2021-04-15
 
 @author: wf
 '''
-from ormigrate.fixer import PageFixer
+from ormigrate.fixer import PageFixer,PageFixerManager
 from ormigrate.rating import Rating,RatingType
 from openresearch.openresearch import OpenResearch
 import yaml
@@ -49,3 +49,6 @@ class CurationQualityChecker(PageFixer):
                 return Rating(7,RatingType.invalid,'last edited by unrated curator')
         else:   
             return Rating(10,RatingType.missing,'bug: lastEditor not set')
+        
+if __name__ == "__main__":
+    PageFixerManager.runCmdLine([CurationQualityChecker])
