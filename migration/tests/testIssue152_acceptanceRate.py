@@ -41,16 +41,17 @@ class TestIssue152AcceptanceRate(unittest.TestCase):
         
     def testIssue152Rating(self):
         '''
-        
+        tries rating https://github.com/SmartDataAnalytics/OpenResearch/issues/152
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("",testAll=self.testAll)
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("BTU 2009","FCT 1993",testAll=self.testAll)
         for pageTitleList in pageTitleLists:
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, AcceptanceRateFixer,debug=self.debug)
             painCounter=counters["pain"]
+            # TODO - make sure the pain counters work if calculated from the wikiFiles (propertyMapping!)
             if pageTitleList is None:
                 self.assertTrue(painCounter[5]>1000)
             else:
-                self.assertEqual(6,painCounter[5])
+                self.assertEqual(2,painCounter[3])
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
