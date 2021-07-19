@@ -27,7 +27,7 @@ class CorpusForTesting(object):
             hasCache=hasCache and os.path.isfile(jsonFile)
         return hasCache
     
-    @classmethod()
+    @classmethod
     def getWikiUser(cls,wikiId=None):
         if wikiId is None:
             wikiId= cls.wikiId
