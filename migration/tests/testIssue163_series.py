@@ -4,32 +4,26 @@ Created on 2021-07-16
 @author: wf
 '''
 import unittest
-from ormigrate.fixer import PageFixerManager
 from ormigrate.issue163_series import SeriesFixer
-from tests.pagefixtoolbox import PageFixerToolbox
-from ormigrate.toolbox import Profiler
+from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 
-class TestIssue163(unittest.TestCase):
+class TestIssue163(PageFixerTest):
     '''
     https://github.com/SmartDataAnalytics/OpenResearch/issues/163
     '''
 
     def setUp(self):
-        self.testAll=True
-        self.debug=False
-        pass
-
-    def tearDown(self):
-        pass
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=SeriesFixer
     
     def testRating(self):
         '''
         test the Rating
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("IJCAI-PRICAI 2020","OPENSYM 2013",
-           "WAIS 2020","WIKISYM 2011","WIKISYM 2012",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("IJCAI-PRICAI 2020","OPENSYM 2013",
+           "WAIS 2020","WIKISYM 2011","WIKISYM 2012")
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, SeriesFixer, debug=self.debug)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is not None:
                 self.assertEqual(5,painCounter[1])

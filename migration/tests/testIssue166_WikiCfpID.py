@@ -6,28 +6,23 @@ Created on 2021-07-16
 import unittest
 from ormigrate.issue166_cfp import WikiCFPIDFixer
 from openresearch.event import Event
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 
 class TestWikiCFPId(unittest.TestCase):
     '''
     test wiki CFP Id fixing
     '''
-
+    
     def setUp(self):
-        self.debug=False
-        self.testAll=True
-        pass
-
-
-    def tearDown(self):
-        pass
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=WikiCFPIDFixer
 
 
     def testIssue166Examples(self):
         """
         Tests the issue 166 for addition of WikiCFP-ID to applicable pages
         """
-        fixer=PageFixerToolbox.getPageFixer(WikiCFPIDFixer)
+        fixer=self.getPageFixer()
         samplesWikiText = Event.getSampleWikiTextList()
         wikicfpid= fixer.getWikiCFPIdFromPage(samplesWikiText[1])
         self.assertIsNotNone(wikicfpid)
@@ -53,10 +48,10 @@ class TestWikiCFPId(unittest.TestCase):
         '''
         test the wikicfpID handling
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("WebDB 2008","WebS 2008",
-            "WiCOM 2008","WiCOM 2009","WiCOM 2010","WiMob 2008","WiNC 2009","WiOpt 2008",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("WebDB 2008","WebS 2008",
+            "WiCOM 2008","WiCOM 2009","WiCOM 2010","WiMob 2008","WiNC 2009","WiOpt 2008")
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, WikiCFPIDFixer, debug=self.debug)
+            counters=self.getRatingCounters(self, pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is not None:
                 self.assertEqual(8,painCounter[5])

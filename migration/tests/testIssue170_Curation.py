@@ -8,23 +8,17 @@ from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.issue170_curation import CurationQualityChecker
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from collections import Counter
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 
-class TestIssue170(unittest.TestCase):
+class TestIssue170(PageFixerTest):
     '''
         https://github.com/SmartDataAnalytics/OpenResearch/issues/170
         
         Curation quality check
     '''
     def setUp(self):
-        self.debug=False
-        self.testAll=True
-        pass
-
-
-    def tearDown(self):
-        pass
-
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=CurationQualityChecker
 
     def testCurationQualityCheck170(self):
         '''
@@ -70,9 +64,9 @@ class TestIssue170(unittest.TestCase):
         '''
         test the rating handling for the curation quality checker
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("SCA 2020",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("SCA 2020")
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, CurationQualityChecker)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             # TODO - this is not the true rating since the curator info is not available
             # from the Wiki Files - check whether a true tests makes sense with WF, AG and JF
