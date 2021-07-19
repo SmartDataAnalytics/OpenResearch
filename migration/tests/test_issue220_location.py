@@ -26,6 +26,9 @@ class TestLocationFixer(TestCase):
     def setUp(self):
         self.debug=False
         self.testAll=True
+        self.CITY=LocationFixer.CITY
+        self.REGION=LocationFixer.REGION
+        self.COUNTRY=LocationFixer.COUNTRY
 
     def testFixEventRecordExample(self):
         '''
@@ -33,15 +36,15 @@ class TestLocationFixer(TestCase):
         '''
         event={
             "Acronym":"Test 2020",
-            "Country":"Germany",
-            "State":"Bavaria",   #ToDo: Change to Region once template argument is changed
-            "City": "Munich"
+            self.COUNTRY:"Germany",
+            self.REGION:"Bavaria",   #ToDo: Change to Region once template argument is changed
+            self.CITY: "Munich"
         }
         exp_event={
             "Acronym":"Test 2020",
-            "Country":"DE",
-            "State":"DE/BY",   #ToDo: Change to Region once template argument is changed
-            "City": "DE/BY/Munich"
+            self.COUNTRY:"DE",
+            self.REGION:"DE/BY",   #ToDo: Change to Region once template argument is changed
+            self.CITY: "DE/BY/Munich"
         }
         res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event,res)
@@ -53,22 +56,22 @@ class TestLocationFixer(TestCase):
         """
         eventRecord = {
             "Acronym": "Test 2020",
-            "Country": "Germany",
-            "State": "Bavaria",  # ToDo: Change to Region once template argument is changed
-            "City": "Munich"
+            self.COUNTRY: "Germany",
+            self.REGION: "Bavaria",  # ToDo: Change to Region once template argument is changed
+            self.CITY: "Munich"
         }
         exp_event = {
             "Acronym": "Test 2020",
-            "Country": "DE",
-            "State": "DE/BY",  # ToDo: Change to Region once template argument is changed
-            "City": "DE/BY/Munich"
+            self.COUNTRY: "DE",
+            self.REGION: "DE/BY",  # ToDo: Change to Region once template argument is changed
+            self.CITY: "DE/BY/Munich"
         }
         event=Event()
         event.fromDict(eventRecord)
         self.fixer.fixEvent(event)
-        self.assertEqual(exp_event.get("Country"), event.Country)
-        self.assertEqual(exp_event.get("State"), event.State)
-        self.assertEqual(exp_event.get("City"), event.City)
+        self.assertEqual(exp_event.get(self.COUNTRY), event.__dict__[self.COUNTRY])
+        self.assertEqual(exp_event.get(self.REGION), event.__dict__[self.REGION])
+        self.assertEqual(exp_event.get(self.CITY), event.__dict__[self.CITY])
 
 
     def test_fixEventRecord_invalid_country(self):
@@ -79,15 +82,15 @@ class TestLocationFixer(TestCase):
         profile = Profiler("Testing the correction invalid countries", self.profile)
         event={
             "Acronym":"Test 2020",
-            "Country":"USA",
-            "State":"British Columbia",   #ToDo: Change to Region once template argument is changed
-            "City": "Vancouver"
+            self.COUNTRY:"USA",
+            self.REGION:"British Columbia",   #ToDo: Change to Region once template argument is changed
+            self.CITY: "Vancouver"
         }
         exp_event={
             "Acronym":"Test 2020",
-            "Country":"CA",
-            "State":"CA/BC",   #ToDo: Change to Region once template argument is changed
-            "City": "CA/BC/Vancouver"
+            self.COUNTRY:"CA",
+            self.REGION:"CA/BC",   #ToDo: Change to Region once template argument is changed
+            self.CITY: "CA/BC/Vancouver"
         }
         res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event,res)
@@ -100,14 +103,14 @@ class TestLocationFixer(TestCase):
         profile = Profiler("Testing detecting and fixing of missing location entries in event records", self.profile)
         event = {
             "Acronym": "Test 2020",
-            "Country": "USA",
-            "City": "Los Angeles"
+            self.COUNTRY: "USA",
+            self.CITY: "Los Angeles"
         }
         exp_event = {
             "Acronym": "Test 2020",
-            "Country": "US",
-            "State": "US/CA",  # ToDo: Change to Region once template argument is changed
-            "City": "US/CA/Los Angeles"
+            self.COUNTRY: "US",
+            self.REGION: "US/CA",  # ToDo: Change to Region once template argument is changed
+            self.CITY: "US/CA/Los Angeles"
         }
         res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event, res)
@@ -120,13 +123,13 @@ class TestLocationFixer(TestCase):
         """
         event = {
             "Acronym": "Test 2020",
-            "Country": "Germany",
-            "State": "Bavaria"   # ToDo: Change to Region once template argument is changed
+            self.COUNTRY: "Germany",
+            self.REGION: "Bavaria"   # ToDo: Change to Region once template argument is changed
         }
         exp_event = {
             "Acronym": "Test 2020",
-            "Country": "DE",
-            "State": "DE/BY",  # ToDo: Change to Region once template argument is changed
+            self.COUNTRY: "DE",
+            self.REGION: "DE/BY",  # ToDo: Change to Region once template argument is changed
         }
         res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event, res)
@@ -138,15 +141,15 @@ class TestLocationFixer(TestCase):
         """
         event = {
             "Acronym": "Test 2020",
-            "Country": "Germany",
-            "State": "Bavaria",   # ToDo: Change to Region once template argument is changed
-            "City": "invalid city name!!!"
+            self.COUNTRY: "Germany",
+            self.REGION: "Bavaria",   # ToDo: Change to Region once template argument is changed
+            self.CITY: "invalid city name!!!"
         }
         exp_event = {
             "Acronym": "Test 2020",
-            "Country": "DE",
-            "State": "DE/BY",  # ToDo: Change to Region once template argument is changed
-            "City": "invalid city name!!!"
+            self.COUNTRY: "DE",
+            self.REGION: "DE/BY",  # ToDo: Change to Region once template argument is changed
+            self.CITY: "invalid city name!!!"
         }
         res, errors = self.fixer.fixEventRecord(event)
         print(errors)
@@ -162,13 +165,13 @@ class TestLocationFixer(TestCase):
         # Misplaced region
         event = {
             "Acronym": "Test 2020",
-            "Country": "Germany",
-            "City": "Bavaria"
+            self.COUNTRY: "Germany",
+            self.CITY: "Bavaria"
         }
         exp_event = {
             "Acronym": "Test 2020",
-            "Country": "Germany",
-            "State": "Bavaria"
+            self.COUNTRY: "Germany",
+            self.REGION: "Bavaria"
         }
         self.fixer.fixLocationType(event)
         self.assertEqual(exp_event, event)
@@ -176,13 +179,13 @@ class TestLocationFixer(TestCase):
         # Misplaced city
         event = {
             "Acronym": "Test 2020",
-            "Country": "Germany",
-            "State": "Munich"
+            self.COUNTRY: "Germany",
+            self.REGION: "Munich"
         }
         exp_event = {
             "Acronym": "Test 2020",
-            "Country": "Germany",
-            "City": "Munich"
+            self.COUNTRY: "Germany",
+            self.CITY: "Munich"
         }
         self.fixer.fixLocationType(event)
         self.assertEqual(exp_event, event)
@@ -190,21 +193,21 @@ class TestLocationFixer(TestCase):
         # Misplaced city, location, country
         event = {
             "Acronym": "Test 2020",
-            "State": "USA",
-            "City": "CA",
-            "Country": "Los Angeles"
+            self.REGION: "USA",
+            self.CITY: "CA",
+            self.COUNTRY: "Los Angeles"
         }
         exp_event = {
             "Acronym": "Test 2020",
-            "Country": "USA",
-            "State": "CA",
-            "City": "Los Angeles"
+            self.COUNTRY: "USA",
+            self.REGION: "CA",
+            self.CITY: "Los Angeles"
         }
         hasChangedPositions=self.fixer.fixLocationType(event)
         self.assertTrue(hasChangedPositions)
-        self.assertEqual(exp_event["City"], event["City"])
-        self.assertEqual(exp_event["State"], event["State"])
-        self.assertEqual(exp_event["Country"], event["Country"])
+        self.assertEqual(exp_event[self.CITY], event[self.CITY])
+        self.assertEqual(exp_event[self.REGION], event[self.REGION])
+        self.assertEqual(exp_event[self.COUNTRY], event[self.COUNTRY])
         profile.time()
 
     def test_get_page_title(self):
@@ -230,12 +233,34 @@ class TestLocationFixer(TestCase):
         '''
         test the rating
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("ICKE 2022",testAll=self.testAll)
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("ICKE 2022","AAC 2019","ETC 2021","CSCW 2021","ACNS 2016",testAll=self.testAll)
         for pageTitleList in pageTitleLists:
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, LocationFixer,debug=self.debug)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertTrue(painCounter[5]>1000)
             else:
-                self.assertEqual(6,painCounter[5])
+                self.assertEqual(3,painCounter[5])
+
+    def testGetRating(self):
+        '''
+        tests the rating of location values of eventRecords
+        '''
+        event_region_missing={
+            self.COUNTRY:"Germany",
+            self.CITY:"Aachen"
+        }
+        rating_region_missing=self.fixer.getRating(event_region_missing)
+        self.assertEqual(rating_region_missing.pain, 5)
+
+        event_invalid_city = {
+            self.COUNTRY: "Germany",
+            self.CITY: "123456"
+        }
+        rating_region_missing = self.fixer.getRating(event_invalid_city)
+        self.assertEqual(rating_region_missing.pain, 6)
+
+        event_missing_locations = {}
+        rating_missing_locations= self.fixer.getRating(event_missing_locations)
+        self.assertEqual(rating_missing_locations.pain, 7)
         

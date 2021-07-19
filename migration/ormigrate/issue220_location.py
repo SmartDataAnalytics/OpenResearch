@@ -1,6 +1,8 @@
 from geograpy.locator import LocationContext, Location, City, Country, Region
 from openresearch.event import Event
 from ormigrate.fixer import PageFixer, PageFixerManager
+from ormigrate.rating import Rating, RatingType
+
 
 class LocationFixer(PageFixer):
     '''
@@ -10,16 +12,16 @@ class LocationFixer(PageFixer):
     issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/220"
     
     # value of type attribute of Locations to be fixed
-    COUNTRY = "Country"
-    REGION = "State"
-    CITY = "City"
+    COUNTRY = "country"
+    REGION = "region"
+    CITY = "city"
 
     def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
         super(LocationFixer, self).__init__(pageFixerManager)
-        self.locationContext=LocationContext.fromJSONBackup()
+        LocationFixer.locationContext=self.getORLocationContext()
  
     def fixEventRecords(self, events:list):
         """
@@ -310,6 +312,88 @@ class LocationFixer(PageFixer):
         else:
             pageTitle=location.name
         return pageTitle
+
+    @classmethod
+    def getRating(cls, eventRecord):
+        '''
+        get the pain Rating for the given eventRecord
+        '''
+        painrating = None
+        city = None
+        region = None
+        country = None
+
+        if cls.CITY in eventRecord: city = eventRecord[cls.CITY]
+        if cls.REGION in eventRecord: region = eventRecord[cls.REGION]
+        if cls.COUNTRY in eventRecord: country = eventRecord[cls.COUNTRY]
+        if not city and not region and not country:
+            # location is not defined
+            painrating = Rating(7, RatingType.missing,f'Locations are not defined')
+        else:
+            if 'locationContext' in cls.__dict__:
+                cities=cls.__dict__['locationContext'].getCities(city)
+                regions=cls.__dict__['locationContext'].getCities(region)
+                countries=cls.__dict__['locationContext'].getCities(country)
+            if cities and regions and countries:
+                # all locations are recognized
+                painrating= Rating(1,RatingType.ok,f'Locations are valid. (Country: {country}, Region: {region}, City:{city})')
+            elif not cities:
+                # City is not valid
+                painrating = Rating(6, RatingType.invalid,f'City is not recognized. (City:{city})')
+            elif not regions:
+                # City is valid but region is not
+                painrating = Rating(5, RatingType.invalid,f'Region is not recognized. (Country: {country}, Region: {region}, City:{city})')
+            else:
+                # City and region are valid but country is not
+                painrating = Rating(3, RatingType.invalid,f'Country is not recognized. (Country: {country}, Region: {region}, City:{city})')
+        return painrating
+
+    @staticmethod
+    def getORLocationContext():
+        '''
+        Returns a LocationContext enhanced with location labels used by OPENRESEARCH
+        '''
+        locationContext = LocationContext.fromJSONBackup()
+        if locationContext is None:
+            return
+        for locations in locationContext.countries, locationContext.regions, locationContext.cities:
+            for location in locations:
+                LocationFixer._addPageTitleToLabels((location))
+                LocationFixer._addCommonNamesToLabels((location))
+        return locationContext
+
+    @staticmethod
+    def _addPageTitleToLabels(location: Location):
+        '''
+        Adds the pageTitle of the given location to the labels of the given location
+        '''
+        pageTitle = LocationFixer.getPageTitle(location)
+        LocationFixer._addLabelToLocation(location, pageTitle)
+
+    @staticmethod
+    def _addCommonNamesToLabels(location: Location):
+        '''
+        Add commonly used names to the labels
+        '''
+        if isinstance(location, Country):
+            label = f"Category:{location.name}"
+            LocationFixer._addLabelToLocation(location, label)
+
+    @staticmethod
+    def _addLabelToLocation(location: Location, *label: str):
+        '''
+        Adds the given labels to the given location
+        '''
+        for l in label:
+            if 'labels' in location.__dict__:
+                labels = location.__dict__['labels']
+                if isinstance(labels, list):
+                    labels.append(l)
+                else:
+                    labels = [l, labels]
+                location.__dict__['labels'] = labels
+            else:
+                location.__dict__['labels'] = [l]
     
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([LocationFixer])

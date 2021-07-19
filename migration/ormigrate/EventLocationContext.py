@@ -17,11 +17,10 @@ class EventLocationContext(object):
         Initalize the object by creating a LocationContext and enhancing it with the openresearch location nameing
         convention (or names assigned as label to each location)
         '''
-        self.locationContext=LocationContext.fromJSONBackup()
         self.wikiFileManager=wikiFileManager
         pageFixerManager=PageFixerManager([LocationFixer],wikiFileManager)
         self.locationFixer=LocationFixer(pageFixerManager)
-        self._addORLocationLabels()
+        self.locationContext = self.locationFixer.getORLocationContext()
 
     def getSamples(self)->list:
         '''
@@ -40,13 +39,7 @@ class EventLocationContext(object):
         ]
         return samples
 
-    def _addORLocationLabels(self):
-        if self.locationContext is None:
-            return
-        for locations in self.locationContext.countries, self.locationContext.regions, self.locationContext.cities:
-            for location in locations:
-                EventLocationContext._addPageTitleToLabels((location))
-                EventLocationContext._addCommonNamesToLabels((location))
+
 
     def generateORLocationPages(self, events:list, overwrite:bool=False, limit:int=None):
         '''
@@ -150,35 +143,3 @@ class EventLocationContext(object):
         counterList = Counter(fieldValues)
         return counterList
 
-    @staticmethod
-    def _addPageTitleToLabels(location:Location):
-        '''
-        Adds the pageTitle of the given location to the labels of the given location
-        '''
-        pageTitle=LocationFixer.getPageTitle(location)
-        EventLocationContext._addLabelToLocation(location, pageTitle)
-
-    @staticmethod
-    def _addCommonNamesToLabels(location:Location):
-        '''
-        Add commonly used names to the labels
-        '''
-        if isinstance(location, Country):
-            label=f"Category:{location.name}"
-            EventLocationContext._addLabelToLocation(location, label)
-
-    @staticmethod
-    def _addLabelToLocation(location:Location, *label:str):
-        '''
-        Adds the given labels to the given location
-        '''
-        for l in label:
-            if 'labels' in location.__dict__:
-                labels=location.__dict__['labels']
-                if isinstance(labels, list):
-                    labels.append(l)
-                else:
-                    labels=[l, labels]
-                location.__dict__['labels']=labels
-            else:
-                location.__dict__['labels']=[l]
