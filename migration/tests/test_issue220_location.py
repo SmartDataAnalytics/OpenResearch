@@ -3,10 +3,10 @@ from geograpy.locator import LocationContext
 from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import Profiler
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 from ormigrate.fixer import PageFixerManager
 
-class TestLocationFixer(TestCase):
+class TestLocationFixer(PageFixerTest):
     '''
     test location fixer
     '''
@@ -24,7 +24,8 @@ class TestLocationFixer(TestCase):
         return fixer
     
     def setUp(self):
-        self.debug=False
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=LocationFixer
         self.testAll=False
         self.CITY=LocationFixer.CITY
         self.REGION=LocationFixer.REGION
@@ -233,16 +234,14 @@ class TestLocationFixer(TestCase):
         '''
         test the rating
         '''
-        profile = Profiler("Testing rating of location values in event records", self.profile)
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("ICKE 2022","AAC 2019","ETC 2021","CSCW 2021","ACNS 2016",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("ICKE 2022","AAC 2019","ETC 2021","CSCW 2021","ACNS 2016")
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, LocationFixer,debug=self.debug)
+            counters=self.getRatingCounters(self, pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertTrue(painCounter[5]>1000)
             else:
                 self.assertEqual(3,painCounter[5])
-        profile.time()
 
     def testGetRating(self):
         '''

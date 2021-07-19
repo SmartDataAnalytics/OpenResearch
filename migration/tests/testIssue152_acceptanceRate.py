@@ -5,22 +5,16 @@ Created on 2021-07-16
 '''
 import unittest
 from ormigrate.issue152_acceptancerate import AcceptanceRateFixer
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerTest
 
-class TestIssue152AcceptanceRate(unittest.TestCase):
+class TestIssue152AcceptanceRate(PageFixerTest):
     '''
     tests for Issue 152 Acceptance Rate Not calculated 
     '''
 
     def setUp(self):
-        self.debug=False
-        self.testAll=True
-        pass
-
-
-    def tearDown(self):
-        pass
-
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=AcceptanceRateFixer
 
     def testIssue152ForRecords(self):
         '''
@@ -32,7 +26,7 @@ class TestIssue152AcceptanceRate(unittest.TestCase):
                        {'submittedPapers':'test', 'acceptedPapers':None},
                        {'submittedPapers':None, 'acceptedPapers':'test'}]
         painRatings=[]
-        fixer=PageFixerToolbox.getPageFixer(AcceptanceRateFixer)
+        fixer=self.getPageFixer()
         for event in eventRecords:
             painRating =fixer.getRating(event)
             self.assertIsNotNone(painRating)
@@ -43,9 +37,9 @@ class TestIssue152AcceptanceRate(unittest.TestCase):
         '''
         tries rating https://github.com/SmartDataAnalytics/OpenResearch/issues/152
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("BTU 2009","FCT 1993",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("BTU 2009","FCT 1993")
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, AcceptanceRateFixer,debug=self.debug)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertTrue(painCounter[3]>1000)

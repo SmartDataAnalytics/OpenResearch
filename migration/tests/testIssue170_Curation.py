@@ -72,7 +72,7 @@ class TestIssue170(unittest.TestCase):
         '''
         pageTitleLists=PageFixerToolbox.getPageTitleLists("SCA 2020",testAll=self.testAll)
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, CurationQualityChecker, debug=self.debug)
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, CurationQualityChecker)
             painCounter=counters["pain"]
             # TODO - this is not the true rating since the curator info is not available
             # from the Wiki Files - check whether a true tests makes sense with WF, AG and JF

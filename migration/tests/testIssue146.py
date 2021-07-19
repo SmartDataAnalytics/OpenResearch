@@ -12,6 +12,7 @@ class TestIssue146(unittest.TestCase):
     tests for https://github.com/SmartDataAnalytics/OpenResearch/issues/146
     Inconsistent location names
     '''
+    #TODO remove superfluous test, code and ressources
 
     def setUp(self):
         self.debug=False

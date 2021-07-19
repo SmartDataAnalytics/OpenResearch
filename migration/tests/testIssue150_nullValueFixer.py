@@ -5,20 +5,16 @@ Created on 2021-07-13
 '''
 import unittest
 from ormigrate.issue150_nullvalue import NullValueFixer
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 
-class TestNullValueFixer(unittest.TestCase):
+class TestNullValueFixer(PageFixerTest):
     '''
     Test the fixer for Fixer for https://github.com/SmartDataAnalytics/OpenResearch/issues/150
     '''
 
     def setUp(self):
-        self.debug=False
-        self.testAll=True
-        pass
-
-    def tearDown(self):
-        pass
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=NullValueFixer
 
     def testNullValueFixer(self):
         '''
@@ -26,7 +22,7 @@ class TestNullValueFixer(unittest.TestCase):
         '''
         pageTitleLists=PageFixerToolbox.getPageTitleLists("ECIR 2019","ECIR 2018","ECIR 2017","ECIR 2009",testAll=self.testAll)
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, NullValueFixer, debug=self.debug)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is not None:
                 self.assertEqual(1,painCounter[1])

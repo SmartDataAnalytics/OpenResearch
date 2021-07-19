@@ -6,22 +6,17 @@ Created on 2021-07-12
 import unittest
 from ormigrate.issue119_ordinal import OrdinalFixer
 from ormigrate.toolbox import HelperFunctions as hf
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 
-class TestOrdinalFixer(unittest.TestCase):
+class TestOrdinalFixer(PageFixerTest):
     '''
     test the
     fixer for Ordinal not being an integer
     https://github.com/SmartDataAnalytics/OpenResearch/issues/119
     '''
-
     def setUp(self):
-        self.testAll=True
-        self.debug=False
-        pass
-
-    def tearDown(self):
-        pass
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=OrdinalFixer
     
     def testDictionaryLoad(self):
         """
@@ -38,7 +33,7 @@ class TestOrdinalFixer(unittest.TestCase):
             test for fixing Ordinals not a number
             https://github.com/SmartDataAnalytics/OpenResearch/issues/119
         '''
-        fixer=PageFixerToolbox.getPageFixer(OrdinalFixer)
+        fixer=self.getPageFixer()
         lookup_dict = hf.loadDictionary()
         eventRecords= [{'Ordinal':2},
                        {'Ordinal':None},
@@ -61,9 +56,9 @@ class TestOrdinalFixer(unittest.TestCase):
         '''
         test the ordinal Fixer on pageTitle examples
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("ICKE 2022","IEAI 2021","AIAT 2021",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("ICKE 2022","IEAI 2021","AIAT 2021")
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, OrdinalFixer,debug=self.debug)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertTrue(painCounter[5]>800)

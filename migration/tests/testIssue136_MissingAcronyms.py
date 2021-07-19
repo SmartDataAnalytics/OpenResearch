@@ -5,28 +5,26 @@ Created on 2021-07-15
 '''
 import unittest
 from ormigrate.issue136_MissingAcronym import EventSeriesAcronymFixer
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 
-class TestIssue136(unittest.TestCase):
+class TestIssue136(PageFixerTest):
     '''
     https://github.com/SmartDataAnalytics/OpenResearch/issues/136
     '''
 
     def setUp(self):
-        self.debug=False
-        self.testAll=True
-        pass
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=EventSeriesAcronymFixer
+        self.template="Event series"
 
-    def tearDown(self):
-        pass
-
+  
     def testIssue136(self):
         '''
         TestEventSeriesTitleFixer
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("CSR","DB","DELFI","EISTA","DEBS","ISS",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("CSR","DB","DELFI","EISTA","DEBS","ISS")
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, EventSeriesAcronymFixer,template="Event series",debug=self.debug)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertTrue(painCounter[5]>1000)
