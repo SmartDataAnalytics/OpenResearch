@@ -236,7 +236,7 @@ class TestLocationFixer(PageFixerTest):
         '''
         pageTitleLists=self.getPageTitleLists("ICKE 2022","AAC 2019","ETC 2021","CSCW 2021","ACNS 2016")
         for pageTitleList in pageTitleLists:
-            counters=self.getRatingCounters(self, pageTitleList)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertTrue(painCounter[5]>1000)
