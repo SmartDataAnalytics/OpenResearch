@@ -3,6 +3,8 @@
 '''
 from ormigrate.rating import Rating,RatingType
 from ormigrate.fixer import PageFixer
+from wikifile.wikiRender import WikiFile
+from ormigrate.rating import PageRating,RatingType
 
 class BiblographicFieldFixer(PageFixer):
     '''
@@ -18,22 +20,23 @@ class BiblographicFieldFixer(PageFixer):
         '''
         super(BiblographicFieldFixer, self).__init__(pageFixerManager)
 
-    @classmethod
-    def getRating(self, eventRecord):
-        painrating = None
-        hasBiblographic = False
-        hasProceedings  = False
-        for key in eventRecord:
-            checker = str(key).lower()
-            if checker.find("bibliography") != -1:
-                if checker.find('proceedings') != -1:
-                    hasProceedings = True
-                else:
-                    hasBiblographic= True
+    def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
+        '''
+        Args:
+            wikiFile(WikiFile): the wikiFile to work on
+            
+        Return:
+            Rating: The rating for this WikiFile
+        
+        '''
+        # prepare rating
+        wikiText,_eventDict,rating=self.prepareWikiFileRating(wikiFile,"Event")
+        hasBiblographic = "|has Bibliography=" in wikiText
+        hasProceedings  = "|has Proceedings Bibliography=" in wikiText
         if hasProceedings:
-            painrating = Rating(7, RatingType.ok,f'Has Proceedings Bibliography field exists which is not defined as a property in OR')
+            painrating = rating.set(7, RatingType.ok,f'Has Proceedings Bibliography field exists which is not defined as a property in OR')
         elif hasBiblographic:
-            painrating = Rating(5, RatingType.ok,f'Has Bibliography field exists which is defined as a property in OR but is not used properly')
+            painrating = rating.set(5, RatingType.ok,f'Has Bibliography field exists which is defined as a property in OR but is not used properly')
         else:
-            painrating = Rating(1, RatingType.ok, f'Bibliography field not found in event')
+            painrating = rating.set(1, RatingType.ok, f'No unused Bibliography fields found in event')
         return painrating

@@ -8,8 +8,10 @@ from ormigrate.rating import Rating, RatingType
 
 class EventSeriesProvenanceFixer(PageFixer):
     '''
-    fixes Event Series
+    see issue and purpose
     '''
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/57"
+    purpose="fixes missing provenance information"
 
     def __init__(self,pageFixerManager):
         '''
@@ -19,6 +21,9 @@ class EventSeriesProvenanceFixer(PageFixer):
         
     @classmethod
     def getRating(cls,eventRecord):
+        '''
+        check the provenance information rating
+        '''
         hasDblp=eventRecord.get('dblpSeries') is not  None
         hasWikidata=eventRecord.get('wikidataId') is not None
         if hasDblp and hasWikidata:
