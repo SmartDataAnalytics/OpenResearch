@@ -6,9 +6,9 @@ Created on 2021-07-16
 import unittest
 from ormigrate.issue166_cfp import WikiCFPIDFixer
 from openresearch.event import Event
-from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
+from tests.pagefixtoolbox import PageFixerTest
 
-class TestWikiCFPId(unittest.TestCase):
+class TestWikiCFPId(PageFixerTest):
     '''
     test wiki CFP Id fixing
     '''
@@ -51,7 +51,7 @@ class TestWikiCFPId(unittest.TestCase):
         pageTitleLists=self.getPageTitleLists("WebDB 2008","WebS 2008",
             "WiCOM 2008","WiCOM 2009","WiCOM 2010","WiMob 2008","WiNC 2009","WiOpt 2008")
         for pageTitleList in pageTitleLists:
-            counters=self.getRatingCounters(self, pageTitleList)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is not None:
                 self.assertEqual(8,painCounter[5])

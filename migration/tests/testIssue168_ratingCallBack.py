@@ -4,10 +4,7 @@ Created on 2021-04-13
 @author: wf
 '''
 import unittest
-from openresearch.event import Event,EventSeries
 from collections import Counter
-from tests.corpusfortesting import CorpusForTesting as Corpus
-from ormigrate.toolbox import Profiler
 from ormigrate.rating import PageRating,PageRatingList
 
 class TestIssue168(unittest.TestCase):

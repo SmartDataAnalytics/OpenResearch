@@ -20,7 +20,7 @@ class TestNullValueFixer(PageFixerTest):
         '''
         test fixing https://confident.dbis.rwth-aachen.de/or/index.php?title=ECIR
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("ECIR 2019","ECIR 2018","ECIR 2017","ECIR 2009",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("ECIR 2019","ECIR 2018","ECIR 2017","ECIR 2009")
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]

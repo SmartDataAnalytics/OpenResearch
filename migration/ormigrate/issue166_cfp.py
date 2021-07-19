@@ -91,7 +91,6 @@ class WikiCFPIDFixer(PageFixer):
         return None
 
 
-
     def fixPageWithDBCrosscheck(self, path, event, wikicfpid):
         """
         fix page of Event Series with crosschecking Event_all.db from PTP
@@ -106,7 +105,7 @@ class WikiCFPIDFixer(PageFixer):
         dblpLOD = self.sqlDB.query(query)
         filename = ntpath.basename(path).replace('.wiki', '')
         wikiFilePath = ntpath.dirname(path)
-        wikiFile = WikiFile(filename, wikiFilePath, wiki_render=self.wikiRender,wikiText=event)
+        wikiFile = WikiFile(filename, wikiFilePath, wikiText=event)
         orEvent = wikiFile.extract_template('Event')
         if len(dblpLOD)> 0:
             for dic in dblpLOD:
