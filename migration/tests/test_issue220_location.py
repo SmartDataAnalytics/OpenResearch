@@ -25,7 +25,7 @@ class TestLocationFixer(TestCase):
     
     def setUp(self):
         self.debug=False
-        self.testAll=True
+        self.testAll=False
         self.CITY=LocationFixer.CITY
         self.REGION=LocationFixer.REGION
         self.COUNTRY=LocationFixer.COUNTRY
@@ -233,6 +233,7 @@ class TestLocationFixer(TestCase):
         '''
         test the rating
         '''
+        profile = Profiler("Testing rating of location values in event records", self.profile)
         pageTitleLists=PageFixerToolbox.getPageTitleLists("ICKE 2022","AAC 2019","ETC 2021","CSCW 2021","ACNS 2016",testAll=self.testAll)
         for pageTitleList in pageTitleLists:
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, LocationFixer,debug=self.debug)
@@ -241,6 +242,7 @@ class TestLocationFixer(TestCase):
                 self.assertTrue(painCounter[5]>1000)
             else:
                 self.assertEqual(3,painCounter[5])
+        profile.time()
 
     def testGetRating(self):
         '''
