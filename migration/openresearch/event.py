@@ -454,8 +454,8 @@ class EventList(OREntityList):
             { 'prop':'Country',             'name': 'country'},
             { 'prop':'State',               'name': 'region'},
             { 'prop':'City',                'name': 'city'},
-            { 'prop':'Accepted_papers',     'name': 'acceptedPapers'},
-            { 'prop':'Submitted_papers',    'name': 'submittedPapers'}
+            { 'prop':'Accepted papers',     'name': 'acceptedPapers'},
+            { 'prop':'Submitted papers',    'name': 'submittedPapers'}
     ]               
 
     '''

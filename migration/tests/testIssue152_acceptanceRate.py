@@ -47,11 +47,10 @@ class TestIssue152AcceptanceRate(unittest.TestCase):
         for pageTitleList in pageTitleLists:
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, AcceptanceRateFixer,debug=self.debug)
             painCounter=counters["pain"]
-            # TODO - make sure the pain counters work if calculated from the wikiFiles (propertyMapping!)
             if pageTitleList is None:
-                self.assertTrue(painCounter[5]>1000)
+                self.assertTrue(painCounter[3]>1000)
             else:
-                self.assertEqual(2,painCounter[3])
+                self.assertEqual(2,painCounter[7])
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
