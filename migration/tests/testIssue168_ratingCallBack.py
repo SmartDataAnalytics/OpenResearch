@@ -8,6 +8,7 @@ from openresearch.event import Event,EventSeries
 from collections import Counter
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
+from ormigrate.rating import PageRating,PageRatingList
 
 class TestIssue168(unittest.TestCase):
     '''
@@ -47,18 +48,33 @@ class TestIssue168(unittest.TestCase):
                 print (f"{i+1}:{column}=")
                 print(counter.most_common(50))
         pass
+    
+    def testPageRatingList(self):
+        '''
+        test the page rating List
+        '''
+        pageRatingList=PageRatingList()
+        self.assertEqual(0,len(pageRatingList.getList()))
+        self.assertEqual(0,len(pageRatingList.pageRatings))
+        for ratingRecord in PageRating.getSamples():
+            rating=PageRating()
+            rating.fromDict(ratingRecord)
+            pageRatingList.getList().append(rating)
+        jsonStr=pageRatingList.toJSON(limitToSampleFields=True)
+        print(jsonStr)
+            
 
-    def testRatingCallback(self):
-        '''
-        test the rating call back
-        '''
-        profile=Profiler("test rating call back")
-        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug)
-        lod,errors=eventCorpus.eventList.getRatedLod(Event.rateMigration)
-        self.checkRatedLod(lod, errors)
-        lod,errors=eventCorpus.eventSeriesList.getRatedLod(EventSeries.rateMigration)
-        self.checkRatedLod(lod, errors)
-        profile.time()
+    #def testRatingCallback(self):
+    #    '''
+    #    test the rating call back
+    #    '''
+    #    profile=Profiler("test rating call back")
+    #    eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug)
+    #    lod,errors=eventCorpus.eventList.getRatedLod(Event.rateMigration)
+    #    self.checkRatedLod(lod, errors)
+    #    lod,errors=eventCorpus.eventSeriesList.getRatedLod(EventSeries.rateMigration)
+    #    self.checkRatedLod(lod, errors)
+    #    profile.time()
 
 
 if __name__ == "__main__":

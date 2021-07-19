@@ -4,21 +4,24 @@ Created on 2021-04-16
 @author: wf
 '''
 from enum import Enum
+from lodstorage.jsonable import JSONAble,JSONAbleList
 
-class RatingType(Enum):
+class RatingType(str,Enum):
     '''
     the rating type
+    
+    see https://stackoverflow.com/a/51976841/1497139 why we use str as a type for better json Encoding
     '''
     missing='❌'
     invalid='👎'
     ok='👍'
     
-class Rating(object):
+class Rating(JSONAble):
     '''
     I am rating
     '''
 
-    def __init__(self,pain:int,reason:str,hint:str):
+    def __init__(self,pain:int=-1,reason:str=None,hint:str=None):
         '''
         Constructor
         
@@ -28,6 +31,16 @@ class Rating(object):
             hint(str): the description of the rating - hint on what is wrong
         '''
         self.set(pain,reason,hint)
+        
+    @classmethod
+    def getSamples(cls):
+        samplesLOD=[{
+            "pain": 1,
+            "reason": RatingType.ok,
+            "hint": "Dates,  Jul 13, 2008 , Jul 14, 2008 valid",
+        }
+        ]
+        return samplesLOD
         
     def set(self,pain:int,reason:str,hint:str):
         '''
@@ -45,7 +58,7 @@ class PageRating(Rating):
     I am a Rating for a page
     '''
     
-    def __init__(self,pageTitle:str,templateName:str,pain:int,reason:str,hint:str):
+    def __init__(self,pageTitle:str=None,templateName:str=None,pain:int=-1,reason:str=None,hint:str=None):
         '''
         construct me
         
@@ -60,6 +73,28 @@ class PageRating(Rating):
         self.pageTitle=pageTitle
         self.templateName=templateName
         
+    @classmethod
+    def getSamples(cls):
+        samplesLOD=[{
+            "templateName": "Event",
+            "pageTitle": "Workshop on Spatial/Temporal Reasoning 2008",
+            "pain": 1,
+            "reason": RatingType.ok,
+            "hint": "Dates,  Jul 13, 2008 , Jul 14, 2008 valid",
+        }
+        ]
+        return samplesLOD
+        
     def __str__(self):
         return f"{self.templateName} {self.pageTitle}: {self.pain} - {self.reason}: {self.hint}"
         
+class PageRatingList(JSONAbleList):
+    '''
+    a container for page ratings
+    '''
+    def __init__(self):
+        '''
+        construct me
+        '''
+        super(PageRatingList, self).__init__("pageRatings", PageRating, "pageratings")
+    

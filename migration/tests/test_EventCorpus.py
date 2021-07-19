@@ -40,6 +40,7 @@ class TestEventCorpus(unittest.TestCase):
         '''
         test the event corpus
         '''
+        self.debug=True
         profile=Profiler("getting EventCorpus from WikiUser")
         eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
         profile.time()
