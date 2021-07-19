@@ -114,8 +114,10 @@ class DateFixer(PageFixer):
 
         if painStartDate == 1 and painEndDate == 1:
             painrating= Rating(1,RatingType.ok,f'Dates,  {startDate} , {endDate} valid')
-        elif painStartDate == 7 or painEndDate ==7:
-            painrating= Rating(7,RatingType.invalid,"Date can't be parsed")
+        elif painStartDate == 7:
+            painrating= Rating(7,RatingType.invalid,f"Date: {startDate} can't be parsed")
+        elif painEndDate == 7:
+            painrating = Rating(7, RatingType.invalid,f"Date: {endDate} can't be parsed")
         elif painStartDate != 1 and painEndDate != 1:
             painrating=Rating(5,RatingType.missing,f'Dates not found')
         elif painStartDate == 5 and painEndDate == 1:

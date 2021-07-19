@@ -27,7 +27,7 @@ class TestInvalidDatesFixer(unittest.TestCase):
         dateFixer=PageFixerToolbox.getPageFixer(DateFixer)
         sampledates=['2020-02-20','2020/02/20','2020.02.20','20/02/2020','02/20/2020','20.02.2020','02.20.2020','20 Feb, 2020','2020, Feb 20','2020 20 Feb','2020 Feb 20']
         for date in sampledates:
-            self.assertEqual('2020/02/20',dateFixer.parseDate(date))
+            self.assertEqual('2020/02/20',dateFixer.parseDate(date)[0])
             
     def testIssue71Examples(self):
         '''
@@ -67,14 +67,14 @@ class TestInvalidDatesFixer(unittest.TestCase):
         '''
         test the rating handling for the data Fixer
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("SAC 2010",testAll=self.testAll)
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("IEEE TSC 2008","IJCICG 2010","IJECEE 2009",testAll=self.testAll)
         for pageTitleList in pageTitleLists:
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, DateFixer, debug=self.debug)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[2]>1500)
+                self.assertGreater(painCounter[7],1500)
             else:
-                self.assertEqual(2,painCounter[1])
+                self.assertEqual(3,painCounter[7])
 
 
 if __name__ == "__main__":
