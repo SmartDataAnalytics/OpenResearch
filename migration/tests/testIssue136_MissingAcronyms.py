@@ -5,7 +5,7 @@ Created on 2021-07-15
 '''
 import unittest
 from ormigrate.issue136_MissingAcronym import EventSeriesAcronymFixer
-from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
+from tests.pagefixtoolbox import PageFixerTest
 
 class TestIssue136(PageFixerTest):
     '''

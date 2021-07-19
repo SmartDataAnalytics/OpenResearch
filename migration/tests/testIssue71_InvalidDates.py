@@ -65,7 +65,7 @@ class TestInvalidDatesFixer(PageFixerTest):
         '''
         pageTitleLists=self.getPageTitleLists("IEEE TSC 2008","IJCICG 2010","IJECEE 2009")
         for pageTitleList in pageTitleLists:
-            counters=self.getRatingCounters(self, pageTitleList)
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertGreater(painCounter[7],500)
