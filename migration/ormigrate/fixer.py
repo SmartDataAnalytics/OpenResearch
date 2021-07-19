@@ -157,10 +157,6 @@ class PageFixer(object):
         '''
         self.debug=debug
         self.wikiFileManager=pageFixerManager.wikiFileManager
-        self.wikiclient = self.wikiFileManager.getWikiClient()
-        if 'wikiUser' in self.wikiclient.__dict__:
-            if 'wikiId' in self.wikiclient.wikiUser.__dict__:
-                self.wikiId=self.wikiclient.wikiUser.wikiId
         self.propertyLookups={}
         self.propertyLookups["Event"]=EventList.getPropertyLookup()
         self.propertyLookups["Event series"]=EventSeriesList.getPropertyLookup()

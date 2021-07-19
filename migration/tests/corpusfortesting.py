@@ -31,6 +31,7 @@ class CorpusForTesting(object):
     def getWikiUser(cls,wikiId=None):
         if wikiId is None:
             wikiId= cls.wikiId
+        # make sure there is a wikiUser (even in public CI)
         wikiUser=hf.getSMW_WikiUser(wikiId=wikiId,save=hf.inPublicCI())
         return wikiUser
         
