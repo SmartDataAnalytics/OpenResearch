@@ -11,10 +11,10 @@ import os
 
 class CurationQualityChecker(PageFixer):
     '''
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/170
-        
-    Curation quality check
+    see purpose and issue
     '''
+    purpose="Curation quality check"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/170"
     userrating={}
     
     def __init__(self,pageFixerManager):

@@ -6,8 +6,9 @@ Created on 2021-04-15
 import unittest
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.issue170_curation import CurationQualityChecker
-from tests.corpus import Corpus
+from tests.corpusfortesting import CorpusForTesting as Corpus
 from collections import Counter
+from tests.pagefixtoolbox import PageFixerToolbox
 
 class TestIssue170(unittest.TestCase):
     '''
@@ -17,6 +18,7 @@ class TestIssue170(unittest.TestCase):
     '''
     def setUp(self):
         self.debug=False
+        self.testAll=True
         pass
 
 
@@ -63,6 +65,22 @@ class TestIssue170(unittest.TestCase):
             counter[user]+=len(userLookup[user])
         # hide personal data
         #print (counter.most_common(50))
+        
+    def testRating(self):
+        '''
+        test the rating handling for the curation quality checker
+        '''
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("SCA 2020",testAll=self.testAll)
+        for pageTitleList in pageTitleLists:
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, CurationQualityChecker, debug=self.debug)
+            painCounter=counters["pain"]
+            # TODO - this is not the true rating since the curator info is not available
+            # from the Wiki Files - check whether a true tests makes sense with WF, AG and JF
+            if pageTitleList is None:
+                self.assertTrue(painCounter[10]>9000)
+            else:
+                self.assertEqual(1,painCounter[10])
+
             
         
 

@@ -34,6 +34,7 @@ class TestInvalidDatesFixer(unittest.TestCase):
             test for fixing invalid dates
             https://github.com/SmartDataAnalytics/OpenResearch/issues/71
         '''
+        # TODO add invalid dates that are not properly formatted examples
         eventRecords = [{'startDate': '20 Feb, 2020', 'endDate': '20 Feb, 2020'},
                         {'startDate': None, 'endDate': None},
                         {'startDate': '20 Feb, 2020', 'endDate': None},
