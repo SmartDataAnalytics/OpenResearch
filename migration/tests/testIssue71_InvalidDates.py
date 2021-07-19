@@ -43,8 +43,10 @@ class TestInvalidDatesFixer(unittest.TestCase):
                         ]
         expectedPainRatings=[1, 5, 3, 7,7]
         expectedStartDates=['2020/02/20', None, '2020/02/20', None,'2010/03/22']
-        expectedEndDates=['2020/02/20', None, None, '2020/02/20',]
+        expectedEndDates=['2020/02/20', None, None, '2020/02/20','2011/03/226']
+        expectedErrors=[0, 2, 1, 1, 1]
         painRatings=[]
+        errors=[]
         fixedStartDates=[]
         fixedEndDates=[]
         fixer=PageFixerToolbox.getPageFixer(DateFixer)
@@ -52,9 +54,11 @@ class TestInvalidDatesFixer(unittest.TestCase):
             painRating = fixer.getRating(event)
             event,_err = fixer.fixEventRecord(event, ['startDate', 'endDate'])
             self.assertIsNotNone(painRating)
+            errors.append(len(_err))
             painRatings.append(painRating.pain)
             fixedStartDates.append(event['startDate'])
             fixedEndDates.append(event['endDate'])
+        self.assertEqual(expectedErrors,errors)
         self.assertEqual(expectedPainRatings,painRatings)
         self.assertEqual(expectedStartDates, fixedStartDates)
         self.assertEqual(expectedEndDates, fixedEndDates)
