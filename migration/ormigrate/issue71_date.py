@@ -85,6 +85,18 @@ class DateFixer(PageFixer):
             return None
         
     @classmethod
+    def checkDate(cls,dateStr)->(int,str):
+        if dateStr is None:
+            return 5,"Date is missing"
+        else:
+            try:
+                cls.parseDate(cls, dateStr)
+                return 1,"Date is ok"
+            except Exception as _ex:
+                return 5,f"Date can't be parsed {str(_ex)}"
+                 
+        
+    @classmethod
     def getRating(self,eventRecord):
         '''
         get the pain Rating for the given eventRecord

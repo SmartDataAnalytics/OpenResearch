@@ -39,10 +39,11 @@ class TestInvalidDatesFixer(unittest.TestCase):
                         {'startDate': None, 'endDate': None},
                         {'startDate': '20 Feb, 2020', 'endDate': None},
                         {'startDate': None, 'endDate': '20 Feb, 2020'},
+                        {'startDate': '2010/03/22', 'endDate':'2011/03/226'},
                         ]
-        expectedPainRatings=[1, 5, 3, 7]
-        expectedStartDates=['2020/02/20', None, '2020/02/20', None]
-        expectedEndDates=['2020/02/20', None, None, '2020/02/20']
+        expectedPainRatings=[1, 5, 3, 7,7]
+        expectedStartDates=['2020/02/20', None, '2020/02/20', None,'2010/03/22']
+        expectedEndDates=['2020/02/20', None, None, '2020/02/20',]
         painRatings=[]
         fixedStartDates=[]
         fixedEndDates=[]
@@ -62,7 +63,7 @@ class TestInvalidDatesFixer(unittest.TestCase):
         '''
         test the rating handling for the data Fixer
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("SCA 2020",testAll=self.testAll)
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("SAC 2010",testAll=self.testAll)
         for pageTitleList in pageTitleLists:
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, DateFixer, debug=self.debug)
             painCounter=counters["pain"]
