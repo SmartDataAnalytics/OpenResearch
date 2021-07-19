@@ -56,6 +56,8 @@ class PageFixerManager(object):
         cmdLine.getParser()
         cmdLine.parser.add_argument("--stats", action="store_true",
                             help="calculate and show rating statistics")
+        cmdLine.parser.add_argument("--listRatings", action="store_true",
+                            help="calculate and show Ratings as a list of links")
         cmdLine.parser.add_argument("--verbose", action="store_true",
                             help="shows verbose output")
         if argv is None:
@@ -78,9 +80,13 @@ class PageFixerManager(object):
         self.wikiFilesToWorkon=self.wikiFileManager.getAllWikiFilesForArgs(self.args)
         if self.args.debug:
             print(f"found {len(self.wikiFilesToWorkon)} pages to work on")
-        if self.args.stats:
+        if self.args.stats or self.args.listRatings:
             self.getRatings(debug=self.args.debug)
+        if self.args.stats:
             self.showRatingStats()
+        if self.args.listRatings:
+            self.showRatingList()
+            
             
     def getRatings(self,debug:bool,debugLimit:int=10):
         '''
@@ -121,6 +127,13 @@ class PageFixerManager(object):
             for rating in self.ratings.values():
                 counter[rating.__dict__[attr]]+=1
         return counters
+    
+    def showRatingList(self):
+        '''
+        show a list of ratings
+        '''
+        for rating in self.ratings.values():
+            print(rating)
         
     def showRatingStats(self): 
         '''
