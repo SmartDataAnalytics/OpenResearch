@@ -7,7 +7,7 @@ from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
 from openresearch.event import OREntity,EventList,EventSeriesList
-from ormigrate.rating import RatingType,PageRating
+from ormigrate.rating import RatingType,PageRating, PageRatingList
 from collections import Counter
 import sys
 import traceback
@@ -97,12 +97,12 @@ class PageFixerManager(object):
             debugLimit(int): maximum number of debug message to be printed
         '''
         self.errors=[]
-        self.ratings={}
+        self.ratings=PageRatingList()
         for pageFixer in self.pageFixers.values():
             for wikiFile in self.wikiFilesToWorkon.values():
                 try:
                     rating = pageFixer.getRatingFromWikiFile(wikiFile)
-                    self.ratings[wikiFile.getPageTitle()]=rating
+                    self.ratings.getList().append(rating)
                 except Exception as e:
                     self.errors.append({'error':e,'fixer':pageFixer,'pageTitle':wikiFile.getPageTitle()})
         if len(self.errors)>0 and debug:
@@ -124,16 +124,19 @@ class PageFixerManager(object):
         for attr in ["reason","pain"]:
             counter=Counter()
             counters[attr]=counter
-            for rating in self.ratings.values():
+            for rating in self.ratings.getList():
                 counter[rating.__dict__[attr]]+=1
         return counters
     
-    def showRatingList(self):
+    def showRatingList(self,listFormat='json'):
         '''
         show a list of ratings
         '''
-        for rating in self.ratings.values():
-            print(rating)
+        if listFormat=="json":
+            print(self.ratings.toJSON(limitToSampleFields=True))
+        else:
+            for rating in self.ratings.getList():
+                print(rating)
         
     def showRatingStats(self): 
         '''

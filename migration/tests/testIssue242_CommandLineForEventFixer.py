@@ -4,7 +4,7 @@ Created on 2021-07-16
 @author: wf
 '''
 import unittest
-from tests.corpusfortesting import CorpusForTesting as Corpus
+from ormigrate.issue71_date import DateFixer
 from tests.pagefixtoolbox import PageFixerToolbox
 
 class TestIssue242_CommandLineForEventFixer(unittest.TestCase):
@@ -36,6 +36,9 @@ class TestIssue242_CommandLineForEventFixer(unittest.TestCase):
         '''
         test getting a list of Ratings
         '''
+        pageTitles=["ATN 2017"]
+        pageFixerManager=PageFixerToolbox.runAndGetPageFixerManager(self,pageTitles,DateFixer)
+
         
 
 

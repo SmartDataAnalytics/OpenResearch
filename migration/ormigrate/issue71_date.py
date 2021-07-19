@@ -88,15 +88,14 @@ class DateFixer(PageFixer):
         
     @classmethod
     def checkDate(cls,dateStr)->(int,str):
-        if dateStr is None:
+        if dateStr is None or dateStr.strip()=="":
             return 5,"Date is missing"
         else:
-            date,errors = cls.parseDate(cls, dateStr)
+            _date,errors = cls.parseDate(cls, dateStr)
             if len(errors) == 0:
-                return 1,"Date is ok"
+                return 1,"Date is {dateStr} is ok"
             else:
-                return 7,f"Date can't be parsed {errors[dateStr]}"
-                 
+                return 7,f"Date '{dateStr}' can't be parsed: {errors[dateStr]}"           
         
     @classmethod
     def getRating(self,eventRecord):
@@ -115,15 +114,15 @@ class DateFixer(PageFixer):
         if painStartDate == 1 and painEndDate == 1:
             painrating= Rating(1,RatingType.ok,f'Dates,  {startDate} , {endDate} valid')
         elif painStartDate == 7:
-            painrating= Rating(7,RatingType.invalid,f"Date: {startDate} can't be parsed")
+            painrating= Rating(7,RatingType.invalid,f"{messageStartDate}")
         elif painEndDate == 7:
-            painrating = Rating(7, RatingType.invalid,f"Date: {endDate} can't be parsed")
+            painrating = Rating(7, RatingType.invalid,f"{messageEndDate}")
         elif painStartDate != 1 and painEndDate != 1:
             painrating=Rating(5,RatingType.missing,f'Dates not found')
         elif painStartDate == 5 and painEndDate == 1:
-            painrating=Rating(7,RatingType.missing,f'Start Date is not there while end date exists')
+            painrating=Rating(7,RatingType.missing,f'Start Date missing for valid end date {endDate}')
         elif painStartDate == 1 and painEndDate == 5:
-            painrating=Rating(3,RatingType.missing,f'Start Date is there but end date is not')
+            painrating=Rating(3,RatingType.missing,f'End Date missing for valid start date {startDate}')
         return painrating
 
 if __name__ == "__main__":

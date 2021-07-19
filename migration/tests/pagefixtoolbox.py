@@ -29,11 +29,36 @@ class PageFixerToolbox(object):
         return fixer
         pass
     
-    def getRatingCounters(self,pageTitleList:list,pageFixerClass,template="Event",debug=True):
+    @staticmethod
+    def runAndGetPageFixerManager(testCase,pageTitleList:list,pageFixerClass,template="Event"):
+        '''
+        run and get a PageFixreManager for the given arguments
+    
+        Args:
+            testCase(TestCase): a test Case for which this function is called
+            pageTitleList(list): a list of pageTitles - if None will be replaced by a list of all pages
+            pageFixerClass(): the class of the pageFixer to be instantiated and tested
+            template(str): the template to filter the WikiSon entities
+            debug(bool): if True show the pain Counters
+        Returns:
+            PageFixerManager: a PageFixerManager with pageRatings already set
+        '''
+        pageCount="all" if pageTitleList is None else len(pageTitleList)
+        profile=Profiler(f"{pageFixerClass.purpose} for {pageCount} pages")
+        argv=PageFixerToolbox.getArgs(pageTitleList,["--stats"],template=template,debug=testCase.debug)
+        pageFixerManager=PageFixerManager.fromCommandLine([pageFixerClass],argv)
+        pageFixerManager.wikiFilesToWorkon=pageFixerManager.wikiFileManager.getAllWikiFilesForArgs(pageFixerManager.args)
+        pageFixerManager.getRatings(debug=testCase.debug)
+        profile.time()
+        return pageFixerManager
+    
+    @staticmethod
+    def getRatingCounters(testCase,pageTitleList:list,pageFixerClass,template="Event",debug=True):
         '''
         get the rating counters for the given pageFixerClass and template
         
         Args:
+            testCase(TestCase): a test Case for which this function is called
             pageTitleList(list): a list of pageTitles - if None will be replaced by a list of all pages
             pageFixerClass(): the class of the pageFixer to be instantiated and tested
             template(str): the template to filter the WikiSon entities
@@ -41,18 +66,14 @@ class PageFixerToolbox(object):
         Returns:
             the rating/pain counters as per the given pageTitleList 
         '''
-        pageCount="all" if pageTitleList is None else len(pageTitleList)
-        profile=Profiler(f"{pageFixerClass.purpose} for {pageCount} pages")
-        args=PageFixerToolbox.getArgs(pageTitleList,["--stats"],template=template,debug=self.debug)
-        pageFixerManager=PageFixerManager.runCmdLine([pageFixerClass],args)
-        profile.time()
+        pageFixerManager=PageFixerToolbox.runAndGetPageFixerManager(testCase, pageTitleList, pageFixerClass, template, debug)
         counters=pageFixerManager.getRatingCounters()
         painCounter=counters["pain"]
         if debug:
             print (painCounter)
         if pageTitleList is not None:
-            self.assertEqual(0,len(pageFixerManager.errors))
-            self.assertEqual(len(pageTitleList),len(pageFixerManager.ratings))
+            testCase.assertEqual(0,len(pageFixerManager.errors))
+            testCase.assertEqual(len(pageTitleList),len(pageFixerManager.ratings))
         return counters
         
     @staticmethod 
