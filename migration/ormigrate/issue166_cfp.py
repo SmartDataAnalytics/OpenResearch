@@ -5,7 +5,7 @@ Created on 2021-04-06
 '''
 import re
 import ntpath
-from ormigrate.fixer import PageFixer
+from ormigrate.fixer import PageFixer,PageFixerManager
 from difflib import SequenceMatcher
 from lodstorage.sql import SQLDB
 from os.path import expanduser
@@ -15,16 +15,17 @@ from wikifile.wikiFileManager import WikiFileManager
 
 class WikiCFPIDFixer(PageFixer):
     '''
-    fixer for getting WikiCFP id from free text
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/166
+    see purpose and issue
+    
     '''
+    purpose="fixer for getting WikiCFP id from free text"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/166"
 
     def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
         super(WikiCFPIDFixer, self).__init__(pageFixerManager)
-        self.debug = pageFixerManager.debug
         home = expanduser("~")
         self.wikiRender= WikiRender()
         dbname="%s/.ptp/Event_all.db" % home
@@ -44,7 +45,7 @@ class WikiCFPIDFixer(PageFixer):
             wikicfpidsearch= re.search(r'\[.*http:\/\/www\.wikicfp\.com.*eventid=(\d*).*]',event)
             try:
                 wikicfpid=wikicfpidsearch.group(1)
-            except IndexError as Idx:
+            except IndexError as _idx:
                 return None
             return wikicfpid
         return None
@@ -123,20 +124,5 @@ class WikiCFPIDFixer(PageFixer):
                         print(dic)
                         print(orEvent)
 
-
-
-
-
-
-# if __name__ == "__main__":
-#     wikiUser = hf.getWikiClient('ormk')
-#     fixer = WikiCFPIDFixer(wikiUser)
-#     fixer.debug = True
-#     for page,event in fixer.getAllPageTitles4Topic():
-#         wikicfpid= fixer.getWikiCFPIdFromPage(page, event)
-#         if wikicfpid is not None:
-#             fixedEvent=fixer.fixEventFile(page, event)
-#             break;
-#             #     fixer.fixFile(page,fixedEvent,'WikiCFP')
-
-
+if __name__ == "__main__":
+    PageFixerManager.runCmdLine([WikiCFPIDFixer])

@@ -10,9 +10,11 @@ from openresearch.event import EventList
 
 class SeriesFixer(PageFixer):
     '''
-    fixer for event having multiple series marked
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/163
+    see purpose and issue
+    
     '''
+    purpose="fixer for event having multiple series marked"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/163"
 
     def __init__(self,pageFixerManager):
         '''

@@ -10,11 +10,12 @@ from tests.pagefixtoolbox import PageFixerToolbox
 
 class TestWikiCFPId(unittest.TestCase):
     '''
-    test wiki CFP Id
+    test wiki CFP Id fixing
     '''
 
-
     def setUp(self):
+        self.debug=False
+        self.testAll=False
         pass
 
 
@@ -22,7 +23,7 @@ class TestWikiCFPId(unittest.TestCase):
         pass
 
 
-    def testIssue166(self):
+    def testIssue166Examples(self):
         """
         Tests the issue 166 for addition of WikiCFP-ID to applicable pages
         """
@@ -56,7 +57,20 @@ class TestWikiCFPId(unittest.TestCase):
         fixedDict=fixedPage.extract_template('Event')
         self.assertIsNotNone(fixedDict['wikicfpId'])
         self.assertEqual(fixedDict['wikicfpId'],'3845')
-
+        
+    def testIssue166(self):
+        '''
+        test the wikicfpID handling
+        '''
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("WebDB 2008","WebS 2008",
+            "WiCOM 2008","WiCOM 2009","WiCOM 2010","WiMob 2008","WiNC 2009","WiOpt 2008",testAll=self.testAll)
+        for pageTitleList in pageTitleLists:
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, WikiCFPIDFixer, debug=self.debug)
+            painCounter=counters["pain"]
+            if pageTitleList is not None:
+                self.assertEqual(5,painCounter[1])
+            else:
+                self.assertTrue(painCounter[5]>350)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

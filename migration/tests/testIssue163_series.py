@@ -26,22 +26,12 @@ class TestIssue163(unittest.TestCase):
         '''
         test the Rating
         '''
-        pageLists=PageFixerToolbox.getPageTitleLists("IJCAI-PRICAI 2020","OPENSYM 2013",
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("IJCAI-PRICAI 2020","OPENSYM 2013",
            "WAIS 2020","WIKISYM 2011","WIKISYM 2012",testAll=self.testAll)
-        for pageList in pageLists:
-            pageCount="all" if pageList is None else len(pageList)
-            profile=Profiler(f"testing null Values for {pageCount} pages")
-            args=PageFixerToolbox.getArgs(pageList,["--stats"],debug=self.debug)
-            pageFixerManager=PageFixerManager.runCmdLine([SeriesFixer],args)
-            profile.time()
-            counters=pageFixerManager.getRatingCounters()
+        for pageTitleList in pageTitleLists:
+            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, SeriesFixer, debug=self.debug)
             painCounter=counters["pain"]
-            debug=self.debug
-            if debug:
-                print (painCounter)
-            if pageList is not None:
-                self.assertEqual(0,len(pageFixerManager.errors))
-                self.assertEqual(5,len(pageFixerManager.ratings))
+            if pageTitleList is not None:
                 self.assertEqual(5,painCounter[1])
             else:
                 self.assertTrue(painCounter[5]>350)
