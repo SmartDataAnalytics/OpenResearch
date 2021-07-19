@@ -15,7 +15,7 @@ class TestWikiCFPId(unittest.TestCase):
 
     def setUp(self):
         self.debug=False
-        self.testAll=False
+        self.testAll=True
         pass
 
 
@@ -33,7 +33,6 @@ class TestWikiCFPId(unittest.TestCase):
         self.assertIsNotNone(wikicfpid)
         self.assertEqual(wikicfpid,'3845')
 
-
         samplesDict=Event.getSamples()
         count=0
         for sample in samplesDict:
@@ -41,14 +40,6 @@ class TestWikiCFPId(unittest.TestCase):
             if wikiFile is not None:
                 count+=1
         self.assertGreaterEqual(count,1)
-
-
-        count= 0
-        for path, event in fixer.getAllPageTitles4Topic():
-            fixedEvent=fixer.fixEventFile(path, event)
-            if fixedEvent is not None:
-                count +=1
-        self.assertGreaterEqual(count,1000)
 
 
         fixedPage= fixer.fixPageWithDBCrosscheck('test', samplesWikiText[1], wikicfpid)
@@ -68,9 +59,9 @@ class TestWikiCFPId(unittest.TestCase):
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, WikiCFPIDFixer, debug=self.debug)
             painCounter=counters["pain"]
             if pageTitleList is not None:
-                self.assertEqual(5,painCounter[1])
+                self.assertEqual(8,painCounter[5])
             else:
-                self.assertTrue(painCounter[5]>350)
+                self.assertTrue(painCounter[5]>2400)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

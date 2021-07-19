@@ -30,13 +30,15 @@ class DateFixer(PageFixer):
         Returns:
             date(str): Date in YYYY/MM/DD format. None if date cannot be converted
         '''
+        errors= {}
         try:
             parseToDatetime = dateutil.parser.parse(date)
         except ValueError as _e:
-            return None
+            errors[date] = _e
+            return None,errors
         datetimeToDate = parseToDatetime.date()
         datetimetoString = datetimeToDate.strftime("%Y/%m/%d")
-        return datetimetoString
+        return datetimetoString,errors
         
 
     def fixEventRecord(self, event, datelist=['Start date' , 'End date'], errors=None):
@@ -45,8 +47,8 @@ class DateFixer(PageFixer):
         for element in datelist:
             eventDate = event.get(element)
             if eventDate is not None:
-                fixedDate = self.parseDate(eventDate)
-                if fixedDate is not None:
+                fixedDate,parseError = self.parseDate(eventDate)
+                if len(parseError) == 0:
                     if fixedDate != eventDate:
                         event[element] = fixedDate
                 else:
@@ -85,6 +87,18 @@ class DateFixer(PageFixer):
             return None
         
     @classmethod
+    def checkDate(cls,dateStr)->(int,str):
+        if dateStr is None:
+            return 5,"Date is missing"
+        else:
+            date,errors = cls.parseDate(cls, dateStr)
+            if len(errors) == 0:
+                return 1,"Date is ok"
+            else:
+                return 7,f"Date can't be parsed {errors[dateStr]}"
+                 
+        
+    @classmethod
     def getRating(self,eventRecord):
         '''
         get the pain Rating for the given eventRecord
@@ -95,14 +109,20 @@ class DateFixer(PageFixer):
         endDate = None
         if 'startDate' in eventRecord: startDate = eventRecord['startDate']
         if 'endDate' in eventRecord: endDate = eventRecord['endDate']
+        painStartDate, messageStartDate = self.checkDate(startDate)
+        painEndDate, messageEndDate = self.checkDate(endDate)
 
-        if startDate is not None and endDate is not None:
+        if painStartDate == 1 and painEndDate == 1:
             painrating= Rating(1,RatingType.ok,f'Dates,  {startDate} , {endDate} valid')
-        elif startDate is None and endDate is None:
+        elif painStartDate == 7:
+            painrating= Rating(7,RatingType.invalid,f"Date: {startDate} can't be parsed")
+        elif painEndDate == 7:
+            painrating = Rating(7, RatingType.invalid,f"Date: {endDate} can't be parsed")
+        elif painStartDate != 1 and painEndDate != 1:
             painrating=Rating(5,RatingType.missing,f'Dates not found')
-        elif startDate is None and endDate is not None:
+        elif painStartDate == 5 and painEndDate == 1:
             painrating=Rating(7,RatingType.missing,f'Start Date is not there while end date exists')
-        elif startDate is not None and endDate is None:
+        elif painStartDate == 1 and painEndDate == 5:
             painrating=Rating(3,RatingType.missing,f'Start Date is there but end date is not')
         return painrating
 

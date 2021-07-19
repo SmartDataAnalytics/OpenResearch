@@ -19,12 +19,12 @@ class PageFixerToolbox(object):
         '''
         
     @staticmethod
-    def getPageFixer(pageFixerClass):
+    def getPageFixer(pageFixerClass,debug=False):
         '''
         get a page fixer for the given pageFixerClass
         '''
         wikiFileManager=Corpus.getWikiFileManager()
-        pageFixerManager=PageFixerManager([pageFixerClass],wikiFileManager)
+        pageFixerManager=PageFixerManager([pageFixerClass],wikiFileManager,debug=debug)
         fixer=pageFixerClass(pageFixerManager)
         return fixer
         pass

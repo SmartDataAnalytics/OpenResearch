@@ -27,7 +27,7 @@ class TestInvalidDatesFixer(unittest.TestCase):
         dateFixer=PageFixerToolbox.getPageFixer(DateFixer)
         sampledates=['2020-02-20','2020/02/20','2020.02.20','20/02/2020','02/20/2020','20.02.2020','02.20.2020','20 Feb, 2020','2020, Feb 20','2020 20 Feb','2020 Feb 20']
         for date in sampledates:
-            self.assertEqual('2020/02/20',dateFixer.parseDate(date))
+            self.assertEqual('2020/02/20',dateFixer.parseDate(date)[0])
             
     def testIssue71Examples(self):
         '''
@@ -39,11 +39,14 @@ class TestInvalidDatesFixer(unittest.TestCase):
                         {'startDate': None, 'endDate': None},
                         {'startDate': '20 Feb, 2020', 'endDate': None},
                         {'startDate': None, 'endDate': '20 Feb, 2020'},
+                        {'startDate': '2010/03/22', 'endDate':'2011/03/226'},
                         ]
-        expectedPainRatings=[1, 5, 3, 7]
-        expectedStartDates=['2020/02/20', None, '2020/02/20', None]
-        expectedEndDates=['2020/02/20', None, None, '2020/02/20']
+        expectedPainRatings=[1, 5, 3, 7,7]
+        expectedStartDates=['2020/02/20', None, '2020/02/20', None,'2010/03/22']
+        expectedEndDates=['2020/02/20', None, None, '2020/02/20','2011/03/226']
+        expectedErrors=[0, 2, 1, 1, 1]
         painRatings=[]
+        errors=[]
         fixedStartDates=[]
         fixedEndDates=[]
         fixer=PageFixerToolbox.getPageFixer(DateFixer)
@@ -51,9 +54,11 @@ class TestInvalidDatesFixer(unittest.TestCase):
             painRating = fixer.getRating(event)
             event,_err = fixer.fixEventRecord(event, ['startDate', 'endDate'])
             self.assertIsNotNone(painRating)
+            errors.append(len(_err))
             painRatings.append(painRating.pain)
             fixedStartDates.append(event['startDate'])
             fixedEndDates.append(event['endDate'])
+        self.assertEqual(expectedErrors,errors)
         self.assertEqual(expectedPainRatings,painRatings)
         self.assertEqual(expectedStartDates, fixedStartDates)
         self.assertEqual(expectedEndDates, fixedEndDates)
@@ -62,14 +67,14 @@ class TestInvalidDatesFixer(unittest.TestCase):
         '''
         test the rating handling for the data Fixer
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("SCA 2020",testAll=self.testAll)
+        pageTitleLists=PageFixerToolbox.getPageTitleLists("IEEE TSC 2008","IJCICG 2010","IJECEE 2009",testAll=self.testAll)
         for pageTitleList in pageTitleLists:
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, DateFixer, debug=self.debug)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[2]>1500)
+                self.assertGreater(painCounter[7],500)
             else:
-                self.assertEqual(2,painCounter[1])
+                self.assertEqual(3,painCounter[7])
 
 
 if __name__ == "__main__":
