@@ -72,7 +72,7 @@ class TestInvalidDatesFixer(unittest.TestCase):
             counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, DateFixer, debug=self.debug)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertGreater(painCounter[7],1500)
+                self.assertGreater(painCounter[7],500)
             else:
                 self.assertEqual(3,painCounter[7])
 
