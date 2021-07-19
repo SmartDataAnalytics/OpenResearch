@@ -4,9 +4,11 @@ import re
 
 class AcronymLengthFixer(PageFixer):
     '''
-    fixer for acronym length
-    https://github.com/SmartDataAnalytics/OpenResearch/issues/41
+    see purpose and issue
+    
     '''
+    purpose="fixer for acronym length"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/41"
 
     def __init__(self,pageFixerManager):
         '''
