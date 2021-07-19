@@ -1,30 +1,26 @@
 '''
-Created on 15.07.2021
+Created on 2021-07-15
 
 @author: wf
 '''
 import unittest
 from ormigrate.issue71_date import DateFixer
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerToolbox,PageFixerTest
 
-class TestInvalidDatesFixer(unittest.TestCase):
+class TestInvalidDatesFixer(PageFixerTest):
     '''
     https://github.com/SmartDataAnalytics/OpenResearch/issues/71
     '''
 
     def setUp(self):
-        self.testAll=True
-        pass
-
-
-    def tearDown(self):
-        pass
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=DateFixer
 
     def testDateParser(self):
         '''
         test the date parser used to convert dates in issue 71
         '''
-        dateFixer=PageFixerToolbox.getPageFixer(DateFixer)
+        dateFixer=self.getPageFixer()
         sampledates=['2020-02-20','2020/02/20','2020.02.20','20/02/2020','02/20/2020','20.02.2020','02.20.2020','20 Feb, 2020','2020, Feb 20','2020 20 Feb','2020 Feb 20']
         for date in sampledates:
             self.assertEqual('2020/02/20',dateFixer.parseDate(date)[0])
@@ -67,9 +63,9 @@ class TestInvalidDatesFixer(unittest.TestCase):
         '''
         test the rating handling for the data Fixer
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists("IEEE TSC 2008","IJCICG 2010","IJECEE 2009",testAll=self.testAll)
+        pageTitleLists=self.getPageTitleLists("IEEE TSC 2008","IJCICG 2010","IJECEE 2009")
         for pageTitleList in pageTitleLists:
-            counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, DateFixer, debug=self.debug)
+            counters=self.getRatingCounters(self, pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertGreater(painCounter[7],500)

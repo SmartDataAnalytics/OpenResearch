@@ -6,7 +6,7 @@ Created on 2021-07-12
 import unittest
 from ormigrate.issue119_ordinal import OrdinalFixer
 from ormigrate.toolbox import HelperFunctions as hf
-from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
+from tests.pagefixtoolbox import PageFixerTest
 
 class TestOrdinalFixer(PageFixerTest):
     '''

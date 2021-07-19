@@ -5,16 +5,16 @@ Created on 2021-07-15
 '''
 import unittest
 from ormigrate.issue195_biblographic import BiblographicFieldFixer
+from tests.pagefixtoolbox import PageFixerTest
 
-class Test(unittest.TestCase):
-
+class TestBiblographicFieldFixer(PageFixerTest):
+    '''
+    test the BiblographicFieldFixer
+    '''
 
     def setUp(self):
-        pass
-
-
-    def tearDown(self):
-        pass
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=BiblographicFieldFixer
 
 
     def testBibliograpicFieldFixer(self):
@@ -34,6 +34,20 @@ class Test(unittest.TestCase):
             self.assertIsNotNone(painRating)
             painRatings.append(painRating.pain)
         self.assertEqual(painRatings,[7,1,1,5])
+        
+    def testRating(self):
+        '''
+        test the rating
+        '''
+        pageTitleLists=self.getPageTitleLists("SCA 2020")
+        for pageTitleList in pageTitleLists:
+            counters=self.getRatingCounters(pageTitleList)
+            painCounter=counters["pain"]
+            if pageTitleList is None:
+                self.assertTrue(painCounter[10]>9000)
+            else:
+                self.assertEqual(1,painCounter[10])
+
 
 
 if __name__ == "__main__":

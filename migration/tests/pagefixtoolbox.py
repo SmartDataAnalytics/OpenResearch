@@ -77,23 +77,6 @@ class PageFixerToolbox(object):
             testCase.assertEqual(len(pageTitleList),len(pageFixerManager.ratings.getList()))
         return counters
         
-    @staticmethod 
-    def getPageTitleLists(*pageTitles,testAll:bool):
-        '''
-        get the pageTitle lists to be tested
-        
-        Args:
-            testAll(bool): if True add a None list entry which will initiate to test all Pages
-            pageTitles(args): the pageTitles as a variable parameter argument list
-        '''
-        pageList=[]
-        for pageTitle in pageTitles:
-            pageList.append(pageTitle)
-        pageLists=[pageList]
-        if testAll:
-            pageLists.append(None)
-        return pageLists
-        
     @staticmethod
     def getArgs(pageTitles,moreArgs=None,template="Event",verbose=True,debug=False):
         '''
@@ -152,6 +135,12 @@ class PageFixerTest(TestCase):
             testAll(bool): if True add a None list entry which will initiate to test all Pages
             pageTitles(args): the pageTitles as a variable parameter argument list
         '''
-        pageTitleLists=PageFixerToolbox.getPageTitleLists(pageTitles,testAll=self.testAll)
-        return pageTitleLists
+        pageList=[]
+        for pageTitle in pageTitles:
+            pageList.append(pageTitle)
+        pageLists=[pageList]
+        if self.testAll:
+            pageLists.append(None)
+        return pageLists
+         
         

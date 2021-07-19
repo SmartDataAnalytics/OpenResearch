@@ -1,11 +1,11 @@
-import unittest
+
 from ormigrate.fixer import PageFixerManager
 from ormigrate.issue41_acronym import AcronymLengthFixer
-from tests.pagefixtoolbox import PageFixerToolbox
+from tests.pagefixtoolbox import PageFixerToolbox,PageFixerTest
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.toolbox import Profiler
 
-class TestIssue41(unittest.TestCase):
+class TestIssue41(PageFixerTest):
     '''
     test issue 41 fixer
     
@@ -17,36 +17,24 @@ class TestIssue41(unittest.TestCase):
     Check pages where Acronym is different from PAGENAME 
     '''
 
-    def setUp(self) -> None:
-        '''
-        set up the test environment
-        '''
-        self.debug=False
-        self.testAll=hf.inPublicCI()
-        self.testAll=True
+    def setUp(self):
+        PageFixerTest.setUp(self)
+        self.pageFixerClass=AcronymLengthFixer
               
     def testPagesAcronym(self):
         '''
         test pages acronym fixing
         '''
-        pageLists=PageFixerToolbox.getPageTitleLists("LICS 2008","FSE 1997",testAll=self.testAll)
-        for pageList in pageLists:
-            pageCount="all" if pageList is None else len(pageList)
-            profile=Profiler(f"testing acronym length for {pageCount} pages")
-            args=PageFixerToolbox.getArgs(pageList,["--stats"],debug=self.debug)
-            pageFixerManager=PageFixerManager.runCmdLine([AcronymLengthFixer],args)     
-            profile.time()  
-            counters=pageFixerManager.getRatingCounters()
+        pageTitleLists=self.getPageTitleLists("LICS 2008","FSE 1997")
+        for pageTitleList in pageTitleLists:
+            counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
-            debug=self.debug
-            if debug:
-                print (painCounter)
-            if pageList is None:
+            if pageTitleList is None:
                 self.assertTrue(painCounter[2]>1500)
             else:
                 self.assertEqual(2,painCounter[1])
          
-    def testgetPainRating(self):
+    def testGetPainRating(self):
         painList = [
             (1,"IEEE 2020"),
             (1,"IEEE 2020a"),

@@ -6,9 +6,11 @@ from ormigrate.fixer import PageFixer
 
 class BiblographicFieldFixer(PageFixer):
     '''
-        fixer for Biblographic fields
-        https://github.com/SmartDataAnalytics/OpenResearch/issues/195
+    see purpose and issue
+        
     '''
+    purpose="fixer for Biblographic fields"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/195"
 
     def __init__(self,pageFixerManager):
         '''
