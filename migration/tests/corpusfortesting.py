@@ -26,25 +26,28 @@ class CorpusForTesting(object):
             jsonFile=OREntityList.getJsonFile(entityName)
             hasCache=hasCache and os.path.isfile(jsonFile)
         return hasCache
+    
+    @classmethod()
+    def getWikiUser(cls,wikiId=None):
+        if wikiId is None:
+            wikiId= cls.wikiId
+        wikiUser=hf.getSMW_WikiUser(wikiId=wikiId,save=hf.inPublicCI())
+        return wikiUser
         
     @classmethod
     def getWikiFileManager(cls,wikiId=None,debug=False):
-        if wikiId is None:
-            wikiId= cls.wikiId
+        wikiUser=cls.getWikiUser(wikiId)
         home = path.expanduser("~")
-        wikiTextPath = f"{home}/.or/wikibackup/{wikiId}"
+        wikiTextPath = f"{home}/.or/wikibackup/{wikiUser.wikiId}"
         wikiFileManager = WikiFileManager(wikiId,wikiTextPath,login=False,debug=debug)
         return wikiFileManager
-
 
     @classmethod
     def getEventCorpusFromWikiAPI(cls, wikiId=None, force=False, debug=False):
         '''
         get events with series by knitting / linking the entities together
         '''
-        if wikiId is None:
-            wikiId=cls.wikiId
-        wikiUser=hf.getSMW_WikiUser(wikiId=wikiId,save=hf.inPublicCI())
+        wikiUser=cls.getWikiUser(wikiId)
         eventCorpus=EventCorpus(debug=debug)
         eventCorpus.fromWikiUser(wikiUser,force=force)
         eventCorpus.wikiFileManager=cls.getWikiFileManager(wikiId, debug)
