@@ -347,17 +347,18 @@ class EventSeriesList(OREntityList):
     i represent a list of EventSeries
     '''
     propertyLookupList=[
-            { 'prop':'EventSeries acronym', 'name': 'acronym'},
-            { 'prop':'Homepage',            'name': 'homepage'},
-            { 'prop':'Logo',                'name': 'logo'},
-            { 'prop':'Title',               'name': 'title'},
+            { 'prop':'EventSeries acronym', 'name': 'acronym',      'label': 'Acronym'},
+            { 'prop':'DblpSeries',          'name': 'dblpSeries',   'label': 'DblpSeries'},
+            { 'prop':'Homepage',            'name': 'homepage',     'label': 'Homepage'},
+            { 'prop':'Logo',                'name': 'logo',         'label': 'Logo'},
+            { 'prop':'Title',               'name': 'title',        'label': 'Title'},
             # TODO enable and handle
             #{ 'prop':'Field',      'name': 'subject'},
-            { 'prop':'Wikidataid',          'name': 'wikidataId'},
-            { 'prop':'WikiCfpSeries',       'name': 'wikiCfpSeries'},
-            { 'prop':'DblpSeries',          'name': 'dblpSeries' },
-            { 'prop':'Period',              'name': 'period'},
-            { 'prop':'Unit',                'name': 'unit'},
+            { 'prop':'Wikidataid',          'name': 'wikidataId',   'label': 'WikiDataId'},
+            { 'prop':'WikiCfpSeries',       'name': 'wikiCfpSeries','label': 'WikiCfpSeries'},
+            { 'prop':'Period',              'name': 'period',       'label': 'Period'},
+            { 'prop':'Unit',                'name': 'unit',         'label': 'Unit'},
+            { 'prop':'Has CORE Rank',       'name': 'core2018Rank', 'label': 'has CORE2018 Rank'}
             # TODO add more fields according to
             # https://confident.dbis.rwth-aachen.de/or/index.php?title=Template:Event_series&action=edit
     ]
@@ -394,7 +395,9 @@ class EventSeries(OREntity):
             'subject' : 'Artificial Intelligence',
             'homepage' : 'www.aaai.org/Conferences/AAAI/aaai.php',
             'wikidataId' : 'Q56682083',
-            'dblpSeries' : 'aaai'
+            'dblpSeries' : 'aaai',
+            'period': 1,
+            'unit': 'year'
         },
         {
             "acronym": "3DUI",

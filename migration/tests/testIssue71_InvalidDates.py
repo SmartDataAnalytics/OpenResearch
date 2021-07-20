@@ -63,7 +63,7 @@ class TestInvalidDatesFixer(PageFixerTest):
         '''
         test the rating handling for the data Fixer
         '''
-        self.debug=True
+        #self.debug=True
         pageTitleLists=self.getPageTitleLists("IEEE TSC 2008","IJCICG 2010","IJECEE 2009")
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
