@@ -20,6 +20,7 @@ class TestIssue163(PageFixerTest):
         '''
         test the Rating
         '''
+        #self.debug=True
         pageTitleLists=self.getPageTitleLists("IJCAI-PRICAI 2020","OPENSYM 2013",
            "WAIS 2020","WIKISYM 2011","WIKISYM 2012")
         for pageTitleList in pageTitleLists:
@@ -28,7 +29,7 @@ class TestIssue163(PageFixerTest):
             if pageTitleList is not None:
                 self.assertEqual(5,painCounter[1])
             else:
-                self.assertTrue(painCounter[5]>350)
+                self.assertTrue(painCounter[7]>2000)
 
 
     def testIssue163(self):
