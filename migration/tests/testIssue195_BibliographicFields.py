@@ -28,7 +28,8 @@ class TestBiblographicFieldFixer(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[7]>30)
+                self.assertTrue(painCounter[5]>=20)
+                self.assertTrue(painCounter[7]>=20)
             else:
                 self.assertEqual(1,painCounter[7])
                 
