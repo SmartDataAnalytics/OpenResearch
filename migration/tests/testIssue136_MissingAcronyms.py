@@ -22,14 +22,15 @@ class TestIssue136(PageFixerTest):
         '''
         TestEventSeriesTitleFixer
         '''
-        pageTitleLists=self.getPageTitleLists("CSR","DB","DELFI","EISTA","DEBS","ISS")
+        self.debug=True
+        pageTitleLists=self.getPageTitleLists("DB","DELFI","EISTA","DEBS","ISS")
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[5]>1000)
+                self.assertTrue(painCounter[5]>500)
             else:
-                self.assertEqual(6,painCounter[5])
+                self.assertEqual(4,painCounter[5])
         pass
 
 if __name__ == "__main__":
