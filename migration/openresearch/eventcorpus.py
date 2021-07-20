@@ -15,11 +15,12 @@ class EventCorpus(object):
     Towards a gold standard event corpus  and observatory ...
     '''
 
-    def __init__(self,debug=False):
+    def __init__(self,debug=False,verbose=False):
         '''
         Constructor
         '''
         self.debug=debug
+        self.verbose=verbose
         self._wikiFileManager=None
         self.wikiUser=None
         
@@ -41,7 +42,31 @@ class EventCorpus(object):
             
     @wikiFileManager.setter
     def wikiFileManager(self,value):
-        self._wikiFileManager=value                                       
+        self._wikiFileManager=value      
+        
+    def linkSeriesAndEvent(self,seriesKey="Series"):
+        '''
+        link Series and Event using the given foreignKey
+        
+        Args:
+            seriesKey(str): the key to be use for lookup
+        '''          
+        # get foreign key hashtable
+        self.seriesLookup = LOD.getLookup(self.eventList.getList(),seriesKey, withDuplicates=True)
+        # get "primary" key hashtable
+        self.seriesAcronymLookup = LOD.getLookup(self.eventSeriesList.getList(),"acronym", withDuplicates=True)
+
+        for seriesAcronym in self.seriesLookup.keys():
+            if seriesAcronym in self.seriesAcronymLookup:
+                seriesEvents=self.seriesLookup[seriesAcronym]
+                if self.verbose:
+                    print(f"{seriesAcronym}:{len(seriesEvents):4d}" )
+            else:
+                if self.debug:
+                    print(f"Event Series Acronym {seriesAcronym} lookup failed")
+        if self.debug:
+            print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
+                       
 
     def fromWikiFileManager(self,wikiFileManager):
         '''
@@ -55,23 +80,9 @@ class EventCorpus(object):
         self.eventSeriesList = EventSeriesList()
         self.eventSeriesList.debug = self.debug
         self.eventSeriesList.fromWikiFileManager(wikiFileManager)
+        self.linkSeriesAndEvent()
         
-        # get foreign key hashtable
-        self.seriesLookup = LOD.getLookup(self.eventList.getList(),"Series", withDuplicates=True)
-        # get "primary" key hashtable
-        self.seriesAcronymLookup = LOD.getLookup(self.eventSeriesList.getList(),"acronym", withDuplicates=True)
-
-        for seriesAcronym in self.seriesLookup.keys():
-            if seriesAcronym in self.seriesAcronymLookup:
-                seriesEvents=self.seriesLookup[seriesAcronym]
-                if self.debug:
-                    print(f"{seriesAcronym}:{len(seriesEvents):4d}" )
-            else:
-                if self.debug:
-                    print(f"Event Series Acronym {seriesAcronym} lookup failed")
-        if self.debug:
-            print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
-        
+          
     def fromWikiUser(self,wikiUser,force=False):
         '''
         get events with series by knitting / linking the entities together
@@ -88,23 +99,8 @@ class EventCorpus(object):
         if self.debug:
             self.eventSeriesList.profile=True
         self.eventSeriesList.fromCache(wikiUser,force=force)
+        self.linkSeriesAndEvent("inEventSeries")
         
-        # get foreign key hashtable
-        self.seriesLookup=self.eventList.getLookup("inEventSeries", withDuplicates=True)
-        # get "primary" key hashtable
-        self.seriesAcronymLookup=self.eventSeriesList.getLookup("acronym",withDuplicates=True)
-        
-        for seriesAcronym in self.seriesLookup.keys():
-            if seriesAcronym in self.seriesAcronymLookup:
-                seriesEvents=self.seriesLookup[seriesAcronym]
-                if self.debug:
-                    print(f"{seriesAcronym}:{len(seriesEvents):4d}" )
-            else:
-                if self.debug:
-                    print(f"Event Series Acronym {seriesAcronym} lookup failed")
-        if self.debug:
-            print ("%d events/%d eventSeries -> %d linked" % (len(self.eventList.getList()),len(self.eventSeriesList.getList()),len(self.seriesLookup)))
-
     def generateCSV(self,pageTitles,filename,filepath=None):
         """
         Generate a csv with the given pageTitles
