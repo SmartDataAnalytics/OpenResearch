@@ -56,11 +56,12 @@ class OREntity(JSONAble):
         result=None 
         if record:
             result={}
-            for key in lookup:
-                if key in record:
-                    newKey=lookup[key].get('name')
+            for propertyKey in lookup:
+                templateKey=lookup[propertyKey].get('label')
+                if templateKey in record:
+                    newKey=lookup[propertyKey].get('name')
                     if newKey is not None:
-                        result[newKey]=record[key]
+                        result[newKey]=record[templateKey]
                         #del record[key]
         return result
 

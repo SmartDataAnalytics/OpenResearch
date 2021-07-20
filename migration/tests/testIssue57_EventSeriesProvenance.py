@@ -18,21 +18,23 @@ class TestIssue57(PageFixerTest):
         PageFixerTest.setUp(self)
         self.pageFixerClass=EventSeriesProvenanceFixer
         self.template="Event series"
-        self.debug=True
+        self.debug=False
 
     def testProvenanceCheck(self):
         '''
         test provenance for series handling
         '''
-        pageTitleLists=self.getPageTitleLists("ECIS")
+        self.debug=True
+        pageTitleLists=self.getPageTitleLists("3DUI","ECIS")
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
                 self.assertTrue(painCounter[7]>900)
-                self.assertTrue(painCounter[4]>50)
+                self.assertTrue(painCounter[4]>30)
+                self.assertTrue(painCounter[0]>20)
             else:
-                self.assertEqual(1,painCounter[4])
+                self.assertEqual(2,painCounter[0])
 
 
 if __name__ == "__main__":
