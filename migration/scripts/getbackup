@@ -2,18 +2,73 @@
 #WF 2021-04-06
 # -rw-r--r--  1 wf  wheel  16632545 12 Jul 00:01 openresearchwikibackup.tgz
 
+#ansi colors
+#http://www.csc.uvic.ca/~sae/seng265/fall04/tips/s265s047-tips/bash-using-colors.html
+blue='\033[0;34m'
+red='\033[0;31m'
+green='\033[0;32m' # '\e[1;32m' is too bright for white bg.
+endColor='\033[0m'
+
+#
+# a colored message
+#   params:
+#     1: l_color - the color of the message
+#     2: l_msg - the message to display
+#
+color_msg() {
+  local l_color="$1"
+  local l_msg="$2"
+  echo -e "${l_color}$l_msg${endColor}"
+}
+
+#
+# error
+#
+# show the given error message on stderr and exit
+#
+#   params:
+#     1: l_msg - the error message to display
+#
+error() {
+  local l_msg="$1"
+  # use ansi red for error
+  color_msg $red "Error:" 1>&2
+  color_msg $red "\t$l_msg" 1>&2
+  exit 1
+}
+
+
+# show usage
+#
+usage() {
+  echo "$0 [-h|--help] [-f|--force]"
+  echo ""
+  echo "-h | --help: show this usage"
+  echo "-f | --force: force download/unpack"
+  exit 1
+}
+
+
+#
+# get a backup of the OpenResearch wiki pages
+#
+# params
+#   #1: wiki
+#   #2: the name of the wikibackup .tgz file
+#   #3: force - if true force update/unpack
 getBackup() {
   local l_wiki="$1"
   local l_wb="$2"
+  local l_force="$3"
   local l_cd=$(pwd)
-  if [ ! -f $l_wb ]
+  if [ ! -f $l_wb ] || [ "$l_force" = "True" ]
   then
     curl https://confident.dbis.rwth-aachen.de/orintegrate/images/$l_wb -o $l_wb
   else
     echo "$l_cd/$l_wb exists"
   fi
   local l_wbd="wikibackup/$l_wiki"
-  if [ -d $l_wbd ]
+  if [ -d $l_wbd ] && [ "$l_force" = "False" ]
   then
     echo "$l_cd/$l_wbd exists"
   else
@@ -26,12 +81,32 @@ getBackup() {
     tar xfz $l_cd/$l_wb
   fi
 }
+force="False"
+# commandline option
+while [  "$1" != ""  ]
+do
+  option=$1
+  shift
+  # optionally show usage
+  case $option in
+    -f|--force)
+      force="True"
+    ;;
+    -h|--help)
+      usage
+    ;;
+    *)
+      usage
+      ;;
+  esac
+done
+
 orroot=$HOME/.or
 if [ ! -d orroot ]
 then
   mkdir -p $orroot
 fi
 cd $orroot
-getBackup or openresearchwikibackup.tgz
+getBackup or openresearchwikibackup.tgz $force
 cd $orroot
-getBackup orclone orclonewikibackup.tgz
+getBackup orclone orclonewikibackup.tgz $force
