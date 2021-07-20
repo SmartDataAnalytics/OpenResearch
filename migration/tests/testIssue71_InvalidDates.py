@@ -63,12 +63,15 @@ class TestInvalidDatesFixer(PageFixerTest):
         '''
         test the rating handling for the data Fixer
         '''
+        self.debug=True
         pageTitleLists=self.getPageTitleLists("IEEE TSC 2008","IJCICG 2010","IJECEE 2009")
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertGreater(painCounter[7],500)
+                self.assertGreater(painCounter[3],100) 
+                self.assertGreater(painCounter[5],500)
+                self.assertGreater(painCounter[7],100)  
             else:
                 self.assertEqual(3,painCounter[7])
 
