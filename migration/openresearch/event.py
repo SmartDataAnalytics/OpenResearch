@@ -440,22 +440,21 @@ class EventSeries(OREntity):
 
 class EventList(OREntityList):
     propertyLookupList=[
-            { 'prop':'Acronym',             'name': 'acronym'},
-            { 'prop':'Ordinal',             'name': 'ordinal'},
-            { 'prop':'Homepage',            'name': 'homepage'},
-            { 'prop':'Title',               'name': 'title'},
-            { 'prop':'Event type',          'name': 'eventType'},
-            { 'prop':'Start date',          'name': 'startDate'},
-            { 'prop':'End date',            'name': 'endDate'},
-            { 'prop':'Series',              'name': 'inEventSeries'},
-            { 'prop':'Has_location_country','name': 'country'},
-            { 'prop':'Has_location_state',  'name': 'region'},
-            { 'prop':'Has_location_city',   'name': 'city'},
-            { 'prop':'Country',             'name': 'country'},
-            { 'prop':'State',               'name': 'region'},
-            { 'prop':'City',                'name': 'city'},
-            { 'prop':'Accepted papers',     'name': 'acceptedPapers'},
-            { 'prop':'Submitted papers',    'name': 'submittedPapers'}
+            { 'prop':'Acronym',             'name': 'acronym',         "label": "Acronym"},
+            { 'prop':'End date',            'name': 'endDate',         "label": "End date"},
+            { 'prop':'Event in series',     'name': 'inEventSeries',   "label": "Series"},
+            { 'prop':'Event presence',      'name': 'presence',        "label": "presence"},
+            { 'prop':'Event type',          'name': 'eventType',       "label": "Type"},
+            { 'prop':'Has_location_country','name': 'country',         "label": "Country"},
+            { 'prop':'Has_location_state',  'name': 'region',          "label": "State"},
+            { 'prop':'Has_location_city',   'name': 'city',            "label": "City"},
+            { 'prop':'Has year',            'name': 'year',            "label": "Year"},   
+            { 'prop':'Homepage',            'name': 'homepage',        "label": "Homepage"},
+            { 'prop':'Ordinal',             'name': 'ordinal',         "label": "Ordinal"},
+            { 'prop':'Start date',          'name': 'startDate',       "label": "Start date"},
+            { 'prop':'Title',               'name': 'title',           "label": "Title"},
+            { 'prop':'Accepted papers',     'name': 'acceptedPapers',  "label": "Accepted papers"},
+            { 'prop':'Submitted papers',    'name': 'submittedPapers', "label": "Submitted papers"}
     ]               
 
     '''
