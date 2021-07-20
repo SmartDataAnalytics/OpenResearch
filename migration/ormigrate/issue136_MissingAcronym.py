@@ -27,7 +27,10 @@ class EventSeriesAcronymFixer(PageFixer):
             return  Rating(5,RatingType.missing,'acronym is missing')
         
     #TODO
-    # implement fixer e.g. by getting the acronym of the series elements and removing the year    
+    # implement fixer e.g. by getting the acronym of the series elements and removing the year
+
+    # The Series property of event uses currently the pageTitle of the EventSeries as value space
+    # If we NOT use the pageTitle as acronym how can we identify the elements of an series?
         
         
 if __name__ == '__main__':
