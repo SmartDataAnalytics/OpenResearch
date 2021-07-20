@@ -114,6 +114,7 @@ class PageFixerTest(TestCase):
         self.debug=False
         self.testAll=True
         self.template="Event"
+        self.wikiUser=Corpus.getWikiUser()
         pass
 
     def tearDown(self):

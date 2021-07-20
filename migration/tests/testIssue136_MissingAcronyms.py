@@ -22,7 +22,7 @@ class TestIssue136(PageFixerTest):
         '''
         TestEventSeriesTitleFixer
         '''
-        self.debug=True
+        #self.debug=True
         pageTitleLists=self.getPageTitleLists("DB","DELFI","EISTA","DEBS","ISS")
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
