@@ -29,7 +29,8 @@ class TestIssue57(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[2]>1500)
+                self.assertTrue(painCounter[7]>900)
+                self.assertTrue(painCounter[4]>50)
             else:
                 self.assertEqual(1,painCounter[4])
 
