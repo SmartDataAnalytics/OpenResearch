@@ -277,6 +277,8 @@ class OREntityList(JSONAbleList):
                 if not isinstance(record, dict):
                     continue
                 normalizedDict=OREntity.fromWikiSonToLod(record,lookup)
+                # make sure the pageTitle survives (it is not in the property mapping ...)
+                normalizedDict["pageTitle"]=record["pageTitle"]
                 lod.append(normalizedDict)
         return lod
 
@@ -489,17 +491,18 @@ class Event(OREntity):
             "acronym": "5GU 2017",
             "city": "Melbourne",
             "country": "Australia",
-            "creationDate": datetime.fromisoformat("2016-09-25T07:36:02"),
             "endDate": datetime.fromisoformat("2017-06-09T00:00:00"),
             "eventType": "Conference",
             "homepage": "http://5guconference.org/2017/show/cf-papers",
             "inEventSeries": "5GU",
-            "lastEditor": "Wolfgang Fahl",
-            "modificationDate": datetime.fromisoformat("2020-11-05T12:33:23"),
             "ordinal": 2,
-            "pageTitle": "5GU 2017",
             "startDate": datetime.fromisoformat("2017-06-08T00:00:00"),
-            "title": "2nd EAI International Conference on 5G for Ubiquitous Connectivity"
+            "title": "2nd EAI International Conference on 5G for Ubiquitous Connectivity",
+            # technical attributes - SMW specific
+            "pageTitle": "5GU 2017",
+            "lastEditor": "Wolfgang Fahl",
+            "creationDate": datetime.fromisoformat("2016-09-25T07:36:02"),
+            "modificationDate": datetime.fromisoformat("2020-11-05T12:33:23"),
         },
         {
             'acronym': "IDC 2009",

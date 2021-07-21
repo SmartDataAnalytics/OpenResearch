@@ -6,6 +6,7 @@ Created on 2021-07-14
 import unittest
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
+from lodstorage.lod import LOD
 
 class TestEventCorpus(unittest.TestCase):
     '''
@@ -15,12 +16,14 @@ class TestEventCorpus(unittest.TestCase):
     def setUp(self):
         self.debug = False
         self.profile=True
+        self.eventCorpusAPI=None
+        self.eventCorpusWikiText=None
         pass
 
     def tearDown(self):
         pass
     
-    def checkEventCorpus(self,eventCorpus,expectedAttrs=['lastEditor']):
+    def checkEventCorpus(self,eventCorpus,expectedAttrs=['lastEditor','pageTitle']):
         '''
         check the given eventCorpus
         '''
@@ -55,9 +58,9 @@ class TestEventCorpus(unittest.TestCase):
         #TODO: Only test when json is available. Expects to run less than 1 sec
         if Corpus.hasCache():
             profile=Profiler(f"getting EventCorpus for {Corpus.wikiId} from WikiUser Cache",self.profile)
-            eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=debug, force=False)
+            self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=debug, force=False)
             profile.time()
-            self.checkEventCorpus(eventCorpus)
+            self.checkEventCorpus(self.eventCorpusAPI)
         
 
     def testEventCorpusFromWikiFileManager(self):
@@ -65,15 +68,32 @@ class TestEventCorpus(unittest.TestCase):
         test the Event Corpus from the wiki file manager(wikiFiles).
         """
         profile=Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
-        eventCorpus = Corpus.getEventCorpusFromWikiText(debug=self.debug)
+        self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
         profile.time()
-        self.checkEventCorpus(eventCorpus,[])
+        self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])
 
     def testMatchingSetsForEventCorpus(self):
         """
         test the different sets of Event Corpus and check the similarities between them
         """
-        # TODO implement
+        if not Corpus.hasCache():
+            return
+        profile=Profiler(f"getting EventCorpora from wikiAPI and wikiText files for {Corpus.wikiId}")
+        if self.eventCorpusAPI is None:
+            self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=False)
+        if self.eventCorpusWikiText is None:
+            self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
+        profile.time()    
+        profile=Profiler(f"finding common events and series for {Corpus.wikiId}")
+        apiEventList=self.eventCorpusAPI.eventList.getLoD()
+        wikiTextEventList=self.eventCorpusWikiText.eventList.getLoD()
+        commonEvents=LOD.intersect(apiEventList,wikiTextEventList,"pageTitle")
+        apiEventSeriesList=self.eventCorpusAPI.eventSeriesList.getLoD()
+        wikiTextEventSeriesList=self.eventCorpusWikiText.eventSeriesList.getLoD()
+        commonEventSeries=LOD.intersect(apiEventSeriesList,wikiTextEventSeriesList,"pageTitle")
+        profile.time()
+        print(f"Events      : api: {len(apiEventList)} wikiText: {len(wikiTextEventList)} common: {len(commonEvents)}")
+        print(f"EventsSeries: api: {len(apiEventSeriesList)} wikiText: {len(wikiTextEventSeriesList)} common: {len(commonEventSeries)}")
         pass
 
     
