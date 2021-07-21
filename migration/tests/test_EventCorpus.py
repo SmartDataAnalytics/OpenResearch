@@ -7,6 +7,36 @@ import unittest
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
 from lodstorage.lod import LOD
+    
+class MatchingSet:
+    
+    def __init__(self,title,list1Name,entityList1,list2Name,entityList2,keys):
+        '''
+        construct me
+        '''
+        self.title=title
+        self.lod1=entityList1.getLoD()
+        self.lod2=entityList2.getLoD()
+        self.list1Name=list1Name
+        self.list2Name=list2Name
+        self.commonBy={}
+        for key in keys:
+            self.lodf1=self.filterKey(self.lod1,key)
+            self.lodf2=self.filterKey(self.lod2,key)
+            self.commonBy[key]=LOD.intersect(self.lodf1,self.lodf2,key)
+            
+    def filterKey(self,lod:list,key)->list:
+        '''
+        filter the list of dicts by the given key
+        '''
+        lodf=[record for record in lod if key in record and record[key] is not None]
+        return lodf
+            
+    def showStats(self):
+        for key in self.commonBy:
+            commonList=self.commonBy[key]
+            print(f"{self.title} {key}: {self.list1Name}: {len(self.lodf1)}/{len(self.lod1)} {self.list2Name}: {len(self.lodf2)}/{len(self.lod2)} common: {len(commonList)}")
+    
 
 class TestEventCorpus(unittest.TestCase):
     '''
@@ -70,9 +100,8 @@ class TestEventCorpus(unittest.TestCase):
         profile=Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
         self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
         profile.time()
-        self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])
+        self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])    
         
-
     def testMatchingSetsForEventCorpus(self):
         """
         test the different sets of Event Corpus and check the similarities between them
@@ -86,15 +115,12 @@ class TestEventCorpus(unittest.TestCase):
             self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
         profile.time()    
         profile=Profiler(f"finding common events and series for {Corpus.wikiId}")
-        apiEventList=self.eventCorpusAPI.eventList.getLoD()
-        wikiTextEventList=self.eventCorpusWikiText.eventList.getLoD()
-        commonEvents=LOD.intersect(apiEventList,wikiTextEventList,"pageTitle")
-        apiEventSeriesList=self.eventCorpusAPI.eventSeriesList.getLoD()
-        wikiTextEventSeriesList=self.eventCorpusWikiText.eventSeriesList.getLoD()
-        commonEventSeries=LOD.intersect(apiEventSeriesList,wikiTextEventSeriesList,"pageTitle")
+        keys=["acronym","pageTitle"]
+        eventSet=MatchingSet("Events","api",self.eventCorpusAPI.eventList,"wikiText",self.eventCorpusWikiText.eventList,keys)
+        eventSeriesSet=MatchingSet("EventSeries","api",self.eventCorpusAPI.eventSeriesList,"wikiText",self.eventCorpusWikiText.eventSeriesList,keys)
         profile.time()
-        print(f"Events      : api: {len(apiEventList)} wikiText: {len(wikiTextEventList)} common: {len(commonEvents)}")
-        print(f"EventsSeries: api: {len(apiEventSeriesList)} wikiText: {len(wikiTextEventSeriesList)} common: {len(commonEventSeries)}")
+        eventSet.showStats()
+        eventSeriesSet.showStats()
         pass
 
     
