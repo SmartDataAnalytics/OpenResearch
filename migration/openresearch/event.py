@@ -57,7 +57,7 @@ class OREntity(JSONAble):
         if record:
             result={}
             for propertyKey in lookup:
-                templateKey=lookup[propertyKey].get('label')
+                templateKey=lookup[propertyKey].get('templateParam')
                 if templateKey in record:
                     newKey=lookup[propertyKey].get('name')
                     if newKey is not None:
@@ -348,18 +348,18 @@ class EventSeriesList(OREntityList):
     i represent a list of EventSeries
     '''
     propertyLookupList=[
-            { 'prop':'EventSeries acronym', 'name': 'acronym',      'label': 'Acronym'},
-            { 'prop':'DblpSeries',          'name': 'dblpSeries',   'label': 'DblpSeries'},
-            { 'prop':'Homepage',            'name': 'homepage',     'label': 'Homepage'},
-            { 'prop':'Logo',                'name': 'logo',         'label': 'Logo'},
-            { 'prop':'Title',               'name': 'title',        'label': 'Title'},
+            { 'prop':'EventSeries acronym', 'name': 'acronym',      'templateParam': 'Acronym'},
+            { 'prop':'DblpSeries',          'name': 'dblpSeries',   'templateParam': 'DblpSeries'},
+            { 'prop':'Homepage',            'name': 'homepage',     'templateParam': 'Homepage'},
+            { 'prop':'Logo',                'name': 'logo',         'templateParam': 'Logo'},
+            { 'prop':'Title',               'name': 'title',        'templateParam': 'Title'},
             # TODO enable and handle
             #{ 'prop':'Field',      'name': 'subject'},
-            { 'prop':'Wikidataid',          'name': 'wikidataId',   'label': 'WikiDataId'},
-            { 'prop':'WikiCfpSeries',       'name': 'wikiCfpSeries','label': 'WikiCfpSeries'},
-            { 'prop':'Period',              'name': 'period',       'label': 'Period'},
-            { 'prop':'Unit',                'name': 'unit',         'label': 'Unit'},
-            { 'prop':'Has CORE Rank',       'name': 'core2018Rank', 'label': 'has CORE2018 Rank'}
+            { 'prop':'Wikidataid',          'name': 'wikidataId',   'templateParam': 'WikiDataId'},
+            { 'prop':'WikiCfpSeries',       'name': 'wikiCfpSeries','templateParam': 'WikiCfpSeries'},
+            { 'prop':'Period',              'name': 'period',       'templateParam': 'Period'},
+            { 'prop':'Unit',                'name': 'unit',         'templateParam': 'Unit'},
+            { 'prop':'Has CORE Rank',       'name': 'core2018Rank', 'templateParam': 'has CORE2018 Rank'}
             # TODO add more fields according to
             # https://confident.dbis.rwth-aachen.de/or/index.php?title=Template:Event_series&action=edit
     ]
