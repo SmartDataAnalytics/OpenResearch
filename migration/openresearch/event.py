@@ -65,25 +65,6 @@ class OREntity(JSONAble):
                         #del record[key]
         return result
 
-    def fixRecord(self, record):
-        '''
-        fix my dict representation
-        '''
-        invalidKeys = []
-        for key in record.keys():
-            value = record[key]
-            if type(value) == list:
-                # TODO: handle properly e.g. by marking and converting list to
-                # comma separated list
-
-                invalidKeys.append(key)
-                print("invalid list %s=%s in %s" % (key, record[key], record))
-            if value is None:
-                invalidKeys.append(key)
-
-        for key in invalidKeys:
-            record.pop(key)
-
 class OREntityList(JSONAbleList):
     '''
     OpenResearch entity list
@@ -220,11 +201,6 @@ class OREntityList(JSONAbleList):
             # call the constructor to get a new instance
             try:
                 entity=self.clazz()
-                # TODO callBacks should be more generic (if any)
-                #if hasattr(entity,"fixRecord"):
-                #    fixRecord=getattr(entity,'fixRecord');
-                #    if callable(fixRecord):
-                #        fixRecord(record)
                 entity.fromDict(record)
                 entityList.append(entity)
             except Exception as ex:
@@ -582,71 +558,4 @@ This CfP was obtained from [http://www.wikicfp.com/cfp/servlet/event.showcfp?eve
             samplesWikiSon="..."
         
         return samplesWikiSon
-    
-class CountryList(OREntityList):
-    '''
-    a list of countries
-    '''
-    def __init__(self):
-        self.countries=[]
-        super(CountryList, self).__init__("countries",Country)
-        
-        self.propertyLookupList=[
-            { 'prop':'Country name',    'name': 'name'},
-            { 'prop':'Country wikidatid', 'name': 'wikidataId'}
-        ]       
-        
-    def getDefault(self):
-        jsonFilePrefix="%s/orCountries" % OpenResearch.getResourcePath()
-        self.restoreFromJsonFile(jsonFilePrefix)
-
-    @classmethod
-    def getPluralname(cls):
-        return "Countries" 
-    
-class Country(JSONAble):
-    '''
-    distinct region in geography; a broad term that can include political divisions or 
-    regions associated with distinct political characteristics 
-    '''
-    
-    @classmethod
-    def getSamples(cls):
-        '''
-        get my samples
-        TODO:
-           remove countryPrefix and change country attribute to "name"
-        '''
-        samplesLOD=[
-    {
-      "name" : "USA",
-      "wikidataName" : "United States of America",
-      "wikidataId" : "Q30"
-    },
-    {
-      "name" : "China",
-      "wikidataName" : "People's Republic of China",
-      "wikidataId" : "Q148"
-    },
-    {
-      "name" : "Germany",
-      "wikidataName" : "Germany",
-      "wikidataId" : "Q183"
-    },
-    {
-      "name" : "Italy",
-      "wikidataName" : "Italy",
-      "wikidataId" : "Q38"
-    },
-    {
-      "name" : "France",
-      "wikidataName" : "France",
-      "wikidataId" : "Q142"
-    }
-    ]
-        return samplesLOD
-    
-    def __str__(self):
-        text=self.name
-        return text
     
