@@ -87,6 +87,17 @@ class PageRating(Rating):
         
     def __str__(self):
         return f"{self.templateName} {self.pageTitle}: {self.pain} - {self.reason}: {self.hint}"
+    
+class EntityRating(PageRating):
+    '''
+    a rating for an entity
+    '''
+    
+    def __init__(self):
+        '''
+        construct me
+        '''
+        super(PageRating,self).__init__()
         
 class PageRatingList(JSONAbleList):
     '''

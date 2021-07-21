@@ -3,13 +3,16 @@ Created on 2021-04-15
 
 @author: wf
 '''
-from ormigrate.fixer import PageFixer,PageFixerManager
-from ormigrate.rating import Rating,RatingType
+from smw.pagefixer import PageFixer,PageFixerManager
+from smw.rating import Rating,RatingType
 from openresearch.openresearch import OpenResearch
 import yaml
 import os
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
 
-class CurationQualityChecker(PageFixer):
+
+class CurationQualityChecker(ORFixer):
     '''
     see purpose and issue
     '''

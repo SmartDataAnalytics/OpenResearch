@@ -4,7 +4,7 @@ Created on 2021-07-14
 @author: wf
 '''
 import os
-from ormigrate.fixer import PageFixerManager
+from smw.pagefixer import PageFixerManager
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
 from unittest import TestCase

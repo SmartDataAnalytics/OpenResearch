@@ -5,15 +5,16 @@ Created on 2021-04-06
 '''
 import re
 import ntpath
-from ormigrate.fixer import PageFixer,PageFixerManager
-from ormigrate.rating import RatingType,PageRating
+from smw.rating import RatingType,PageRating
 from difflib import SequenceMatcher
 from lodstorage.sql import SQLDB
 from os.path import expanduser,isfile
 from wikifile.wikiFile import WikiFile
-from wikifile.wikiRender import WikiRender
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
 
-class WikiCFPIDFixer(PageFixer):
+
+class WikiCFPIDFixer(ORFixer):
     '''
     see purpose and issue
     

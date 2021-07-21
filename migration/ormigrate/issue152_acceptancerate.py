@@ -4,10 +4,12 @@ Created on 2021-04-02
 @author: wf
 '''
 import re
-from ormigrate.fixer import PageFixerManager,PageFixer
-from ormigrate.rating import Rating,RatingType
+from smw.rating import Rating,RatingType
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
 
-class AcceptanceRateFixer(PageFixer):
+
+class AcceptanceRateFixer(ORFixer):
 
     '''
     see purpose and issue

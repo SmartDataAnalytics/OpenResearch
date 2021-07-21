@@ -5,11 +5,12 @@ Created on 2021-04-07
 '''
 
 import re
-from ormigrate.fixer import PageFixerManager,PageFixer
-from ormigrate.rating import Rating,RatingType
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
+from smw.rating import Rating,RatingType
 from ormigrate.dictionary import Dictionary
 
-class OrdinalFixer(PageFixer):
+class OrdinalFixer(ORFixer):
     '''
     see purpose and issue     
     '''

@@ -3,12 +3,13 @@ Created on 13.07.2021
 
 @author: wf
 '''
-from ormigrate.fixer import PageFixerManager,PageFixer
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
 from wikifile.wikiRender import WikiFile
-from ormigrate.rating import PageRating,RatingType
+from smw.rating import PageRating,RatingType
 
 
-class NullValueFixer(PageFixer):
+class NullValueFixer(ORFixer):
     '''
     see purpose and issue
     '''

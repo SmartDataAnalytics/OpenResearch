@@ -1,10 +1,9 @@
-from unittest import TestCase
 from geograpy.locator import LocationContext
 from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import Profiler
 from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
-from ormigrate.fixer import PageFixerManager
+from smw.pagefixer import PageFixerManager
 
 class TestLocationFixer(PageFixerTest):
     '''

@@ -1,11 +1,13 @@
 '''
 @author: mk
 '''
-from ormigrate.fixer import PageFixer,PageFixerManager
-from wikifile.wikiRender import WikiFile
-from ormigrate.rating import PageRating,RatingType
 
-class BiblographicFieldFixer(PageFixer):
+from wikifile.wikiRender import WikiFile
+from smw.rating import PageRating,RatingType
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
+
+class BiblographicFieldFixer(ORFixer):
     '''
     see purpose and issue
         

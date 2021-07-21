@@ -3,10 +3,11 @@ Created on 2021-04-16
 
 @author: wf
 '''
-from ormigrate.fixer import PageFixer
-from ormigrate.rating import Rating, RatingType
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
+from smw.rating import Rating, RatingType
 
-class EventSeriesProvenanceFixer(PageFixer):
+class EventSeriesProvenanceFixer(ORFixer):
     '''
     see issue and purpose
     '''

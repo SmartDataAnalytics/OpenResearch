@@ -3,12 +3,13 @@ Created on 2021-04-06
 
 @author: wf
 '''
-from ormigrate.fixer import PageFixer, PageFixerManager
 from ormigrate.toolbox import HelperFunctions as hf
-from ormigrate.rating import Rating,RatingType
+from smw.rating import Rating,RatingType
 from openresearch.event import EventList
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
 
-class SeriesFixer(PageFixer):
+class SeriesFixer(ORFixer):
     '''
     see purpose and issue
     

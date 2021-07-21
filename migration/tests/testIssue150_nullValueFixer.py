@@ -5,7 +5,7 @@ Created on 2021-07-13
 '''
 import unittest
 from ormigrate.issue150_nullvalue import NullValueFixer
-from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
+from tests.pagefixtoolbox import PageFixerTest
 
 class TestNullValueFixer(PageFixerTest):
     '''

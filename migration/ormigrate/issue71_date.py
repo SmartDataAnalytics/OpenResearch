@@ -5,11 +5,12 @@ Created on 2021-04-06
 '''
 import dateutil.parser
 import re
-from ormigrate.fixer import PageFixer,PageFixerManager
-from ormigrate.rating import Rating,RatingType
+from smw.rating import Rating,RatingType
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
 
 
-class DateFixer(PageFixer):
+class DateFixer(ORFixer):
     '''
     see purpose and issue
     '''

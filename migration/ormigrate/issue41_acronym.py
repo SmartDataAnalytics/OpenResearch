@@ -1,8 +1,10 @@
-from ormigrate.fixer import PageFixer,PageFixerManager
-from ormigrate.rating import Rating,RatingType
-import re
 
-class AcronymLengthFixer(PageFixer):
+from smw.rating import Rating,RatingType
+import re
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
+
+class AcronymLengthFixer(ORFixer):
     '''
     see purpose and issue
     

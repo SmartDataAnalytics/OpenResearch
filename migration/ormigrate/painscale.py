@@ -1,10 +1,18 @@
 
 
 class PainScale(object):
+    '''
+    painscale handling
+    '''
 
     @staticmethod
     def lookupPainImage(rating: int):
-        '''Returns html image tag to the corresponding pain rating'''
+        '''
+        Returns html image tag to the corresponding pain rating
+       
+        Args:
+            rating(int): the pain rating
+        '''
         painImages = {1: "http://rq.bitplan.com/images/rq/a/a3/Pain0.png",
                       2: "https://rq.bitplan.com/images/rq/0/01/Pain1.png",
                       3: "https://rq.bitplan.com/images/rq/0/0a/Pain4.png",

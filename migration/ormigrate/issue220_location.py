@@ -1,10 +1,11 @@
 from geograpy.locator import LocationContext, Location, City, Country, Region
 from openresearch.event import Event
-from ormigrate.fixer import PageFixer, PageFixerManager
-from ormigrate.rating import Rating, RatingType
+from smw.pagefixer import PageFixerManager
+from ormigrate.fixer import ORFixer
+from smw.rating import Rating, RatingType
 
 
-class LocationFixer(PageFixer):
+class LocationFixer(ORFixer):
     '''
     see purpose and issue
     '''
