@@ -71,6 +71,7 @@ class TestEventCorpus(unittest.TestCase):
         self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
         profile.time()
         self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])
+        
 
     def testMatchingSetsForEventCorpus(self):
         """
