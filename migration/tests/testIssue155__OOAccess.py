@@ -119,7 +119,6 @@ class TestEvent(unittest.TestCase):
     
     def testLODtoSQL(self):
         """Test if LOD is returned correctly if called from api to store to SQL"""
-        #ToDo: Events with list as Series property value currently lead to the fail → manual curation or filter?
         wikiuser=self.getWikiUser()
         expectedCount={"Event":100,"EventSeries":20}
         for entityListClass in EventList,EventSeriesList:
