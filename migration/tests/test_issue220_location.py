@@ -194,15 +194,15 @@ class TestLocationFixer(PageFixerTest):
         # Misplaced city, location, country
         event = {
             "Acronym": "Test 2020",
-            self.REGION: "USA",
-            self.CITY: "CA",
-            self.COUNTRY: "Los Angeles"
+            self.REGION: "Germany",
+            self.CITY: "Bavaria",
+            self.COUNTRY: "Munich"
         }
         exp_event = {
             "Acronym": "Test 2020",
-            self.COUNTRY: "USA",
-            self.REGION: "CA",
-            self.CITY: "Los Angeles"
+            self.COUNTRY: "Germany",
+            self.REGION: "Bavaria",
+            self.CITY: "Munich"
         }
         hasChangedPositions=self.fixer.fixLocationType(event)
         self.assertTrue(hasChangedPositions)

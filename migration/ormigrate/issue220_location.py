@@ -241,12 +241,12 @@ class LocationFixer(PageFixer):
             if possible_cities and possible_regions:
                 # country could be city or region -> undecidable
                 pass
-            elif possible_cities and not cities:
+            elif (possible_cities and not cities) or (possible_cities and modified_country):
                 event[self.CITY]=event_country
                 modified_city=True
                 if not modified_country:
                     del event[self.COUNTRY]
-            elif possible_regions and not regions:
+            elif (possible_regions and not regions) or (possible_cities and modified_country):
                 event[self.REGION] = event_country
                 modified_region=True
                 if not modified_country:
