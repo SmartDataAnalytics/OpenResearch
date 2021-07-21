@@ -420,21 +420,21 @@ class EventSeries(OREntity):
 
 class EventList(OREntityList):
     propertyLookupList=[
-            { 'prop':'Acronym',             'name': 'acronym',         "label": "Acronym"},
-            { 'prop':'End date',            'name': 'endDate',         "label": "End date"},
-            { 'prop':'Event in series',     'name': 'inEventSeries',   "label": "Series"},
-            { 'prop':'Event presence',      'name': 'presence',        "label": "presence"},
-            { 'prop':'Event type',          'name': 'eventType',       "label": "Type"},
-            { 'prop':'Has_location_country','name': 'country',         "label": "Country"},
-            { 'prop':'Has_location_state',  'name': 'region',          "label": "State"},
-            { 'prop':'Has_location_city',   'name': 'city',            "label": "City"},
-            { 'prop':'Has year',            'name': 'year',            "label": "Year"},   
-            { 'prop':'Homepage',            'name': 'homepage',        "label": "Homepage"},
-            { 'prop':'Ordinal',             'name': 'ordinal',         "label": "Ordinal"},
-            { 'prop':'Start date',          'name': 'startDate',       "label": "Start date"},
-            { 'prop':'Title',               'name': 'title',           "label": "Title"},
-            { 'prop':'Accepted papers',     'name': 'acceptedPapers',  "label": "Accepted papers"},
-            { 'prop':'Submitted papers',    'name': 'submittedPapers', "label": "Submitted papers"}
+            { 'prop':'Acronym',             'name': 'acronym',         'templateParam': "Acronym"},
+            { 'prop':'End date',            'name': 'endDate',         'templateParam': "End date"},
+            { 'prop':'Event in series',     'name': 'inEventSeries',   'templateParam': "Series"},
+            { 'prop':'Event presence',      'name': 'presence',        'templateParam': "presence"},
+            { 'prop':'Event type',          'name': 'eventType',       'templateParam': "Type"},
+            { 'prop':'Has_location_country','name': 'country',         'templateParam': "Country"},
+            { 'prop':'Has_location_state',  'name': 'region',          'templateParam': "State"},
+            { 'prop':'Has_location_city',   'name': 'city',            'templateParam': "City"},
+            { 'prop':'Has year',            'name': 'year',            'templateParam': "Year"},   
+            { 'prop':'Homepage',            'name': 'homepage',        'templateParam': "Homepage"},
+            { 'prop':'Ordinal',             'name': 'ordinal',         'templateParam': "Ordinal"},
+            { 'prop':'Start date',          'name': 'startDate',       'templateParam': "Start date"},
+            { 'prop':'Title',               'name': 'title',           'templateParam': "Title"},
+            { 'prop':'Accepted papers',     'name': 'acceptedPapers',  'templateParam': "Accepted papers"},
+            { 'prop':'Submitted papers',    'name': 'submittedPapers', 'templateParam': "Submitted papers"}
     ]               
 
     '''
