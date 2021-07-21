@@ -28,6 +28,7 @@ class TestWikiCFPId(PageFixerTest):
         self.assertIsNotNone(wikicfpid)
         self.assertEqual(wikicfpid,'3845')
 
+        
         samplesDict=Event.getSamples()
         count=0
         for sample in samplesDict:
@@ -36,13 +37,14 @@ class TestWikiCFPId(PageFixerTest):
                 count+=1
         self.assertGreaterEqual(count,1)
 
-
-        fixedPage= fixer.fixPageWithDBCrosscheck('test', samplesWikiText[1], wikicfpid)
-        if self.debug:
-            print(fixedPage)
-        fixedDict=fixedPage.extract_template('Event')
-        self.assertIsNotNone(fixedDict['wikicfpId'])
-        self.assertEqual(fixedDict['wikicfpId'],'3845')
+        # TODO
+        if fixer.databaseAvailable():
+            fixedPage= fixer.fixPageWithDBCrosscheck('test', samplesWikiText[1], wikicfpid)
+            if self.debug:
+                print(fixedPage)
+            fixedDict=fixedPage.extract_template('Event')
+            self.assertIsNotNone(fixedDict['wikicfpId'])
+            self.assertEqual(fixedDict['wikicfpId'],'3845')
         
     def testIssue166(self):
         '''
