@@ -4,6 +4,9 @@ Created on 2021-04-06
 @author: wf
 '''
 import unittest
+
+from lodstorage.lod import LOD
+
 from openresearch.event import Event, EventList, EventSeries, EventSeriesList
 from lodstorage.sql import SQLDB
 from ormigrate.toolbox import HelperFunctions as hf, Profiler
@@ -70,6 +73,7 @@ class TestEvent(unittest.TestCase):
         '''
         entityList=entityListClass()
         self.sqlDB=self.getSQLDB()
+        LOD.handleListTypes(lod=listOfRecords,doFilter=False,separator=';')
         entityInfo=self.sqlDB.createTable(listOfRecords,entityList.clazz.__name__,primaryKey,withDrop=True,sampleRecordCount=len(listOfRecords))
         self.assertIsNotNone(entityInfo)
         self.sqlDB.store(listOfRecords,entityInfo,fixNone=True)
