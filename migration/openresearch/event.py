@@ -278,7 +278,8 @@ class OREntityList(JSONAbleList):
                     continue
                 normalizedDict=OREntity.fromWikiSonToLod(record,lookup)
                 # make sure the pageTitle survives (it is not in the property mapping ...)
-                normalizedDict["pageTitle"]=record["pageTitle"]
+                if "pageTitle" in record:
+                    normalizedDict["pageTitle"]=record["pageTitle"]
                 lod.append(normalizedDict)
         return lod
 
