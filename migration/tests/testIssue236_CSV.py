@@ -36,40 +36,19 @@ class TestIssue236(unittest.TestCase):
         pass
 
 
-    def testGetEventSeries(self):
+    def testGetEventLinkedToSeries(self):
         '''
         get getting the events in a certain series
         e.g. 3DUI
         '''
+        #self.debug=True
         eventsLinked=self.eventCorpus.getEventsInSeries('3DUI')
+        for event in eventsLinked:
+            self.assertEqual("3DUI",event.inEventSeries)
+            if self.debug:
+                print(event)
+        
         self.assertGreaterEqual(len(eventsLinked), 2)
-
-    def testLimitingEventsFromBackup(self):
-        '''
-        tests loading of limited events from backup files.
-        '''
-        # TODO refactor or remove
-        return
-        eventList2 = EventList()
-        eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020', '3DUI 2016'])
-        self.assertGreaterEqual(len(eventList2.getList()), 2)
-
-
-    def testFromBackupFile(self):
-        """
-        Test loading of event series and eventlist from backup files.
-        """
-        # TODO refactor or remove
-        return
-        eventSeriesList=EventSeriesList()
-        eventSeriesList.fromWikiSonBackupFiles('Event series',wikiId=self.wikiId,backupdir=self.backupdir)
-        # self.assertGreater(len(eventSeriesList.getList()), 100)
-        eventList= EventList()
-        eventList.fromWikiSonBackupFiles('Event',wikiId=self.wikiId,backupdir=self.backupdir)
-        self.assertGreater(len(eventList.getList()),8000)
-        eventList2= EventList()
-        eventList2.fromWikiSonBackupFiles('Event',wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020','3DUI 2016'])
-        self.assertGreaterEqual(len(eventList2.getList()), 2)
         
     def checkCSV(self,csvFilePath,minRows=1):
         '''

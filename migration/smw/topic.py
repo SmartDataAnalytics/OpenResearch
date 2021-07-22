@@ -100,6 +100,22 @@ class EntityList(JSONAbleList):
         get my entity name
         '''
         return self.clazz.__name__
+    
+    def getLookup(self,attrName:str)->dict:
+        '''
+        get a lookup map by the given attribute Name
+        
+        Args:
+            attrName(str): the name of the attribute to create a lookup map for
+        
+        Returns:
+            dict: a map of entities by the given attribute
+        '''
+        lookup={}
+        for entity in self.getList():
+            if hasattr(entity, attrName):
+                lookup[getattr(entity,attrName)]=entity
+        return lookup
 
     def getAskQuery(self,askExtra="",propertyLookupList=None):
         '''
@@ -193,12 +209,24 @@ class EntityList(JSONAbleList):
         lod=sqlDB.queryAll(entityInfo)
         self.fromLoD(lod)
 
-    def fromLoD(self,lod):
+    def fromLoD(self,lod,append:bool=True,filterInvalidListTypes:bool=True):
         '''
-        create me from the given list of dicts
+        load my entityList from the given list of dicts
+        
+        Args:
+            lod(list): the list of dicts to load
+            append(bool): if True append to my existing entries
+            filterInvalidListTypes(bool): ignore records containing list entries
+        
         '''
         errors=[]
-        entityList=self.getList()
+        if append:
+            entityList=self.getList()
+        else:
+            entityList=[]
+        if filterInvalidListTypes:
+            lod=LOD.handleListTypes(lod=lod,doFilter=True)
+
         for record in lod:
             # call the constructor to get a new instance
             try:

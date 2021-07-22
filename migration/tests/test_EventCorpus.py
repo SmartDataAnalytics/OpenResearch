@@ -19,11 +19,15 @@ class MatchingSet:
         self.lod2=entityList2.getLoD()
         self.list1Name=list1Name
         self.list2Name=list2Name
-        self.commonBy={}
+        self.commonByKey={}
+        self.filter1ByKey={}
+        self.filter2ByKey={}
         for key in keys:
-            self.lodf1=self.filterKey(self.lod1,key)
-            self.lodf2=self.filterKey(self.lod2,key)
-            self.commonBy[key]=LOD.intersect(self.lodf1,self.lodf2,key)
+            lodf1=self.filterKey(self.lod1,key)
+            lodf2=self.filterKey(self.lod2,key)
+            self.filter1ByKey[key]=lodf1
+            self.filter2ByKey[key]=lodf2
+            self.commonByKey[key]=LOD.intersect(lodf1,lodf2,key)
             
     def filterKey(self,lod:list,key)->list:
         '''
@@ -33,9 +37,11 @@ class MatchingSet:
         return lodf
             
     def showStats(self):
-        for key in self.commonBy:
-            commonList=self.commonBy[key]
-            print(f"{self.title} {key}: {self.list1Name}: {len(self.lodf1)}/{len(self.lod1)} {self.list2Name}: {len(self.lodf2)}/{len(self.lod2)} common: {len(commonList)}")
+        for key in self.commonByKey:
+            commonList=self.commonByKey[key]
+            lodf1=self.filter1ByKey[key]
+            lodf2=self.filter2ByKey[key]
+            print(f"{self.title} {key}: {self.list1Name}: {len(lodf1)}/{len(self.lod1)} {self.list2Name}: {len(lodf2)}/{len(self.lod2)} common: {len(commonList)}")
     
 
 class TestEventCorpus(unittest.TestCase):
@@ -58,15 +64,19 @@ class TestEventCorpus(unittest.TestCase):
         check the given eventCorpus
         '''
         listOfEvents=eventCorpus.eventList.getList()
+        eventSeriesByPageTitle=eventCorpus.eventSeriesList.getLookup('pageTitle')
         withSeries=0
+        withValidSeries=0
         for event in listOfEvents:
             for attr in expectedAttrs:
                 self.assertTrue(hasattr(event, attr))
             if hasattr(event,'inEventSeries'): 
                 if event.inEventSeries:
                     withSeries+=1
+                    if event.inEventSeries in eventSeriesByPageTitle:
+                        withValidSeries+=1
         if self.debug:
-            print(f"inEventseries: {withSeries}")
+            print(f"inEventseries: {withSeries} valid: {withValidSeries}")
         self.assertTrue(withSeries>4500)
 
     def testEventCorpusFromWikiUser(self):
@@ -84,8 +94,7 @@ class TestEventCorpus(unittest.TestCase):
         """
         test the Event Corpus from the wikiUser(API) cache.
         """
-        debug = False
-        #TODO: Only test when json is available. Expects to run less than 1 sec
+        debug = True
         if Corpus.hasCache():
             profile=Profiler(f"getting EventCorpus for {Corpus.wikiId} from WikiUser Cache",self.profile)
             self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=debug, force=False)
@@ -101,6 +110,17 @@ class TestEventCorpus(unittest.TestCase):
         self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
         profile.time()
         self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])    
+        
+    def testLimitingEventsFromBackup(self):
+        '''
+        tests loading of limited events from backup files.
+        '''
+        # TODO refactor or remove
+        return
+        #eventList2 = EventList()
+        #eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020', '3DUI 2016'])
+        #self.assertGreaterEqual(len(eventList2.getList()), 2)
+  
         
     def testMatchingSetsForEventCorpus(self):
         """

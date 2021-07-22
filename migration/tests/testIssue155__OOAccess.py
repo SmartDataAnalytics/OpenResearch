@@ -73,7 +73,6 @@ class TestEvent(unittest.TestCase):
         '''
         entityList=entityListClass()
         self.sqlDB=self.getSQLDB()
-        LOD.handleListTypes(lod=listOfRecords,doFilter=False,separator=';')
         entityInfo=self.sqlDB.createTable(listOfRecords,entityList.clazz.__name__,primaryKey,withDrop=True,sampleRecordCount=len(listOfRecords))
         self.assertIsNotNone(entityInfo)
         self.sqlDB.store(listOfRecords,entityInfo,fixNone=True)
