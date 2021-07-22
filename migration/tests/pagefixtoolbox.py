@@ -127,6 +127,7 @@ class PageFixerTest(TestCase):
     def getPageFixer(self):
         pageFixer=PageFixerToolbox.getPageFixer(self.pageFixerClass, self.debug)
         return pageFixer
+              
     
     def getPageTitleLists(self,*pageTitles):
         '''

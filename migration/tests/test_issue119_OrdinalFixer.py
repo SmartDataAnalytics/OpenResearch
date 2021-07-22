@@ -64,7 +64,7 @@ class TestOrdinalFixer(PageFixerTest):
                 self.assertTrue(painCounter[5]>800)
             else:
                 self.assertEqual(3,painCounter[5])
-
+                
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

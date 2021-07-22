@@ -5,8 +5,6 @@ Created on 2021-04-06
 '''
 import unittest
 
-from lodstorage.lod import LOD
-
 from openresearch.event import Event, EventList, EventSeries, EventSeriesList
 from lodstorage.sql import SQLDB
 from ormigrate.toolbox import HelperFunctions as hf, Profiler
@@ -14,6 +12,10 @@ from ormigrate.toolbox import HelperFunctions as hf, Profiler
 class TestEvent(unittest.TestCase):
     '''
     test handling Event and EventSeries
+    
+    https://github.com/SmartDataAnalytics/OpenResearch/issues/155
+  
+    Add Object Oriented python access to Event, EventSeries and other relevant Entities/Topics 
     '''
 
     def setUp(self):

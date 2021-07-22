@@ -162,10 +162,11 @@ class EntityList(JSONAbleList):
         jsonFilePath=f"{jsonPrefix}.json" 
         return jsonFilePath
 
-    def fromCache(self,wikiuser:WikiUser,force=False):
+    def fromCache(self,wikiuser:WikiUser,force:bool=False):
         '''
         Args:
-            wikiuser: the wikiuser to use
+            wikiuser(WikiUser): the wikiuser to use
+            force(bool): if true force updating the cache
         '''
         jsonFilePath=EntityList.getJsonFile(self.getEntityName())
         # TODO: fix upstream pyLodStorage

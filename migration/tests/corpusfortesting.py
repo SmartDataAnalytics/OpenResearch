@@ -11,10 +11,11 @@ from openresearch.event import OREntityList
 import os
 class CorpusForTesting(object):
     '''
-    Simplify initializing an EventCorpus for tests
+    Simplify initializing an EventCorpus for tests (singleton)
     '''
 
     wikiId='orclone'
+    
     
     @classmethod
     def hasCache(cls):
