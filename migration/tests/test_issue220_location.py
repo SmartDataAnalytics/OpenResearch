@@ -2,6 +2,8 @@ from geograpy.locator import LocationContext
 from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import Profiler
+from smw.rating import EntityRating
+from smw.topic import Entity
 from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 from smw.pagefixer import PageFixerManager
 
@@ -49,29 +51,9 @@ class TestLocationFixer(PageFixerTest):
         res, errors = self.fixer.fixEventRecord(event)
         self.assertEqual(exp_event,res)
         self.assertTrue('complete' in errors and len(errors) == 1)
-
-    def testFixEventRecordExamples(self):
-        """
-        tests location fixing on event object
-        """
-        eventRecord = {
-            "Acronym": "Test 2020",
-            self.COUNTRY: "Germany",
-            self.REGION: "Bavaria",  # ToDo: Change to Region once template argument is changed
-            self.CITY: "Munich"
-        }
-        exp_event = {
-            "Acronym": "Test 2020",
-            self.COUNTRY: "DE",
-            self.REGION: "DE/BY",  # ToDo: Change to Region once template argument is changed
-            self.CITY: "DE/BY/Munich"
-        }
-        event=Event()
-        event.fromDict(eventRecord)
-        self.fixer.fixEvent(event)
-        self.assertEqual(exp_event.get(self.COUNTRY), event.__dict__[self.COUNTRY])
-        self.assertEqual(exp_event.get(self.REGION), event.__dict__[self.REGION])
-        self.assertEqual(exp_event.get(self.CITY), event.__dict__[self.CITY])
+        self.assertEqual(exp_event.get(self.COUNTRY), event[self.COUNTRY])
+        self.assertEqual(exp_event.get(self.REGION), event[self.REGION])
+        self.assertEqual(exp_event.get(self.CITY), event[self.CITY])
 
 
     def test_fixEventRecord_invalid_country(self):
@@ -242,7 +224,7 @@ class TestLocationFixer(PageFixerTest):
             else:
                 self.assertEqual(3,painCounter[5])
 
-    def testGetRating(self):
+    def testRate(self):
         '''
         tests the rating of location values of eventRecords
         '''
@@ -250,17 +232,40 @@ class TestLocationFixer(PageFixerTest):
             self.COUNTRY:"Germany",
             self.CITY:"Aachen"
         }
-        rating_region_missing=self.fixer.getRating(event_region_missing)
-        self.assertEqual(rating_region_missing.pain, 5)
+        entityRating_region_missing = self.getEntityRatingForRecord(event_region_missing)
+        self.fixer.rate(entityRating_region_missing)
+        self.assertEqual(entityRating_region_missing.pain, 5)
 
         event_invalid_city = {
             self.COUNTRY: "Germany",
             self.CITY: "123456"
         }
-        rating_region_missing = self.fixer.getRating(event_invalid_city)
-        self.assertEqual(rating_region_missing.pain, 6)
+        entityRating_invalid_city= self.getEntityRatingForRecord(event_invalid_city)
+        self.fixer.rate(entityRating_invalid_city)
+        self.assertEqual(entityRating_invalid_city.pain, 6)
 
         event_missing_locations = {}
-        rating_missing_locations= self.fixer.getRating(event_missing_locations)
-        self.assertEqual(rating_missing_locations.pain, 7)
+        entityRating_missing_locations  = self.getEntityRatingForRecord(event_missing_locations)
+        self.fixer.rate(entityRating_missing_locations)
+        self.assertEqual(entityRating_missing_locations.pain, 7)
+
+    def testFix(self):
+        eventRecord = {
+            "Acronym": "Test 2020",
+            self.COUNTRY: "Germany",
+            self.CITY: "Bavaria"
+        }
+        entityRating=self.getEntityRatingForRecord(eventRecord)
+        self.fixer.fix(entityRating)
+        print(entityRating.getRecord())
+
+    def getEntityRatingForRecord(self, record:dict):
+        '''
+        creates EntityRating for given record
+        '''
+        entity = Entity()
+        entity.fromDict(record)
+        entityRating = EntityRating(entity)
+        return entityRating
+
         

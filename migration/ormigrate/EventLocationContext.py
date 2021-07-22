@@ -52,7 +52,8 @@ class EventLocationContext(object):
         # Generate country location pages
         self.generateLocationPages(self.locationContext.countries, overwrite)
         # Fix locations of the event → Normalized location names afterwards
-        self.locationFixer.fixEvents(events)
+        for event in events:
+            self.locationFixer.fixEventRecord(event.__dict__)
 
         cityCounter=EventLocationContext.getFieldCounter(events, 'city', 'City')
         usedCities=[]
