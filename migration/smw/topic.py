@@ -225,7 +225,7 @@ class EntityList(JSONAbleList):
         else:
             entityList=[]
         if filterInvalidListTypes:
-            lod=LOD.handleListTypes(lod=lod,doFilter=True)
+            LOD.handleListTypes(lod=lod,doFilter=True)
 
         for record in lod:
             # call the constructor to get a new instance
