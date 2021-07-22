@@ -109,17 +109,7 @@ class TestEventCorpus(unittest.TestCase):
         profile=Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
         self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
         profile.time()
-        self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])    
-        
-    def testLimitingEventsFromBackup(self):
-        '''
-        tests loading of limited events from backup files.
-        '''
-        # TODO refactor or remove
-        return
-        #eventList2 = EventList()
-        #eventList2.fromWikiSonBackupFiles('Event', wikiId=self.wikiId,backupdir=self.backupdir,listOfItems=['3DUI 2020', '3DUI 2016'])
-        #self.assertGreaterEqual(len(eventList2.getList()), 2)
+        self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])
   
         
     def testMatchingSetsForEventCorpus(self):

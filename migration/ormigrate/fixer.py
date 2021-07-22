@@ -16,6 +16,7 @@ class ORFixer(EntityFixer):
         constructor
         '''
         super(ORFixer,self).__init__(pageFixerManager, debug)
+        # workaround as long as we can't use MetaModel information directly from the wiki
         self.propertyLookups["Event"]=EventList.getPropertyLookup()
         self.propertyLookups["Event series"]=EventSeriesList.getPropertyLookup()
         

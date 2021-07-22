@@ -23,10 +23,11 @@ class Entity(JSONAble):
     '''
 
 
-    def __init__(self):
+    def __init__(self,wikiFile=None):
         '''
         Constructor
         '''
+        self.wikiFile=wikiFile
         pass
     
     @classmethod

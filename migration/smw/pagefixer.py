@@ -233,10 +233,24 @@ class EntityFixer(PageFixer):
         super(EntityFixer,self).__init__(pageFixerManager, debug)
         self.propertyLookups={}
         
-        
     def rate(self,rating:EntityRating):
+        '''
+        Hollywood style callback with a prepared rating to be filled with the
+        actual rating of this fixer. So the fixer needs to modify this rating accordingly.
+        
+        Args:
+            rating(EntityRating): the rating for a single entity
+        '''
         raise Exception("rate not implemented")
         pass
     
     def fix(self,rating:EntityRating):
+        '''
+        Hollywood style callback with a prepared rating that has already been rated.
+        The fixer will provide a fixing proposal by providing a modified version of the 
+        entity and potentially the corresponding WikiText.
+        
+        Args:
+            rating(EntityRating): the rating for a single entity
+        '''
         raise Exception("fix not implemented")
