@@ -41,6 +41,9 @@ class OREntityList(EntityList):
         
     @classmethod    
     def getDefaultCachePath(cls):
+        '''
+        get the default cache path
+        '''
         cachePath=OpenResearch.getCachePath()
         return cachePath
  

@@ -46,6 +46,7 @@ class Wikihandler(object):
         
         csvStr: 
         '''
+        #TODO FIXME: use csv library
         csvList = csvStr.split('\n')
         csvList = list(filter(None, csvList))
         headers = csvList[0].split(',')
@@ -61,10 +62,10 @@ class Wikihandler(object):
         import the given list of dicts to my wiki
         '''
         wikiFileManager = WikiFileManager(self.wikiId)
-        # FIXME why is this specific to Events?
+        # TODO FIXME why is this specific to Events?
         eventList = EventList()
         eventList.fromLoD(LoD)
-        # FIXME make the call of fixers configurable
+        # TODO FIXME make the call of fixers configurable
         # LocationFixer(wikiclient).fixEventRecords(LoD)
         wikiFileManager.importLODtoWiki(LoD, 'Event')
         
