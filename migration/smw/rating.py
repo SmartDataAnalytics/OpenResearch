@@ -4,7 +4,9 @@ Created on 2021-04-16
 @author: wf
 '''
 from enum import Enum
+from smw.topic import Entity
 from lodstorage.jsonable import JSONAble,JSONAbleList
+
 
 class RatingType(str,Enum):
     '''
@@ -93,11 +95,19 @@ class EntityRating(PageRating):
     a rating for an entity
     '''
     
-    def __init__(self):
+    def __init__(self,entity:Entity):
         '''
         construct me
         '''
         super(PageRating,self).__init__()
+        self.entity=entity
+
+    def getRecord(self):
+        return self.entity.__dict__
+
+    @property
+    def wikiFile(self):
+        return self.entity.wikiFile
         
 class PageRatingList(JSONAbleList):
     '''
