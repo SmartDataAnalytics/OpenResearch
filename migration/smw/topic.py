@@ -101,9 +101,9 @@ class EntityList(JSONAbleList):
         '''
         return self.clazz.__name__
     
-    def getLookup(self,attrName:str)->dict:
+    def getEntityLookup(self,attrName:str)->dict:
         '''
-        get a lookup map by the given attribute Name
+        get a lookup map of entities by the given attribute Name
         
         Args:
             attrName(str): the name of the attribute to create a lookup map for

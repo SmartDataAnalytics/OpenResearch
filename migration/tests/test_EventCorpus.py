@@ -64,7 +64,7 @@ class TestEventCorpus(unittest.TestCase):
         check the given eventCorpus
         '''
         listOfEvents=eventCorpus.eventList.getList()
-        eventSeriesByPageTitle=eventCorpus.eventSeriesList.getLookup('pageTitle')
+        eventSeriesByPageTitle=eventCorpus.eventSeriesList.getEntityLookup('pageTitle')
         withSeries=0
         withValidSeries=0
         for event in listOfEvents:
