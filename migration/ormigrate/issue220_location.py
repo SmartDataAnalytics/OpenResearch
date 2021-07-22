@@ -1,8 +1,7 @@
 from geograpy.locator import LocationContext, Location, City, Country, Region
-from openresearch.event import Event
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
-from smw.rating import Rating, RatingType
+from smw.rating import Rating, RatingType, EntityRating
 
 
 class LocationFixer(ORFixer):
@@ -23,41 +22,21 @@ class LocationFixer(ORFixer):
         '''
         super(LocationFixer, self).__init__(pageFixerManager)
         LocationFixer.locationContext=self.getORLocationContext()
- 
-    def fixEventRecords(self, events:list):
-        """
-        Gets list of dicts (list of events) and tries to fix the location entries
-        """
-        count=0
-        stats={}
-        for event_unfixed in events:
-            event, errors = self.fixEventRecord(event_unfixed)
-            print(errors)
-            if errors is not None:
-                for error in errors.keys():
-                    if error in stats:
-                        stats[error]+=1
-                    else:
-                        stats[error]=1
-        print(stats)
 
-    def fixEvents(self, events:list):
+    def fix(self,rating:EntityRating):
         '''
-        fixes the location of the given events
+        tries fixing the location entries of the  given entity
+        '''
+        eventRecord = rating.getRecord()
+        self.fixEventRecord(eventRecord)
 
+    def fixEventRecord(self, event:dict, errors:dict=None, bestFit=True):
+        '''
         Args:
-            events(list): list of Event objects that should be fixed
+            event(dict): event records containing the location values that should be fixed
+            errors(dict): dictonary containing the errors of the given event record → new errors are added to the dict
+            bestFit(bool): If true the best/closed fit for a location is chosen (e.g. city with highest population). Otherwise a fix is only applied if the location can be identified with certainty.
         '''
-        for event in events:
-            self.fixEvent(event)
-
-    def fixEvent(self, event:Event):
-        '''
-        fixes the location of the given event
-        '''
-        self.fixEventRecord(event.__dict__)
-
-    def fixEventRecord(self, event:dict, errors=None):
         # event location values
         if errors is None:
             errors = {}
@@ -115,21 +94,22 @@ class LocationFixer(ORFixer):
                     cities = list(filter(
                         lambda x: 'wikidataid' in x.country.__dict__ and x.country.wikidataid in countryids,
                         cities))
-                if len(cities) == 1:
+                if len(cities) >0:
                     # city can be identified (Could still be incorrect)
-                    final_city=cities[0]
+                    if len(cities) > 1:
+                        errors["city_unclear"] = f"City '{event_city}' matches against multiple cities in the LocationCorpus. Other location information are not sufficient enough to clearly identify the city"
+                        cities=sorted(cities,key=lambda city:0 if 'population'not in city.__dict__ or city.population is None else int(city.population), reverse=True)
+                    final_city = cities[0]
                     if isinstance(final_city,City):
                         event[self.CITY]=self.getPageTitle(final_city)
                         event[self.REGION] = self.getPageTitle(final_city.region)
                         event[self.COUNTRY] = self.getPageTitle(final_city.country)
                         errors["complete"]="Location of event complete"
                         return event, errors
-                elif len(cities) == 0:
+                else:
                     # No matching city -> Two possibilities: event location information incorrect or locations missing in LocationCorpus
                     errors["city_unknown"]=f"City '{event_city}' could not be matched against a city in the LocationCorpus with the given region and country. Either location information are incorrect or location is missing in the corpus."
                     #return None, errors
-                else:
-                    errors["city_unclear"]=f"City '{event_city}' matches against multiple cities in the LocationCorpus. Other location information are not sufficient enough to clearly identify the city"
             else:
                 # event_city is not the LocationCorpus
                 isPossiblyMisplaced=True
@@ -314,11 +294,17 @@ class LocationFixer(ORFixer):
             pageTitle=location.name
         return pageTitle
 
-    @classmethod
-    def getRating(cls, eventRecord):
+
+    def rate(self, rating:EntityRating):
         '''
         get the pain Rating for the given eventRecord
         '''
+        eventRecord=rating.getRecord()
+        arating=self.getRating(eventRecord)
+        rating.set(arating.pain, arating.reason, arating.hint)
+
+    @classmethod
+    def getRating(cls, eventRecord):
         painrating = None
         city = None
         region = None
@@ -329,7 +315,7 @@ class LocationFixer(ORFixer):
         if cls.COUNTRY in eventRecord: country = eventRecord[cls.COUNTRY]
         if not city and not region and not country:
             # location is not defined
-            painrating = Rating(7, RatingType.missing,f'Locations are not defined')
+            painrating=Rating(7, RatingType.missing,f'Locations are not defined')
         else:
             if 'locationContext' in cls.__dict__:
                 cities=cls.__dict__['locationContext'].getCities(city)
@@ -337,16 +323,16 @@ class LocationFixer(ORFixer):
                 countries=cls.__dict__['locationContext'].getCities(country)
             if cities and regions and countries:
                 # all locations are recognized
-                painrating= Rating(1,RatingType.ok,f'Locations are valid. (Country: {country}, Region: {region}, City:{city})')
+                painrating=Rating(1,RatingType.ok,f'Locations are valid. (Country: {country}, Region: {region}, City:{city})')
             elif not cities:
                 # City is not valid
-                painrating = Rating(6, RatingType.invalid,f'City is not recognized. (City:{city})')
+                painrating=Rating(6, RatingType.invalid,f'City is not recognized. (City:{city})')
             elif not regions:
                 # City is valid but region is not
-                painrating = Rating(5, RatingType.invalid,f'Region is not recognized. (Country: {country}, Region: {region}, City:{city})')
+                painrating=Rating(5, RatingType.invalid,f'Region is not recognized. (Country: {country}, Region: {region}, City:{city})')
             else:
                 # City and region are valid but country is not
-                painrating = Rating(3, RatingType.invalid,f'Country is not recognized. (Country: {country}, Region: {region}, City:{city})')
+                painrating=Rating(3, RatingType.invalid,f'Country is not recognized. (Country: {country}, Region: {region}, City:{city})')
         return painrating
 
     @staticmethod

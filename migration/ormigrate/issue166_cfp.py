@@ -12,6 +12,7 @@ from os.path import expanduser,isfile
 from wikifile.wikiFile import WikiFile
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
+from smw.rating import EntityRating
 
 
 class WikiCFPIDFixer(ORFixer):
@@ -73,46 +74,34 @@ class WikiCFPIDFixer(ORFixer):
             return wikicfpid
         return None
 
-    def fixEventFileFromWiki(self,pageTitle):
+    def fix(self, rating:EntityRating):
         """
-        Get the pageTitle from the wiki directly and run the fixer on it
+        Get the entityRating object and apply the fixer on it.
         
         Args:
-            pageTitle(str): page title of a wiki page
-        
-        Returns:
-            wikiFile(WikiFile): A WikiFile object if fixer is applied, None otherwise
+            entityRating(EntityRating): EntityRating object of the Event
         """
-        wikiFileManager = self.wikiFileManager
-        wikiFile = wikiFileManager.getWikiFile(pageTitle)
-        event = str(wikiFile.wikiText)
-        wikicfpid= self.getWikiCFPIdFromPage(event)
+        wikiFile = rating.wikiFile
+        eventRecord = rating.getRecord()
+        wikiText = str(wikiFile.wikiText)
+        wikicfpid= self.getWikiCFPIdFromPage(wikiText)
         if wikicfpid is not None:
-            values = {}
-            values['wikicfpId'] = wikicfpid
-            wikiFile.add_template('Event',values)
-            return wikiFile
-        return None
+            eventRecord['wikicfpId'] = wikicfpid
 
-    def fixEventFile(self,path,event):
+    def rate(self, rating: EntityRating):
         """
-            Get the path and content of .wiki file and run the fixer on it
-            Args:
-                path(str): path of .wiki file
-                event(str): content of .wiki file
-            Returns:
-                wikiFile(WikiFile): A WikiFile object if fixer is applied, None otherwise
+        Rate the rating object as per the issue 166
+        Args:
+            rating(EntityRating): EntityRating object of the Event
         """
-        filename = ntpath.basename(path).replace('.wiki','')
-        wikiFilePath = ntpath.dirname(path)
-        wikicfpid= self.getWikiCFPIdFromPage(event)
-        if wikicfpid is not None:
-            wikiFile = WikiFile(filename,wikiFilePath)
-            values = {}
-            values['wikicfpId']=wikicfpid
-            wikiFile.add_template('Event',values)
-            return wikiFile
-        return None
+        wikiFile= rating.wikiFile
+        eventWikiText = str(wikiFile.wikiText)
+        wikiCFPId = self.getWikiCFPIdFromPage(eventWikiText)
+        if wikiCFPId is None:
+            rating.set(1, RatingType.ok, "no legacy wikiCFP import id  found")
+        else:
+            rating.set(5, RatingType.invalid, f"legacy wikiCFP reference {wikiCFPId} found")
+        return rating
 
 
     def fixPageWithDBCrosscheck(self, wikiText, wikicfpid):
@@ -143,7 +132,9 @@ class WikiCFPIDFixer(ORFixer):
         #                print('Title or acronym not found')
         #                print(dic)
         #                print(orEvent)
-    
+
+
+    #TODO Change function when architecture is implemented.
     def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
         '''
         Args:
