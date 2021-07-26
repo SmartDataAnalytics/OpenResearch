@@ -3,9 +3,9 @@ Created on 2021-04-16
 
 @author: wf
 '''
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
-from smw.rating import Rating, RatingType, EntityRating
+from ormigrate.smw.rating import Rating, RatingType, EntityRating
 
 
 class EventSeriesProvenanceFixer(ORFixer):

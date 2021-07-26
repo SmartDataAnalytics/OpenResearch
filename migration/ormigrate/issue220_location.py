@@ -1,7 +1,7 @@
 from geograpy.locator import LocationContext, Location, City, Country, Region
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
-from smw.rating import Rating, RatingType, EntityRating
+from ormigrate.smw.rating import Rating, RatingType, EntityRating
 
 
 class LocationFixer(ORFixer):

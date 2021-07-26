@@ -1,7 +1,6 @@
-
-from smw.rating import Rating, RatingType, EntityRating
 import re
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.rating import Rating, RatingType, EntityRating
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
 class AcronymLengthFixer(ORFixer):

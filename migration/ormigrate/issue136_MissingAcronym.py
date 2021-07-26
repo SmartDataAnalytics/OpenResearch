@@ -3,8 +3,8 @@ Created on 2021-07-15
 
 @author: wf
 '''
-from smw.rating import Rating, RatingType, EntityRating
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.rating import Rating, RatingType, EntityRating
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
 class EventSeriesAcronymFixer(ORFixer):

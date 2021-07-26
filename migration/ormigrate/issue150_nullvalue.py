@@ -3,10 +3,10 @@ Created on 13.07.2021
 
 @author: wf
 '''
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 from wikifile.wikiRender import WikiFile
-from smw.rating import PageRating, RatingType, EntityRating
+from ormigrate.smw.rating import PageRating, RatingType, EntityRating
 
 
 class NullValueFixer(ORFixer):

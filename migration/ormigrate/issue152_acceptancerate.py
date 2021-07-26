@@ -4,8 +4,8 @@ Created on 2021-04-02
 @author: wf
 '''
 import re
-from smw.rating import Rating, RatingType, EntityRating
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.rating import Rating, RatingType, EntityRating
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
 

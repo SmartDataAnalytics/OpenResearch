@@ -4,9 +4,9 @@ Created on 2021-04-06
 @author: wf
 '''
 from ormigrate.toolbox import HelperFunctions as hf
-from smw.rating import Rating, RatingType, EntityRating
+from ormigrate.smw.rating import Rating, RatingType, EntityRating
 from openresearch.event import EventList
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
 class SeriesFixer(ORFixer):

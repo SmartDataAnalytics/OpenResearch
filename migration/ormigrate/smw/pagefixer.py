@@ -7,7 +7,7 @@ from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
 from conferencecorpus.smw.topic import Entity,EntityList
-from rating import RatingType,PageRating, PageRatingList, EntityRating
+from ormigrate.smw.rating import RatingType,PageRating, PageRatingList, EntityRating
 from collections import Counter
 import sys
 import traceback

@@ -5,9 +5,9 @@ Created on 2021-04-07
 '''
 
 import re
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
-from smw.rating import Rating, RatingType, EntityRating
+from ormigrate.smw.rating import Rating, RatingType, EntityRating
 from ormigrate.dictionary import Dictionary
 
 class OrdinalFixer(ORFixer):

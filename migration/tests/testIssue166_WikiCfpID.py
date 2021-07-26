@@ -7,9 +7,8 @@ import unittest
 from ormigrate.issue166_cfp import WikiCFPIDFixer
 from openresearch.event import Event
 from tests.pagefixtoolbox import PageFixerTest
-from wikifile.wikiFileManager import WikiFileManager
 from wikifile.wikiFile import WikiFile
-from smw.rating import EntityRating
+from ormigrate.smw.rating import EntityRating
 
 class TestWikiCFPId(PageFixerTest):
     '''

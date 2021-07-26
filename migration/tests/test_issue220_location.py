@@ -2,10 +2,10 @@ from geograpy.locator import LocationContext
 from openresearch.event import Event
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import Profiler
-from smw.rating import EntityRating
-from smw.topic import Entity
+from ormigrate.smw.rating import EntityRating
+from conferencecorpus.smw.topic import Entity
 from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.pagefixer import PageFixerManager
 
 class TestLocationFixer(PageFixerTest):
     '''

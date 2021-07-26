@@ -4,9 +4,9 @@ Created on 2021-07-14
 @author: wf
 '''
 import os
-from smw.pagefixer import PageFixerManager
-from smw.rating import EntityRating
-from smw.topic import Entity
+from ormigrate.smw.pagefixer import PageFixerManager
+from ormigrate.smw.rating import EntityRating
+from conferencecorpus.smw.topic import Entity
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
 from unittest import TestCase

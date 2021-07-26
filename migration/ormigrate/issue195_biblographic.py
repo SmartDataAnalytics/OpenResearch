@@ -3,8 +3,8 @@
 '''
 
 from wikifile.wikiRender import WikiFile
-from smw.rating import PageRating, RatingType, EntityRating
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.rating import PageRating, RatingType, EntityRating
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
 class BiblographicFieldFixer(ORFixer):

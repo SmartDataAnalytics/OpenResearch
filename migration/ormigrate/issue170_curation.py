@@ -3,12 +3,12 @@ Created on 2021-04-15
 
 @author: wf
 '''
-from smw.pagefixer import PageFixer,PageFixerManager
-from smw.rating import Rating, RatingType, EntityRating
+from ormigrate.smw.pagefixer import PageFixer,PageFixerManager
+from ormigrate.smw.rating import Rating, RatingType, EntityRating
 from openresearch.openresearch import OpenResearch
 import yaml
 import os
-from smw.pagefixer import PageFixerManager
+from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
 

@@ -5,7 +5,7 @@ Created on 2021-04-13
 '''
 import unittest
 from collections import Counter
-from smw.rating import PageRating,PageRatingList
+from ormigrate.smw.rating import PageRating,PageRatingList
 
 class TestIssue168(unittest.TestCase):
     '''
