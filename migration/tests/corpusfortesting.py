@@ -3,11 +3,11 @@ Created on 16.04.2021
 
 @author: wf
 '''
-from conferencecorpus.corpus.eventcorpus import EventCorpus
+from corpus.eventcorpus import EventCorpus
 from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
 from os import path
-from openresearch.event import OREntityList
+from openresearch.orevent import OREntityList
 import os
 class CorpusForTesting(object):
     '''

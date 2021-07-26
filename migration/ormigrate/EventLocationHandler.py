@@ -7,7 +7,7 @@ from collections import Counter
 from lodstorage.lod import LOD
 
 
-class EventLocationContext(object):
+class EventLocationHandler(object):
     '''
     Extends the geograpy3 LocationContext with methods required to fix the events and location entries in OPENRESEARCH
     '''
@@ -55,7 +55,7 @@ class EventLocationContext(object):
         for event in events:
             self.locationFixer.fixEventRecord(event.__dict__)
 
-        cityCounter=EventLocationContext.getFieldCounter(events, 'city', 'City')
+        cityCounter=EventLocationHandler.getFieldCounter(events, 'city', 'City')
         usedCities=[]
         if limit is None:
             usedCities=cityCounter.keys()

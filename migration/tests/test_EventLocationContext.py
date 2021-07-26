@@ -1,13 +1,13 @@
 import os
 
-from ormigrate.EventLocationContext import EventLocationContext
+from ormigrate.EventLocationHandler import EventLocationHandler
 from unittest import TestCase
 
 from ormigrate.toolbox import Profiler
 from tests.corpusfortesting import CorpusForTesting
 
 
-class TestEventLocationContext(TestCase):
+class TestEventLocationHandler(TestCase):
     '''
     test the event Location context
     '''
@@ -18,7 +18,7 @@ class TestEventLocationContext(TestCase):
         self.wikiFileManager = CorpusForTesting.getWikiFileManager()
         self.wikiFileManager.targetPath=targetWikiTextPath
         self.eventCorpus=CorpusForTesting.getEventCorpusFromWikiText()
-        self.eventLocationContext=EventLocationContext(wikiFileManager=self.wikiFileManager)
+        self.eventLocationContext=EventLocationHandler(wikiFileManager=self.wikiFileManager)
 
     def test_generateLocationPages(self):
         """
@@ -67,7 +67,7 @@ class TestEventLocationContext(TestCase):
             {"test": "Third"},
             {"test": "Third"},
         ]
-        counterList=EventLocationContext.getFieldCounter(lod, 'Test', 'test')
+        counterList=EventLocationHandler.getFieldCounter(lod, 'Test', 'test')
         self.assertEqual(counterList.get("First"), 1)
         self.assertEqual(counterList.get("Second"), 2)
         self.assertEqual(counterList.get("Third"), 3)

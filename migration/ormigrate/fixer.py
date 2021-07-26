@@ -4,7 +4,7 @@ Created on 21.07.2021
 @author: wf
 '''
 from ormigrate.smw.pagefixer import EntityFixer, PageFixerManager
-from openresearch.event import EventList, EventSeriesList
+from openresearch.orevent import EventList, EventSeriesList
 
 class ORFixer(EntityFixer):
     '''

@@ -40,7 +40,8 @@ setup(name='OpenResearchMigration',
           'python-dateutil',
           'py-3rdparty-mediawiki',
           'wikitextparser',
-          'geograpy3'
+          'geograpy3',
+          'ConferenceCorpus'
       ],
       entry_points={
          'console_scripts': [
