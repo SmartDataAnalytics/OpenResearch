@@ -4,7 +4,7 @@ Created on 2021-04-06
 @author: wf
 '''
 from datetime import datetime
-from smw.topic import Entity, EntityList
+from conferencecorpus.smw.topic import Entity, EntityList
 
 from openresearch.openresearch import OpenResearch
 
