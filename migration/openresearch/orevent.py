@@ -4,50 +4,10 @@ Created on 2021-04-06
 @author: wf
 '''
 from datetime import datetime
-from smw.topic import Entity, EntityList
-
+from corpus.event import EventEntity, EventEntityList
 from openresearch.openresearch import OpenResearch
 
-class OREntity(Entity):
-    '''
-    base class for OpenResearch entities
-    '''
-    def __init__(self):
-        '''
-        Constructor
-        '''
-        pass
-    
-    def __str__(self):
-        '''
-        return my
-        '''
-        text=self.__class__.__name__
-        attrs=["pageTitle","acronym","title"]
-        delim=":"
-        for attr in attrs:
-            if hasattr(self, attr):
-                value=getattr(self,attr)
-                text+=f"{delim}{value}"
-                delim=":" 
-        return text
-        
-class OREntityList(EntityList):
-    '''
-    OpenResearch entity list
-    '''
-    def __init__(self,listName:str=None,clazz=None,tableName:str=None):
-        super(OREntityList, self).__init__(listName,clazz,tableName)
-        
-    @classmethod    
-    def getDefaultCachePath(cls):
-        '''
-        get the default cache path
-        '''
-        cachePath=OpenResearch.getCachePath()
-        return cachePath
- 
-class EventSeriesList(OREntityList):
+class OREventSeriesList(EventEntityList):
     '''
     i represent a list of EventSeries
     '''
@@ -73,9 +33,9 @@ class EventSeriesList(OREntityList):
         construct me
         '''
         self.eventSeries=[]
-        super(EventSeriesList, self).__init__("eventSeries",EventSeries)
+        super(OREventSeriesList, self).__init__("eventSeries",EventSeries)
         
-class EventSeries(OREntity):
+class OREventSeries(EventEntity):
     '''
     an event Series
     '''
