@@ -1,4 +1,4 @@
-name: Upload ormigrate Python Package
+name: Upload Conference Corpus Python Package
 
 on:
   release:
@@ -10,7 +10,7 @@ jobs:
 
     defaults:
           run:
-              working-directory: ./migration
+              working-directory: ./conferencecorpus
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
