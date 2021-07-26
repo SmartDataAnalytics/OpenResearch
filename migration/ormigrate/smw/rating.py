@@ -4,7 +4,7 @@ Created on 2021-04-16
 @author: wf
 '''
 from enum import Enum
-from smw.topic import Entity
+from conferencecorpus.smw.topic import Entity
 from lodstorage.jsonable import JSONAble,JSONAbleList
 
 

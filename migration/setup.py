@@ -39,7 +39,8 @@ setup(name='OpenResearchMigration',
           'pylodstorage',
           'python-dateutil',
           'py-3rdparty-mediawiki',
-          'wikitextparser'
+          'wikitextparser',
+          'geograpy3'
       ],
       entry_points={
          'console_scripts': [

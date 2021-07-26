@@ -11,7 +11,7 @@ except:
     print('Curr dir:', os.getcwd())
     long_description = open('../README.md').read()
 
-setup(name='EventCorpus',
+setup(name='ConferenceCorpus',
       version='0.0.1',
       description='python api providing access to academic events and event series from different sources',
       long_description=long_description,
