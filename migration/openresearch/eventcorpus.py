@@ -37,7 +37,7 @@ class EventCorpus(object):
             else:
                 if self.debug:
                     print(f"Creating WikiFileManager for {self.wikiUser.wikiId}")
-                self._wikiFileManager = WikiFileManager(wikiId=self.wikiUser.wikiId,debug=self.debug)
+                self._wikiFileManager = WikiFileManager(sourceWikiId=self.wikiUser.wikiId,debug=self.debug)
                 return self._wikiFileManager   
             
     @wikiFileManager.setter
