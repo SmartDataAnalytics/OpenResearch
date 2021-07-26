@@ -232,7 +232,7 @@ class TestLocationFixer(PageFixerTest):
             self.COUNTRY:"Germany",
             self.CITY:"Aachen"
         }
-        entityRating_region_missing = self.getEntityRatingForRecord(event_region_missing)
+        entityRating_region_missing = PageFixerToolbox.getEntityRatingForRecord(event_region_missing)
         self.fixer.rate(entityRating_region_missing)
         self.assertEqual(entityRating_region_missing.pain, 5)
 
@@ -240,12 +240,12 @@ class TestLocationFixer(PageFixerTest):
             self.COUNTRY: "Germany",
             self.CITY: "123456"
         }
-        entityRating_invalid_city= self.getEntityRatingForRecord(event_invalid_city)
+        entityRating_invalid_city= PageFixerToolbox.getEntityRatingForRecord(event_invalid_city)
         self.fixer.rate(entityRating_invalid_city)
         self.assertEqual(entityRating_invalid_city.pain, 6)
 
         event_missing_locations = {}
-        entityRating_missing_locations  = self.getEntityRatingForRecord(event_missing_locations)
+        entityRating_missing_locations  = PageFixerToolbox.getEntityRatingForRecord(event_missing_locations)
         self.fixer.rate(entityRating_missing_locations)
         self.assertEqual(entityRating_missing_locations.pain, 7)
 
@@ -255,17 +255,9 @@ class TestLocationFixer(PageFixerTest):
             self.COUNTRY: "Germany",
             self.CITY: "Bavaria"
         }
-        entityRating=self.getEntityRatingForRecord(eventRecord)
+        entityRating=PageFixerToolbox.getEntityRatingForRecord(eventRecord)
         self.fixer.fix(entityRating)
         print(entityRating.getRecord())
 
-    def getEntityRatingForRecord(self, record:dict):
-        '''
-        creates EntityRating for given record
-        '''
-        entity = Entity()
-        entity.fromDict(record)
-        entityRating = EntityRating(entity)
-        return entityRating
 
         

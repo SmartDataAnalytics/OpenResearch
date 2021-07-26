@@ -5,7 +5,8 @@ Created on 2021-04-16
 '''
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
-from smw.rating import Rating, RatingType
+from smw.rating import Rating, RatingType, EntityRating
+
 
 class EventSeriesProvenanceFixer(ORFixer):
     '''
@@ -19,6 +20,9 @@ class EventSeriesProvenanceFixer(ORFixer):
         Constructor
         '''
         super(EventSeriesProvenanceFixer, self).__init__(pageFixerManager)
+
+    def rate(self, rating: EntityRating):
+        return self.getRating(rating.getRecord())
         
     @classmethod
     def getRating(cls,eventRecord):

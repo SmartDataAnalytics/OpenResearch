@@ -4,7 +4,7 @@ Created on 2021-04-15
 @author: wf
 '''
 from smw.pagefixer import PageFixer,PageFixerManager
-from smw.rating import Rating,RatingType
+from smw.rating import Rating, RatingType, EntityRating
 from openresearch.openresearch import OpenResearch
 import yaml
 import os
@@ -52,6 +52,9 @@ class CurationQualityChecker(ORFixer):
                 return Rating(7,RatingType.invalid,'last edited by unrated curator')
         else:   
             return Rating(10,RatingType.missing,'bug: lastEditor not set')
+
+    def rate(self, rating: EntityRating):
+        return self.getRating(rating.getRecord())
         
 if __name__ == "__main__":
     PageFixerManager.runCmdLine([CurationQualityChecker])

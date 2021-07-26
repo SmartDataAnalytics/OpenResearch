@@ -7,7 +7,7 @@ Created on 2021-04-07
 import re
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
-from smw.rating import Rating,RatingType
+from smw.rating import Rating, RatingType, EntityRating
 from ormigrate.dictionary import Dictionary
 
 class OrdinalFixer(ORFixer):
@@ -70,6 +70,9 @@ class OrdinalFixer(ORFixer):
                     if self.debug:
                             print(f"{ordinal_val} will changed to {cardinal_value}.")
                     return new_event
+
+    def rate(self, rating: EntityRating):
+        return self.getRating(rating.getRecord())
 
     @classmethod
     def getRating(cls,eventRecord):

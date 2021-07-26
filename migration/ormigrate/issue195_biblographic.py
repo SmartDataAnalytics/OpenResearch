@@ -3,7 +3,7 @@
 '''
 
 from wikifile.wikiRender import WikiFile
-from smw.rating import PageRating,RatingType
+from smw.rating import PageRating, RatingType, EntityRating
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
@@ -20,6 +20,12 @@ class BiblographicFieldFixer(ORFixer):
         Constructor
         '''
         super(BiblographicFieldFixer, self).__init__(pageFixerManager)
+
+    def rate(self,rating:EntityRating):
+        '''
+        Rate Entity by the quality of their biblographic fields
+        '''
+        return self.getRatingFromWikiFile(rating.wikiFile)
 
     def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
         '''

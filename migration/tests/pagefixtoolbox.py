@@ -5,6 +5,8 @@ Created on 2021-07-14
 '''
 import os
 from smw.pagefixer import PageFixerManager
+from smw.rating import EntityRating
+from smw.topic import Entity
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
 from unittest import TestCase
@@ -104,7 +106,17 @@ class PageFixerToolbox(object):
         if debug:
             print(args)
         return args
-    
+
+    @staticmethod
+    def getEntityRatingForRecord(record:dict):
+        '''
+        creates EntityRating for given record
+        '''
+        entity = Entity()
+        entity.fromDict(record)
+        entityRating = EntityRating(entity)
+        return entityRating
+
 class PageFixerTest(TestCase):
     '''
     test for pageFixer

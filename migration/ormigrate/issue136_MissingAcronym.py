@@ -3,7 +3,7 @@ Created on 2021-07-15
 
 @author: wf
 '''
-from smw.rating import Rating,RatingType
+from smw.rating import Rating, RatingType, EntityRating
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
@@ -19,6 +19,9 @@ class EventSeriesAcronymFixer(ORFixer):
         Constructor
         '''
         super(EventSeriesAcronymFixer, self).__init__(pageFixerManager)
+
+    def rate(self, rating: EntityRating):
+        return self.getRating(rating.getRecord())
            
     @classmethod
     def getRating(cls,eventRecord):

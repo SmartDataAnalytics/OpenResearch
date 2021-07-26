@@ -6,7 +6,7 @@ Created on 13.07.2021
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 from wikifile.wikiRender import WikiFile
-from smw.rating import PageRating,RatingType
+from smw.rating import PageRating, RatingType, EntityRating
 
 
 class NullValueFixer(ORFixer):
@@ -46,6 +46,9 @@ class NullValueFixer(ORFixer):
             else:
                 rating.set(5,RatingType.invalid,f"found {nullValues} improper nullValues")    
         return rating
+
+    def rate(self, rating: EntityRating):
+        return self.getRatingFromWikiFile(rating.wikiFile)
         
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([NullValueFixer])

@@ -4,7 +4,7 @@ Created on 2021-04-06
 @author: wf
 '''
 from ormigrate.toolbox import HelperFunctions as hf
-from smw.rating import Rating,RatingType
+from smw.rating import Rating, RatingType, EntityRating
 from openresearch.event import EventList
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
@@ -23,6 +23,8 @@ class SeriesFixer(ORFixer):
         '''
         super(SeriesFixer, self).__init__(pageFixerManager)
 
+    def rate(self, rating: EntityRating):
+        return self.getRating(rating.getRecord())
 
     def getRating(self,eventRecord):
         '''

@@ -5,7 +5,7 @@ Created on 2021-04-06
 '''
 import dateutil.parser
 import re
-from smw.rating import Rating,RatingType
+from smw.rating import Rating, RatingType, EntityRating
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
@@ -96,8 +96,11 @@ class DateFixer(ORFixer):
             if len(errors) == 0:
                 return 1,"Date is {dateStr} is ok"
             else:
-                return 7,f"Date '{dateStr}' can't be parsed: {errors[dateStr]}"           
-        
+                return 7,f"Date '{dateStr}' can't be parsed: {errors[dateStr]}"
+
+    def rate(self, rating: EntityRating):
+        return self.getRating(rating.getRecord())
+
     @classmethod
     def getRating(self,eventRecord):
         '''

@@ -1,5 +1,5 @@
 
-from smw.rating import Rating,RatingType
+from smw.rating import Rating, RatingType, EntityRating
 import re
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
@@ -17,6 +17,9 @@ class AcronymLengthFixer(ORFixer):
         Constructor
         '''
         super(AcronymLengthFixer, self).__init__(pageFixerManager)
+
+    def rate(self, rating: EntityRating):
+        return self.getRating(rating.getRecord())
 
     @staticmethod
     def getRating(eventRecord):

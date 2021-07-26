@@ -4,7 +4,7 @@ Created on 2021-04-02
 @author: wf
 '''
 import re
-from smw.rating import Rating,RatingType
+from smw.rating import Rating, RatingType, EntityRating
 from smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
@@ -71,6 +71,8 @@ class AcceptanceRateFixer(ORFixer):
             painrating=Rating(7,RatingType.missing,f'Accepted Papers exists but Submitted papers is not available')
         return painrating
 
+    def rate(self, rating: EntityRating):
+        return self.getRating(rating.getRecord())
         
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([AcceptanceRateFixer])
