@@ -7,7 +7,6 @@
 [![Github Actions Build](https://github.com/SmartDataAnalytics/OpenResearch/workflows/Build/badge.svg?branch=master)](https://github.com/SmartDataAnalytics/OpenResearch/actions?query=workflow%3ABuild+branch%3Amaster)
 [![PyPI Status](https://img.shields.io/pypi/v/OpenResearchMigration.svg)](https://pypi.python.org/pypi/OpenResearchMigration/)
 [![pypi](https://img.shields.io/pypi/pyversions/OpenResearchMigration)](https://pypi.org/project/OpenResearchMigration/)
-## EventCorpus
 
 # OPEN RESEARCH
 
@@ -36,6 +35,7 @@ This repository is mainly used as public ticket system for
 
 # Opensource Projects
 We contributed to and/or created the following OpenSource projects to reach our project goals:
+* [ConferenceCorpus](https://github.com/WolfgangFahl/ConferenceCorpus)
 * [Semantic MediaWiki](https://www.semantic-mediawiki.org/wiki/Semantic_MediaWiki)
 * [ConfIDent dataimports](https://github.com/TIBHannover/confiDent-dataimports)
 * [geograpy3](https://github.com/somnathrakshit/geograpy3)
