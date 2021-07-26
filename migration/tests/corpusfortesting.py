@@ -3,7 +3,7 @@ Created on 16.04.2021
 
 @author: wf
 '''
-from openresearch.eventcorpus import EventCorpus
+from conferencecorpus.corpus.eventcorpus import EventCorpus
 from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
 from os import path
