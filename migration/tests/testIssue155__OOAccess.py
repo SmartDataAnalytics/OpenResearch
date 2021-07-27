@@ -5,7 +5,7 @@ Created on 2021-04-06
 '''
 import unittest
 
-from openresearch.event import Event, EventList, EventSeries, EventSeriesList
+from datasources.openresearch import OREvent, OREventList, OREventSeries, OREventSeriesList
 from lodstorage.sql import SQLDB
 from ormigrate.toolbox import HelperFunctions as hf, Profiler
 
@@ -30,13 +30,13 @@ class TestEvent(unittest.TestCase):
         '''
         test eventseries handling
         '''
-        eventSeriesList=EventSeriesList()
-        eventSeriesList.fromSampleWikiSonLod(EventSeries)
+        eventSeriesList=OREventSeriesList()
+        eventSeriesList.fromSampleWikiSonLod(OREventSeries)
         self.assertTrue(len(eventSeriesList.getList())>0)
         for eventSeries in eventSeriesList.getList():
             if self.debug:
                 print(eventSeries)
-            self.assertTrue(isinstance(eventSeries,EventSeries))
+            self.assertTrue(isinstance(eventSeries,OREventSeries))
             self.assertTrue(eventSeries.acronym is not None)
             
       
@@ -44,13 +44,13 @@ class TestEvent(unittest.TestCase):
         '''
         Tests the event object
         '''
-        eventList=EventList()
-        eventList.fromSampleWikiSonLod(Event)
+        eventList=OREventList()
+        eventList.fromSampleWikiSonLod(OREvent)
         self.assertTrue(len(eventList.getList())>0)
         for event in eventList.getList():
             if self.debug:
                 print(event)
-            self.assertTrue(isinstance(event,Event))
+            self.assertTrue(isinstance(event,OREvent))
             self.assertTrue(event.acronym is not None)
             self.assertTrue(event.ordinal is not None)
         
@@ -84,11 +84,11 @@ class TestEvent(unittest.TestCase):
         return entityList
     
     def getEventList(self,listOfRecords):
-        eventList=self.getEntityListViaSQL(listOfRecords, EventList)
+        eventList=self.getEntityListViaSQL(listOfRecords, OREventList)
         return eventList
     
     def getEventSeriesList(self,listOfRecords):
-        eventSeriesList=self.getEntityListViaSQL(listOfRecords, EventSeriesList)
+        eventSeriesList=self.getEntityListViaSQL(listOfRecords, OREventSeriesList)
         return eventSeriesList
     
     def checkEventList(self,eventList,expectedMin):
@@ -99,7 +99,7 @@ class TestEvent(unittest.TestCase):
         '''
         test event handling with SQL
         ''' 
-        listOfRecords=Event.getSamples()
+        listOfRecords=OREvent.getSamples()
         eventList=self.getEventList(listOfRecords)
         self.checkEventList(eventList, 1)
   
@@ -107,11 +107,11 @@ class TestEvent(unittest.TestCase):
         '''
         test event series handling with SQL
         '''
-        listOfRecords = EventSeries.getSamples()
+        listOfRecords = OREventSeries.getSamples()
         eventSeriesList=self.getEventSeriesList(listOfRecords)
         self.assertEqual(2, len(eventSeriesList.eventSeries))
         eventSeries=eventSeriesList.eventSeries[0]
-        self.assertTrue(isinstance(eventSeries,EventSeries))
+        self.assertTrue(isinstance(eventSeries,OREventSeries))
         
         
     def getWikiUser(self):
@@ -122,7 +122,7 @@ class TestEvent(unittest.TestCase):
         """Test if LOD is returned correctly if called from api to store to SQL"""
         wikiuser=self.getWikiUser()
         expectedCount={"Event":100,"EventSeries":20}
-        for entityListClass in EventList,EventSeriesList:
+        for entityListClass in OREventList,OREventSeriesList:
             profile=Profiler(f"testLoDtoSQL for {entityListClass.__name__}")
             entityList=entityListClass()
             entityName=entityList.getEntityName()
@@ -145,7 +145,7 @@ class TestEvent(unittest.TestCase):
         '''
         get the eventList from the cache
         '''
-        eventList=EventList()
+        eventList=OREventList()
         eventList.profile=True
         askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
         eventList.askExtra=askExtra

@@ -11,4 +11,4 @@ wikirender>=0.0.23
 # https://github.com/somnathrakshit/geograpy3
 geograpy3>=0.1.29
 # https://github.com/SmartDataAnalytics/OpenResearch
-ConferenceCorpus>=0.0.2
+ConferenceCorpus>=0.0.3

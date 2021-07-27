@@ -3,11 +3,10 @@ Created on 16.04.2021
 
 @author: wf
 '''
-from corpus.eventcorpus import EventCorpus
+from datasources.openresearch import OREventCorpus, OREventList
 from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
 from os import path
-from openresearch.orevent import OREntityList
 import os
 class CorpusForTesting(object):
     '''
@@ -24,7 +23,7 @@ class CorpusForTesting(object):
         '''
         hasCache=True
         for entityName in ["Event","EventSeries"]:
-            jsonFile=OREntityList.getJsonFile(entityName)
+            jsonFile=OREventList.getJsonFile(entityName)
             hasCache=hasCache and os.path.isfile(jsonFile)
         return hasCache
     
@@ -50,7 +49,7 @@ class CorpusForTesting(object):
         get events with series by knitting / linking the entities together
         '''
         wikiUser=cls.getWikiUser(wikiId)
-        eventCorpus=EventCorpus(debug=debug)
+        eventCorpus=OREventCorpus(debug=debug)
         eventCorpus.fromWikiUser(wikiUser,force=force)
         eventCorpus.wikiFileManager=cls.getWikiFileManager(wikiId, debug)
         return eventCorpus
@@ -63,6 +62,6 @@ class CorpusForTesting(object):
         if wikiId is None:
             wikiId=cls.wikiId
         wikiFileManager=cls.getWikiFileManager(wikiId,debug)
-        eventCorpus= EventCorpus(debug=debug)
+        eventCorpus=OREventCorpus(debug=debug)
         eventCorpus.fromWikiFileManager(wikiFileManager)
         return eventCorpus

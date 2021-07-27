@@ -6,7 +6,7 @@ Created on 2021-04-15
 import unittest
 from tests.corpusfortesting import CorpusForTesting as Corpus
 import csv
-from openresearch.event import Event,EventList, EventSeriesList
+from datasources.openresearch import OREvent,OREventList, OREventSeriesList
 
 class TestIssue236(unittest.TestCase):
     '''
@@ -76,16 +76,16 @@ class TestIssue236(unittest.TestCase):
         """
         tests updating an event from EventList
         """
-        eventList = EventList()
-        eventSamples=Event.getSamples()
+        eventList = OREventList()
+        eventSamples=OREvent.getSamples()
         eventList.fromLoD(eventSamples)
         eventDict1=eventSamples[0]
         eventDict1['testAttr']='test'
-        event= Event()
+        event= OREvent()
         event.fromDict(eventDict1)
         eventList.updateEntity(event)
         eventDict2 = eventSamples[-1]
-        event2 = Event()
+        event2 = OREvent()
         event2.fromDict(eventDict2)
         eventList.updateEntity(event2)
         updatedList = eventList.getList()

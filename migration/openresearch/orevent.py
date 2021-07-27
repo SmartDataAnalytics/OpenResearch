@@ -33,7 +33,7 @@ class OREventSeriesList(EventEntityList):
         construct me
         '''
         self.eventSeries=[]
-        super(OREventSeriesList, self).__init__("eventSeries",EventSeries)
+        super(OREventSeriesList, self).__init__("eventSeries",OREventSeries)
         
 class OREventSeries(EventEntity):
     '''
@@ -106,7 +106,7 @@ class OREventSeries(EventEntity):
 
         return samplesWikiSon
 
-class EventList(OREntityList):
+class OREventList(EventEntityList):
     propertyLookupList=[
             { 'prop':'Acronym',             'name': 'acronym',         'templateParam': "Acronym"},
             { 'prop':'End date',            'name': 'endDate',         'templateParam': "End date"},
@@ -130,10 +130,10 @@ class EventList(OREntityList):
     '''
     def __init__(self):
         self.events=[]
-        super(EventList, self).__init__("events",Event)
+        super(OREventList, self).__init__("events", OREvent)
 
 
-class Event(OREntity):
+class OREvent(EventEntity):
     '''
     I represent an Event
     

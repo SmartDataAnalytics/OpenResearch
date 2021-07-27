@@ -5,7 +5,7 @@ Created on 2021-04-06
 '''
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.smw.rating import Rating, RatingType, EntityRating
-from openresearch.event import EventList
+from datasources.openresearch import OREventList
 from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 
@@ -46,7 +46,7 @@ class SeriesFixer(ORFixer):
         '''
         """Test if LOD is returned correctly if called from api to store to SQL"""
         wikiUser=hf.getSMW_WikiUser(save=hf.inPublicCI())
-        eventList=EventList()
+        eventList=OREventList()
         eventList.debug=self.debug
         eventRecords=eventList.fromWiki(wikiUser,askExtra=askExtra,profile=self.debug)
         count = 0

@@ -4,7 +4,7 @@ Created on 2021-04-16
 @author: wf
 '''
 from enum import Enum
-from smw.topic import Entity
+from smw.topic import SMWEntity
 from lodstorage.jsonable import JSONAble,JSONAbleList
 
 
@@ -95,7 +95,7 @@ class EntityRating(PageRating):
     a rating for an entity
     '''
     
-    def __init__(self,entity:Entity):
+    def __init__(self,entity:SMWEntity):
         '''
         construct me
         '''

@@ -5,7 +5,7 @@ Created on 2021-07-16
 '''
 import unittest
 from ormigrate.issue166_cfp import WikiCFPIDFixer
-from openresearch.event import Event
+from datasources.openresearch import OREvent
 from tests.pagefixtoolbox import PageFixerTest
 from wikifile.wikiFile import WikiFile
 from ormigrate.smw.rating import EntityRating
@@ -27,13 +27,13 @@ class TestWikiCFPId(PageFixerTest):
 
         """
         fixer=self.getPageFixer()
-        samplesWikiText = Event.getSampleWikiTextList()
+        samplesWikiText = OREvent.getSampleWikiTextList()
         wikicfpid= fixer.getWikiCFPIdFromPage(samplesWikiText[1])
         self.assertIsNotNone(wikicfpid)
         self.assertEqual(wikicfpid,'3845')
 
         wikiFile = WikiFile('sampleFile',None,samplesWikiText)
-        event = Event()
+        event = OREvent()
         event.wikiFile = wikiFile
         entityRating = EntityRating(event)
         entityRating.pageTitle='Test'

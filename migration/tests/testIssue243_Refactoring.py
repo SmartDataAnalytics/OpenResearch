@@ -4,8 +4,8 @@ Created on 2021-07-15
 @author: wf
 '''
 import unittest
-from openresearch.eventcorpus import EventList,EventSeriesList
-from openresearch.event import EventSeries,Event
+from datasources.openresearch import OREventList,OREventSeriesList,OREventSeries,OREvent
+
 
 class TestRefactoring(unittest.TestCase):
     '''
@@ -25,7 +25,7 @@ class TestRefactoring(unittest.TestCase):
         '''
         test the mapping
         '''
-        for entityListClass,entityClass in (EventList,Event),(EventSeriesList,EventSeries):
+        for entityListClass,entityClass in (OREventList,OREvent),(OREventSeriesList,OREventSeries):
             entityList=entityListClass()
             entityList.fromSampleWikiSonLod(entityClass)
             self.assertTrue(len(entityList.getList())>0)    
@@ -39,7 +39,7 @@ class TestRefactoring(unittest.TestCase):
         '''
         test property Lookup
         '''
-        for entityList in EventSeriesList(),EventList():
+        for entityList in OREventSeriesList(),OREventList():
             propertyLookup=entityList.getPropertyLookup()
             if self.debug:
                 print(propertyLookup)

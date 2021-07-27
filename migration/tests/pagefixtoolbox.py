@@ -6,7 +6,7 @@ Created on 2021-07-14
 import os
 from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.smw.rating import EntityRating
-from conferencecorpus.smw.topic import Entity
+from smw.topic import SMWEntity
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
 from unittest import TestCase
@@ -112,7 +112,7 @@ class PageFixerToolbox(object):
         '''
         creates EntityRating for given record
         '''
-        entity = Entity()
+        entity = SMWEntity()
         entity.fromDict(record)
         entityRating = EntityRating(entity)
         return entityRating

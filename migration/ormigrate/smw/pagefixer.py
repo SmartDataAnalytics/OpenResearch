@@ -6,7 +6,7 @@ Created on 2021-04-06
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
-from smw.topic import Entity,EntityList
+from smw.topic import SMWEntity,SMWEntityList
 from ormigrate.smw.rating import RatingType,PageRating, PageRatingList, EntityRating
 from collections import Counter
 import sys
@@ -213,7 +213,7 @@ class PageFixer(object):
             # convert the content according to the property lookup
             propertyLookup=self.propertyLookups[templateName]
             # create a proper entity record
-            entityRecord=Entity.fromWikiSonToLod(entityDict,propertyLookup)
+            entityRecord=SMWEntity.fromWikiSonToLod(entityDict,propertyLookup)
         else:
             entityRecord={}
         # create a default bad rating
