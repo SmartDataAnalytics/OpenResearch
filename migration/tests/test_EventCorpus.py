@@ -63,8 +63,8 @@ class TestEventCorpus(unittest.TestCase):
         '''
         check the given eventCorpus
         '''
-        listOfEvents=eventCorpus.eventList.getList()
-        eventSeriesByPageTitle=eventCorpus.eventSeriesList.getEntityLookup('pageTitle')
+        listOfEvents=eventCorpus.eventManager.getList()
+        eventSeriesByPageTitle,duplicates=LOD.getLookup(lod=eventCorpus.eventSeriesManager.getList(),attrName='pageTitle')
         withSeries=0
         withValidSeries=0
         for event in listOfEvents:
@@ -126,8 +126,8 @@ class TestEventCorpus(unittest.TestCase):
         profile.time()    
         profile=Profiler(f"finding common events and series for {Corpus.wikiId}")
         keys=["acronym","pageTitle"]
-        eventSet=MatchingSet("Events","api",self.eventCorpusAPI.eventList,"wikiText",self.eventCorpusWikiText.eventList,keys)
-        eventSeriesSet=MatchingSet("EventSeries","api",self.eventCorpusAPI.eventSeriesList,"wikiText",self.eventCorpusWikiText.eventSeriesList,keys)
+        eventSet=MatchingSet("Events","api",self.eventCorpusAPI.eventManager,"wikiText",self.eventCorpusWikiText.eventManager,keys)
+        eventSeriesSet=MatchingSet("EventSeries","api",self.eventCorpusAPI.eventSeriesManager,"wikiText",self.eventCorpusWikiText.eventSeriesManager,keys)
         profile.time()
         eventSet.showStats()
         eventSeriesSet.showStats()

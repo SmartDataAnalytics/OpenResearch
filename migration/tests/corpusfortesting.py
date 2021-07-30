@@ -3,7 +3,9 @@ Created on 16.04.2021
 
 @author: wf
 '''
-from datasources.openresearch import OREventCorpus, OREventList
+from datasources.openresearch import OREventCorpus, OREventManager
+from lodstorage.storageconfig import StorageConfig
+
 from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
 from os import path
@@ -22,8 +24,10 @@ class CorpusForTesting(object):
         check whether the cache is available
         '''
         hasCache=True
+        config=cls.getStorageConfig()
+        cachePath=config.getCachePath()
         for entityName in ["Event","EventSeries"]:
-            jsonFile=OREventList.getJsonFile(entityName)
+            jsonFile=f"{cachePath}/{entityName}.json"
             hasCache=hasCache and os.path.isfile(jsonFile)
         return hasCache
     
@@ -49,8 +53,9 @@ class CorpusForTesting(object):
         get events with series by knitting / linking the entities together
         '''
         wikiUser=cls.getWikiUser(wikiId)
-        eventCorpus=OREventCorpus(debug=debug)
-        eventCorpus.fromWikiUser(wikiUser,force=force)
+        config = cls.getStorageConfig()
+        eventCorpus=OREventCorpus(config,debug=debug)
+        eventCorpus.fromCache(wikiUser,force=force)
         eventCorpus.wikiFileManager=cls.getWikiFileManager(wikiId, debug)
         return eventCorpus
 
@@ -61,7 +66,12 @@ class CorpusForTesting(object):
         """
         if wikiId is None:
             wikiId=cls.wikiId
+        config=cls.getStorageConfig()
         wikiFileManager=cls.getWikiFileManager(wikiId,debug)
-        eventCorpus=OREventCorpus(debug=debug)
+        eventCorpus=OREventCorpus(config,debug=debug)
         eventCorpus.fromWikiFileManager(wikiFileManager)
         return eventCorpus
+
+    @classmethod
+    def getStorageConfig(cls):
+        return StorageConfig.getJSON()

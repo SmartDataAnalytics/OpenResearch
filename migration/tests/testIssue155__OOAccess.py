@@ -5,8 +5,11 @@ Created on 2021-04-06
 '''
 import unittest
 
-from datasources.openresearch import OREvent, OREventList, OREventSeries, OREventSeriesList
+from datasources.openresearch import OREvent, OREventManager, OREventSeries, OREventSeriesManager
+from lodstorage.entity import EntityManager
 from lodstorage.sql import SQLDB
+from lodstorage.storageconfig import StorageConfig
+
 from ormigrate.toolbox import HelperFunctions as hf, Profiler
 
 class TestEvent(unittest.TestCase):
@@ -20,6 +23,7 @@ class TestEvent(unittest.TestCase):
 
     def setUp(self):
         self.debug=True
+        self.config=StorageConfig.getSQL()
 
 
     def tearDown(self):
@@ -30,8 +34,8 @@ class TestEvent(unittest.TestCase):
         '''
         test eventseries handling
         '''
-        eventSeriesList=OREventSeriesList()
-        eventSeriesList.fromSampleWikiSonLod(OREventSeries)
+        eventSeriesList=OREventSeriesManager(self.config)
+        eventSeriesList.smwHandler.fromSampleWikiSonLod(OREventSeries)
         self.assertTrue(len(eventSeriesList.getList())>0)
         for eventSeries in eventSeriesList.getList():
             if self.debug:
@@ -44,8 +48,8 @@ class TestEvent(unittest.TestCase):
         '''
         Tests the event object
         '''
-        eventList=OREventList()
-        eventList.fromSampleWikiSonLod(OREvent)
+        eventList=OREventManager(self.config)
+        eventList.smwHandler.fromSampleWikiSonLod(OREvent)
         self.assertTrue(len(eventList.getList())>0)
         for event in eventList.getList():
             if self.debug:
@@ -73,22 +77,18 @@ class TestEvent(unittest.TestCase):
         Returns:
             list: the list of Entities
         '''
-        entityList=entityListClass()
-        self.sqlDB=self.getSQLDB()
-        entityInfo=self.sqlDB.createTable(listOfRecords,entityList.clazz.__name__,primaryKey,withDrop=True,sampleRecordCount=len(listOfRecords))
-        self.assertIsNotNone(entityInfo)
-        self.sqlDB.store(listOfRecords,entityInfo,fixNone=True)
-        if self.debug:
-            print(entityInfo.createTableCmd)
-        entityList.fromSQLTable(self.sqlDB,entityInfo)
+
+        entityList=entityListClass(StorageConfig.getSQL())
+        entityList.storeLoD(listOfRecords)
+        entityList.fromCache()
         return entityList
     
     def getEventList(self,listOfRecords):
-        eventList=self.getEntityListViaSQL(listOfRecords, OREventList)
+        eventList=self.getEntityListViaSQL(listOfRecords, OREventManager)
         return eventList
     
     def getEventSeriesList(self,listOfRecords):
-        eventSeriesList=self.getEntityListViaSQL(listOfRecords, OREventSeriesList)
+        eventSeriesList=self.getEntityListViaSQL(listOfRecords, OREventSeriesManager)
         return eventSeriesList
     
     def checkEventList(self,eventList,expectedMin):
@@ -122,15 +122,15 @@ class TestEvent(unittest.TestCase):
         """Test if LOD is returned correctly if called from api to store to SQL"""
         wikiuser=self.getWikiUser()
         expectedCount={"Event":100,"EventSeries":20}
-        for entityListClass in OREventList,OREventSeriesList:
+        for entityListClass in OREventManager,OREventSeriesManager:
             profile=Profiler(f"testLoDtoSQL for {entityListClass.__name__}")
-            entityList=entityListClass()
-            entityName=entityList.getEntityName()
+            entityList=entityListClass(self.config)
+            entityName=entityList.entityName
             entityList.debug=self.debug
             entityList.profile=self.debug
             askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
             #askExtra="[[Ordinal::36]]"
-            listOfRecords=entityList.fromWiki(wikiuser,askExtra=askExtra)
+            listOfRecords=entityList.smwHandler.fromWiki(wikiuser,askExtra=askExtra)
             entityList=self.getEntityListViaSQL(listOfRecords,entityListClass)
             entities=entityList.getList()
             if self.debug:
@@ -145,7 +145,7 @@ class TestEvent(unittest.TestCase):
         '''
         get the eventList from the cache
         '''
-        eventList=OREventList()
+        eventList=OREventManager(self.config)
         eventList.profile=True
         askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
         eventList.askExtra=askExtra
