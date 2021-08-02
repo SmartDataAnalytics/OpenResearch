@@ -74,4 +74,4 @@ class CorpusForTesting(object):
 
     @classmethod
     def getStorageConfig(cls):
-        return StorageConfig.getJSON()
+        return StorageConfig.getSQL()

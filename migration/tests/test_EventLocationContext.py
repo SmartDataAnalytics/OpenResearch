@@ -25,7 +25,7 @@ class TestEventLocationHandler(TestCase):
         tests if the location page is generated correctly
         """
         profile=Profiler("Generate country location pages",self.profile)
-        countries=self.eventLocationContext.locationContext.countries
+        countries=self.eventLocationContext.locationContext.countries[:10]
         self.eventLocationContext.generateLocationPages(countries, overwrite=True)
         profile.time()
         # ToDo: test if country pages are generated correctly
@@ -37,7 +37,7 @@ class TestEventLocationHandler(TestCase):
         Note: Not running in CI since it generates a lot of pages and uses functionalities which are test in the other tests
         """
         profile = Profiler("Generate OPENRESEARCH location pages (Limited to 100 events)", self.profile)
-        self.eventLocationContext.generateORLocationPages(self.eventCorpus.eventList.events[:100], overwrite=True)
+        self.eventLocationContext.generateORLocationPages(self.eventCorpus.eventManager.events[:100], overwrite=True)
         profile.time()
         # ToDo: test if generated correctly
 

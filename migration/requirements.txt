@@ -1,5 +1,5 @@
 # https://pypi.org/project/pylodstorage/
-pylodstorage>=0.0.51
+pylodstorage>=0.0.60
 # https://pypi.org/project/python-dateutil/
 python-dateutil
 # https://pypi.org/project/py-3rdparty-mediawiki/
@@ -11,4 +11,4 @@ wikirender>=0.0.23
 # https://github.com/somnathrakshit/geograpy3
 geograpy3>=0.1.29
 # https://github.com/SmartDataAnalytics/OpenResearch
-ConferenceCorpus>=0.0.3
+ConferenceCorpus>=0.0.4

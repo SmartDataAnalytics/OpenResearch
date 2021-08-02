@@ -4,7 +4,8 @@ Created on 2021-07-15
 @author: wf
 '''
 import unittest
-from datasources.openresearch import OREventList,OREventSeriesList,OREventSeries,OREvent
+from datasources.openresearch import OREventManager,OREventSeriesManager,OREventSeries,OREvent
+from lodstorage.storageconfig import StorageConfig
 
 
 class TestRefactoring(unittest.TestCase):
@@ -25,9 +26,10 @@ class TestRefactoring(unittest.TestCase):
         '''
         test the mapping
         '''
-        for entityListClass,entityClass in (OREventList,OREvent),(OREventSeriesList,OREventSeries):
-            entityList=entityListClass()
-            entityList.fromSampleWikiSonLod(entityClass)
+        for entityListClass,entityClass in (OREventManager,OREvent),(OREventSeriesManager,OREventSeries):
+            config = StorageConfig.getDefault()
+            entityList=entityListClass(config)
+            entityList.smwHandler.fromSampleWikiSonLod(entityClass)
             self.assertTrue(len(entityList.getList())>0)    
             for entity in entityList.getList():
                 self.assertTrue(isinstance(entity,entityClass))
@@ -39,7 +41,8 @@ class TestRefactoring(unittest.TestCase):
         '''
         test property Lookup
         '''
-        for entityList in OREventSeriesList(),OREventList():
+        config=StorageConfig.getDefault()
+        for entityList in OREventSeriesManager(config),OREventManager(config):
             propertyLookup=entityList.getPropertyLookup()
             if self.debug:
                 print(propertyLookup)

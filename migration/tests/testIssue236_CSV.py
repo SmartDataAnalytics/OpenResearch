@@ -4,15 +4,19 @@ Created on 2021-04-15
 @author: mk
 '''
 import unittest
+
+from lodstorage.storageconfig import StorageConfig
+
 from tests.corpusfortesting import CorpusForTesting as Corpus
 import csv
-from datasources.openresearch import OREvent,OREventList, OREventSeriesList
+from datasources.openresearch import OREvent,OREventManager, OREventSeriesManager
 
 class TestIssue236(unittest.TestCase):
     '''
         https://github.com/SmartDataAnalytics/OpenResearch/issues/236
 
         tests for self updating and fixing of events for CSV round trip issue
+        ToDo: Once ConferenceCorpus has the csv functionality migrate these tests
     '''
     
     @classmethod
@@ -42,7 +46,7 @@ class TestIssue236(unittest.TestCase):
         e.g. 3DUI
         '''
         #self.debug=True
-        eventsLinked=self.eventCorpus.getEventsInSeries('3DUI')
+        eventsLinked=self.eventCorpus.eventManager.getEventsInSeries('3DUI')
         for event in eventsLinked:
             self.assertEqual("3DUI",event.inEventSeries)
             if self.debug:
@@ -76,18 +80,18 @@ class TestIssue236(unittest.TestCase):
         """
         tests updating an event from EventList
         """
-        eventList = OREventList()
+        eventList = OREventManager()
         eventSamples=OREvent.getSamples()
         eventList.fromLoD(eventSamples)
         eventDict1=eventSamples[0]
         eventDict1['testAttr']='test'
         event= OREvent()
         event.fromDict(eventDict1)
-        eventList.updateEntity(event)
+        eventList.smwHandler.updateEntity(event)
         eventDict2 = eventSamples[-1]
         event2 = OREvent()
         event2.fromDict(eventDict2)
-        eventList.updateEntity(event2)
+        eventList.smwHandler.updateEntity(event2)
         updatedList = eventList.getList()
         self.assertEqual(updatedList[0].testAttr,'test')
         self.assertEqual(len(updatedList),len(eventSamples))

@@ -113,7 +113,7 @@ class PageFixerToolbox(object):
         creates EntityRating for given record
         '''
         entity = SMWEntity()
-        entity.fromDict(record)
+        entity.__dict__.update(record)
         entityRating = EntityRating(entity)
         return entityRating
 

@@ -78,7 +78,9 @@ class TestEvent(unittest.TestCase):
             list: the list of Entities
         '''
 
-        entityList=entityListClass(StorageConfig.getSQL())
+        entityList=entityListClass(self.config)
+        entityList.wikiUser=self.getWikiUser()
+        entityList.configure()
         entityList.storeLoD(listOfRecords)
         entityList.fromCache()
         return entityList
@@ -124,15 +126,15 @@ class TestEvent(unittest.TestCase):
         expectedCount={"Event":100,"EventSeries":20}
         for entityListClass in OREventManager,OREventSeriesManager:
             profile=Profiler(f"testLoDtoSQL for {entityListClass.__name__}")
-            entityList=entityListClass(self.config)
-            entityName=entityList.entityName
-            entityList.debug=self.debug
-            entityList.profile=self.debug
+            entityManager=entityListClass(self.config)
+            entityName=entityManager.entityName
+            entityManager.debug=self.debug
+            entityManager.profile=self.debug
             askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
             #askExtra="[[Ordinal::36]]"
-            listOfRecords=entityList.smwHandler.fromWiki(wikiuser,askExtra=askExtra)
-            entityList=self.getEntityListViaSQL(listOfRecords,entityListClass)
-            entities=entityList.getList()
+            listOfRecords=entityManager.smwHandler.fromWiki(wikiuser,askExtra=askExtra)
+            entityManager=self.getEntityListViaSQL(listOfRecords,entityListClass)
+            entities=entityManager.getList()
             if self.debug:
                 print(f"samples for {entityName}:")
                 for entity in entities[:5]:
@@ -150,7 +152,7 @@ class TestEvent(unittest.TestCase):
         askExtra="" if hf.inPublicCI() else "[[Creation date::>2018]][[Creation date::<2020]]"
         eventList.askExtra=askExtra
         wikiuser=self.getWikiUser()
-        eventList.fromCache(wikiuser)
+        eventList.fromCache()
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
