@@ -85,11 +85,11 @@ class TestEventCorpus(unittest.TestCase):
         '''
         self.debug=True
         profile=Profiler("getting EventCorpus from WikiUser")
-        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
+        eventCorpus=Corpus.getEventCorpusFromWikiAPI(forceUpdate=True, debug=self.debug)
         profile.time()
         self.checkEventCorpus(eventCorpus)
-        
-        
+
+
     def testEventCorpusFromWikiUserCache(self):
         """
         test the Event Corpus from the wikiUser(API) cache.
@@ -97,7 +97,7 @@ class TestEventCorpus(unittest.TestCase):
         debug = True
         if Corpus.hasCache():
             profile=Profiler(f"getting EventCorpus for {Corpus.wikiId} from WikiUser Cache",self.profile)
-            self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=debug, force=False)
+            self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=debug, forceUpdate=False)
             profile.time()
             self.checkEventCorpus(self.eventCorpusAPI)
         
@@ -107,7 +107,7 @@ class TestEventCorpus(unittest.TestCase):
         test the Event Corpus from the wiki file manager(wikiFiles).
         """
         profile=Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
-        self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
+        self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(forceUpdate=True, debug=self.debug)
         profile.time()
         self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])
   
@@ -120,7 +120,7 @@ class TestEventCorpus(unittest.TestCase):
             return
         profile=Profiler(f"getting EventCorpora from wikiAPI and wikiText files for {Corpus.wikiId}")
         if self.eventCorpusAPI is None:
-            self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=False)
+            self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, forceUpdate=False)
         if self.eventCorpusWikiText is None:
             self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
         profile.time()    
