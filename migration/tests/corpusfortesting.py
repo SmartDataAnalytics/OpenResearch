@@ -3,15 +3,14 @@ Created on 16.04.2021
 
 @author: wf
 '''
-from corpus.eventcorpus import EventDataSource
 from corpus.lookup import CorpusLookup
-from datasources.openresearch import OREventCorpus, OREventManager
 from lodstorage.storageconfig import StorageConfig
-
 from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
 from os import path
 import os
+
+
 class CorpusForTesting(object):
     '''
     Simplify initializing an EventCorpus for tests (singleton)
@@ -48,7 +47,7 @@ class CorpusForTesting(object):
         return wikiFileManager
 
     @classmethod
-    def getEventCorpusFromWikiAPI(cls, lookupId:str="orclone", forceUpdate:bool=False, debug:bool=False):
+    def getEventDataSourceFromWikiAPI(cls, lookupId:str= "orclone", forceUpdate:bool=False, debug:bool=False):
         '''
         get events with series by knitting / linking the entities together
 
@@ -64,7 +63,7 @@ class CorpusForTesting(object):
         return eventDataSource
 
     @classmethod
-    def getEventCorpusFromWikiText(cls, lookupId:str="orclone-backup", forceUpdate:bool=False, debug=False):
+    def getEventDataSourceFromWikiText(cls, lookupId:str= "orclone-backup", forceUpdate:bool=False, debug=False):
         """
         get events with series by knitting/linking entities from a WikiFileManager
 

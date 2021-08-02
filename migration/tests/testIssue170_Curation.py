@@ -47,8 +47,8 @@ class TestIssue170(PageFixerTest):
         
     def testUserCount(self):
         # only needed to setup userrating yaml file
-        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
-        userLookup=eventCorpus.eventManager.getLookup("lastEditor",withDuplicates=True)
+        eventDataSource=Corpus.getEventDataSourceFromWikiAPI(debug=self.debug, force=True)
+        userLookup=eventDataSource.eventManager.getLookup("lastEditor",withDuplicates=True)
         if self.debug:
             print (f"{len(userLookup)} users")
         expected=1 if hf.inPublicCI() else 140
