@@ -3,20 +3,19 @@ Created on 16.04.2021
 
 @author: wf
 '''
-from datasources.openresearch import OREventCorpus, OREventManager
+from corpus.lookup import CorpusLookup
 from lodstorage.storageconfig import StorageConfig
-
 from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
 from os import path
 import os
+
+
 class CorpusForTesting(object):
     '''
     Simplify initializing an EventCorpus for tests (singleton)
     '''
-
     wikiId='orclone'
-    
     
     @classmethod
     def hasCache(cls):
@@ -48,29 +47,70 @@ class CorpusForTesting(object):
         return wikiFileManager
 
     @classmethod
-    def getEventCorpusFromWikiAPI(cls, wikiId=None, force=False, debug=False):
+    def getEventDataSourceFromWikiAPI(cls, lookupId:str= "orclone", forceUpdate:bool=False, debug:bool=False):
         '''
         get events with series by knitting / linking the entities together
+
+        Args:
+            lookupId(str): ID of the EventDataSource that should be returned.
+            forceUpdate(bool): True if the data should be fetched from the source instead of the cache
+            debug(bool): If True display debug output
+
+        Returns:
+            EventDataSource
         '''
-        wikiUser=cls.getWikiUser(wikiId)
-        config = cls.getStorageConfig()
-        eventCorpus=OREventCorpus(config,debug=debug)
-        eventCorpus.fromCache(wikiUser,force=force)
-        eventCorpus.wikiFileManager=cls.getWikiFileManager(wikiId, debug)
-        return eventCorpus
+        eventDataSource=cls.getEventDataSource(lookupId=lookupId, forceUpdate=forceUpdate, debug=debug)
+        return eventDataSource
 
     @classmethod
-    def getEventCorpusFromWikiText(cls,wikiId=None,debug=False):
+    def getEventDataSourceFromWikiText(cls, lookupId:str= "orclone-backup", forceUpdate:bool=False, debug=False):
         """
         get events with series by knitting/linking entities from a WikiFileManager
+
+        Args:
+            lookupId(str): ID of the EventDataSource that should be returned.
+            forceUpdate(bool): True if the data should be fetched from the source instead of the cache
+            debug(bool): If True display debug output
+
+        Returns:
+            EventDataSource
         """
-        if wikiId is None:
-            wikiId=cls.wikiId
-        config=cls.getStorageConfig()
-        wikiFileManager=cls.getWikiFileManager(wikiId,debug)
-        eventCorpus=OREventCorpus(config,debug=debug)
-        eventCorpus.fromWikiFileManager(wikiFileManager)
-        return eventCorpus
+        eventDataSource = cls.getEventDataSource(lookupId=lookupId, forceUpdate=forceUpdate, debug=debug)
+        return eventDataSource
+
+    @classmethod
+    def getEventDataSource(cls, lookupId:str, forceUpdate:bool=False, debug:bool=False):
+        """
+
+        Args:
+            lookupId(str): ID of the EventDataSource that should be returned.
+            forceUpdate(bool): True if the data should be fetched from the source instead of the cache
+            debug(bool): If True display debug output
+
+        Returns:
+            EventDataSource
+        """
+        lookup = CorpusLookup(lookupIds=[lookupId], configure=cls.patchEventSource, debug=debug)
+        lookup.load(forceUpdate=forceUpdate)
+        eventDataSource = lookup.getDataSource(lookupId)
+        return eventDataSource
+
+    @classmethod
+    def patchEventSource(cls, lookup:CorpusLookup):
+        '''
+        patches the EventManager and EventSeriesManager by adding wikiUser and WikiFileManager
+        '''
+        wikiUser = cls.getWikiUser(cls.wikiId)
+        wikiFileManager = cls.getWikiFileManager(cls.wikiId)
+        for lookupId in ["orclone", "orclone-backup", "or", "or-backup"]:
+            orDataSource = lookup.getDataSource(lookupId)
+            if orDataSource is not None:
+                if lookupId.endswith("-backup"):
+                    orDataSource.eventManager.wikiFileManager = wikiFileManager
+                    orDataSource.eventSeriesManager.wikiFileManager = wikiFileManager
+                else:
+                    orDataSource.eventManager.wikiUser = wikiUser
+                    orDataSource.eventSeriesManager.wikiUser = wikiUser
 
     @classmethod
     def getStorageConfig(cls):

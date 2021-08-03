@@ -52,8 +52,8 @@ class TestEventCorpus(unittest.TestCase):
     def setUp(self):
         self.debug = False
         self.profile=True
-        self.eventCorpusAPI=None
-        self.eventCorpusWikiText=None
+        self.eventDataSourceAPI=None
+        self.eventDataSourceWikiText=None
         pass
 
     def tearDown(self):
@@ -85,11 +85,11 @@ class TestEventCorpus(unittest.TestCase):
         '''
         self.debug=True
         profile=Profiler("getting EventCorpus from WikiUser")
-        eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=True)
+        eventDataSource=Corpus.getEventDataSourceFromWikiAPI(forceUpdate=True, debug=self.debug)
         profile.time()
-        self.checkEventCorpus(eventCorpus)
-        
-        
+        self.checkEventCorpus(eventDataSource)
+
+
     def testEventCorpusFromWikiUserCache(self):
         """
         test the Event Corpus from the wikiUser(API) cache.
@@ -97,9 +97,9 @@ class TestEventCorpus(unittest.TestCase):
         debug = True
         if Corpus.hasCache():
             profile=Profiler(f"getting EventCorpus for {Corpus.wikiId} from WikiUser Cache",self.profile)
-            self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=debug, force=False)
+            self.eventDataSourceAPI=Corpus.getEventDataSourceFromWikiAPI(debug=debug, forceUpdate=False)
             profile.time()
-            self.checkEventCorpus(self.eventCorpusAPI)
+            self.checkEventCorpus(self.eventDataSourceAPI)
         
 
     def testEventCorpusFromWikiFileManager(self):
@@ -107,9 +107,9 @@ class TestEventCorpus(unittest.TestCase):
         test the Event Corpus from the wiki file manager(wikiFiles).
         """
         profile=Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
-        self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
+        self.eventDataSourceWikiText = Corpus.getEventDataSourceFromWikiText(forceUpdate=True, debug=self.debug)
         profile.time()
-        self.checkEventCorpus(self.eventCorpusWikiText,['pageTitle'])
+        self.checkEventCorpus(self.eventDataSourceWikiText, ['pageTitle'])
   
         
     def testMatchingSetsForEventCorpus(self):
@@ -119,15 +119,15 @@ class TestEventCorpus(unittest.TestCase):
         if not Corpus.hasCache():
             return
         profile=Profiler(f"getting EventCorpora from wikiAPI and wikiText files for {Corpus.wikiId}")
-        if self.eventCorpusAPI is None:
-            self.eventCorpusAPI=Corpus.getEventCorpusFromWikiAPI(debug=self.debug, force=False)
-        if self.eventCorpusWikiText is None:
-            self.eventCorpusWikiText = Corpus.getEventCorpusFromWikiText(debug=self.debug)
+        if self.eventDataSourceAPI is None:
+            self.eventDataSourceAPI=Corpus.getEventDataSourceFromWikiAPI(debug=self.debug, forceUpdate=False)
+        if self.eventDataSourceWikiText is None:
+            self.eventDataSourceWikiText = Corpus.getEventDataSourceFromWikiText(debug=self.debug)
         profile.time()    
         profile=Profiler(f"finding common events and series for {Corpus.wikiId}")
         keys=["acronym","pageTitle"]
-        eventSet=MatchingSet("Events","api",self.eventCorpusAPI.eventManager,"wikiText",self.eventCorpusWikiText.eventManager,keys)
-        eventSeriesSet=MatchingSet("EventSeries","api",self.eventCorpusAPI.eventSeriesManager,"wikiText",self.eventCorpusWikiText.eventSeriesManager,keys)
+        eventSet=MatchingSet("Events","api", self.eventDataSourceAPI.eventManager, "wikiText", self.eventDataSourceWikiText.eventManager, keys)
+        eventSeriesSet=MatchingSet("EventSeries","api", self.eventDataSourceAPI.eventSeriesManager, "wikiText", self.eventDataSourceWikiText.eventSeriesManager, keys)
         profile.time()
         eventSet.showStats()
         eventSeriesSet.showStats()

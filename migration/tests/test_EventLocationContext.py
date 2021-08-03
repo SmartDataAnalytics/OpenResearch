@@ -17,7 +17,7 @@ class TestEventLocationHandler(TestCase):
         targetWikiTextPath = f"{home}/.or/generated/Location"
         self.wikiFileManager = CorpusForTesting.getWikiFileManager()
         self.wikiFileManager.targetPath=targetWikiTextPath
-        self.eventCorpus=CorpusForTesting.getEventCorpusFromWikiText()
+        self.eventDataSource=CorpusForTesting.getEventDataSourceFromWikiText()
         self.eventLocationContext=EventLocationHandler(wikiFileManager=self.wikiFileManager)
 
     def test_generateLocationPages(self):
@@ -37,7 +37,7 @@ class TestEventLocationHandler(TestCase):
         Note: Not running in CI since it generates a lot of pages and uses functionalities which are test in the other tests
         """
         profile = Profiler("Generate OPENRESEARCH location pages (Limited to 100 events)", self.profile)
-        self.eventLocationContext.generateORLocationPages(self.eventCorpus.eventManager.events[:100], overwrite=True)
+        self.eventLocationContext.generateORLocationPages(self.eventDataSource.eventManager.events[:100], overwrite=True)
         profile.time()
         # ToDo: test if generated correctly
 

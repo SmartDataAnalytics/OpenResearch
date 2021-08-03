@@ -66,7 +66,7 @@ class TestIssue168(unittest.TestCase):
     #    test the rating call back
     #    '''
     #    profile=Profiler("test rating call back")
-    #    eventCorpus=Corpus.getEventCorpusFromWikiAPI(debug=self.debug)
+    #    eventCorpus=Corpus.getEventDataSourceFromWikiAPI(debug=self.debug)
     #    lod,errors=eventCorpus.eventList.getRatedLod(Event.rateMigration)
     #    self.checkRatedLod(lod, errors)
     #    lod,errors=eventCorpus.eventSeriesList.getRatedLod(EventSeries.rateMigration)
