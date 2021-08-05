@@ -4,7 +4,7 @@ Created on 2021-07-15
 @author: wf
 '''
 import unittest
-from datasources.openresearch import OREventManager,OREventSeriesManager,OREventSeries,OREvent
+from datasources.openresearch import OREvent,OREventSeries,OREventManager, OREventSeriesManager
 from lodstorage.storageconfig import StorageConfig
 
 
@@ -28,7 +28,7 @@ class TestRefactoring(unittest.TestCase):
         '''
         for entityListClass,entityClass in (OREventManager,OREvent),(OREventSeriesManager,OREventSeries):
             config = StorageConfig.getDefault()
-            entityList=entityListClass(config)
+            entityList=entityListClass(config=config)
             entityList.smwHandler.fromSampleWikiSonLod(entityClass)
             self.assertTrue(len(entityList.getList())>0)    
             for entity in entityList.getList():

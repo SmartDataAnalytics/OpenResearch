@@ -3,6 +3,9 @@
 	<name>OpenResearch</name>
 	<comment></comment>
 	<projects>
+		<project>ConferenceCorpus</project>
+		<project>pyLoDStorage</project>
+		<project>wikirender</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
