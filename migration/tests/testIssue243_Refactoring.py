@@ -42,10 +42,11 @@ class TestRefactoring(unittest.TestCase):
         test property Lookup
         '''
         config=StorageConfig.getDefault()
-        for entityList in OREventSeriesManager(config),OREventManager(config):
+        for entityList in OREventSeriesManager(config=config),OREventManager(config=config):
             propertyLookup=entityList.getPropertyLookup()
             if self.debug:
                 print(propertyLookup)
+            self.assertTrue(len(propertyLookup)>5)
 
 
 if __name__ == "__main__":
