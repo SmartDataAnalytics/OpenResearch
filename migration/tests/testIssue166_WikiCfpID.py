@@ -5,7 +5,7 @@ Created on 2021-07-16
 '''
 import unittest
 from ormigrate.issue166_cfp import WikiCFPIDFixer
-from datasources.openresearch import OREvent
+from corpus.datasources.openresearch import OREvent
 from tests.pagefixtoolbox import PageFixerTest
 from wikifile.wikiFile import WikiFile
 from ormigrate.smw.rating import EntityRating

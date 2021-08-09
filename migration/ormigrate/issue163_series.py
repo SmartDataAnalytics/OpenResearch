@@ -5,7 +5,7 @@ Created on 2021-04-06
 '''
 from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.smw.rating import Rating, RatingType, EntityRating
-from datasources.openresearch import OREventManager
+from corpus.datasources.openresearch import OREventManager
 from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer
 

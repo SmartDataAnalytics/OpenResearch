@@ -4,7 +4,7 @@ Created on 2021-07-15
 @author: wf
 '''
 import unittest
-from datasources.openresearch import OREvent,OREventSeries,OREventManager, OREventSeriesManager
+from corpus.datasources.openresearch import OREvent,OREventSeries,OREventManager, OREventSeriesManager
 from lodstorage.storageconfig import StorageConfig
 
 
