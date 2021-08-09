@@ -1,10 +1,10 @@
 '''
-Created on 21.07.2021
+Created on 2021-07-21
 
 @author: wf
 '''
 from ormigrate.smw.pagefixer import EntityFixer, PageFixerManager
-from datasources.openresearch import OREventManager, OREventSeriesManager
+from corpus.datasources.openresearch import OREventManager, OREventSeriesManager
 
 class ORFixer(EntityFixer):
     '''

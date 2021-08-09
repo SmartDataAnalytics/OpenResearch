@@ -4,9 +4,9 @@ Created on 2021-04-16
 @author: wf
 '''
 
-from smw.topic import SMWEntity
+from corpus.smw.topic import SMWEntity
 from lodstorage.jsonable import JSONAbleList
-from quality.rating import Rating, RatingType
+from corpus.quality.rating import Rating, RatingType
 
         
 class PageRating(Rating):
