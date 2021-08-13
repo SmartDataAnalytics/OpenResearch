@@ -37,6 +37,7 @@ class LocationFixer(ORFixer):
             errors(dict): dictonary containing the errors of the given event record → new errors are added to the dict
             bestFit(bool): If true the best/closed fit for a location is chosen (e.g. city with highest population). Otherwise a fix is only applied if the location can be identified with certainty.
         '''
+        #ToDo: Replace with locationContext.locateLoation()
         # event location values
         if errors is None:
             errors = {}
@@ -154,85 +155,7 @@ class LocationFixer(ORFixer):
                 isPossiblyMisplaced = True
                 pass
         # event locations could not be matched could not be
-        #ToDo: Extend the tests for the location position changes to avoid unnecessary changes
-        if isPossiblyMisplaced:
-            changed_positions=self.fixLocationType(event)
-            if changed_positions:
-                return self.fixEventRecord(event)
         return None,errors
-
-    def fixLocationType(self, event:dict):
-        """
-        Tries to rearrange the location entries of the given event if possible to fix miss placed information.
-        Does not overwrite correctly recognized entries.
-        Note: Should be used with care
-        E.g.: City=Bavaria will be changed to State=Bavaria
-
-        Args:
-            event(dict): Event dict that should be checked/fixed
-
-        Returns:
-            True if location entries were rearranged. Otherwise false
-        """
-        event_city=event.get(self.CITY)
-        event_region=event.get(self.REGION)
-        event_country=event.get(self.COUNTRY)
-        cities = self.locationContext.getCities(event_city)
-        regions = self.locationContext.getRegions(event_region)
-        countries = self.locationContext.getCountries(event_country)
-        modified_city=False
-        modified_region=False
-        modified_country=False
-        # check city
-        if event_city is not None:
-            possible_regions=self.locationContext.getRegions(event_city)
-            possible_country=self.locationContext.getCountries(event_city)
-            if possible_regions and possible_country:
-                # city could be region or country -> undecidable
-                pass
-            elif possible_regions and not regions:
-                event[self.REGION]=event_city
-                modified_region=True
-                if not modified_city:
-                    del event[self.CITY]
-            elif possible_country and not countries:
-                event[self.COUNTRY]=event_city
-                modified_country=True
-                if not modified_city:
-                    del event[self.CITY]
-        if event_region is not None:
-            possible_cities=self.locationContext.getCities(event_region)
-            possible_country=self.locationContext.getCountries(event_region)
-            if possible_cities and possible_country:
-                # region could be city or country -> undecidable
-                pass
-            elif possible_cities and not cities:
-                event[self.CITY]=event_region
-                modified_city=True
-                if not modified_region:
-                    del event[self.REGION]
-            elif possible_country and not countries:
-                event[self.COUNTRY]=event_region
-                modified_country=True
-                if not modified_region:
-                    del event[self.REGION]
-        if event_country is not None:
-            possible_cities=self.locationContext.getCities(event_country)
-            possible_regions=self.locationContext.getRegions(event_country)
-            if possible_cities and possible_regions:
-                # country could be city or region -> undecidable
-                pass
-            elif (possible_cities and not cities) or (possible_cities and modified_country):
-                event[self.CITY]=event_country
-                modified_city=True
-                if not modified_country:
-                    del event[self.COUNTRY]
-            elif (possible_regions and not regions) or (possible_cities and modified_country):
-                event[self.REGION] = event_country
-                modified_region=True
-                if not modified_country:
-                    del event[self.COUNTRY]
-        return modified_city or modified_region or modified_country
 
     @staticmethod
     def getWikidataIds(locations: list):
@@ -318,9 +241,9 @@ class LocationFixer(ORFixer):
             painrating=Rating(7, RatingType.missing,f'Locations are not defined')
         else:
             if 'locationContext' in cls.__dict__:
-                cities=cls.__dict__['locationContext'].getCities(city)
-                regions=cls.__dict__['locationContext'].getCities(region)
-                countries=cls.__dict__['locationContext'].getCities(country)
+                cities=[l for l in getattr(cls,'locationContext').locateLocation(city) if isinstance(l, City)]
+                regions=[l for l in getattr(cls,'locationContext').locateLocation(region) if isinstance(l, Region)]
+                countries=[l for l in getattr(cls,'locationContext').locateLocation(country) if isinstance(l, Country)]
             if cities and regions and countries:
                 # all locations are recognized
                 painrating=Rating(1,RatingType.ok,f'Locations are valid. (Country: {country}, Region: {region}, City:{city})')

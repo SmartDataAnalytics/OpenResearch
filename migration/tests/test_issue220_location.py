@@ -135,60 +135,6 @@ class TestLocationFixer(PageFixerTest):
         self.assertEqual(exp_event, res)
         self.assertTrue("city_unrecognized" in errors)
 
-
-    def testFixLocationType(self):
-        '''
-        tests the correction of misplaced locations
-        '''
-        profile = Profiler("Testing the correction of misplaced locations", self.profile)
-        # Misplaced region
-        event = {
-            "Acronym": "Test 2020",
-            self.COUNTRY: "Germany",
-            self.CITY: "Bavaria"
-        }
-        exp_event = {
-            "Acronym": "Test 2020",
-            self.COUNTRY: "Germany",
-            self.REGION: "Bavaria"
-        }
-        self.fixer.fixLocationType(event)
-        self.assertEqual(exp_event, event)
-
-        # Misplaced city
-        event = {
-            "Acronym": "Test 2020",
-            self.COUNTRY: "Germany",
-            self.REGION: "Munich"
-        }
-        exp_event = {
-            "Acronym": "Test 2020",
-            self.COUNTRY: "Germany",
-            self.CITY: "Munich"
-        }
-        self.fixer.fixLocationType(event)
-        self.assertEqual(exp_event, event)
-
-        # Misplaced city, location, country
-        event = {
-            "Acronym": "Test 2020",
-            self.REGION: "Germany",
-            self.CITY: "Bavaria",
-            self.COUNTRY: "Munich"
-        }
-        exp_event = {
-            "Acronym": "Test 2020",
-            self.COUNTRY: "Germany",
-            self.REGION: "Bavaria",
-            self.CITY: "Munich"
-        }
-        hasChangedPositions=self.fixer.fixLocationType(event)
-        self.assertTrue(hasChangedPositions)
-        self.assertEqual(exp_event[self.CITY], event[self.CITY])
-        self.assertEqual(exp_event[self.REGION], event[self.REGION])
-        self.assertEqual(exp_event[self.COUNTRY], event[self.COUNTRY])
-        profile.time()
-
     def test_get_page_title(self):
         '''tests the generation of the wiki page titles for location entities'''
         profile = Profiler("Testing generation of location page titles", self.profile)
@@ -219,7 +165,7 @@ class TestLocationFixer(PageFixerTest):
             if pageTitleList is None:
                 self.assertTrue(painCounter[5]>1000)
             else:
-                self.assertEqual(3,painCounter[5])
+                self.assertEqual(4,painCounter[5])
 
     def testRate(self):
         '''
