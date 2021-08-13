@@ -21,7 +21,15 @@ class EventSeriesAcronymFixer(ORFixer):
         super(EventSeriesAcronymFixer, self).__init__(pageFixerManager)
 
     def rate(self, rating: EntityRating):
-        return self.getRating(rating.getRecord())
+        if 'acronym' in rating.getRecord():
+            rating.set(1,RatingType.ok,'acronym available')
+            return
+        elif rating.wikiFile is not None:
+            rawRecords=rating.wikiFile.extractTemplate("Event series")
+            if 'acronym' in rawRecords:
+                rating.set(2,RatingType.ok,'acronym available but propertyname incorrrect')
+            return
+        rating.set(5,RatingType.missing,'acronym is missing')
            
     @classmethod
     def getRating(cls,eventRecord):
