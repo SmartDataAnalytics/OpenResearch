@@ -6,7 +6,7 @@ Created on 2021-04-06
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
-from smw.topic import SMWEntity,SMWEntityList
+from corpus.smw.topic import SMWEntity,SMWEntityList
 from ormigrate.smw.rating import RatingType,PageRating, PageRatingList, EntityRating
 from collections import Counter
 import sys
