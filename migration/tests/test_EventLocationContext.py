@@ -25,6 +25,7 @@ class TestEventLocationHandler(TestCase):
         tests if the location page is generated correctly
         """
         profile=Profiler("Generate country location pages",self.profile)
+        self.eventLocationContext.locationContext.countryManager.fromStore()
         countries=self.eventLocationContext.locationContext.countries[:10]
         self.eventLocationContext.generateLocationPages(countries, overwrite=True)
         profile.time()
@@ -41,17 +42,6 @@ class TestEventLocationHandler(TestCase):
         profile.time()
         # ToDo: test if generated correctly
 
-    def test__add_page_title_to_labels(self):
-        '''
-        tests if the generated pageTitles are correctly assigned as location labels
-        '''
-        profile = Profiler("Test adding openresearch location pageTitles to location labels", self.profile)
-        expectedLabel="US/CA"
-        res=self.eventLocationContext.locationContext.getRegions(expectedLabel)
-        self.assertTrue(len(res)==1)
-        ca=res[0]
-        self.assertEqual(ca.wikidataid,"Q99")
-        profile.time()
 
 
     def test_getFieldCounter(self):

@@ -65,14 +65,17 @@ class EventLocationHandler(object):
         regions = set()   # Regions used by the cities in usedCities
         # Generate city location page if city is recognized and add region of the city to regions
         for cityName in usedCities:
-            possibleCities=self.locationContext.getCities(cityName)
+            if cityName is None:
+                continue
+            possibleCities=self.locationContext.cityManager.getByName(*cityName.split('/'))
             if possibleCities is None or possibleCities == []:
                 print(f"City {cityName} not recognized by LocationContext")
                 pass
             else:
                 location=max(possibleCities, key=lambda city: int(city.population) if 'population' in city.__dict__ and city.population is not None else 0)
-                regions.add(location.region)
-                self.generateLocationPage(location, overwrite)
+                if location:
+                    regions.add(location.region)
+                    self.generateLocationPage(location, overwrite)
         # Generate region pages
         for region in regions:
             self.generateLocationPage(region, overwrite)

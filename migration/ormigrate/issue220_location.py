@@ -37,125 +37,55 @@ class LocationFixer(ORFixer):
             errors(dict): dictonary containing the errors of the given event record → new errors are added to the dict
             bestFit(bool): If true the best/closed fit for a location is chosen (e.g. city with highest population). Otherwise a fix is only applied if the location can be identified with certainty.
         '''
-        #ToDo: Replace with locationContext.locateLoation()
-        # event location values
         if errors is None:
             errors = {}
-        event_city = event[self.CITY] if self.CITY in event and event[self.CITY] != "" else None
-        event_region = event[self.REGION] if self.REGION in event and event[self.REGION] != "" else None
-        event_country = event[self.COUNTRY] if self.COUNTRY in event and event[self.COUNTRY] != "" else None
-        # filter out known invalid and None values
-        if event_country in ["Online", "None", "N/A"]:
-            event_country=None
-        if event_region in ["Online", "None", "N/A"]:
-            event_region=None
-        if event_city in ["Online", "None", "N/A"]:
-            event_city=None
-        cities = self.locationContext.getCities(event_city)
-        regions = self.locationContext.getRegions(event_region)
-        countries = self.locationContext.getCountries(event_country)
-        if event_city is None:
-            missing_city=True
-            errors["city_missing"]="city entry missing"
+        eventCity = event.get(self.CITY)
+        eventRegion = event.get(self.REGION)
+        eventCountry = event.get(self.COUNTRY)
+        eventPlaces=[]
+        for eventLocation in eventCountry, eventRegion, eventCity:
+            # filter out known invalid and None values
+            if eventLocation in ["Online", "None", "N/A"]:
+                eventLocation=None
+            # Add eventLocations to event Places
+            if eventLocation:
+                if eventLocation.startswith("Category:"):
+                    eventLocation=eventLocation.replace("Category:","")
+                if '/' in eventLocation:
+                    eventPlaces.extend(eventLocation.split('/'))
+                else:
+                    eventPlaces.append(eventLocation)
+        # event Places could be extended with the event title
+        foundLocations=self.locationContext.locateLocation(*eventPlaces)
+        # find best match
+        foundCities = [l for l in foundLocations if isinstance(l, City) and getattr(l, 'pop') is not None]
+        foundRegions = [l for l in foundLocations if isinstance(l, Region)]
+        foundCountries = [l for l in foundLocations if isinstance(l, Country)]
+        if foundCities:
+            bestMatch=foundCities[0]
+            event[self.CITY]=self.getPageTitle(bestMatch)
+            event[self.REGION] = self.getPageTitle(bestMatch.region)
+            event[self.COUNTRY] = self.getPageTitle(bestMatch.country)
+        elif foundRegions:
+            bestMatch = foundRegions[0]
+            #event[self.CITY] = None
+            event[self.REGION] = self.getPageTitle(bestMatch)
+            event[self.COUNTRY] = self.getPageTitle(bestMatch.country)
+            errors["city_unknown"] = f"Location information did not match any city"
+        elif foundCountries:
+            bestMatch = foundCountries[0]
+            #event[self.CITY] = None
+            #event[self.REGION] = None
+            event[self.COUNTRY] = self.getPageTitle(bestMatch)
+            errors["region_unknown"] = f"Location information did not match any region or city"
         else:
-            if not cities:
-                errors["city_unrecognized"]=f"City '{event_city}' not found in LocationCorpus"
-        if event_region is None:
-            missing_region=True
-            errors["region_missing"] = "region entry missing"
-        else:
-            if not regions:
-                errors["region_unrecognized"] = f"Region '{event_region}' not found in LocationCorpus"
-        if event_country is None:
-            missing_country=True
-            errors["country_missing"] = "country entry missing"
-        else:
-            if not countries:
-                errors["country_unrecognized"] = f"Country '{event_country}' not found in LocationCorpus"
+            errors["country_unknown"] = f"Location information did not match any location"
+            #event[self.CITY] = None
+            #event[self.REGION] = None
+            #event[self.COUNTRY] = None
+        return event, errors
 
-        if event_region == "Washington" and event_city == "Washington":
-            print("Washington")
-        isPossiblyMisplaced=False
-        if event_city is not None:
-            # event has city
-            if cities:
-                # event_city matches cities in locationCorpus -> check if identifiable
-                if regions:
-                    # filter those cities out for which the defined region is not found in any city
-                    regionids = self.getWikidataIds(regions)
-                    cities = list(filter(
-                        lambda x: 'wikidataid' in x.region.__dict__ and x.region.wikidataid in regionids,
-                                  cities))
-                    countries = list(filter(
-                        lambda x: 'wikidataid' in x.country.__dict__ and x.country.wikidataid in regionids,
-                        cities))
-                if countries:
-                    # filter those cities out for which the defined country is not found in any city
-                    countryids=self.getWikidataIds(countries)
-                    cities = list(filter(
-                        lambda x: 'wikidataid' in x.country.__dict__ and x.country.wikidataid in countryids,
-                        cities))
-                if len(cities) >0:
-                    # city can be identified (Could still be incorrect)
-                    if len(cities) > 1:
-                        errors["city_unclear"] = f"City '{event_city}' matches against multiple cities in the LocationCorpus. Other location information are not sufficient enough to clearly identify the city"
-                        cities=sorted(cities,key=lambda city:0 if 'population'not in city.__dict__ or city.population is None else int(city.population), reverse=True)
-                    final_city = cities[0]
-                    if isinstance(final_city,City):
-                        event[self.CITY]=self.getPageTitle(final_city)
-                        event[self.REGION] = self.getPageTitle(final_city.region)
-                        event[self.COUNTRY] = self.getPageTitle(final_city.country)
-                        errors["complete"]="Location of event complete"
-                        return event, errors
-                else:
-                    # No matching city -> Two possibilities: event location information incorrect or locations missing in LocationCorpus
-                    errors["city_unknown"]=f"City '{event_city}' could not be matched against a city in the LocationCorpus with the given region and country. Either location information are incorrect or location is missing in the corpus."
-                    #return None, errors
-            else:
-                # event_city is not the LocationCorpus
-                isPossiblyMisplaced=True
-        if event_region is not None:
-            # event_city is not defined
-            if regions:
-                if countries:
-                    # filter those cities out for which the defined country is not found in any city
-                    countryids=self.getWikidataIds(countries)
-                    regions = list(filter(
-                        lambda x: 'wikidataid' in x.country.__dict__ and x.country.wikidataid in countryids,
-                        regions))
-                if len(regions)==1:
-                    # region can be identified
-                    final_region = regions[0]
-                    if isinstance(final_region, Region):
-                        event[self.REGION] = self.getPageTitle(final_region)
-                        event[self.COUNTRY] = self.getPageTitle(final_region.country)
-                        return event, errors
-                elif len(regions) == 0:
-                    # No matching region -> Two possibilities: event location information incorrect or locations missing in LocationCorpus
-                    errors["region_unknown"]=f"Region '{event_region}' could not be matched against a region in the LocationCorpus with the given country. Either location information are incorrect or location is missing in the corpus."
-                    #return None, errors
-                else:
-                    errors["region_unclear"]=f"Region '{event_region}' matches against multiple regions in the LocationCorpus. Other location information are not sufficient enough to clearly identify the region"
-            else:
-                isPossiblyMisplaced = True
-                pass
-        if event_country is not None:
-            if countries:
-                if len(countries)==1:
-                    final_country=countries[0]
-                    event[self.COUNTRY] = self.getPageTitle(final_country)
-                    return event, errors
-                elif len(countries) == 0:
-                    # No matching region -> Two possibilities: event location information incorrect or locations missing in LocationCorpus
-                    errors["country_unknown"]=f"Country '{event_country}' could not be matched against a country in the LocationCorpus with the given country. Either location information are incorrect or location is missing in the corpus."
-                    #return None, errors
-                else:
-                    errors["country_unclear"] = f"Country '{event_region}' matches against multiple country in the LocationCorpus. Other location information are not sufficient enough to clearly identify the region"
-            else:
-                isPossiblyMisplaced = True
-                pass
-        # event locations could not be matched could not be
-        return None,errors
+
 
     @staticmethod
     def getWikidataIds(locations: list):
@@ -263,13 +193,13 @@ class LocationFixer(ORFixer):
         '''
         Returns a LocationContext enhanced with location labels used by OPENRESEARCH
         '''
-        locationContext = LocationContext.fromJSONBackup()
+        locationContext = LocationContext.fromCache()
         if locationContext is None:
             return
-        for locations in locationContext.countries, locationContext.regions, locationContext.cities:
-            for location in locations:
-                LocationFixer._addPageTitleToLabels((location))
-                LocationFixer._addCommonNamesToLabels((location))
+        # for locations in locationContext.countries, locationContext.regions, locationContext.cities:
+        #     for location in locations:
+        #         LocationFixer._addPageTitleToLabels((location))
+        #         LocationFixer._addCommonNamesToLabels((location))
         return locationContext
 
     @staticmethod
@@ -304,6 +234,7 @@ class LocationFixer(ORFixer):
                 location.__dict__['labels'] = labels
             else:
                 location.__dict__['labels'] = [l]
+
     
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([LocationFixer])
