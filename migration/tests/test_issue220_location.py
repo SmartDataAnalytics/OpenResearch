@@ -1,8 +1,9 @@
-from geograpy.locator import LocationContext
+from geograpy.locator import LocationContext, Locator
 from ormigrate.issue220_location import LocationFixer
 from ormigrate.toolbox import Profiler
 from tests.pagefixtoolbox import PageFixerToolbox, PageFixerTest
 from ormigrate.smw.pagefixer import PageFixerManager
+from ormigrate.toolbox import HelperFunctions as hf
 
 class TestLocationFixer(PageFixerTest):
     '''
@@ -20,8 +21,17 @@ class TestLocationFixer(PageFixerTest):
         pageFixerManager=PageFixerManager.fromCommandLine([LocationFixer], argv)
         fixer=pageFixerManager.pageFixers["LocationFixer"]
         return fixer
+
+    @staticmethod
+    def setUpLocationDb():
+        '''Ensure the georapyDB is present'''
+        if hf.inPublicCI():
+            Locator.resetInstance()
+            locator = Locator.getInstance()
+            locator.downloadDB()
     
     def setUp(self):
+        self.setUpLocationDb()
         PageFixerTest.setUp(self)
         self.pageFixerClass=LocationFixer
         self.testAll=False
