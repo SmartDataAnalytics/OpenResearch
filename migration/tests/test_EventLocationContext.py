@@ -43,7 +43,6 @@ class TestEventLocationHandler(TestCase):
         # ToDo: test if generated correctly
 
 
-
     def test_getFieldCounter(self):
         '''
         test the correct counting field values of LoDs

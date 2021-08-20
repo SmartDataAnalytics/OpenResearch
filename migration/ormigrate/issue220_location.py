@@ -119,30 +119,15 @@ class LocationFixer(ORFixer):
         '''
         pageTitle=None
         if isinstance(location, City):
-            if 'name' in location.__dict__:
-                nameCity=location.__dict__.get('name')
-                isoParts=nameCity.split("-")
-                isoRegion = LocationFixer.getPageTitle(location.region)
-                if isoRegion is not None:
-                    pageTitle=f"{isoRegion}/{nameCity}"
-                else:
-                    pageTitle=None
+            countryPart=getattr(location.country,'iso')
+            regionPart=getattr(location.region,'iso').split('-')[1] if '-' in getattr(location.region,'iso') else getattr(location.region,'iso')
+            pageTitle=f"{countryPart}/{regionPart}/{getattr(location, 'name')}"
         elif isinstance(location, Region):
-            if 'iso' in location.__dict__:
-                isoRegion=location.__dict__.get('iso')
-                isoParts=isoRegion.split("-")
-                isoCountry = LocationFixer.getPageTitle(location.country)
-                if len(isoParts) == 2:
-                    # assumed iso format of regions US-CA
-                    isoRegion=isoParts[1]
-                    if isoCountry is None:
-                        isoCountry=isoParts[0]
-                    pageTitle=f"{isoCountry}/{isoRegion}"
-                else:
-                    pageTitle=None
+            countryPart = getattr(location.country, 'iso')
+            regionPart=getattr(location,'iso').split('-')[1] if '-' in getattr(location,'iso') else getattr(location, 'iso')
+            pageTitle = f"{countryPart}/{regionPart}"
         elif isinstance(location, Country):
-            if 'iso' in location.__dict__:
-                pageTitle=location.__dict__.get('iso')
+            pageTitle=getattr(location,'iso')
         else:
             pageTitle=location.name
         return pageTitle
