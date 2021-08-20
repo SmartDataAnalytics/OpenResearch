@@ -9,7 +9,7 @@ from ormigrate.smw.rating import EntityRating
 from corpus.smw.topic import SMWEntity
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
-from unittest import TestCase
+from tests.basetest import ORMigrationTest
 
 class PageFixerToolbox(object):
     '''
@@ -117,20 +117,18 @@ class PageFixerToolbox(object):
         entityRating = EntityRating(entity)
         return entityRating
 
-class PageFixerTest(TestCase):
+class PageFixerTest(ORMigrationTest):
     '''
     test for pageFixer
     '''
     
-    def setUp(self):
-        self.debug=False
+    def setUp(self,debug=False):
+        super().setUp(debug=debug)
         self.testAll=True
         self.template="Event"
         self.wikiUser=Corpus.getWikiUser()
         pass
 
-    def tearDown(self):
-        pass
     
     def getRatingCounters(self,pageTitleList:list):
         counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, self.pageFixerClass, self.template)
