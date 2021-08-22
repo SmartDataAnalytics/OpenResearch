@@ -1,4 +1,9 @@
+import sys
+
+from corpus.lookup import CorpusLookup
 from geograpy.locator import LocationContext, Location, City, Country, Region
+from wikifile.cmdline import CmdLineAble
+
 from ormigrate.issue220_location import LocationFixer
 from wikifile.wikiFileManager import WikiFileManager
 from ormigrate.fixer import PageFixerManager
@@ -41,27 +46,23 @@ class EventLocationHandler(object):
 
 
 
-    def generateORLocationPages(self, events:list, overwrite:bool=False, limit:int=None):
+    def generateORLocationPages(self, events:list, overwrite:bool=False, fixLocation=False, limit:int=10):
         '''
 
         Args:
             events(list): List of events for which the needed Location pages are generated
             overwrite(bool): If False the generated page is only saved if the page already exists. Otherwise save the file even if it does not exist already.
-            limit(bool): Number of most used cities for which the cities and regions should be generated. Does not affect the generated countries. If None generate city and region for all used cities.
+            limit(bool): limit generation of city pages to n-th deciles
         '''
         # Generate country location pages
         self.generateLocationPages(self.locationContext.countries, overwrite)
         # Fix locations of the event → Normalized location names afterwards
-        for event in events:
-            self.locationFixer.fixEventRecord(event.__dict__)
+        if fixLocation:
+            for event in events:
+                self.locationFixer.fixEventRecord(event.__dict__)
 
-        cityCounter=EventLocationHandler.getFieldCounter(events, 'city', 'City')
-        usedCities=[]
-        if limit is None:
-            usedCities=cityCounter.keys()
-        else:
-            # limit used cities to the cities that are most used
-            usedCities=[city for (city, counter) in cityCounter.most_common(limit)]
+        usedCities=self.getNthCityDecile(events, limit)
+        usedCities=[c for c in usedCities if c not in ["Online", "None", "N/A", "", None]]
         regions = set()   # Regions used by the cities in usedCities
         # Generate city location page if city is recognized and add region of the city to regions
         for cityName in usedCities:
@@ -72,7 +73,7 @@ class EventLocationHandler(object):
                 print(f"City {cityName} not recognized by LocationContext")
                 pass
             else:
-                location=max(possibleCities, key=lambda city: int(city.population) if 'population' in city.__dict__ and city.population is not None else 0)
+                location=max(possibleCities, key=lambda city: int(city.pop) if hasattr(city,'pop') and getattr(city, "pop") else 0)
                 if location:
                     regions.add(location.region)
                     self.generateLocationPage(location, overwrite)
@@ -106,10 +107,10 @@ class EventLocationHandler(object):
         locationData = {}
         for field in locationFields:
             if field in location.__dict__:
-                locationData[field] = location.__dict__[field]
+                locationData[field] = getattr(location, field)
             if field == "coordinates":
-                lat = location.__dict__.get('lat')
-                lon = location.__dict__.get('lon')
+                lat = getattr(location,'lat')
+                lon = getattr(location,'lon')
                 if lat and lon:
                     locationData[field] = f"{lat},{lon}"
             elif field == "partOf":
@@ -124,11 +125,34 @@ class EventLocationHandler(object):
         wikiFile.add_template(template_name="Location", data=locationData)
         wikiFile.save_to_file(overwrite=overwrite)
 
+
+    def getNthCityDecile(self, events:list, n:int=10):
+        '''
+        Retuns the cities of the n-th decile
+
+        Args:
+         events:
+         n: decile
+
+        Returns:
+         List of city names in requested decile
+        '''
+        cityNames=[getattr(record,self.locationFixer.CITY) for record in events]
+        counter=Counter(cityNames)
+        target=n*0.1*len(events)
+        sum=0
+        nthDecile=[]
+        for (name, counter) in counter.most_common():
+            if sum>=target:break
+            nthDecile.append(name)
+            sum+=counter
+        return nthDecile
+
+
     @staticmethod
     def getFieldCounter(lod: list, *field:str):
         '''
         Count number of occurrences of the values of the given fields in the given list
-        ToDo: Propose migration to pyLODStorage.LOD
         Args:
             lod(list): List of dicts of list of objects for which the values fo the given fields should be counted
             field(str): One or more fields for which the number of occurrences of the value should be counted
@@ -147,3 +171,21 @@ class EventLocationHandler(object):
         counterList = Counter(fieldValues)
         return counterList
 
+
+if __name__ == '__main__':
+    cmdLine = CmdLineAble()
+    cmdLine.getParser()
+    cmdLine.parser.add_argument("--decile",help="decile of cities for which the locations should be generated")
+    argv = sys.argv[1:]
+    args = cmdLine.parser.parse_args(argv)
+    wikiFileManager = WikiFileManager(sourceWikiId=args.source, wikiTextPath=args.backupPath, login=False,debug=args.debug)
+    lookupId="orclone-backup"
+    def patchEventSource(lookup):
+        lookup.getDataSource(lookupId).eventManager.wikiFileManager = wikiFileManager
+        lookup.getDataSource(lookupId).eventSeriesManager.wikiFileManager = wikiFileManager
+    eventLocationHandler=EventLocationHandler(wikiFileManager)
+    lookup = CorpusLookup(lookupIds=[lookupId], configure=patchEventSource)
+    lookup.load(forceUpdate=False)
+    eventDataSource = lookup.getDataSource(lookupId)
+    eventRecords=[e.__dict__ for e in eventDataSource.eventManager.getList()]
+    eventLocationHandler.generateORLocationPages(events=eventDataSource.eventManager.getList(), limit=1, overwrite=True)

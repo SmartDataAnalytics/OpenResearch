@@ -5,6 +5,7 @@ from unittest import TestCase
 
 from ormigrate.toolbox import Profiler
 from tests.corpusfortesting import CorpusForTesting
+from tests.test_issue220_location import TestLocationFixer
 
 
 class TestEventLocationHandler(TestCase):
@@ -12,6 +13,7 @@ class TestEventLocationHandler(TestCase):
     test the event Location context
     '''
     def setUp(self) -> None:
+        TestLocationFixer.setUpLocationDb()
         self.profile = True
         home = os.path.expanduser("~")
         targetWikiTextPath = f"{home}/.or/generated/Location"
@@ -41,7 +43,6 @@ class TestEventLocationHandler(TestCase):
         self.eventLocationContext.generateORLocationPages(self.eventDataSource.eventManager.events[:100], overwrite=True)
         profile.time()
         # ToDo: test if generated correctly
-
 
 
     def test_getFieldCounter(self):
