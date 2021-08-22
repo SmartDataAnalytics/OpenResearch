@@ -3,6 +3,7 @@ Created on 2021-04-06
 
 @author: wf
 '''
+from corpus.lookup import CorpusLookup
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
@@ -175,8 +176,10 @@ class PageFixer(object):
         self.debug=debug
         self.pageFixerManager=pageFixerManager
         self.wikiFileManager=pageFixerManager.wikiFileManager
-    
-     
+        # ToDo: With the new caching strategy the fixers need access to the corpus to init the cache → potential for circular imports → needs improvement
+        self.orDataSource = CorpusLookup(lookupIds=["orclone-backup"], configure=self.patchEventSource,
+                                         debug=debug).getDataSource("orclone-backup")
+
     def fixEventRecord(self):
         ''' abstract base function to be overwritten by fixing class'''
         return
@@ -219,6 +222,23 @@ class PageFixer(object):
         # create a default bad rating
         rating=PageRating(pageTitle,templateName,7,RatingType.missing,"rating error")
         return wikiText,entityRecord,rating
+
+    @classmethod
+    def patchEventSource(cls, lookup: CorpusLookup):
+        '''
+        patches the EventManager and EventSeriesManager by adding wikiUser and WikiFileManager
+        '''
+        wikiUser = cls.getWikiUser(cls.wikiId)
+        wikiFileManager = cls.getWikiFileManager(cls.wikiId)
+        for lookupId in ["orclone", "orclone-backup", "or", "or-backup"]:
+            orDataSource = lookup.getDataSource(lookupId)
+            if orDataSource is not None:
+                if lookupId.endswith("-backup"):
+                    orDataSource.eventManager.wikiFileManager = wikiFileManager
+                    orDataSource.eventSeriesManager.wikiFileManager = wikiFileManager
+                else:
+                    orDataSource.eventManager.wikiUser = wikiUser
+                    orDataSource.eventSeriesManager.wikiUser = wikiUser
 
     
 class EntityFixer(PageFixer):

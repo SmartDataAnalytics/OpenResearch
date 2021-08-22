@@ -19,7 +19,7 @@ class EventSeriesProvenanceFixer(ORFixer):
         '''
         Constructor
         '''
-        super(EventSeriesProvenanceFixer, self).__init__(pageFixerManager)
+        super().__init__(pageFixerManager)
 
     def rate(self, rating: EntityRating):
         return self.getRating(rating.getRecord())
@@ -39,3 +39,5 @@ class EventSeriesProvenanceFixer(ORFixer):
             return Rating(3,RatingType.ok,'Wikidata only series')
         return Rating(7,RatingType.invalid,'Series provenance data missing')
     
+if __name__ == '__main__':
+    PageFixerManager.runCmdLine([EventSeriesProvenanceFixer])
