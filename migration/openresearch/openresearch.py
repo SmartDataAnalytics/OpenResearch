@@ -5,6 +5,7 @@ Created on 2021-04-16
 '''
 import os
 from pathlib import Path
+from geograpy.locator import LocationContext
 
 class OpenResearch(object):
     '''
@@ -26,3 +27,13 @@ class OpenResearch(object):
     def getResourcePath(cls):
         path = os.path.dirname(__file__) + "/../ormigrate/resources"
         return path
+    
+    @staticmethod
+    def getORLocationContext():
+        '''
+        Returns a LocationContext 
+        '''
+        locationContext = LocationContext.fromCache()
+        if locationContext is None:
+            return
+        return locationContext

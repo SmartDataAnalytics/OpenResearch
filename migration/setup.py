@@ -12,7 +12,7 @@ except:
     long_description = open('../README.md').read()
 
 setup(name='OpenResearchMigration',
-      version='0.0.27',
+      version='0.0.28',
       description='python api to access OPENRESEARCH data',
       long_description=long_description,
       long_description_content_type='text/markdown',
