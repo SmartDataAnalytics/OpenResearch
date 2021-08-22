@@ -1,0 +1,12 @@
+'Issue 228 countries occurring once':
+    sql: |
+        SELECT ROW_NUMBER() OVER(ORDER BY country) AS "#", country, url
+        FROM event_orclonebackup
+        WHERE country IN
+        	(SELECT country
+        	FROM(
+        		SELECT COUNT(*) AS commonness, country
+        		FROM event_orclonebackup
+        		GROUP BY country
+        		ORDER BY commonness DESC) AS cc
+        	WHERE commonness == 1)

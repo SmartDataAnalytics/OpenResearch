@@ -12,3 +12,5 @@ wikirender>=0.0.24
 geograpy3>=0.2.1
 # https://github.com/SmartDataAnalytics/OpenResearch
 ConferenceCorpus>=0.0.21
+# https://github.com/mocnik-science/osm-python-tools
+OSMPythonTools
