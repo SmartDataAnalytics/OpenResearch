@@ -16,7 +16,7 @@ class TestIssue228(PageFixerTest):
         '''
         setuUp 
         '''
-        super().setUp(self,debug=False)
+        super().setUp(debug=False)
         self.locationContext=OpenResearch.getORLocationContext()
         
     def getCountries(self):

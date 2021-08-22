@@ -1,7 +1,8 @@
 import sys
 
 from corpus.lookup import CorpusLookup
-from geograpy.locator import LocationContext, Location, City, Country, Region
+from openresearch.openresearch import OpenResearch
+from geograpy.locator import Location, City, Country, Region
 from wikifile.cmdline import CmdLineAble
 
 from ormigrate.issue220_location import LocationFixer
@@ -25,7 +26,7 @@ class EventLocationHandler(object):
         self.wikiFileManager=wikiFileManager
         pageFixerManager=PageFixerManager([LocationFixer],wikiFileManager)
         self.locationFixer=LocationFixer(pageFixerManager)
-        self.locationContext = self.locationFixer.getORLocationContext()
+        self.locationContext = OpenResearch.getORLocationContext()
 
     def getSamples(self)->list:
         '''
