@@ -10,6 +10,8 @@ from ormigrate.issue228_country import CountryFixer
 from lodstorage.query import Query, QueryManager
 from tests.pagefixtoolbox import PageFixerTest
 from openresearch.openresearch import OpenResearch
+from tests.test_issue220_location import TestLocationFixer
+
 
 class TestIssue228(PageFixerTest):
     '''
@@ -22,6 +24,7 @@ class TestIssue228(PageFixerTest):
         '''
         super().setUp(debug=False)
         self.pageFixerClass=CountryFixer
+        TestLocationFixer.setUpLocationDb()
 
     def printInvalidCountries(self, invalidCountries:list=None):
         '''
