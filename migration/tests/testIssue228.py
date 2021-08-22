@@ -5,7 +5,7 @@ Created on 2021-08-21
 '''
 from tests.pagefixtoolbox import PageFixerTest
 import unittest
-from openresearch.openresearch import OpenResearch
+from ormigrate.issue228_country import CountryFixer
 
 class TestIssue228(PageFixerTest):
     '''
@@ -17,15 +17,8 @@ class TestIssue228(PageFixerTest):
         setuUp 
         '''
         super().setUp(debug=False)
-        self.locationContext=OpenResearch.getORLocationContext()
-        
-    def getCountries(self):
-        '''
-        load countries
-        '''
-        cityManager=self.locationContext.cityManager
-        cityManager.fromCache()
-        self.citiesByIso=cityManager.getLookup("iso")
+       
+        pass
         
    
     def testIssue228(self):
@@ -33,6 +26,7 @@ class TestIssue228(PageFixerTest):
         check for Invalid countries
         '''
         
+        self.assertTrue(len(self.countriesByIso)>200)
         pass
 
 
