@@ -2,19 +2,19 @@ from setuptools import setup,find_packages
 import os
 from collections import OrderedDict
 
-# try:
-#     long_description = ""
-#     with open('README.md', encoding='utf-8') as f:
-#         long_description = f.read()
-#
-# except:
-#     print('Curr dir:', os.getcwd())
-#     long_description = open('../README.md').read()
+try:
+    long_description = ""
+    with open('README.md', encoding='utf-8') as f:
+        long_description = f.read()
+
+except:
+    print('Curr dir:', os.getcwd())
+    long_description = open('../README.md').read()
 
 setup(name='OpenResearchMigration',
       version='0.0.28',
       description='python api to access OPENRESEARCH data',
-      # long_description=long_description,
+      long_description=long_description,
       long_description_content_type='text/markdown',
       url='https://www.openresearch.org/wiki/Main_Page',
       download_url='https://github.com/SmartDataAnalytics/OpenResearch',
