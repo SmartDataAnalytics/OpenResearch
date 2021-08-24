@@ -1,0 +1,7 @@
+#!/bin/bash
+#TH 2021-08-23
+
+echo "Generate Location pages"
+python ../ormigrate/EventLocationHandler.py --decile 2 -s orclone
+echo "upload generated location pages to myor"
+wikirestore -t myor --backupPath ~/.or/generated/Location

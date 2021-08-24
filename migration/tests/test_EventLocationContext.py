@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 from ormigrate.EventLocationHandler import EventLocationHandler
 from unittest import TestCase
@@ -15,12 +16,14 @@ class TestEventLocationHandler(TestCase):
     def setUp(self) -> None:
         TestLocationFixer.setUpLocationDb()
         self.profile = True
-        home = os.path.expanduser("~")
-        targetWikiTextPath = f"{home}/.or/generated/Location"
+        self.tmpDir=tempfile.TemporaryDirectory()
         self.wikiFileManager = CorpusForTesting.getWikiFileManager()
-        self.wikiFileManager.targetPath=targetWikiTextPath
+        self.wikiFileManager.targetPath=self.tmpDir.name
         self.eventDataSource=CorpusForTesting.getEventDataSourceFromWikiText()
         self.eventLocationContext=EventLocationHandler(wikiFileManager=self.wikiFileManager)
+
+    def tearDown(self) -> None:
+        self.tmpDir.cleanup()
 
     def test_generateLocationPages(self):
         """
@@ -63,3 +66,9 @@ class TestEventLocationHandler(TestCase):
         self.assertEqual(counterList.get("Second"), 2)
         self.assertEqual(counterList.get("Third"), 3)
         profile.time()
+
+    def  testGenerateTechnicalPages(self):
+        '''Tests generation of the technical pages for the location topic in wikimarkup'''
+        self.assertFalse(os.path.isfile(f"{self.tmpDir.name}/Help:Location.wiki"))
+        self.eventLocationContext.generateTechnicalPages()
+        self.assertTrue(os.path.isfile(f"{self.tmpDir.name}/Help:Location.wiki"))

@@ -1,15 +1,18 @@
+import json
+import os
 import sys
+from collections import Counter
 
 from corpus.lookup import CorpusLookup
+from wikifile.metamodel import Topic
+
 from openresearch.openresearch import OpenResearch
 from geograpy.locator import Location, City, Country, Region
 from wikifile.cmdline import CmdLineAble
-
 from ormigrate.issue220_location import LocationFixer
 from wikifile.wikiFileManager import WikiFileManager
 from ormigrate.fixer import PageFixerManager
 from wikifile.wikiFile import WikiFile
-from collections import Counter
 from lodstorage.lod import LOD
 
 
@@ -27,6 +30,7 @@ class EventLocationHandler(object):
         pageFixerManager=PageFixerManager([LocationFixer],wikiFileManager)
         self.locationFixer=LocationFixer(pageFixerManager)
         self.locationContext = OpenResearch.getORLocationContext()
+        self.locationContext.countryManager.fromCache()
 
     def getSamples(self)->list:
         '''
@@ -100,7 +104,7 @@ class EventLocationHandler(object):
 
         Args:
             location(Location): Location for which the page should be generated
-            overwrite(bool): If False the generated page is only saved if the page already exists. Otherwise save the file even if it does not exist already.
+            overwrite(bool): If False the generated page is only saved if the page does not already exists. Otherwise generated files might overwrite existing files.
         '''
         pageTitle = LocationFixer.getPageTitle(location)
         wikiFile = WikiFile(name=pageTitle, wikiText="", wikiFileManager=self.wikiFileManager)
@@ -129,11 +133,11 @@ class EventLocationHandler(object):
 
     def getNthCityDecile(self, events:list, n:int=10):
         '''
-        Retuns the cities of the n-th decile
+        Returns the cities of the n-th decile
 
         Args:
-         events:
-         n: decile
+         events(list): List of event records which should be considered for the calculation of the decile
+         n: n-th decile of used cities to return
 
         Returns:
          List of city names in requested decile
@@ -172,21 +176,43 @@ class EventLocationHandler(object):
         counterList = Counter(fieldValues)
         return counterList
 
+    def generateTechnicalPages(self, overwrite:bool=False):
+        '''
+        Generates the technical pages of the Location topic
+        Pages such as Help:Location, List of Lcoations, Concept:Location, ...
+
+        Args:
+            overwrite(bool): If False the generated page is only saved if the page does not already exists. Otherwise generated files might overwrite existing files.
+        '''
+        resources = OpenResearch.getResourcePath()
+        topicSpec=None
+        with open(f"{resources}/topiclocation.json", mode="r") as f:
+            topicSpec=json.load(f)
+        locationSpec={"data":[topicSpec.get("topic")]}
+        locationPropertySpec = {"data": topicSpec.get("properties")}
+        locationTopic=Topic.from_wiki_json(topic_json=json.dumps(locationSpec), prop_json=json.dumps(locationPropertySpec))
+        self.wikiFileManager.wikiRender.generateTopic(locationTopic, overwrite=overwrite, path=self.wikiFileManager.targetPath)
+
 
 if __name__ == '__main__':
     cmdLine = CmdLineAble()
     cmdLine.getParser()
-    cmdLine.parser.add_argument("--decile",help="decile of cities for which the locations should be generated")
+    cmdLine.parser.add_argument("--decile", default=None, dest="decile",help="decile of cities for which the locations should be generated")
     argv = sys.argv[1:]
     args = cmdLine.parser.parse_args(argv)
-    wikiFileManager = WikiFileManager(sourceWikiId=args.source, wikiTextPath=args.backupPath, login=False,debug=args.debug)
+    home = os.path.expanduser("~")
+    targetWikiTextPath = f"{home}/.or/generated/Location"
+    wikiFileManager = WikiFileManager(sourceWikiId=args.source, wikiTextPath=args.backupPath,targetWikiTextPath=targetWikiTextPath, login=False,debug=args.debug)
     lookupId="orclone-backup"
     def patchEventSource(lookup):
         lookup.getDataSource(lookupId).eventManager.wikiFileManager = wikiFileManager
         lookup.getDataSource(lookupId).eventSeriesManager.wikiFileManager = wikiFileManager
     eventLocationHandler=EventLocationHandler(wikiFileManager)
+    # generate technical pages for the location topic
+    eventLocationHandler.generateTechnicalPages(overwrite=True)
+    # generate location pages
     lookup = CorpusLookup(lookupIds=[lookupId], configure=patchEventSource)
     lookup.load(forceUpdate=False)
     eventDataSource = lookup.getDataSource(lookupId)
     eventRecords=[e.__dict__ for e in eventDataSource.eventManager.getList()]
-    eventLocationHandler.generateORLocationPages(events=eventDataSource.eventManager.getList(), limit=1, overwrite=True)
+    eventLocationHandler.generateORLocationPages(events=eventDataSource.eventManager.getList(), limit=int(args.decile), overwrite=True)
