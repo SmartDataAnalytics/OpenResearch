@@ -213,7 +213,6 @@ class TestLocationFixer(PageFixerTest):
 
     def testCaching(self):
         '''Test caching of location information'''
-        self.fixer.orDataSource.eventManager.fromCache()
         eventRecords = self.fixer.orDataSource.eventManager.getLoD()
         expectedLookups=2500
         if hf.inPublicCI() or not self.debug:
