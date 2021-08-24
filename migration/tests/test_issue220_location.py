@@ -211,5 +211,14 @@ class TestLocationFixer(PageFixerTest):
         self.fixer.fix(entityRating)
         print(entityRating.getRecord())
 
-
+    def testCaching(self):
+        '''Test caching of location information'''
+        self.fixer.orDataSource.eventManager.fromCache()
+        eventRecords = self.fixer.orDataSource.eventManager.getLoD()
+        expectedLookups=2500
+        if hf.inPublicCI() or not self.debug:
+            eventRecords=eventRecords[:20]
+            expectedLookups=10
+        self.fixer.cacheLocations(eventRecords)
+        self.assertTrue(len(self.fixer.locationTextLookup)>=expectedLookups)
         

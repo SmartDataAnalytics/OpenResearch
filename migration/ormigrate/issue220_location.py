@@ -22,6 +22,54 @@ class LocationFixer(ORFixer):
         '''
         super(LocationFixer, self).__init__(pageFixerManager)
         LocationFixer.locationContext=OpenResearch.getORLocationContext()
+        self.locationTextLookup={}
+
+
+    def cacheLocations(self, eventRecords:list):
+        '''Caches the identified locations form the given events'''
+        locationCombinations={}
+        for eventRecord in eventRecords:
+            eventCity = eventRecord.get(self.CITY)
+            eventRegion = eventRecord.get(self.REGION)
+            eventCountry = eventRecord.get(self.COUNTRY)
+            locationCombination=f"{eventCountry},{eventRegion},{eventCity}"
+            locationCombinations[locationCombination]={"countryName":eventCountry, "regionName":eventRegion, "cityName":eventCity}
+        total=len(locationCombinations)
+        count=0
+        for locationCombination, eventPlaces in locationCombinations.items():
+            count+=1
+            if self.debug:
+                print(f"{count}/{total} Looked up location information")
+            foundLocations=self.lookupLocation(**eventPlaces)
+            if foundLocations:
+                self.locationTextLookup[locationCombination]=foundLocations
+
+    def lookupLocation(self, countryName:str=None, regionName:str=None, cityName:str=None):
+        '''
+        Uses geograpy3 to find locations matching the given information
+        Args:
+            countryName: name of the country
+            regionName: name of the region
+            cityName: name of the city
+
+        Returns:
+            List of locations that match the given location information
+        '''
+        eventPlaces = []
+        for eventLocation in countryName, regionName, cityName:
+            # filter out known invalid and None values
+            if eventLocation in ["Online", "None", "N/A"]:
+                eventLocation = None
+            # Add eventLocations to event Places
+            if eventLocation:
+                if eventLocation.startswith("Category:"):
+                    eventLocation = eventLocation.replace("Category:", "")
+                if '/' in eventLocation:
+                    eventPlaces.extend(eventLocation.split('/'))
+                else:
+                    eventPlaces.append(eventLocation)
+        foundLocations = self.locationContext.locateLocation(*eventPlaces)
+        return foundLocations
 
     def fix(self,rating:EntityRating):
         '''
@@ -41,21 +89,12 @@ class LocationFixer(ORFixer):
         eventCity = event.get(self.CITY)
         eventRegion = event.get(self.REGION)
         eventCountry = event.get(self.COUNTRY)
-        eventPlaces=[]
-        for eventLocation in eventCountry, eventRegion, eventCity:
-            # filter out known invalid and None values
-            if eventLocation in ["Online", "None", "N/A"]:
-                eventLocation=None
-            # Add eventLocations to event Places
-            if eventLocation:
-                if eventLocation.startswith("Category:"):
-                    eventLocation=eventLocation.replace("Category:","")
-                if '/' in eventLocation:
-                    eventPlaces.extend(eventLocation.split('/'))
-                else:
-                    eventPlaces.append(eventLocation)
         # event Places could be extended with the event title
-        foundLocations=self.locationContext.locateLocation(*eventPlaces)
+        locationCombination=f"{eventCountry},{eventRegion},{eventCity}"
+        if locationCombination in self.locationTextLookup:
+            foundLocations=self.locationTextLookup.get(locationCombination)
+        else:
+            foundLocations=self.lookupLocation(eventCountry, eventRegion, eventCity)
         # find best match
         foundCities = [l for l in foundLocations if isinstance(l, City) and getattr(l, 'pop') is not None]
         foundRegions = [l for l in foundLocations if isinstance(l, Region)]

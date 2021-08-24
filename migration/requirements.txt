@@ -7,7 +7,7 @@ py-3rdparty-mediawiki>=0.4.10
 # https://github.com/5j9/wikitextparser
 wikitextparser>=0.47.4
 # https://pypi.org/project/wikirender/
-wikirender>=0.0.24
+wikirender>=0.0.25
 # https://github.com/somnathrakshit/geograpy3
 geograpy3>=0.2.1
 # https://github.com/SmartDataAnalytics/OpenResearch

@@ -201,7 +201,10 @@ if __name__ == '__main__':
     argv = sys.argv[1:]
     args = cmdLine.parser.parse_args(argv)
     home = os.path.expanduser("~")
-    targetWikiTextPath = f"{home}/.or/generated/Location"
+    if args.backupPath is None:
+        targetWikiTextPath = f"{home}/.or/generated/Location"
+    else:
+        targetWikiTextPath=args.backupPath
     wikiFileManager = WikiFileManager(sourceWikiId=args.source, wikiTextPath=args.backupPath,targetWikiTextPath=targetWikiTextPath, login=False,debug=args.debug)
     lookupId="orclone-backup"
     def patchEventSource(lookup):

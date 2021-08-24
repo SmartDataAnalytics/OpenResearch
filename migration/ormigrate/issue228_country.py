@@ -37,7 +37,7 @@ class CountryFixer(ORFixer):
             os.makedirs(cacheDir)
         self.nominatim = Nominatim(cacheDir=cacheDir)
         logging.getLogger('OSMPythonTools').setLevel(logging.ERROR)
-        self.invalidCountryNames=self.cacheNominatim(show=self.debug)
+        self.invalidCountryNames = self.cacheNominatim(show=self.debug)
         
     def getCountries(self):
         '''
@@ -122,11 +122,9 @@ class CountryFixer(ORFixer):
                 country = None
             if show:
                 if country:
-                    print(
-                        f"{i:4d}/{count:4d}{rsum:6d}/{total:5d}({percent:4.1f}%)✅:{locationText}({locationCount})→{country}")
+                    print(f"{i:4d}/{count:4d}{rsum:6d}/{total:5d}({percent:4.1f}%)✅:{locationText}({locationCount})→{country}")
                 else:
-                    print(
-                        f"{i:4d}/{count:4d}{rsum:6d}/{total:5d}({percent:4.1f}%)❌:{locationText if locationText else '<None>'}({locationCount})")
+                    print(f"{i:4d}/{count:4d}{rsum:6d}/{total:5d}({percent:4.1f}%)❌:{locationText if locationText else '<None>'}({locationCount})")
                     invalidCountries.append(locationText)
         return invalidCountries
         

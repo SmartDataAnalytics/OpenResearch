@@ -3,11 +3,12 @@ Created on 2021-04-06
 
 @author: wf
 '''
-from corpus.lookup import CorpusLookup
+from corpus.datasources.openresearch import OREventManager
+from lodstorage.lod import LOD
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
-from corpus.smw.topic import SMWEntity,SMWEntityList
+from corpus.smw.topic import SMWEntity, SMWEntityList
 from ormigrate.smw.rating import RatingType,PageRating, PageRatingList, EntityRating
 from collections import Counter
 import sys
@@ -61,6 +62,8 @@ class PageFixerManager(object):
                             help="calculate and show Ratings as a list of links")
         cmdLine.parser.add_argument("--verbose", action="store_true",
                             help="shows verbose output")
+        cmdLine.parser.add_argument("--fix", action="store_true",help="Fix the Event pages")
+        cmdLine.parser.add_argument("--force",default=False, action="store_true",help="Overwrite existing files")
         if argv is None:
             argv=sys.argv[1:]
         args = cmdLine.parser.parse_args(argv)
@@ -87,7 +90,53 @@ class PageFixerManager(object):
             self.showRatingStats()
         if self.args.listRatings:
             self.showRatingList()
-            
+        if self.args.fix:
+            self.fix(self.args.force)
+
+    def getEntityRating(self, wikiFile:WikiFile):
+        '''Returns EntityRating object for the given wikiFile'''
+        smwEntity=SMWEntity(wikiFile=wikiFile)
+        wikiSonRecords=wikiFile.extract_template("Event")
+        if wikiSonRecords:
+            records=SMWEntity.fromWikiSonToLod(wikiSonRecords, OREventManager.getPropertyLookup())
+            for key, value in records.items():
+                setattr(smwEntity,key, value)
+            entityRating=EntityRating(entity=smwEntity)
+            return entityRating
+        else:
+            return None
+
+    def saveEntityRatingToWikiText(self, entityRating:EntityRating, overwrite:bool=False):
+        '''
+        Saves the given eventRating by applying the entity records to the wiki markup text
+        Args:
+            entityRating(EntityRating):
+            overwrite(bool): If True existing files might be overwritten
+
+        Returns:
+
+        '''
+        lookup,_dup=LOD.getLookup(OREventManager.propertyLookupList, "name")
+        wikiSonRecords={lookup.get(key).get('templateParam'):value for key,value in entityRating.getRecord().items() if key in lookup}
+        entityRating.wikiFile.add_template('Event',wikiSonRecords,overwrite=overwrite)
+        entityRating.wikiFile.save_to_file(overwrite=overwrite)
+
+    def fix(self, overwrite:bool=False):
+        '''
+        Fix the wikiFiles by calling the fix functions of the pageFixers
+        Args:
+            overwrite(bool): If True existing files might be overwritten
+        '''
+        entityRatings=[self.getEntityRating(wikiFile) for wikiFile in self.wikiFilesToWorkon.values()]
+        entityRatings=[entityRating for entityRating in entityRatings if entityRating is not None]
+        for entityRating in entityRatings:
+            for pageFixer in self.pageFixers.values():
+                try:
+                    pageFixer.fix(entityRating)
+                except Exception as e:
+                    self.errors.append({'error':e,'fixer':pageFixer,'pageTitle':entityRating.wikiFile.getPageTitle()})
+            #all fixes applied save back to wikiText file
+            self.saveEntityRatingToWikiText(entityRating, overwrite=overwrite)
             
     def getRatings(self,debug:bool,debugLimit:int=10):
         '''
@@ -176,9 +225,6 @@ class PageFixer(object):
         self.debug=debug
         self.pageFixerManager=pageFixerManager
         self.wikiFileManager=pageFixerManager.wikiFileManager
-        # ToDo: With the new caching strategy the fixers need access to the corpus to init the cache → potential for circular imports → needs improvement
-        self.orDataSource = CorpusLookup(lookupIds=["orclone-backup"], configure=self.patchEventSource,
-                                         debug=debug).getDataSource("orclone-backup")
 
     def fixEventRecord(self):
         ''' abstract base function to be overwritten by fixing class'''
@@ -223,22 +269,6 @@ class PageFixer(object):
         rating=PageRating(pageTitle,templateName,7,RatingType.missing,"rating error")
         return wikiText,entityRecord,rating
 
-    @classmethod
-    def patchEventSource(cls, lookup: CorpusLookup):
-        '''
-        patches the EventManager and EventSeriesManager by adding wikiUser and WikiFileManager
-        '''
-        wikiUser = cls.getWikiUser(cls.wikiId)
-        wikiFileManager = cls.getWikiFileManager(cls.wikiId)
-        for lookupId in ["orclone", "orclone-backup", "or", "or-backup"]:
-            orDataSource = lookup.getDataSource(lookupId)
-            if orDataSource is not None:
-                if lookupId.endswith("-backup"):
-                    orDataSource.eventManager.wikiFileManager = wikiFileManager
-                    orDataSource.eventSeriesManager.wikiFileManager = wikiFileManager
-                else:
-                    orDataSource.eventManager.wikiUser = wikiUser
-                    orDataSource.eventSeriesManager.wikiUser = wikiUser
 
     
 class EntityFixer(PageFixer):
