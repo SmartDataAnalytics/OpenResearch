@@ -193,7 +193,7 @@ copyWiki() {
     ;;
     fix)
       # generate LocationPages
-      python ../migration/ormigrate/EventLocationHandler.py --decile 3 -s orclone --wikiTextPath ~/.or/showcase
+      python ../migration/ormigrate/EventLocationHandler.py --decile 9 -s orclone --wikiTextPath ~/.or/showcase
       # backup event and event series pages to apply the fixers to
       wikibackup -s $l_source -q "[[isA::Event]][[Modification date::>$l_since]]" --withImages --progress -qd 10 --backupPath ~/.or/showcase
       wikibackup -s $l_source -q "[[Category:Event series]][[Modification date::>$l_since]]" --withImages --progress -qd 10 --backupPath ~/.or/showcase
@@ -229,7 +229,7 @@ echo "Starting to create a local docker copy of OPENRESEARCH  at $timestamp ..."
 getBackup $wikiId
 timestamp=$(getIsoTime)
 echo "Installing docker SemanticMediaWiki with extensions at $timestamp ..."
-#installAndGetMediaWikiDocker
+installAndGetMediaWikiDocker
 setupWikiUser $wikiId
 echo "copying wiki content in mode $mode"
 copyWiki $wikiId $since $mode
