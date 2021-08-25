@@ -220,4 +220,15 @@ class TestLocationFixer(PageFixerTest):
             expectedLookups=10
         self.fixer.cacheLocations(eventRecords)
         self.assertTrue(len(self.fixer.locationTextLookup)>=expectedLookups)
-        
+
+
+    def testKnownLookupIssues(self):
+        '''test ranking issues of found locations'''
+        return
+        #ToDo: Improve ranking of geograpy
+        # greenville in North Carolina is first answer even though the correct choice is on place three
+        greenville=["Greenville", "South Carolina", "USA"]
+        greenvilleWikidataId="Q574192"
+        foundLocations=self.fixer.locationContext.locateLocation(*greenville)
+        print([l.wikidataid for l in foundLocations])
+        self.assertEqual(greenvilleWikidataId, foundLocations[0].wikidataid)
