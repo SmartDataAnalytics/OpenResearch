@@ -1,0 +1,68 @@
+{#-------------------------------Template Page for Locations---------------------------------#}
+{#
+Generate the template of page for a entity.
+Input:
+    topic: properties defining the entity
+Output: Generates the page Template:<topic.name>
+#}
+{#-------------------------------Template-------------------------------------#}
+<noinclude>
+This is the template {{ '{{' }}Link|target=Template:{{ topic.name }}|title={{ '}}' }}.
+
+== See also ==
+{{ SMWPart.getAllAsPageLink(topic) }}
+
+== Usage ==
+<pre>
+{{ SMW.render_sample_entity_with_properties(topic, topic.properties, oneliner=False) }}
+</pre>
+{{ SMW.render_sample_entity_with_properties(topic, topic.properties, oneliner=False) }}
+
+[[Category:Template]]
+</noinclude>
+<includeonly>
+
+{{ Template.table_of_arguments(topic, topic.properties, setProperties=True) }}
+
+{{ '{{' }}#display_map:center={{ '{{{ coordinates| }}}' }}|zoom={{ '{{{ zoomLevel|5}}}' }}|service=leaflet|width=280|height=280{{ '}}' }}
+{{ '{{' }}#ask: [[location partOf::{{ '{{ PAGENAME }}' }}]]
+|mainLabel=parts
+|?Location locationKind=kind
+{{ '}}' }}
+
+'''Conferences'''
+{{ '{{' }}#ask: [[isA::Event]] [[has location city::{{ '{{{ name| }}}' }}]]
+|format=count
+{{ '}}' }} events for {{ '{{{ name| }}}' }} are known to this wiki.
+{{ '{{' }}HideShow|ConferencesForLocation|
+{{ '{{' }}#ask: [[isA::Event]] [[has location city::{{ '{{{ name| }}}' }}]]
+| ?title = Name
+| ?has location city = City
+| ?has location country = Country
+| ?Start date#-F[M j] = Start
+| ?End date#-F[M j] = End
+| mainlabel=Acronym
+| format=table
+| limit = 50
+| sort= Start date
+{{ '}}' }}
+{{ '}}' }}
+
+Upcoming:
+<small>
+{{ '{{' }}#ask: [[isA::Event]] [[has location city::{{ '{{{ name| }}}' }}]] [[End date::>{{ '{{ CURRENTYEAR }}' }}-{{ '{{ CURRENTMONTH }}' }}-{{ '{{ CURRENTDAY }}' }}]]
+| ?title = Name
+| ?has location city = City
+| ?has location country = Country
+| ?Submission deadline#-F[M j] = Submissions due
+| ?Start date#-F[M j] = Start
+| ?End date#-F[M j] = End
+| mainlabel=Acronym
+| format=table
+| limit = 7
+| sort= Start date
+{{ '}}' }}
+</small>
+
+[[Category:{{ topic.name }}]]{{ SMW.parser_function("default_form",presence_is_true=True, **{topic.name:True}) }}
+</includeonly>

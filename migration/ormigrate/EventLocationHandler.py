@@ -5,6 +5,7 @@ from collections import Counter
 
 from corpus.lookup import CorpusLookup
 from wikifile.metamodel import Topic
+from wikifile.wikiRender import WikiRender
 
 from openresearch.openresearch import OpenResearch
 from geograpy.locator import Location, City, Country, Region
@@ -191,7 +192,8 @@ class EventLocationHandler(object):
         locationSpec={"data":[topicSpec.get("topic")]}
         locationPropertySpec = {"data": topicSpec.get("properties")}
         locationTopic=Topic.from_wiki_json(topic_json=json.dumps(locationSpec), prop_json=json.dumps(locationPropertySpec))
-        self.wikiFileManager.wikiRender.generateTopic(locationTopic, overwrite=overwrite, path=self.wikiFileManager.targetPath)
+        wikiRender=WikiRender(additional_template_env=f"{resources}/templates/location")
+        wikiRender.generateTopic(locationTopic, overwrite=overwrite, path=self.wikiFileManager.targetPath)
 
 
 if __name__ == '__main__':

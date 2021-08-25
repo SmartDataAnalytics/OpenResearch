@@ -166,7 +166,8 @@
        "isLink": "f",
        "nullable": "f",
        "topic": "Concept:Location",
-       "regexp": null
+       "regexp": null,
+       "externalFormatterUri": "https://www.wikidata.org/entity/$1"
     }
   ]
 }

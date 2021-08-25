@@ -34,7 +34,7 @@ setup(name='OpenResearchMigration',
             'Programming Language :: Python :: 3.9'
       ],
       packages=['ormigrate','ormigrate.smw','openresearch',''],
-      package_data={'ormigrate': ['resources/*.json']},
+      package_data={'ormigrate': ['resources/*.json','resources/templates/**/*.jinja']},
       install_requires=[
           'pylodstorage',
           'python-dateutil',
