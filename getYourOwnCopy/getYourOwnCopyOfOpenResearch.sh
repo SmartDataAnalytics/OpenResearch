@@ -182,7 +182,7 @@ copyWiki() {
   wikipush -s $l_source -t myor -q "[[Concept:+]]"
   wikipush -s $l_source -t myor -q "[[Template:+]]"
   wikipush -s $l_source -t myor -q "[[Category:Template]]"
-  wikipush -s $l_source -t myor -p "Template:Event" "Template:Event series" "Template:Tablelongrow" "Template:TableRow" "Template:Tablesection"
+  wikipush -s $l_source -t myor -p "Template:Event" "Template:Event series" "Template:Tablelongrow" "Template:TableRow" "Template:Tablesection" "Template:HideShow"
   wikipush -s $l_source -t myor -p "List of Events"
   wikipush -s $l_source -t myor -p "Template:Col-begin" "Template:Col-1-of-3" "Template:Col-2-of-3" "Template:Col-3-of-3" "Template:Col-end" "Template:Research_field_tpl" "Template:Yearly_calendar"
   wikipush -s $l_source -t myor -f -p "Main Page" "MediaWiki:Sidebar" --withImages
