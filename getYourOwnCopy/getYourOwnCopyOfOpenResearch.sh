@@ -69,6 +69,8 @@ installAndGetMediaWikiDocker() {
   pip install -U py-3rdparty-mediawiki
   pip install -U OpenResearchMigration
   pip install -U wikirender
+  # Enable raw html in for the wiki
+  docker exec  mw1_35_3_mw_1 sh -c "echo '\$wgRawHtml = true;\n' >> /var/www/html/LocalSettings.php"
 }
 
 #
@@ -195,10 +197,8 @@ copyWiki() {
       # generate LocationPages
       python ../migration/ormigrate/EventLocationHandler.py --decile 9 -s orclone --wikiTextPath ~/.or/showcase
       # backup event and event series pages to apply the fixers to
-      wikibackup -s $l_source -q "[[isA::Event]][[Modification date::>$l_since]]" --withImages --progress -qd 10 --backupPath ~/.or/showcase
-      wikibackup -s $l_source -q "[[Category:Event series]][[Modification date::>$l_since]]" --withImages --progress -qd 10 --backupPath ~/.or/showcase
       # apply fixers
-      python ../migration/ormigrate/issue220_location.py -s $l_source --fix --wikiTextPath ~/.or/showcase --force
+      python ../migration/ormigrate/smw/pagefixer.py -s $l_source --ccId "orclone-backup" --targetWikiTextPath ~/.or/showcase --fixers LocationFixer DateFixer NullValueFixer --fix --force
       wikirestore -t myor --backupPath ~/.or/showcase
     ;;
   esac
