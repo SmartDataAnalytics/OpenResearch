@@ -41,7 +41,8 @@ setup(name='OpenResearchMigration',
           'py-3rdparty-mediawiki',
           'wikitextparser',
           'geograpy3',
-          'ConferenceCorpus'
+          'ConferenceCorpus',
+          'OSMPythonTools'
       ],
       entry_points={
          'console_scripts': [

@@ -7,10 +7,10 @@ py-3rdparty-mediawiki>=0.4.10
 # https://github.com/5j9/wikitextparser
 wikitextparser>=0.47.4
 # https://pypi.org/project/wikirender/
-wikirender>=0.0.26
+wikirender>=0.0.27
 # https://github.com/somnathrakshit/geograpy3
 geograpy3>=0.2.1
 # https://github.com/SmartDataAnalytics/OpenResearch
-ConferenceCorpus>=0.0.21
+ConferenceCorpus>=0.0.24
 # https://github.com/mocnik-science/osm-python-tools
 OSMPythonTools

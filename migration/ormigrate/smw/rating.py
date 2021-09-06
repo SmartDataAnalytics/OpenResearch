@@ -5,7 +5,7 @@ Created on 2021-04-16
 '''
 
 from corpus.smw.topic import SMWEntity
-from lodstorage.jsonable import JSONAbleList
+from lodstorage.jsonable import JSONAbleList, JSONAble
 from corpus.quality.rating import Rating, RatingType
 
         
@@ -49,7 +49,7 @@ class EntityRating(PageRating):
     a rating for an entity
     '''
     
-    def __init__(self,entity:SMWEntity):
+    def __init__(self,entity:JSONAble):
         '''
         construct me
         '''
@@ -61,7 +61,9 @@ class EntityRating(PageRating):
 
     @property
     def wikiFile(self):
-        return self.entity.wikiFile
+        if hasattr(self.entity, "smwHandler"):
+            return self.entity.smwHandler.wikiFile
+        return None
         
 class PageRatingList(JSONAbleList):
     '''

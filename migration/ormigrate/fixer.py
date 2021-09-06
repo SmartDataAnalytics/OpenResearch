@@ -3,15 +3,29 @@ Created on 2021-07-21
 
 @author: wf
 '''
+import inspect
+import sys
+from enum import Enum, auto
+
 from corpus.lookup import CorpusLookup
 
 from ormigrate.smw.pagefixer import EntityFixer, PageFixerManager
 from corpus.datasources.openresearch import OREventManager, OREventSeriesManager
 
+class Entity(Enum):
+    '''
+    Entities of openresearch.
+    Used to specify for a fixer the domain of operation.
+    '''
+    EVENT=auto()
+    EVENT_SERIES=auto()
+    LOCATION=auto()
+
 class ORFixer(EntityFixer):
     '''
     OpenResearch Fixer
     '''
+    worksOn=[Entity.EVENT,Entity.EVENT_SERIES]
 
     def __init__(self,pageFixerManager:PageFixerManager,debug=False):
         '''

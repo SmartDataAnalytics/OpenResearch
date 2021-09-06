@@ -1,6 +1,6 @@
 from geograpy.locator import Location, City, Country, Region
 from ormigrate.smw.pagefixer import PageFixerManager
-from ormigrate.fixer import ORFixer
+from ormigrate.fixer import ORFixer, Entity
 from ormigrate.smw.rating import Rating, RatingType, EntityRating
 from openresearch.openresearch import OpenResearch
 
@@ -10,6 +10,8 @@ class LocationFixer(ORFixer):
     '''
     purpose="fixes Locations"
     issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/220"
+
+    worksOn=[Entity.EVENT]
     
     # value of type attribute of Locations to be fixed
     COUNTRY = "country"
@@ -95,6 +97,7 @@ class LocationFixer(ORFixer):
             foundLocations=self.locationTextLookup.get(locationCombination)
         else:
             foundLocations=self.lookupLocation(eventCountry, eventRegion, eventCity)
+            self.locationTextLookup[locationCombination]=foundLocations
         # find best match
         foundCities = [l for l in foundLocations if isinstance(l, City) and getattr(l, 'pop') is not None]
         foundRegions = [l for l in foundLocations if isinstance(l, Region)]

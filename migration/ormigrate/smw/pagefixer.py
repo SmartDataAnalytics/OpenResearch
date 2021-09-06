@@ -3,28 +3,35 @@ Created on 2021-04-06
 
 @author: wf
 '''
+import sys
+import traceback
+import inspect
+from functools import partial
+from os import path
 from corpus.datasources.openresearch import OREventManager
+from corpus.lookup import CorpusLookup
 from lodstorage.lod import LOD
+from tabulate import tabulate
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
 from corpus.smw.topic import SMWEntity, SMWEntityList
 from ormigrate.smw.rating import RatingType,PageRating, PageRatingList, EntityRating
 from collections import Counter
-import sys
-import traceback
+
 
 class PageFixerManager(object):
     '''
     manage a list of PageFixers
     '''
     
-    def __init__(self,pageFixerClassList,wikiFileManager,debug=False):
+    def __init__(self,pageFixerClassList,wikiFileManager, ccID:str="orclone-backup",debug=False):
         ''' 
         construct me 
         
         Args:
             pageFixerClassList(list): a list of pageFixers
+            ccID(str): ConferenceCorpus source lookup id
         '''
         self.pageFixerClassList=pageFixerClassList
         self.pageFixers={}
@@ -34,9 +41,31 @@ class PageFixerManager(object):
             pageFixer=pageFixerClass(self)
             pageFixerClassName=pageFixerClass.__name__
             self.pageFixers[pageFixerClassName]=pageFixer
+
+        patchEventSource=partial(self.patchEventSource, wikiFileManager=wikiFileManager)
+        lookup = CorpusLookup(lookupIds=[ccID], configure=patchEventSource, debug=debug)
+        lookup.load(forceUpdate=True)   # forceUpdate to init the managers from the markup files
+        self.orDataSource = lookup.getDataSource("orclone-backup")
+        # load wikiFiles for each entity
+        for entityManager in self.orDataSource.eventManager, self.orDataSource.eventSeriesManager:
+            if hasattr(entityManager, 'smwHandler'):
+                entityManager.smwHandler.interlinkEnititesWithWikiMarkupFile()
+        self.setupEntityRatings()
+
+
+    @property
+    def ratings(self):
+        '''Returns the EntityRatings of all fixers and entities'''
+        res=[]
+        if hasattr(self, 'entityRatings'):
+            for pageFixerRatings in self.entityRatings.values():
+                for entityRatings in pageFixerRatings.values():
+                    res.extend(entityRatings)
+        return res
+
     
     @staticmethod
-    def runCmdLine(pageFixerClassList:list,argv=None):
+    def runCmdLine(pageFixerClassList:list=None,argv=None):
         '''
         Args:
             pageFixerList(list): a list of page fixers to apply
@@ -46,11 +75,12 @@ class PageFixerManager(object):
             in the arguments
         '''
         pageFixerManager=PageFixerManager.fromCommandLine(pageFixerClassList, argv)
-        pageFixerManager.workOnArgs()
+        if pageFixerManager:
+            pageFixerManager.workOnArgs()
         return pageFixerManager
      
     @staticmethod
-    def fromCommandLine(pageFixerClassList,argv=None):
+    def fromCommandLine(pageFixerClassList:list=None,argv=None):
         '''
         construct a pageFixerList from the command line with the given Arguments
         '''
@@ -62,15 +92,52 @@ class PageFixerManager(object):
                             help="calculate and show Ratings as a list of links")
         cmdLine.parser.add_argument("--verbose", action="store_true",
                             help="shows verbose output")
-        cmdLine.parser.add_argument("--fix", action="store_true",help="Fix the Event pages")
-        cmdLine.parser.add_argument("--force",default=False, action="store_true",help="Overwrite existing files")
+        cmdLine.parser.add_argument("--fix", action="store_true",
+                            help="Fix the Event pages")
+        cmdLine.parser.add_argument("--force",default=False, action="store_true",
+                            help="Overwrite existing files")
+        cmdLine.parser.add_argument('--targetWikiTextPath', dest="targetWikiTextPath",
+                            help="Path to store/update the wiki entries")
+        cmdLine.parser.add_argument("--fixers", nargs='+',
+                            help="Name of the fixers to apply")
+        cmdLine.parser.add_argument("--listFixers", action="store_true",
+                            help="List all avaliable fixers")
+        cmdLine.parser.add_argument("--ccId",
+                            help="Id of the ConferenceCorpus data source to use")
         if argv is None:
             argv=sys.argv[1:]
         args = cmdLine.parser.parse_args(argv)
         cmdLine.initLogging(args)
+        pageFixers=PageFixerManager.getAllFixers()
+        if args.listFixers:
+            print("Avaliable fixers:")
+            res=[]
+            for pageFixer in pageFixers:
+                pfDesc={"name":pageFixer.__name__}
+                for key in "purpose", "issue":
+                    if hasattr(pageFixer, key):
+                        pfDesc[key]=getattr(pageFixer,key)
+                res.append(pfDesc)
+            print(tabulate(tabular_data=res, headers="keys"))
+            return
+        if pageFixerClassList is None:
+            pageFixerClassList=[]
+        if args.fixers:
+            pageFixersByName={pf.__name__:pf for pf in pageFixers}
+            for fixer in args.fixers:
+                if fixer in pageFixersByName:
+                    pageFixerClassList.append(pageFixersByName.get(fixer))
         if args.verbose:
             print(f"Starting pagefixers for {args.source}")
-        wikiFileManager=WikiFileManager(sourceWikiId=args.source,wikiTextPath=args.backupPath,login=False,debug=args.debug)
+        wikiTextPath=args.backupPath
+        if wikiTextPath and args.ccId:
+            home = path.expanduser("~")
+            wikiTextPath = f"{home}/.or/wikibackup/{args.ccId}"
+        wikiFileManager=WikiFileManager(sourceWikiId=args.source,
+                                        wikiTextPath=wikiTextPath,
+                                        targetWikiTextPath=args.targetWikiTextPath,
+                                        login=False,
+                                        debug=args.debug)
         pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager=wikiFileManager,debug=args.debug)
         for pageFixer in pageFixerManager.pageFixers.values():
             pageFixer.templateName=args.template
@@ -81,7 +148,7 @@ class PageFixerManager(object):
         '''
         work as specified by my arguments
         '''    
-        self.wikiFilesToWorkon=self.wikiFileManager.getAllWikiFilesForArgs(self.args)
+        # self.wikiFilesToWorkon=self.wikiFileManager.getAllWikiFilesForArgs(self.args)
         if self.args.debug:
             print(f"found {len(self.wikiFilesToWorkon)} pages to work on")
         if self.args.stats or self.args.listRatings:
@@ -92,6 +159,30 @@ class PageFixerManager(object):
             self.showRatingList()
         if self.args.fix:
             self.fix(self.args.force)
+
+    def setupEntityRatings(self):
+        '''
+        Generates for each fixer their EntityRating objects
+        '''
+        entityRatings={}
+        for fixer in self.pageFixers:
+            eventRatings=[EntityRating(entity=entity) for entity in self.orDataSource.eventManager.getList()]
+            eventSeriesRatings=[EntityRating(entity=entity) for entity in self.orDataSource.eventSeriesManager.getList()]
+            from ormigrate.fixer import Entity
+            entityRatings[fixer]={
+                Entity.EVENT:eventRatings,
+                Entity.EVENT_SERIES:eventSeriesRatings
+            }
+        self.entityRatings=entityRatings
+
+    def getEventRatingsForFixer(self, fixer):
+        '''Returns the EventRatings the given fixer can work on'''
+        entityRatings=self.entityRatings.get(fixer.__class__.__name__)
+        res=[]
+        if hasattr(fixer, "worksOn"):
+            for entity in fixer.worksOn:
+                res.extend(entityRatings.get(entity))
+        return res
 
     def getEntityRating(self, wikiFile:WikiFile):
         '''Returns EntityRating object for the given wikiFile'''
@@ -118,7 +209,7 @@ class PageFixerManager(object):
         '''
         lookup,_dup=LOD.getLookup(OREventManager.propertyLookupList, "name")
         wikiSonRecords={lookup.get(key).get('templateParam'):value for key,value in entityRating.getRecord().items() if key in lookup}
-        entityRating.wikiFile.add_template('Event',wikiSonRecords,overwrite=overwrite)
+        entityRating.wikiFile.add_template('Event',wikiSonRecords, overwrite=overwrite)
         entityRating.wikiFile.save_to_file(overwrite=overwrite)
 
     def fix(self, overwrite:bool=False):
@@ -127,16 +218,16 @@ class PageFixerManager(object):
         Args:
             overwrite(bool): If True existing files might be overwritten
         '''
-        entityRatings=[self.getEntityRating(wikiFile) for wikiFile in self.wikiFilesToWorkon.values()]
-        entityRatings=[entityRating for entityRating in entityRatings if entityRating is not None]
-        for entityRating in entityRatings:
-            for pageFixer in self.pageFixers.values():
-                try:
-                    pageFixer.fix(entityRating)
-                except Exception as e:
-                    self.errors.append({'error':e,'fixer':pageFixer,'pageTitle':entityRating.wikiFile.getPageTitle()})
-            #all fixes applied save back to wikiText file
-            self.saveEntityRatingToWikiText(entityRating, overwrite=overwrite)
+        for pageFixer in self.pageFixers.values():
+            entityRatings=self.getEventRatingsForFixer(pageFixer)
+            for entityRating in entityRatings:
+                pageFixer.fix(entityRating)
+        #all fixes are applied → save back to wikiText file
+        for entityRating in self.ratings:
+            if hasattr(entityRating.entity, "smwHandler"):
+                smwHandler=entityRating.entity.smwHandler
+                if isinstance(smwHandler, SMWEntity):
+                    smwHandler.saveToWikiText(overwrite=overwrite)
             
     def getRatings(self,debug:bool,debugLimit:int=10):
         '''
@@ -149,10 +240,10 @@ class PageFixerManager(object):
         self.errors=[]
         self.ratings=PageRatingList()
         for pageFixer in self.pageFixers.values():
-            for wikiFile in self.wikiFilesToWorkon.values():
+            entityRatings = self.getEventRatingsForFixer(pageFixer)
+            for entityRating in entityRatings:
                 try:
-                    rating = pageFixer.getRatingFromWikiFile(wikiFile)
-                    self.ratings.getList().append(rating)
+                    rating = pageFixer.rate(entityRating)
                 except Exception as e:
                     self.errors.append({'error':e,'fixer':pageFixer,'pageTitle':wikiFile.getPageTitle()})
         if len(self.errors)>0 and debug:
@@ -211,6 +302,34 @@ class PageFixerManager(object):
     def showAllRatings(self):
         for i,pageTitle in enumerate(self.ratings):
             print(f"{i+1}:{pageTitle}->{self.ratings[pageTitle]}")
+
+    def patchEventSource(self, lookup:CorpusLookup, wikiFileManager:WikiFileManager):
+        '''
+        patches the EventManager and EventSeriesManager by adding wikiUser and WikiFileManager
+        '''
+        for lookupId in ["orclone", "orclone-backup", "or", "or-backup"]:
+            orDataSource = lookup.getDataSource(lookupId)
+            if orDataSource is not None:
+                if lookupId.endswith("-backup"):
+                    orDataSource.eventManager.wikiFileManager = wikiFileManager
+                    orDataSource.eventSeriesManager.wikiFileManager = wikiFileManager
+                else:
+                    orDataSource.eventManager.wikiUser = wikiFileManager.wikiUser
+                    orDataSource.eventSeriesManager.wikiUser = wikiFileManager.wikiUser
+
+    @staticmethod
+    def getAllFixers():
+        import ormigrate
+        import pkgutil
+        from ormigrate.fixer import ORFixer
+        pagefixers = []
+        for importer, modname, ispkg in pkgutil.iter_modules(ormigrate.__path__):
+            module = __import__(f"ormigrate.{modname}")
+            clsmembers = inspect.getmembers(getattr(module, modname), inspect.isclass)
+            pageFixer=[clazz for name, clazz in clsmembers if issubclass(clazz, (ORFixer,PageFixer)) and hasattr(clazz, 'purpose')]
+            pagefixers.extend(pageFixer)
+        pagefixers=list(set(pagefixers))
+        return pagefixers
     
     
 class PageFixer(object):
@@ -229,15 +348,15 @@ class PageFixer(object):
     def fixEventRecord(self):
         ''' abstract base function to be overwritten by fixing class'''
         return
-    
+
     def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
         '''
         Args:
             wikiFile(WikiFile): the wikiFile to work on
-            
+
         Return:
             Rating: The rating for this WikiFile
-        
+
         '''
         # prepare rating
         _wikiText,eventRecord,rating=self.prepareWikiFileRating(wikiFile,self.templateName)
@@ -245,7 +364,7 @@ class PageFixer(object):
         arating=self.getRating(eventRecord)
         rating.set(arating.pain,arating.reason,arating.hint)
         return rating
-    
+
     def prepareWikiFileRating(self,wikiFile,templateName=None):
         '''
         prepare the rating of an entity record directly from the wikiFile
@@ -304,3 +423,7 @@ class EntityFixer(PageFixer):
             rating(EntityRating): the rating for a single entity
         '''
         raise Exception("fix not implemented")
+
+
+if __name__ == '__main__':
+    PageFixerManager.runCmdLine()
