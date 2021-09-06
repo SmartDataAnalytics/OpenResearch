@@ -132,7 +132,7 @@ class PageFixerManager(object):
         if args.verbose:
             print(f"Starting pagefixers for {args.source}")
         wikiTextPath=args.backupPath
-        if wikiTextPath and args.ccId:
+        if not wikiTextPath and args.ccId:
             home = path.expanduser("~")
             wikiTextPath = f"{home}/.or/wikibackup/{args.ccId}"
         wikiFileManager=WikiFileManager(sourceWikiId=args.source,

@@ -52,7 +52,7 @@ class EventSeriesAcronymFixer(ORFixer):
 
         '''
         rawRecords = rating.getRawRecords()
-        if hasattr(rating.entity, "acronym"):
+        if hasattr(rating.entity, "acronym") and getattr(rating.entity, 'acronym'):
             pass
         else:
             # normalized acronym value is missing
