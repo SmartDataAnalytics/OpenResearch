@@ -104,6 +104,8 @@ class PageFixerManager(object):
                             help="List all avaliable fixers")
         cmdLine.parser.add_argument("--ccId",
                             help="Id of the ConferenceCorpus data source to use")
+        cmdLine.parser.add_argument("--listFormat",
+                                help="Format the resulting table should have. E.g. mediawiki, github, table")
         if argv is None:
             argv=sys.argv[1:]
         args = cmdLine.parser.parse_args(argv)
@@ -156,7 +158,7 @@ class PageFixerManager(object):
         if self.args.stats:
             self.showRatingStats()
         if self.args.listRatings:
-            self.showRatingList()
+            self.showRatingList(self.args.listFormat)
         if self.args.fix:
             self.fix(self.args.force)
 
@@ -266,15 +268,23 @@ class PageFixerManager(object):
                     counter[getattr(rating, attr)]+=1
         return counters
     
-    def showRatingList(self,listFormat='json'):
+    def showRatingList(self,listFormat='table'):
         '''
         show a list of ratings
         '''
-        if listFormat=="json":
-            print(self.ratings.toJSON(limitToSampleFields=True))
-        else:
-            for rating in self.ratings:
-                print(rating)
+        if listFormat is None:
+            listFormat="table"
+        ratings=[rating.__dict__ for rating in self.ratings if rating.pain>=0]
+        for rating in ratings:
+            entity=rating.get("entity")
+            if hasattr(entity, "pageTitle"):
+                rating["pageTitle"]=getattr(entity, "pageTitle")
+            if hasattr(entity, "url"):
+                rating["url"]=getattr(entity, "url")
+        mandatoryFields=[*EntityRating.getSamples()[0].keys(), "url"]
+        displayRatings=LOD.filterFields(ratings, fields=mandatoryFields, reverse=True)
+        print(tabulate(displayRatings, headers="keys", tablefmt=listFormat))
+
         
     def showRatingStats(self): 
         '''

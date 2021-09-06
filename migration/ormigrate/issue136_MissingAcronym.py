@@ -30,9 +30,9 @@ class EventSeriesAcronymFixer(ORFixer):
             return
         elif rating.wikiFile is not None:
             rawRecords=rating.getRawRecords()
-            if 'acronym' in rawRecords:
+            if 'acronym' in rawRecords and rawRecords.get('acronym').strip():
                 rating.set(2,RatingType.ok,'acronym available but propertyname incorrrect')
-            return
+                return
         rating.set(5,RatingType.missing,'acronym is missing')
            
     @classmethod
@@ -56,7 +56,7 @@ class EventSeriesAcronymFixer(ORFixer):
             pass
         else:
             # normalized acronym value is missing
-            if "acronym" in rawRecords:
+            if "acronym" in rawRecords and rawRecords.get('acronym').strip():
                 acronym=rawRecords.get("acronym")
                 if acronym:
                     acronym.strip()
