@@ -5,7 +5,8 @@ Created on 2021-07-15
 '''
 from ormigrate.smw.rating import Rating, RatingType, EntityRating
 from ormigrate.smw.pagefixer import PageFixerManager
-from ormigrate.fixer import ORFixer
+from ormigrate.fixer import ORFixer, Entity
+
 
 class EventSeriesAcronymFixer(ORFixer):
     '''
@@ -13,6 +14,8 @@ class EventSeriesAcronymFixer(ORFixer):
     ''' 
     purpose="fix missing acronyms in event Series"
     issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/136"
+
+    worksOn = [Entity.EVENT_SERIES]
     
     def __init__(self,pageFixerManager):
         '''
@@ -20,12 +23,13 @@ class EventSeriesAcronymFixer(ORFixer):
         '''
         super(EventSeriesAcronymFixer, self).__init__(pageFixerManager)
 
+
     def rate(self, rating: EntityRating):
-        if 'acronym' in rating.getRecord():
+        if hasattr(rating.entity, 'acronym') and getattr(rating.entity, 'acronym'):
             rating.set(1,RatingType.ok,'acronym available')
             return
         elif rating.wikiFile is not None:
-            rawRecords=rating.wikiFile.extractTemplate("Event series")
+            rawRecords=rating.getRawRecords()
             if 'acronym' in rawRecords:
                 rating.set(2,RatingType.ok,'acronym available but propertyname incorrrect')
             return
@@ -36,14 +40,31 @@ class EventSeriesAcronymFixer(ORFixer):
         if 'acronym' in eventRecord:
             return Rating(1,RatingType.ok,'acronym available')
         else:
-            return  Rating(5,RatingType.missing,'acronym is missing')
-        
-    #TODO
-    # implement fixer e.g. by getting the acronym of the series elements and removing the year
+            return Rating(5,RatingType.missing,'acronym is missing')
 
-    # The Series property of event uses currently the pageTitle of the EventSeries as value space
-    # If we NOT use the pageTitle as acronym how can we identify the elements of an series?
-        
+    def fix(self,rating:EntityRating):
+        '''
+        Fixes the missing acronyms of event series
+        Args:
+            rating: EntityRating to be fixed
+
+        Returns:
+
+        '''
+        rawRecords = rating.getRawRecords()
+        if hasattr(rating.entity, "acronym"):
+            pass
+        else:
+            # normalized acronym value is missing
+            if "acronym" in rawRecords:
+                acronym=rawRecords.get("acronym")
+                if acronym:
+                    acronym.strip()
+                setattr(rating.entity, "acronym", acronym)
+                return
+            else:
+                # Try to get event series acronym from pageTitle
+                pass
         
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([EventSeriesAcronymFixer])

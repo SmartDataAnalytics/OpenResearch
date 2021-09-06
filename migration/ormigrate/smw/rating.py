@@ -64,6 +64,14 @@ class EntityRating(PageRating):
         if hasattr(self.entity, "smwHandler"):
             return self.entity.smwHandler.wikiFile
         return None
+
+    def getRawRecords(self):
+        '''Returns the raw entity values of the wiki markup file'''
+        if self.wikiFile:
+            if hasattr(self.entity, "templateName"):
+                templateName = self.entity.templateName
+                rawRecords = self.wikiFile.extract_template(templateName)
+                return rawRecords
         
 class PageRatingList(JSONAbleList):
     '''

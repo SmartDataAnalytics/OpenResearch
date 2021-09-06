@@ -238,14 +238,10 @@ class PageFixerManager(object):
             debugLimit(int): maximum number of debug message to be printed
         '''
         self.errors=[]
-        self.ratings=PageRatingList()
         for pageFixer in self.pageFixers.values():
             entityRatings = self.getEventRatingsForFixer(pageFixer)
             for entityRating in entityRatings:
-                try:
-                    rating = pageFixer.rate(entityRating)
-                except Exception as e:
-                    self.errors.append({'error':e,'fixer':pageFixer,'pageTitle':wikiFile.getPageTitle()})
+                rating = pageFixer.rate(entityRating)
         if len(self.errors)>0 and debug:
             print(f"there are {len(self.errors)} errors")
             for i,errorRecord in enumerate(self.errors):
@@ -265,8 +261,9 @@ class PageFixerManager(object):
         for attr in ["reason","pain"]:
             counter=Counter()
             counters[attr]=counter
-            for rating in self.ratings.getList():
-                counter[rating.__dict__[attr]]+=1
+            for rating in self.ratings:
+                if hasattr(rating, attr):   # If not rated the attr is not set and thus not included in the counters
+                    counter[getattr(rating, attr)]+=1
         return counters
     
     def showRatingList(self,listFormat='json'):
@@ -276,7 +273,7 @@ class PageFixerManager(object):
         if listFormat=="json":
             print(self.ratings.toJSON(limitToSampleFields=True))
         else:
-            for rating in self.ratings.getList():
+            for rating in self.ratings:
                 print(rating)
         
     def showRatingStats(self): 
@@ -287,6 +284,9 @@ class PageFixerManager(object):
         # to allow to transfer results to github,wiki and papers
         counters=self.getRatingCounters()
         counter=counters["reason"]
+        if None in counter:
+            print(f"{counter[None]:5d}/{len(self.ratings)} EntityRating not rated fixers might not apply to all entity types")
+            del counter[None]
         print("Rating:")
         total=sum(counter.values())
         for ratingType in counter:

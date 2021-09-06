@@ -1,3 +1,4 @@
+from os import path
 from unittest import TestCase
 
 from ormigrate.fixer import ORFixer
@@ -14,8 +15,15 @@ class TestPagefixer(TestCase):
 
 
     def testPageFixerSubclasses(self):
+        '''tests the Module extraction of all fixers'''
         pageFixers=PageFixerManager.getAllFixers()
         self.assertTrue(len(pageFixers) > 7)
         if self.debug:
             for pageFixer in pageFixers:
                 print(pageFixer.__name__)
+
+
+    def testCmdLineRating(self):
+        '''test rating functionality of the cmdLine interface'''
+        home = path.expanduser("~")
+        PageFixerManager.runCmdLine(argv=["-s", "orclone", "--ccId", "orclone-backup", "--targetWikiTextPath", f"{home}/.or/generated/test", "--fixer", "EventSeriesAcronymFixer", "--stats"])
