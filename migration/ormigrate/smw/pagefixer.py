@@ -104,7 +104,7 @@ class PageFixerManager(object):
                             help="List all avaliable fixers")
         cmdLine.parser.add_argument("--ccId",
                             help="Id of the ConferenceCorpus data source to use")
-        cmdLine.parser.add_argument("--listFormat",
+        cmdLine.parser.add_argument("--tableFormat",
                                 help="Format the resulting table should have. E.g. mediawiki, github, table")
         if argv is None:
             argv=sys.argv[1:]
@@ -134,7 +134,7 @@ class PageFixerManager(object):
         wikiTextPath=args.backupPath
         if not wikiTextPath and args.ccId:
             home = path.expanduser("~")
-            wikiTextPath = f"{home}/.or/wikibackup/{args.ccId}"
+            wikiTextPath = f"{home}/.or/wikibackup/{args.ccId.replace('-backup', '')}"
         wikiFileManager=WikiFileManager(sourceWikiId=args.source,
                                         wikiTextPath=wikiTextPath,
                                         targetWikiTextPath=args.targetWikiTextPath,
@@ -158,7 +158,7 @@ class PageFixerManager(object):
         if self.args.stats:
             self.showRatingStats()
         if self.args.listRatings:
-            self.showRatingList(self.args.listFormat)
+            self.showRatingList(self.args.tableFormat)
         if self.args.fix:
             self.fix(self.args.force)
 
@@ -185,34 +185,6 @@ class PageFixerManager(object):
             for entity in fixer.worksOn:
                 res.extend(entityRatings.get(entity))
         return res
-
-    def getEntityRating(self, wikiFile:WikiFile):
-        '''Returns EntityRating object for the given wikiFile'''
-        smwEntity=SMWEntity(wikiFile=wikiFile)
-        wikiSonRecords=wikiFile.extract_template("Event")
-        if wikiSonRecords:
-            records=SMWEntity.fromWikiSonToLod(wikiSonRecords, OREventManager.getPropertyLookup())
-            for key, value in records.items():
-                setattr(smwEntity,key, value)
-            entityRating=EntityRating(entity=smwEntity)
-            return entityRating
-        else:
-            return None
-
-    def saveEntityRatingToWikiText(self, entityRating:EntityRating, overwrite:bool=False):
-        '''
-        Saves the given eventRating by applying the entity records to the wiki markup text
-        Args:
-            entityRating(EntityRating):
-            overwrite(bool): If True existing files might be overwritten
-
-        Returns:
-
-        '''
-        lookup,_dup=LOD.getLookup(OREventManager.propertyLookupList, "name")
-        wikiSonRecords={lookup.get(key).get('templateParam'):value for key,value in entityRating.getRecord().items() if key in lookup}
-        entityRating.wikiFile.add_template('Event',wikiSonRecords, overwrite=overwrite)
-        entityRating.wikiFile.save_to_file(overwrite=overwrite)
 
     def fix(self, overwrite:bool=False):
         '''
@@ -261,19 +233,22 @@ class PageFixerManager(object):
         '''
         counters={}
         for attr in ["reason","pain"]:
-            counter=Counter()
-            counters[attr]=counter
-            for rating in self.ratings:
-                if hasattr(rating, attr):   # If not rated the attr is not set and thus not included in the counters
-                    counter[getattr(rating, attr)]+=1
+            counters[attr]= {}
+            for fixer in self.pageFixers:
+                counter = Counter()
+                ratings=self.getEventRatingsForFixer(self.pageFixers.get(fixer))
+                for rating in ratings:
+                    if hasattr(rating, attr):   # If not rated the attr is not set and thus not included in the counters
+                        counter[getattr(rating, attr)]+=1
+                counters[attr][fixer]=counter
         return counters
     
-    def showRatingList(self,listFormat='table'):
+    def showRatingList(self,tableFormat='table'):
         '''
         show a list of ratings
         '''
-        if listFormat is None:
-            listFormat="table"
+        if tableFormat is None:
+            tableFormat="table"
         ratings=[rating.__dict__ for rating in self.ratings if rating.pain>=0]
         for rating in ratings:
             entity=rating.get("entity")
@@ -283,32 +258,43 @@ class PageFixerManager(object):
                 rating["url"]=getattr(entity, "url")
         mandatoryFields=[*EntityRating.getSamples()[0].keys(), "url"]
         displayRatings=LOD.filterFields(ratings, fields=mandatoryFields, reverse=True)
-        print(tabulate(displayRatings, headers="keys", tablefmt=listFormat))
+        print(tabulate(displayRatings, headers="keys", tablefmt=tableFormat))
 
         
     def showRatingStats(self): 
         '''
         show the rating statistics
         '''
-        # TODO use list of dicts and pyLodStorage stats and tabulate options
-        # to allow to transfer results to github,wiki and papers
+        tableFormat=getattr(self.args, "tableFormat")
+        if tableFormat is None:
+            tableFormat="table"
         counters=self.getRatingCounters()
-        counter=counters["reason"]
-        if None in counter:
-            print(f"{counter[None]:5d}/{len(self.ratings)} EntityRating not rated fixers might not apply to all entity types")
-            del counter[None]
+        fixerCounter=counters["reason"]
         print("Rating:")
-        total=sum(counter.values())
-        for ratingType in counter:
-            ratingTypeCount=counter[ratingType]
-            print(f"{ratingType.value}:{ratingTypeCount:5d} ({ratingTypeCount/total*100:5.1f}%)")
-        counter=counters["pain"]
-        total=sum(counter.values())    
-        print("Pain:")
-        for pain in sorted(counter):
-            painCount=counter[pain]
-            print(f"{pain:2d}:{painCount:5d} ({painCount/total*100:5.1f}%)")    
-            
+        reasonTable={}
+        for fixer,counter in fixerCounter.items():
+            total = sum(counter.values())
+            for ratingType in counter:
+                ratingTypeCount=counter[ratingType]
+                fixerReason=f"{ratingTypeCount:5d} ({ratingTypeCount/total*100:5.1f}%)"
+                if ratingType in reasonTable:
+                    reasonTable[ratingType][fixer]=fixerReason
+                else:
+                    reasonTable[ratingType]={"Reason":ratingType.value, fixer:fixerReason}
+        print(tabulate(reasonTable.values(), headers="keys", tablefmt=tableFormat))
+        fixerCounter=counters["pain"]
+        painTable = {}
+        for fixer, counter in fixerCounter.items():
+            total = sum(counter.values())
+            for pain in sorted(counter):
+                painCount=counter[pain]
+                fixerPain=f"{painCount:5d} ({painCount/total*100:5.1f}%)"
+                if pain in painTable:
+                    painTable[pain][fixer]=fixerPain
+                else:
+                    painTable[pain]={"Pain":f"{pain:2d}", fixer:fixerPain}
+        print(tabulate(painTable.values(), headers="keys", tablefmt=tableFormat))
+
     def showAllRatings(self):
         for i,pageTitle in enumerate(self.ratings):
             print(f"{i+1}:{pageTitle}->{self.ratings[pageTitle]}")
