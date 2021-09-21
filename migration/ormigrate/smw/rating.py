@@ -14,7 +14,7 @@ class PageRating(Rating):
     I am a Rating for a page
     '''
     
-    def __init__(self,pageTitle:str=None,templateName:str=None,pain:int=-1,reason:str=None,hint:str=None):
+    def __init__(self,pageTitle:str=None,templateName:str=None,pain:int=-1,reason:RatingType=None,hint:str=None):
         '''
         construct me
         

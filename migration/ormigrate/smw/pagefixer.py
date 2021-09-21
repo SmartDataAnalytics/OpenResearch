@@ -343,9 +343,10 @@ class PageFixerManager(object):
         for ratingEntity in self.ratings:
             if ratingEntity.pain != -1:
                 wikiFile=wikiFileManager.getWikiFile(f"{ratingEntity.pageTitle}/rating", checkWiki=False)
+                wikiFile.wikiText=f"== Ratings for [[{ ratingEntity.pageTitle }]]=="
                 rating={
                     "pain":ratingEntity.pain,
-                    "reason":ratingEntity.reason,
+                    "reason":str(ratingEntity.reason.value),
                     "hint":ratingEntity.hint,
                     "storemode":"subobject"
                 }
