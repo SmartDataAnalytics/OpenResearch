@@ -25,7 +25,7 @@ class PageFixerManager(object):
     manage a list of PageFixers
     '''
     
-    def __init__(self,pageFixerClassList,wikiFileManager, ccID:str="orclone-backup",debug=False):
+    def __init__(self,pageFixerClassList,wikiFileManager:WikiFileManager, ccID:str="orclone-backup",debug=False):
         ''' 
         construct me 
         
@@ -106,6 +106,8 @@ class PageFixerManager(object):
                             help="Id of the ConferenceCorpus data source to use")
         cmdLine.parser.add_argument("--tableFormat",
                                 help="Format the resulting table should have. E.g. mediawiki, github, table")
+        cmdLine.parser.add_argument("--addRatingPage", action="store_true",
+                                    help="adds a rating subpage for each entity containing the ratings of the entity")
         if argv is None:
             argv=sys.argv[1:]
         args = cmdLine.parser.parse_args(argv)
@@ -161,6 +163,8 @@ class PageFixerManager(object):
             self.showRatingList(self.args.tableFormat)
         if self.args.fix:
             self.fix(self.args.force)
+        if self.args.addRatingPage:
+            self.addRatingSubPages()
 
     def setupEntityRatings(self):
         '''
@@ -326,6 +330,28 @@ class PageFixerManager(object):
             pagefixers.extend(pageFixer)
         pagefixers=list(set(pagefixers))
         return pagefixers
+
+    def addRatingSubPages(self, overwrite:bool=True):
+        """
+        Generate the Rating subpages
+        """
+        wikiFileManager=WikiFileManager(self.wikiFileManager.sourceWikiId, self.wikiFileManager.targetPath)
+        # generate rating topic and property pages
+        from ormigrate.EventLocationHandler import EventLocationHandler
+        EventLocationHandler.generateTechnicalPages("rating", wikiFileManager, overwrite=True)
+        # add rating entites
+        for ratingEntity in self.ratings:
+            if ratingEntity.pain != -1:
+                wikiFile=wikiFileManager.getWikiFile(f"{ratingEntity.pageTitle}/rating", checkWiki=False)
+                rating={
+                    "pain":ratingEntity.pain,
+                    "reason":ratingEntity.reason,
+                    "hint":ratingEntity.hint,
+                    "storemode":"subobject"
+                }
+                wikiFile.addTemplate("Rating", data=rating)
+                wikiFile.save_to_file(overwrite=overwrite)
+
     
     
 class PageFixer(object):

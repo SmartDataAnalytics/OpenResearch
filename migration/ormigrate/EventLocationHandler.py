@@ -177,7 +177,8 @@ class EventLocationHandler(object):
         counterList = Counter(fieldValues)
         return counterList
 
-    def generateTechnicalPages(self, overwrite:bool=False):
+    @staticmethod
+    def generateTechnicalPages(topic:str, wikiFileManager:WikiFileManager, overwrite:bool=False):
         '''
         Generates the technical pages of the Location topic
         Pages such as Help:Location, List of Lcoations, Concept:Location, ...
@@ -187,13 +188,13 @@ class EventLocationHandler(object):
         '''
         resources = OpenResearch.getResourcePath()
         topicSpec=None
-        with open(f"{resources}/topiclocation.json", mode="r") as f:
+        with open(f"{resources}/topics/{topic}.json", mode="r") as f:
             topicSpec=json.load(f)
         locationSpec={"data":[topicSpec.get("topic")]}
         locationPropertySpec = {"data": topicSpec.get("properties")}
         locationTopic=Topic.from_wiki_json(topic_json=json.dumps(locationSpec), prop_json=json.dumps(locationPropertySpec))
-        wikiRender=WikiRender(additional_template_env=f"{resources}/templates/location")
-        wikiRender.generateTopic(locationTopic, overwrite=overwrite, path=self.wikiFileManager.targetPath)
+        wikiRender=WikiRender(additional_template_env=f"{resources}/templates/{topic}")
+        wikiRender.generateTopic(locationTopic, overwrite=overwrite, path=wikiFileManager.targetPath)
 
 
 if __name__ == '__main__':
@@ -214,7 +215,7 @@ if __name__ == '__main__':
         lookup.getDataSource(lookupId).eventSeriesManager.wikiFileManager = wikiFileManager
     eventLocationHandler=EventLocationHandler(wikiFileManager)
     # generate technical pages for the location topic
-    eventLocationHandler.generateTechnicalPages(overwrite=True)
+    eventLocationHandler.generateTechnicalPages("loacation", wikiFileManager, overwrite=True)
     # generate location pages
     lookup = CorpusLookup(lookupIds=[lookupId], configure=patchEventSource)
     lookup.load(forceUpdate=False)

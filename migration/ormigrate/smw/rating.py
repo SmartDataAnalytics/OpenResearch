@@ -53,7 +53,7 @@ class EntityRating(PageRating):
         '''
         construct me
         '''
-        super(PageRating,self).__init__()
+        super().__init__(pageTitle=getattr(entity, "pageTitle"))
         self.entity=entity
 
     def getRecord(self):
