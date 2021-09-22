@@ -3,12 +3,15 @@ Created on 2021-04-16
 
 @author: wf
 '''
-
+from __future__ import annotations
+from typing import TYPE_CHECKING
 from corpus.smw.topic import SMWEntity
 from lodstorage.jsonable import JSONAbleList, JSONAble
 from corpus.quality.rating import Rating, RatingType
+if TYPE_CHECKING:
+    from ormigrate.smw.pagefixer import PageFixer, EntityFixer
 
-        
+
 class PageRating(Rating):
     '''
     I am a Rating for a page
@@ -40,7 +43,7 @@ class PageRating(Rating):
         }
         ]
         return samplesLOD
-        
+
     def __str__(self):
         return f"{self.templateName} {self.pageTitle}: {self.pain} - {self.reason}: {self.hint}"
     
@@ -49,12 +52,17 @@ class EntityRating(PageRating):
     a rating for an entity
     '''
     
-    def __init__(self,entity:JSONAble):
+    def __init__(self,entity:JSONAble, fixer:EntityFixer=None):
         '''
         construct me
+
+        Args:
+            entity(JSONAble): entity to be rated/fixed
+            fixer(EntityFixer): fixer responsible for rating/fixing the entity
         '''
         super().__init__(pageTitle=getattr(entity, "pageTitle"))
         self.entity=entity
+        self.fixer = fixer
 
     def getRecord(self):
         return self.entity.__dict__
@@ -72,6 +80,10 @@ class EntityRating(PageRating):
                 templateName = self.entity.templateName
                 rawRecords = self.wikiFile.extract_template(templateName)
                 return rawRecords
+
+    def rate(self):
+        """uses the assigned fixer to rate itself"""
+        self.fixer.rate(self)
         
 class PageRatingList(JSONAbleList):
     '''

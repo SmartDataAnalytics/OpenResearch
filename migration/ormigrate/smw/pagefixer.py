@@ -155,27 +155,37 @@ class PageFixerManager(object):
         # self.wikiFilesToWorkon=self.wikiFileManager.getAllWikiFilesForArgs(self.args)
         if self.args.debug:
             print(f"found {len(self.wikiFilesToWorkon)} pages to work on")
-        if self.args.stats or self.args.listRatings:
+        if self.args.stats or self.args.listRatings or self.args.addRatingPage:
             self.getRatings(debug=self.args.debug)
         if self.args.stats:
             self.showRatingStats()
         if self.args.listRatings:
             self.showRatingList(self.args.tableFormat)
+        if self.args.addRatingPage:
+            # add rating to rating subpage before fixers are applied
+            self.addRatingSubPages()
         if self.args.fix:
             self.fix(self.args.force)
-        if self.args.addRatingPage:
-            self.addRatingSubPages()
+            if self.args.addRatingPage:
+                # add rating to rating subpage after fixers are applied
+                self.getRatings(debug=self.args.debug)   # rate entities again
+                self.addRatingSubPages(afterFixing=True)
+
 
     def setupEntityRatings(self):
         '''
         Generates for each fixer their EntityRating objects
         '''
         entityRatings={}
-        for fixer in self.pageFixers:
-            eventRatings=[EntityRating(entity=entity) for entity in self.orDataSource.eventManager.getList()]
-            eventSeriesRatings=[EntityRating(entity=entity) for entity in self.orDataSource.eventSeriesManager.getList()]
-            from ormigrate.fixer import Entity
-            entityRatings[fixer]={
+        from ormigrate.fixer import Entity
+        for fixerName, fixer in self.pageFixers.items():
+            eventRatings=[]
+            eventSeriesRatings=[]
+            if Entity.EVENT in fixer.worksOn:
+                eventRatings=[EntityRating(entity=entity, fixer=fixer) for entity in self.orDataSource.eventManager.getList()]
+            if Entity.EVENT_SERIES in fixer.worksOn:
+                eventSeriesRatings=[EntityRating(entity=entity, fixer=fixer) for entity in self.orDataSource.eventSeriesManager.getList()]
+            entityRatings[fixerName]={
                 Entity.EVENT:eventRatings,
                 Entity.EVENT_SERIES:eventSeriesRatings
             }
@@ -215,21 +225,8 @@ class PageFixerManager(object):
             debug(bool): should debug information be printed
             debugLimit(int): maximum number of debug message to be printed
         '''
-        self.errors=[]
-        for pageFixer in self.pageFixers.values():
-            entityRatings = self.getEventRatingsForFixer(pageFixer)
-            for entityRating in entityRatings:
-                rating = pageFixer.rate(entityRating)
-        if len(self.errors)>0 and debug:
-            print(f"there are {len(self.errors)} errors")
-            for i,errorRecord in enumerate(self.errors):
-                if i>debugLimit:
-                    break
-                error=errorRecord["error"]
-                traceback.print_tb(error.__traceback__)
-                pageFixer=errorRecord["fixer"]
-                pageTitle=errorRecord["pageTitle"]
-                print(f"{i:3d}: error {error} for fixer {pageFixer.__class__.__name__} on pageTitle {pageTitle}")
+        for rating in self.ratings:
+            rating.rate()
                 
     def getRatingCounters(self):
         '''
@@ -331,7 +328,7 @@ class PageFixerManager(object):
         pagefixers=list(set(pagefixers))
         return pagefixers
 
-    def addRatingSubPages(self, overwrite:bool=True):
+    def addRatingSubPages(self, overwrite:bool=True, afterFixing:bool=False):
         """
         Generate the Rating subpages
         """
@@ -340,17 +337,21 @@ class PageFixerManager(object):
         from ormigrate.EventLocationHandler import EventLocationHandler
         EventLocationHandler.generateTechnicalPages("rating", wikiFileManager, overwrite=True)
         # add rating entites
+        postfix="After" if afterFixing else ""
         for ratingEntity in self.ratings:
             if ratingEntity.pain != -1:
                 wikiFile=wikiFileManager.getWikiFile(f"{ratingEntity.pageTitle}/rating", checkWiki=False)
-                wikiFile.wikiText=f"== Ratings for [[{ ratingEntity.pageTitle }]]=="
+                if not wikiFile.wikiText:
+                    # rating subpage does not exist → add Headline with link to original entity
+                    wikiFile.wikiText=f"== Ratings for [[{ ratingEntity.pageTitle }]]=="
                 rating={
-                    "pain":ratingEntity.pain,
-                    "reason":str(ratingEntity.reason.value),
-                    "hint":ratingEntity.hint,
+                    "fixer": ratingEntity.fixer.__class__.__name__,
+                    f"pain{postfix}":str(ratingEntity.pain),
+                    f"reason{postfix}":str(ratingEntity.reason.value),
+                    f"hint{postfix}":str(ratingEntity.hint),
                     "storemode":"subobject"
                 }
-                wikiFile.addTemplate("Rating", data=rating)
+                wikiFile.updateTemplate("Rating", rating, match={"fixer":ratingEntity.fixer.__class__.__name__}, prettify=True)
                 wikiFile.save_to_file(overwrite=overwrite)
 
     
