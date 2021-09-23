@@ -16,7 +16,7 @@ from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
 from corpus.smw.topic import SMWEntity, SMWEntityList
-from ormigrate.smw.rating import RatingType,PageRating, PageRatingList, EntityRating
+from ormigrate.smw.rating import RatingType, PageRating, PageRatingList, EntityRating, RatingTemplatePage
 from collections import Counter
 
 
@@ -335,7 +335,7 @@ class PageFixerManager(object):
         wikiFileManager=WikiFileManager(self.wikiFileManager.sourceWikiId, self.wikiFileManager.targetPath)
         # generate rating topic and property pages
         from ormigrate.EventLocationHandler import EventLocationHandler
-        EventLocationHandler.generateTechnicalPages("rating", wikiFileManager, overwrite=True)
+        EventLocationHandler.generateTechnicalPages("rating", wikiFileManager, overwrite=True, template=RatingTemplatePage)
         # add rating entites
         postfix="After" if afterFixing else ""
         for ratingEntity in self.ratings:
@@ -346,7 +346,7 @@ class PageFixerManager(object):
                     wikiFile.wikiText=f"== Ratings for [[{ ratingEntity.pageTitle }]]=="
                 rating={
                     "fixer": ratingEntity.fixer.__class__.__name__,
-                    f"pain{postfix}":str(ratingEntity.pain),
+                    f"pain{postfix}":f"[[File:Pain{ratingEntity.pain}.svg|50px|link=https://commons.wikimedia.org/wiki/File:Pain{ratingEntity.pain}.svg]]",
                     f"reason{postfix}":str(ratingEntity.reason.value),
                     f"hint{postfix}":str(ratingEntity.hint),
                     "storemode":"subobject"

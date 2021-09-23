@@ -178,7 +178,7 @@ class EventLocationHandler(object):
         return counterList
 
     @staticmethod
-    def generateTechnicalPages(topic:str, wikiFileManager:WikiFileManager, overwrite:bool=False):
+    def generateTechnicalPages(topic:str, wikiFileManager:WikiFileManager, overwrite:bool=False, **templates):
         '''
         Generates the technical pages of the Location topic
         Pages such as Help:Location, List of Lcoations, Concept:Location, ...
@@ -194,7 +194,7 @@ class EventLocationHandler(object):
         locationPropertySpec = {"data": topicSpec.get("properties")}
         locationTopic=Topic.from_wiki_json(topic_json=json.dumps(locationSpec), prop_json=json.dumps(locationPropertySpec))
         wikiRender=WikiRender(additional_template_env=f"{resources}/templates/{topic}")
-        wikiRender.generateTopic(locationTopic, overwrite=overwrite, path=wikiFileManager.targetPath)
+        wikiRender.generateTopic(locationTopic, overwrite=overwrite, path=wikiFileManager.targetPath, **templates)
 
 
 if __name__ == '__main__':
