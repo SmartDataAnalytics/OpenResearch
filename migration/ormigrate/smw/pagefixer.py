@@ -4,20 +4,24 @@ Created on 2021-04-06
 @author: wf
 '''
 import sys
-import traceback
 import inspect
 from functools import partial
 from os import path
 from corpus.datasources.openresearch import OREventManager
 from corpus.lookup import CorpusLookup
+from lodstorage.entity import EntityManager
 from lodstorage.lod import LOD
 from tabulate import tabulate
+from wikifile.metamodel import Topic
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
 from corpus.smw.topic import SMWEntity, SMWEntityList
-from ormigrate.smw.rating import RatingType, PageRating, PageRatingList, EntityRating, RatingTemplatePage
+from ormigrate.smw.rating import RatingType, PageRating, EntityRating
 from collections import Counter
+
+from ormigrate.smw.templates import RatingTemplatePage, EventTemplatePage, RatedEventTemplatePage, \
+    EventSeriesTemplatePage, RatedEventSeriesTemplatePage
 
 
 class PageFixerManager(object):
@@ -335,7 +339,23 @@ class PageFixerManager(object):
         wikiFileManager=WikiFileManager(self.wikiFileManager.sourceWikiId, self.wikiFileManager.targetPath)
         # generate rating topic and property pages
         from ormigrate.EventLocationHandler import EventLocationHandler
-        EventLocationHandler.generateTechnicalPages("rating", wikiFileManager, overwrite=True, template=RatingTemplatePage)
+        # pages for rating topic
+        EventLocationHandler.generateTechnicalPages("rating",
+                                                    wikiFileManager,
+                                                    overwrite=overwrite,
+                                                    template=RatingTemplatePage)
+        # pages for event topic
+        EventLocationHandler.generateTechnicalPages("event",
+                                                    wikiFileManager,
+                                                    overwrite=overwrite,
+                                                    templateParamMapping=self.getPropertyToTemplateParamMap(self.orDataSource.eventManager),
+                                                    template=RatedEventTemplatePage)
+        # pages for event series topic
+        EventLocationHandler.generateTechnicalPages("eventSeries",
+                                                    wikiFileManager,
+                                                    overwrite=overwrite,
+                                                    templateParamMapping=self.getPropertyToTemplateParamMap(self.orDataSource.eventSeriesManager),
+                                                    template=RatedEventSeriesTemplatePage)
         # add rating entites
         postfix="After" if afterFixing else ""
         for ratingEntity in self.ratings:
@@ -354,6 +374,19 @@ class PageFixerManager(object):
                 wikiFile.updateTemplate("Rating", rating, match={"fixer":ratingEntity.fixer.__class__.__name__}, prettify=True)
                 wikiFile.save_to_file(overwrite=overwrite)
 
+    def getPropertyToTemplateParamMap(self, manager:EntityManager):
+        """
+        Returns the mapping from proeprty names to template parameter names for the given EntityManager
+        Args:
+            manager: EntityManagert for which the mapping should be returned
+
+        Returns:
+            Dict
+        """
+        if hasattr(manager.clazz, "getTemplateParamLookup") and callable(getattr(manager.clazz, "getTemplateParamLookup")):
+            templateParamMapping = {v: k for k, v in manager.clazz.getTemplateParamLookup().items()}
+            return templateParamMapping
+        return {}
     
     
 class PageFixer(object):

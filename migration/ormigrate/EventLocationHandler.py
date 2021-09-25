@@ -178,7 +178,27 @@ class EventLocationHandler(object):
         return counterList
 
     @staticmethod
-    def generateTechnicalPages(topic:str, wikiFileManager:WikiFileManager, overwrite:bool=False, **templates):
+    def getTopicFromResources(topicName:str) -> Topic:
+        """
+        Retrieves the topic and property definitions from the resources anc converts them into a Topic object.
+        Args:
+            topicName: name of the topic
+
+        Returns:
+            Topic
+        """
+        resources = OpenResearch.getResourcePath()
+        topicSpec = None
+        with open(f"{resources}/topics/{topicName}.json", mode="r") as f:
+            topicSpec = json.load(f)
+        locationSpec = {"data": [topicSpec.get("topic")]}
+        locationPropertySpec = {"data": topicSpec.get("properties")}
+        topic = Topic.from_wiki_json(topic_json=json.dumps(locationSpec),
+                                             prop_json=json.dumps(locationPropertySpec))
+        return topic
+
+    @staticmethod
+    def generateTechnicalPages(topic:str, wikiFileManager:WikiFileManager, overwrite:bool=False, templateParamMapping:dict=None, **templates):
         '''
         Generates the technical pages of the Location topic
         Pages such as Help:Location, List of Lcoations, Concept:Location, ...
@@ -186,15 +206,11 @@ class EventLocationHandler(object):
         Args:
             overwrite(bool): If False the generated page is only saved if the page does not already exists. Otherwise generated files might overwrite existing files.
         '''
-        resources = OpenResearch.getResourcePath()
-        topicSpec=None
-        with open(f"{resources}/topics/{topic}.json", mode="r") as f:
-            topicSpec=json.load(f)
-        locationSpec={"data":[topicSpec.get("topic")]}
-        locationPropertySpec = {"data": topicSpec.get("properties")}
-        locationTopic=Topic.from_wiki_json(topic_json=json.dumps(locationSpec), prop_json=json.dumps(locationPropertySpec))
-        wikiRender=WikiRender(additional_template_env=f"{resources}/templates/{topic}")
-        wikiRender.generateTopic(locationTopic, overwrite=overwrite, path=wikiFileManager.targetPath, **templates)
+        topic=EventLocationHandler.getTopicFromResources(topic)
+        if templateParamMapping:
+            topic.templateParamMapping=templateParamMapping
+        wikiRender=WikiRender()
+        wikiRender.generateTopic(topic, overwrite=overwrite, path=wikiFileManager.targetPath, **templates)
 
 
 if __name__ == '__main__':

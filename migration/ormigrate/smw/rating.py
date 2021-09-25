@@ -98,29 +98,3 @@ class PageRatingList(JSONAbleList):
         '''
         super(PageRatingList, self).__init__("pageRatings", PageRating, "pageratings")
 
-
-class RatingTemplatePage(TemplatePage):
-    """
-    Renders the Template page for the Rating topic.
-    Overwrites the viewmodes of the default storemode
-    """
-
-    @property
-    def viewmodes(self) -> dict:
-        viewmodes=super(RatingTemplatePage, self).viewmodes
-        # overwrite the default viewmode
-        table=Table(css_class="wikitable", escape=True)
-        fixerRow=table.add_row()
-        fixerRow.add_cell(PageLink("Rating fixer::@@@","fixer"), is_header=True)
-        fixerRow.add_cell(TemplateParam("fixer"), is_header=True, colspan=2)
-        timeRow=table.add_row()
-        timeRow.add_cell("",is_header=True)
-        timeRow.add_cell("Before", is_header=True)
-        timeRow.add_cell("After", is_header=True)
-        for prop in ["pain", "reason", "hint"]:
-            row = table.add_row()
-            row.add_cell(PageLink(f"Rating {prop}::@@@",prop),is_header=True)
-            row.add_cell(TemplateParam(prop))
-            row.add_cell(TemplateParam(f"{prop}After"))
-        viewmodes['#default']=table.render()
-        return viewmodes
