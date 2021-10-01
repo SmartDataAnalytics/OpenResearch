@@ -75,8 +75,7 @@ class PageFixerToolbox(object):
         if testCase.debug:
             print (painCounter)
         if pageTitleList is not None:
-            testCase.assertEqual(0,len(pageFixerManager.errors))
-            testCase.assertEqual(len(pageTitleList),len(pageFixerManager.ratings.getList()))
+            testCase.assertEqual(len(pageTitleList),len(pageFixerManager.ratings))
         return counters
         
     @staticmethod

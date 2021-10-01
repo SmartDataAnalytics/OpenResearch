@@ -44,3 +44,8 @@ class TestPagefixer(TestCase):
         '''test rating functionality of the cmdLine interface'''
         home = path.expanduser("~")
         PageFixerManager.runCmdLine(argv=["-s", "orclone", "--ccId", "orclone-backup", "--targetWikiTextPath", f"{home}/.or/generated/rating","--fixer", "EventSeriesAcronymFixer", "--addRatingPage"])
+
+    def testCmdLineFix(self):
+        '''test rating functionality of the cmdLine interface'''
+        home = path.expanduser("~")
+        PageFixerManager.runCmdLine(argv=["-s", "orclone", "--ccId", "orclone-backup", "--targetWikiTextPath", f"{home}/.or/generated/test", "--fixer", "LocationFixer", "--fix"])

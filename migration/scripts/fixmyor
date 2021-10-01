@@ -1,7 +1,123 @@
 #!/bin/bash
 #TH 2021-08-23
+# Rate & fix or entities (generates rating subpages)
 
-echo "Generate Location pages"
-python ../ormigrate/EventLocationHandler.py --decile 2 -s orclone
-echo "upload generated location pages to myor"
-wikirestore -t myor --backupPath ~/.or/showcase
+# set for debugging
+#  set -x
+
+#ansi colors
+#http://www.csc.uvic.ca/~sae/seng265/fall04/tips/s265s047-tips/bash-using-colors.html
+blue='\033[0;34m'
+red='\033[0;31m'
+green='\033[0;32m' # '\e[1;32m' is too bright for white bg.
+endColor='\033[0m'
+
+#
+# a colored message
+#   params:
+#     1: l_color - the color of the message
+#     2: l_msg - the message to display
+#
+color_msg() {
+  local l_color="$1"
+  local l_msg="$2"
+  echo -e "${l_color}$l_msg${endColor}"
+}
+
+#
+# error
+#
+#   show an error message and exit
+#
+#   params:
+#     1: l_msg - the message to display
+error() {
+  local l_msg="$1"
+  # use ansi red for error
+  color_msg $red "Error: $l_msg" 1>&2
+  exit 1
+}
+
+#
+# show the usage
+#
+usage() {
+  echo "usage: $0 [-h|--help] -t|--target wiki"
+  echo "  -h|--help: show this usage"
+  echo "  -t|--target: target wiki - The wiki the generated pages should be pushed to if not set the pages will be generated but not pushed"
+}
+#
+# nuke Events, Events series and ratings in the given wiki
+#
+nuke() {
+  local target_wiki="$1"
+  # old wiki pages need to be removed since a pageTitle might change all old entity pages need to be removed as a wikirestore might not overwrite all old pages
+  echo "Remove existing pages in the wiki"
+  wikinuke -t $target_wiki -q "[[isA::Event||Event series||Rating]]" -qd 10 -f --progress
+  wikinuke -t $target_wiki -q "[[Concept:Event]]" -qd 10 -f --progress
+  wikinuke -t $target_wiki -q "[[Concept:Event series]]" -qd 10 -f --progress
+
+}
+#
+# nuke Events, Events series and ratings in the given wiki
+#
+generateAndFix() {
+  local base="$1"
+  local target_wiki="$2"
+  echo "Generate Location pages"
+  python ../ormigrate/EventLocationHandler.py --decile 9 -s orclone --wikiTextPath $base
+
+  echo "Rate and fix entities"
+  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer EventSeriesAcronymFixer WikiCFPIDFixer LocationFixer --addRatingPage --fix --force
+
+}
+#
+# restore (upload) generated pages
+#
+restore() {
+  local base="$1"
+  local target_wiki="$2"
+  echo "upload rating and fixed pages"
+  wikirestore -t $target_wiki --backupPath $base --progress
+
+}
+# commandline option
+while [ "$1" != "" ]
+do
+  option=$1
+  shift
+  case $option in
+    -h|--help)
+       usage;;
+    -t|--target)
+      if [ $# -lt 1 ]
+      then
+        usage
+      fi
+      target_wiki=$1
+      shift
+      ;;
+  esac
+done
+
+scriptbase=$(pwd)
+base=~/.or/generated/orfixed
+if [ ! -d $base ]
+then
+  mkdir -p $base
+else
+  # empty the folder to ensure that only newly generated pages are pushed
+  rm -r ~/.or/generated/orfixed/*
+fi
+
+echo "Install openresearch migration"
+#pip install OpenResearchMigration
+
+#ToDo: call getbackup script
+
+generateAndFix $base $target_wiki
+
+#nuke $target_wiki
+
+restore $base $target_wiki
+

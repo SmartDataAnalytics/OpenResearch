@@ -24,7 +24,8 @@ class SeriesFixer(ORFixer):
         super(SeriesFixer, self).__init__(pageFixerManager)
 
     def rate(self, rating: EntityRating):
-        return self.getRating(rating.getRecord())
+        rating= self.getRating(rating.getRecord())
+        rating.set(rating.pain, rating.reason, rating.hint)
 
     def getRating(self,eventRecord):
         '''

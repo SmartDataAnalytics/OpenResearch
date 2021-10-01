@@ -55,7 +55,7 @@ class EntityRating(PageRating):
     a rating for an entity
     '''
     
-    def __init__(self,entity:JSONAble, fixer:EntityFixer=None):
+    def __init__(self,entity:JSONAble, fixer:EntityFixer=None, pageTitle:str=None):
         '''
         construct me
 
@@ -63,7 +63,8 @@ class EntityRating(PageRating):
             entity(JSONAble): entity to be rated/fixed
             fixer(EntityFixer): fixer responsible for rating/fixing the entity
         '''
-        super().__init__(pageTitle=getattr(entity, "pageTitle"))
+        pageTitle=getattr(entity, "pageTitle") if not pageTitle else pageTitle
+        super().__init__(pageTitle=pageTitle)
         self.entity=entity
         self.fixer = fixer
 

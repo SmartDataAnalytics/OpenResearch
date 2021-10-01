@@ -43,7 +43,7 @@ class CorpusForTesting(object):
         wikiUser=cls.getWikiUser(wikiId)
         home = path.expanduser("~")
         wikiTextPath = f"{home}/.or/wikibackup/{wikiUser.wikiId}"
-        wikiFileManager = WikiFileManager(wikiId,wikiTextPath,login=False,debug=debug)
+        wikiFileManager = WikiFileManager(wikiUser.wikiId,wikiTextPath,login=False,debug=debug)
         return wikiFileManager
 
     @classmethod

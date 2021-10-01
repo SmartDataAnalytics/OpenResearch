@@ -191,6 +191,9 @@ class LocationFixer(ORFixer):
         if cls.CITY in eventRecord: city = eventRecord[cls.CITY]
         if cls.REGION in eventRecord: region = eventRecord[cls.REGION]
         if cls.COUNTRY in eventRecord: country = eventRecord[cls.COUNTRY]
+        for location in [city,region,country]:
+            if isinstance(location, str):
+                location.replace("/",",")   # Adjust new or naming scheme to geograpy
         if not city and not region and not country:
             # location is not defined
             painrating=Rating(7, RatingType.missing,f'Locations are not defined')

@@ -29,7 +29,7 @@ class PageFixerManager(object):
     manage a list of PageFixers
     '''
     
-    def __init__(self,pageFixerClassList,wikiFileManager:WikiFileManager, ccID:str="orclone-backup",debug=False):
+    def __init__(self,pageFixerClassList,wikiFileManager:WikiFileManager, ccID:str="orclone-backup", pageTitles:str=None,debug=False):
         ''' 
         construct me 
         
@@ -54,7 +54,7 @@ class PageFixerManager(object):
         for entityManager in self.orDataSource.eventManager, self.orDataSource.eventSeriesManager:
             if hasattr(entityManager, 'smwHandler'):
                 entityManager.smwHandler.interlinkEnititesWithWikiMarkupFile()
-        self.setupEntityRatings()
+        self.setupEntityRatings(pageTitles)
 
 
     @property
@@ -146,7 +146,7 @@ class PageFixerManager(object):
                                         targetWikiTextPath=args.targetWikiTextPath,
                                         login=False,
                                         debug=args.debug)
-        pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager=wikiFileManager,debug=args.debug)
+        pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager=wikiFileManager, pageTitles=args.pages,debug=args.debug)
         for pageFixer in pageFixerManager.pageFixers.values():
             pageFixer.templateName=args.template
         pageFixerManager.args=args
@@ -155,8 +155,7 @@ class PageFixerManager(object):
     def workOnArgs(self):    
         '''
         work as specified by my arguments
-        '''    
-        # self.wikiFilesToWorkon=self.wikiFileManager.getAllWikiFilesForArgs(self.args)
+        '''
         if self.args.debug:
             print(f"found {len(self.wikiFilesToWorkon)} pages to work on")
         if self.args.stats or self.args.listRatings or self.args.addRatingPage:
@@ -176,7 +175,7 @@ class PageFixerManager(object):
                 self.addRatingSubPages(afterFixing=True)
 
 
-    def setupEntityRatings(self):
+    def setupEntityRatings(self, pageTitles:list=None):
         '''
         Generates for each fixer their EntityRating objects
         '''
@@ -189,6 +188,9 @@ class PageFixerManager(object):
                 eventRatings=[EntityRating(entity=entity, fixer=fixer) for entity in self.orDataSource.eventManager.getList()]
             if Entity.EVENT_SERIES in fixer.worksOn:
                 eventSeriesRatings=[EntityRating(entity=entity, fixer=fixer) for entity in self.orDataSource.eventSeriesManager.getList()]
+            if pageTitles:
+                eventRatings=[e for e in eventRatings if e.pageTitle in pageTitles]
+                eventSeriesRatings = [e for e in eventSeriesRatings if e.pageTitle in pageTitles]
             entityRatings[fixerName]={
                 Entity.EVENT:eventRatings,
                 Entity.EVENT_SERIES:eventSeriesRatings
@@ -212,8 +214,16 @@ class PageFixerManager(object):
         '''
         for pageFixer in self.pageFixers.values():
             entityRatings=self.getEventRatingsForFixer(pageFixer)
+            total=len(entityRatings)
+            count=0
             for entityRating in entityRatings:
                 pageFixer.fix(entityRating)
+                count+=1
+                print(f"{pageFixer.__class__.__name__}: {count}/{total} fixed", end='\r'if count!=total else "\n")
+                if hasattr(entityRating.entity, "smwHandler"):
+                    smwHandler = entityRating.entity.smwHandler
+                    if isinstance(smwHandler, SMWEntity):
+                        smwHandler.saveToWikiText(overwrite=overwrite)
         #all fixes are applied → save back to wikiText file
         for entityRating in self.ratings:
             if hasattr(entityRating.entity, "smwHandler"):
@@ -229,8 +239,12 @@ class PageFixerManager(object):
             debug(bool): should debug information be printed
             debugLimit(int): maximum number of debug message to be printed
         '''
+        total=len(self.ratings)
+        count=0
         for rating in self.ratings:
             rating.rate()
+            count+=1
+            print(f"{count}/{total} rated", end='\r' if count != total else "\n")
                 
     def getRatingCounters(self):
         '''
@@ -366,7 +380,7 @@ class PageFixerManager(object):
                     wikiFile.wikiText=f"== Ratings for [[{ ratingEntity.pageTitle }]]=="
                 rating={
                     "fixer": ratingEntity.fixer.__class__.__name__,
-                    f"pain{postfix}":f"[[File:Pain{ratingEntity.pain}.svg|50px|link=https://commons.wikimedia.org/wiki/File:Pain{ratingEntity.pain}.svg]]",
+                    f"pain{postfix}":f"{ratingEntity.pain}",
                     f"reason{postfix}":str(ratingEntity.reason.value),
                     f"hint{postfix}":str(ratingEntity.hint),
                     "storemode":"subobject"

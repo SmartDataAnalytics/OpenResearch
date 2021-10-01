@@ -35,8 +35,7 @@ class TestWikiCFPId(PageFixerTest):
         wikiFile = WikiFile('sampleFile',None,samplesWikiText)
         event = OREvent()
         event.wikiFile = wikiFile
-        entityRating = EntityRating(event)
-        entityRating.pageTitle='Test'
+        entityRating = EntityRating(event, pageTitle='Test')
         entityRating.templateName= 'Event'
 
         # Get Fixer
@@ -78,9 +77,9 @@ class TestWikiCFPId(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is not None:
-                self.assertEqual(8,painCounter[5])
+                self.assertEqual(8,painCounter[self.pageFixerClass.__name__][5])
             else:
-                self.assertTrue(painCounter[5]>2400)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>2400)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
