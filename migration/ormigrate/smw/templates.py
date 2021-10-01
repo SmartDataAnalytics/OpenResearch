@@ -207,8 +207,13 @@ class RatingTemplatePage(TemplatePage):
         for prop in ["pain", "reason", "hint"]:
             row = table.add_row()
             row.add_cell(PageLink(f"Rating {prop}::@@@",prop),is_header=True)
-            row.add_cell(TemplateParam(prop))
-            row.add_cell(TemplateParam(f"{prop}After"))
+            if prop == "pain":
+                painScale=lambda x:f"[[File: Pain{x}.svg | 50px | link = https: // commons.wikimedia.org / wiki / File: Pain{x}.svg]]"
+                row.add_cell(painScale(TemplateParam(prop)))
+                row.add_cell(painScale(TemplateParam(f"{prop}After")))
+            else:
+                row.add_cell(TemplateParam(prop))
+                row.add_cell(TemplateParam(f"{prop}After"))
         viewmodes['#default']=table.render()
         return viewmodes
 
