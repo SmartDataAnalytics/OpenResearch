@@ -189,7 +189,8 @@
          "isLink": null,
          "nullable": null,
          "topic": "Concept:Event",
-         "regexp": null
+         "regexp": null,
+         "externalFormatterUri": "https://lobid.org/gnd/$1"
       },
       {
          "pageTitle": "Property:Has location city",
@@ -419,7 +420,8 @@
          "isLink": null,
          "nullable": null,
          "topic": "Concept:Event",
-         "regexp": null
+         "regexp": null,
+         "externalFormatterUri": "http://www.wikicfp.com/cfp/servlet/event.showcfp?eventid=$1"
       },
       {
          "pageTitle": "Property:Wikidataid",
@@ -442,7 +444,8 @@
          "isLink": null,
          "nullable": null,
          "topic": "Concept:Event",
-         "regexp": null
+         "regexp": null,
+       "externalFormatterUri": "https://www.wikidata.org/entity/$1"
       }
    ]
 }

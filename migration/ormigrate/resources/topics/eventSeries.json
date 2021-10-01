@@ -74,7 +74,8 @@
          "isLink": null,
          "nullable": null,
          "topic": "Event",
-         "regexp": null
+         "regexp": null,
+         "externalFormatterUri": "https://lobid.org/gnd/$1"
       },
       {
          "pageTitle": "Property:Has subject",
@@ -169,9 +170,9 @@
          "regexp": null
       },
       {
-         "pageTitle": "Property:WikiCFP-ID",
-         "name": "wikicfpId",
-         "label": "wikiCFP ID",
+         "pageTitle": "Property:WikiCfpSeries",
+         "name": "WikiCfpSeries",
+         "label": "WikiCFP Series",
          "type": "External identifier",
          "index": null,
          "sortPos": null,
@@ -189,7 +190,8 @@
          "isLink": null,
          "nullable": null,
          "topic": "Event",
-         "regexp": null
+         "regexp": null,
+         "externalFormatterUri": "http://wikicfp.com/cfp/program?id=$1"
       },
       {
          "pageTitle": "Property:Wikidataid",
@@ -212,7 +214,8 @@
          "isLink": null,
          "nullable": null,
          "topic": "Event",
-         "regexp": null
+         "regexp": null,
+       "externalFormatterUri": "https://www.wikidata.org/entity/$1"
       }
    ]
 }
