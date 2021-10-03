@@ -196,25 +196,34 @@ class RatingTemplatePage(TemplatePage):
     def viewmodes(self) -> dict:
         viewmodes=super(RatingTemplatePage, self).viewmodes
         # overwrite the default viewmode
-        table=Table(css_class="wikitable", escape=True)
-        fixerRow=table.add_row()
-        fixerRow.add_cell(PageLink("Rating fixer::@@@","fixer"), is_header=True)
-        fixerRow.add_cell(TemplateParam("fixer"), is_header=True, colspan=2)
-        timeRow=table.add_row()
-        timeRow.add_cell("",is_header=True)
-        timeRow.add_cell("Before", is_header=True)
-        timeRow.add_cell("After", is_header=True)
-        for prop in ["pain", "reason", "hint"]:
-            row = table.add_row()
-            row.add_cell(PageLink(f"Rating {prop}::@@@",prop),is_header=True)
-            if prop == "pain":
-                painScale=lambda x:f"[[File: Pain{x}.svg | 50px | link = https: // commons.wikimedia.org / wiki / File: Pain{x}.svg]]"
-                row.add_cell(painScale(TemplateParam(prop)))
-                row.add_cell(painScale(TemplateParam(f"{prop}After")))
-            else:
-                row.add_cell(TemplateParam(prop))
-                row.add_cell(TemplateParam(f"{prop}After"))
-        viewmodes['#default']=table.render()
+        ratingComparisonTable=Table(css_class="wikitable", escape=True)
+        ratingOnlyTable = Table(css_class="wikitable", escape=True)
+        for table, withFixerCol in [(ratingOnlyTable, False), (ratingComparisonTable, True)]:
+            fixerRow=table.add_row()
+            fixerRow.add_cell(PageLink("Rating fixer::@@@","fixer"), is_header=True)
+            fixerRow.add_cell(TemplateParam("fixer"), is_header=True, colspan=2)
+            timeRow=table.add_row()
+            if withFixerCol:
+                timeRow.add_cell("",is_header=True)
+                timeRow.add_cell("Before", is_header=True)
+                timeRow.add_cell("After", is_header=True)
+            for prop in ["pain", "reason", "hint"]:
+                row = table.add_row()
+                row.add_cell(PageLink(f"Rating {prop}::@@@",prop),is_header=True)
+                if prop == "pain":
+                    painScale=lambda x:f"{{{{#ifeq:{x}|||[[File:Pain{x}.svg|50px|link=https://commons.wikimedia.org/wiki/File:Pain{x}.svg]]}}}}"
+                    row.add_cell(painScale(TemplateParam(prop)))
+                    if withFixerCol:
+                        row.add_cell(painScale(TemplateParam(f"{prop}After")))
+                else:
+                    row.add_cell(TemplateParam(prop))
+                    if withFixerCol:
+                        row.add_cell(TemplateParam(f"{prop}After"))
+        viewmodes={
+            'ratingOnly':ratingOnlyTable.render(),
+            'ratingComparison':None, # fall through
+            '#default':ratingComparisonTable.render()
+        }
         return viewmodes
 
 class EventSeriesTemplatePage(TemplatePage):
