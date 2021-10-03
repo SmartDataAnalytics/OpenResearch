@@ -38,6 +38,7 @@ class WikiCfpIdSeriesFixer(ORFixer):
         self.seriesLookup=None
 
     def getWikiCFPDataSource(self):
+        """Returns the WikiCfpDataSource of the ConferenceCorpus"""
         lookup = CorpusLookup(lookupIds=["wikicfp"], debug=self.debug)
         lookup.load()
         cfpDataSource = lookup.getDataSource("wikicfp")
@@ -45,6 +46,7 @@ class WikiCfpIdSeriesFixer(ORFixer):
 
 
     def getEventsOfSeries(self, seriesAcronym):
+        """Returns the events that are in the series with the given acronym"""
         eventManager=self.pageFixerManager.orDataSource.eventManager
         eventSeriesManager=self.pageFixerManager.orDataSource.eventSeriesManager
         if self.seriesLookup is None:

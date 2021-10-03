@@ -7,15 +7,18 @@ from ormigrate.toolbox import HelperFunctions as hf
 from ormigrate.smw.rating import Rating, RatingType, EntityRating
 from corpus.datasources.openresearch import OREventManager
 from ormigrate.smw.pagefixer import PageFixerManager
-from ormigrate.fixer import ORFixer
+from ormigrate.fixer import ORFixer, Entity
+
 
 class SeriesFixer(ORFixer):
     '''
     see purpose and issue
     
     '''
-    purpose="fixer for event having multiple series marked"
+    purpose="fixer for event having multiple or no series marked"
     issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/163"
+
+    worksOn = [Entity.EVENT]
 
     def __init__(self,pageFixerManager):
         '''
@@ -24,17 +27,17 @@ class SeriesFixer(ORFixer):
         super(SeriesFixer, self).__init__(pageFixerManager)
 
     def rate(self, rating: EntityRating):
-        rating= self.getRating(rating.getRecord())
-        rating.set(rating.pain, rating.reason, rating.hint)
+        aRating= self.getRating(rating.getRecord())
+        rating.set(aRating.pain, aRating.reason, aRating.hint)
 
     def getRating(self,eventRecord):
         '''
         get the pain Rating for the given event Record
         '''
-        if 'inEventSeries' in eventRecord:
-            value=eventRecord['inEventSeries']
-            if type(value)==list:
-                painRating = Rating(9, RatingType.invalid, f'Event Series {value} has multiple objects')
+        series=eventRecord.get("inEventSeries")
+        if series:
+            if isinstance(series, list):
+                painRating = Rating(9, RatingType.invalid, f'Event Series {series} has multiple objects')
             else:
                 painRating = Rating(1, RatingType.ok, f'Event Series is correct for the Event')
         else:

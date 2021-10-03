@@ -22,7 +22,9 @@ class EventSeriesProvenanceFixer(ORFixer):
         super().__init__(pageFixerManager)
 
     def rate(self, rating: EntityRating):
-        return self.getRating(rating.getRecord())
+        aRating = self.getRating(rating.getRecord())
+        rating.set(pain=aRating.pain, reason=aRating.reason, hint=aRating.hint)
+        return rating
         
     @classmethod
     def getRating(cls,eventRecord):

@@ -69,6 +69,7 @@ class EntityRating(PageRating):
         self.fixer = fixer
 
     def getRecord(self):
+        # ToDo: Limit to entity properties (exclude auxiliary properties)
         return self.entity.__dict__
 
     @property

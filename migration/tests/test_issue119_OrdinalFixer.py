@@ -35,10 +35,7 @@ class TestOrdinalFixer(PageFixerTest):
         '''
         fixer=self.getPageFixer()
         lookup_dict = hf.loadDictionary()
-        eventRecords= [{'Ordinal':2},
-                       {'Ordinal':None},
-                       {'Ordinal':'2nd'},
-                       {'Ordinal':'test'}]
+        eventRecords=[{"ordinal":val} for val in [2, None, '2nd', 'test']]
         expectedPainRatings=[1, 4, 5, 7]
         expectedOrdinals= [2, None, 2, 'test']
         painRatings = []
@@ -46,7 +43,7 @@ class TestOrdinalFixer(PageFixerTest):
         for event in eventRecords:
             painRating = fixer.getRating(event)
             res, _err = fixer.fixEventRecord(event,lookup_dict)
-            ordinals.append(res['Ordinal'])
+            ordinals.append(res['ordinal'])
             self.assertIsNotNone(painRating)
             painRatings.append(painRating.pain)
         self.assertEqual(expectedPainRatings,painRatings)
@@ -61,9 +58,9 @@ class TestOrdinalFixer(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[5]>800)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>800)
             else:
-                self.assertEqual(3,painCounter[5])
+                self.assertEqual(3,painCounter[self.pageFixerClass.__name__][5])
                 
 
 if __name__ == "__main__":

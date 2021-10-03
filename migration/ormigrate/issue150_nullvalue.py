@@ -22,19 +22,9 @@ class NullValueFixer(ORFixer):
         '''
         super(NullValueFixer, self).__init__(pageFixerManager)
         
-    def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
-        '''
-        Args:
-            wikiFile(WikiFile): the wikiFile to work on
-            
-        Return:
-            Rating: The rating for this WikiFile
-        
-        '''
-        # prepare rating
-        wikiText,eventDict,rating=self.prepareWikiFileRating(wikiFile,"Event")
-        # start rating
-        if eventDict is None:
+    def rate(self, rating: EntityRating):
+        wikiText=rating.wikiFile.wikiText
+        if rating.getRecord() is None:
             rating.set(7,RatingType.missing,"no event record found")
         else:
             nullValues=0
@@ -46,9 +36,6 @@ class NullValueFixer(ORFixer):
             else:
                 rating.set(5,RatingType.invalid,f"found {nullValues} improper nullValues")    
         return rating
-
-    def rate(self, rating: EntityRating):
-        return self.getRatingFromWikiFile(rating.wikiFile)
         
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([NullValueFixer])

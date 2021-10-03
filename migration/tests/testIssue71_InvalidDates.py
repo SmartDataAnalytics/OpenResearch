@@ -69,11 +69,11 @@ class TestInvalidDatesFixer(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertGreater(painCounter[3],100) 
-                self.assertGreater(painCounter[5],500)
-                self.assertGreater(painCounter[7],100)  
+                self.assertGreater(painCounter[self.pageFixerClass.__name__][3],100)
+                self.assertGreater(painCounter[self.pageFixerClass.__name__][5],500)
+                self.assertGreater(painCounter[self.pageFixerClass.__name__][7],100)
             else:
-                self.assertEqual(3,painCounter[7])
+                self.assertEqual(3,painCounter[self.pageFixerClass.__name__][7])
 
 
 if __name__ == "__main__":

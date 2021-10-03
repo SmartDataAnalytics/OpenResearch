@@ -18,6 +18,7 @@ class TestWikiCFPId(PageFixerTest):
     def setUp(self):
         PageFixerTest.setUp(self)
         self.pageFixerClass=WikiCFPIDFixer
+        #self.testAll=False
 
 
     def testIssue166Examples(self):

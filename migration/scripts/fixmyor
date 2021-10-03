@@ -65,11 +65,11 @@ generateAndFix() {
   local base="$1"
   local target_wiki="$2"
   echo "Generate Location pages"
-  python ../ormigrate/EventLocationHandler.py --decile 9 -s orclone --wikiTextPath $base
+  #python ../ormigrate/EventLocationHandler.py --decile 9 -s orclone --wikiTextPath $base
 
   echo "Rate and fix entities"
-  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer EventSeriesAcronymFixer WikiCFPIDFixer LocationFixer --addRatingPage --fix --force
-
+  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer EventSeriesAcronymFixer WikiCFPIDFixer SeriesFixer OrdinalFixer DateFixer BiblographicFieldFixer AcceptanceRateFixer NullValueFixer EventSeriesProvenanceFixer AcronymLengthFixer --addRatingPage --fix --force
+  #python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer OrdinalFixer --addRatingPage --fix --force
 }
 #
 # restore (upload) generated pages
@@ -78,6 +78,7 @@ restore() {
   local base="$1"
   local target_wiki="$2"
   echo "upload rating and fixed pages"
+  #wikipush -s orclone -t $target_wiki  -p "File:Pain0.svg" "File:Pain1.svg" "File:Pain2.svg" "File:Pain3.svg" "File:Pain4.svg" "File:Pain5.svg" "File:Pain6.svg" "File:Pain7.svg" "File:Pain8.svg" "File:Pain9.svg" "File:Pain10.svg"
   wikirestore -t $target_wiki --backupPath $base --progress
 
 }

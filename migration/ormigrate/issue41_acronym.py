@@ -18,7 +18,9 @@ class AcronymLengthFixer(ORFixer):
         super(AcronymLengthFixer, self).__init__(pageFixerManager)
 
     def rate(self, rating: EntityRating):
-        return self.getRating(rating.getRecord())
+        aRating = self.getRating(rating.getRecord())
+        rating.set(pain=aRating.pain, reason=aRating.reason, hint=aRating.hint)
+        return rating
 
     @staticmethod
     def getRating(eventRecord):

@@ -53,6 +53,6 @@ class TestWikiCfpSeriesId(PageFixerTest):
         """
         tests the rating of missing wikiCFP ids for Event series
         """
-        pageTitleList = ["AMOS","VNC",]
+        pageTitleList = ["AMOS","VNC"]
         counters=self.getRatingCounters(pageTitleList)
         print(counters)

@@ -47,7 +47,7 @@ class TestIssue170(PageFixerTest):
         
     def testUserCount(self):
         # only needed to setup userrating yaml file
-        eventDataSource=Corpus.getEventDataSourceFromWikiAPI(debug=self.debug, forceUpdate=True)
+        eventDataSource=Corpus.getEventDataSourceFromWikiAPI(debug=self.debug, forceUpdate=False)
         userLookup=eventDataSource.eventManager.getLookup("lastEditor",withDuplicates=True)
         if self.debug:
             print (f"{len(userLookup)} users")
@@ -71,9 +71,9 @@ class TestIssue170(PageFixerTest):
             # TODO - this is not the true rating since the curator info is not available
             # from the Wiki Files - check whether a true tests makes sense with WF, AG and JF
             if pageTitleList is None:
-                self.assertTrue(painCounter[10]>9000)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][10]>9000)
             else:
-                self.assertEqual(1,painCounter[10])
+                self.assertEqual(1,painCounter[self.pageFixerClass.__name__][10])
 
             
         

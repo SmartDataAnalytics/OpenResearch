@@ -28,9 +28,9 @@ class TestIssue136(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[5]>500)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>150)
             else:
-                self.assertEqual(4,painCounter[5])
+                self.assertEqual(3,painCounter[self.pageFixerClass.__name__][5])
         pass
 
 if __name__ == "__main__":

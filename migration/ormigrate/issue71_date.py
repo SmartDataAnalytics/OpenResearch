@@ -7,7 +7,7 @@ import dateutil.parser
 import re
 from ormigrate.smw.rating import Rating, RatingType, EntityRating
 from ormigrate.smw.pagefixer import PageFixerManager
-from ormigrate.fixer import ORFixer
+from ormigrate.fixer import ORFixer, Entity
 
 
 class DateFixer(ORFixer):
@@ -15,7 +15,9 @@ class DateFixer(ORFixer):
     see purpose and issue
     '''
     purpose="fixer for Dates being in incorrect format"
-    issue=" https://github.com/SmartDataAnalytics/OpenResearch/issues/71"
+    issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/71"
+
+    worksOn = [Entity.EVENT]
     
     def __init__(self,pageFixerManager):
         '''
@@ -40,9 +42,12 @@ class DateFixer(ORFixer):
         datetimeToDate = parseToDatetime.date()
         datetimetoString = datetimeToDate.strftime("%Y/%m/%d")
         return datetimetoString,errors
-        
 
-    def fixEventRecord(self, event, datelist=['Start date' , 'End date'], errors=None):
+    def fix(self,rating:EntityRating):
+        record=rating.getRecord()
+        self.fixEventRecord(record, datelist=["startDate", "endDate"])
+
+    def fixEventRecord(self, event, datelist:list=['Start date' , 'End date'], errors=None):
         if errors is None:
             errors={}
         for element in datelist:
@@ -99,7 +104,9 @@ class DateFixer(ORFixer):
                 return 7,f"Date '{dateStr}' can't be parsed: {errors[dateStr]}"
 
     def rate(self, rating: EntityRating):
-        return self.getRating(rating.getRecord())
+        aRating = self.getRating(rating.getRecord())
+        rating.set(pain=aRating.pain, reason=aRating.reason, hint=aRating.hint)
+        return rating
 
     @classmethod
     def getRating(self,eventRecord):

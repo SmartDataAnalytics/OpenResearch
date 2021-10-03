@@ -25,9 +25,9 @@ class TestNullValueFixer(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is not None:
-                self.assertEqual(1,painCounter[1])
+                self.assertEqual(1,painCounter[self.pageFixerClass.__name__][1])
             else:
-                self.assertTrue(painCounter[5]>350)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>350)
     
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

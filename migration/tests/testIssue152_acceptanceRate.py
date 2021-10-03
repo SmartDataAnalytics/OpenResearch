@@ -42,9 +42,9 @@ class TestIssue152AcceptanceRate(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[3]>1000)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][3]>1000)
             else:
-                self.assertEqual(2,painCounter[7])
+                self.assertEqual(2,painCounter[self.pageFixerClass.__name__][7])
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

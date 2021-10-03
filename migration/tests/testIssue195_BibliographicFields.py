@@ -28,10 +28,10 @@ class TestBiblographicFieldFixer(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[5]>=20)
-                self.assertTrue(painCounter[7]>=20)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>=20)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][7]>=20)
             else:
-                self.assertEqual(1,painCounter[7])
+                self.assertEqual(1,painCounter[self.pageFixerClass.__name__][7])
                 
     def testRatingOfEvent(self):
         '''
@@ -43,9 +43,9 @@ class TestBiblographicFieldFixer(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[7]>300)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][7]>300)
             else:
-                self.assertEqual(1,painCounter[7])
+                self.assertEqual(1,painCounter[self.pageFixerClass.__name__][7])
 
 
 if __name__ == "__main__":

@@ -6,9 +6,10 @@ Created on 2021-04-07
 
 import re
 from ormigrate.smw.pagefixer import PageFixerManager
-from ormigrate.fixer import ORFixer
+from ormigrate.fixer import ORFixer, Entity
 from ormigrate.smw.rating import Rating, RatingType, EntityRating
 from ormigrate.dictionary import Dictionary
+from ormigrate.toolbox import HelperFunctions as hf
 
 class OrdinalFixer(ORFixer):
     '''
@@ -16,17 +17,25 @@ class OrdinalFixer(ORFixer):
     '''
     purpose="fixer for Ordinal not being an integer"
     issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/119"
+
+    worksOn = [Entity.EVENT]
     
     def __init__(self,pageFixerManager):
         '''
         Constructor
         '''
         super(OrdinalFixer, self).__init__(pageFixerManager)
+        self.lookup_dict = hf.loadDictionary()
+
+    def fix(self,rating:EntityRating):
+
+        record=rating.getRecord()
+        self.fixEventRecord(record, self.lookup_dict)
 
     def fixEventRecord(self,event:dict,lookup_dict: Dictionary, errors=None):
         if errors is None:
             errors={}
-        ordinal_val = str(event.get('Ordinal'))
+        ordinal_val = str(event.get('ordinal'))
         if not ordinal_val.isnumeric():
             cardinal_dict = lookup_dict.getToken(ordinal_val)
             if cardinal_dict is None:
@@ -37,7 +46,7 @@ class OrdinalFixer(ORFixer):
                     print(f"{CRED}:\t Lookup failed! {ordinal_val} is missing in the dictionary. {CEND}")
             else:
                 cardinal_value = cardinal_dict['value']
-                event['Ordinal'] = cardinal_value
+                event['ordinal'] = cardinal_value
                 if self.debug:
                     print(f"{ordinal_val} will changed to {cardinal_value}.")
         return event,errors
@@ -72,7 +81,9 @@ class OrdinalFixer(ORFixer):
                     return new_event
 
     def rate(self, rating: EntityRating):
-        return self.getRating(rating.getRecord())
+        aRating=self.getRating(rating.getRecord())
+        rating.set(pain=aRating.pain, reason=aRating.reason, hint=aRating.hint)
+        return rating
 
     @classmethod
     def getRating(cls,eventRecord):

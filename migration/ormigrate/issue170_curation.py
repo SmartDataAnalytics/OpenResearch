@@ -54,7 +54,9 @@ class CurationQualityChecker(ORFixer):
             return Rating(10,RatingType.missing,'bug: lastEditor not set')
 
     def rate(self, rating: EntityRating):
-        return self.getRating(rating.getRecord())
+        aRating=self.getRating(rating.getRecord())
+        rating.set(pain=aRating.pain, reason=aRating.reason, hint=aRating.hint)
+        return rating
         
 if __name__ == "__main__":
     PageFixerManager.runCmdLine([CurationQualityChecker])

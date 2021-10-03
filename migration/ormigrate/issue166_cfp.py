@@ -10,7 +10,7 @@ from lodstorage.sql import SQLDB
 from os.path import expanduser,isfile
 from wikifile.wikiFile import WikiFile
 from ormigrate.smw.pagefixer import PageFixerManager
-from ormigrate.fixer import ORFixer
+from ormigrate.fixer import ORFixer, Entity
 from ormigrate.smw.rating import EntityRating,RatingType,PageRating
 
 
@@ -21,6 +21,8 @@ class WikiCFPIDFixer(ORFixer):
     '''
     purpose="fixer for getting WikiCFP id from free text"
     issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/166"
+
+    worksOn = [Entity.EVENT]
 
     def __init__(self,pageFixerManager):
         '''
