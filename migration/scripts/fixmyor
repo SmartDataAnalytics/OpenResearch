@@ -65,10 +65,10 @@ generateAndFix() {
   local base="$1"
   local target_wiki="$2"
   echo "Generate Location pages"
-  #python ../ormigrate/EventLocationHandler.py --decile 9 -s orclone --wikiTextPath $base
+  python ./ormigrate/EventLocationHandler.py --decile 10 -s orclone --wikiTextPath $base
 
   echo "Rate and fix entities"
-  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer EventSeriesAcronymFixer WikiCFPIDFixer SeriesFixer OrdinalFixer DateFixer BiblographicFieldFixer AcceptanceRateFixer NullValueFixer EventSeriesProvenanceFixer AcronymLengthFixer --addRatingPage --fix --force
+  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer EventSeriesAcronymFixer WikiCFPIDFixer SeriesFixer OrdinalFixer DateFixer BiblographicFieldFixer AcceptanceRateFixer NullValueFixer EventSeriesProvenanceFixer AcronymLengthFixer LocationFixer --addRatingPage --fix --force
   #python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer OrdinalFixer --addRatingPage --fix --force
 }
 #

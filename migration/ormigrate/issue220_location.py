@@ -25,6 +25,7 @@ class LocationFixer(ORFixer):
         super(LocationFixer, self).__init__(pageFixerManager)
         LocationFixer.locationContext=OpenResearch.getORLocationContext()
         self.locationTextLookup={}
+        self.locationRatingLookup={}
 
 
     def cacheLocations(self, eventRecords:list):
@@ -35,16 +36,56 @@ class LocationFixer(ORFixer):
             eventRegion = eventRecord.get(self.REGION)
             eventCountry = eventRecord.get(self.COUNTRY)
             locationCombination=f"{eventCountry},{eventRegion},{eventCity}"
-            locationCombinations[locationCombination]={"countryName":eventCountry, "regionName":eventRegion, "cityName":eventCity}
+            locationCombinations[locationCombination]={ "cityName":eventCity,"regionName":eventRegion, "countryName":eventCountry}
         total=len(locationCombinations)
         count=0
         for locationCombination, eventPlaces in locationCombinations.items():
             count+=1
             if self.debug:
                 print(f"{count}/{total} Looked up location information")
-            foundLocations=self.lookupLocation(**eventPlaces)
-            if foundLocations:
-                self.locationTextLookup[locationCombination]=foundLocations
+            bestMatchingLoc=self.getMatchingLocation(*eventPlaces.values())
+            if bestMatchingLoc:
+                self.locationTextLookup[locationCombination]=bestMatchingLoc
+
+    def getMatchingLocation(self, city:str=None, region:str=None, country:str=None):
+        """
+        Uses geograpy3 to retrieve the best match for the given location information by ranking the results of geograpy
+        Args:
+            city:
+            region:
+            country:
+
+        Returns:
+            Location
+        """
+        foundLocations = LocationFixer.locationContext.locateLocation(city, region, country)
+        if foundLocations:
+            #find best match
+            rankedLocs=[]
+            for loc in foundLocations:
+                rank=0
+                checkLocation=loc
+                if isinstance(checkLocation, City):
+                    if checkLocation.isKnownAs(city):
+                        rank+=3
+                    checkLocation=checkLocation.region
+                if isinstance(checkLocation, Region):
+                    if checkLocation.isKnownAs(region):
+                        rank+=2
+                    checkLocation=checkLocation.country
+                if isinstance(checkLocation, Country):
+                    if checkLocation.isKnownAs(country):
+                        rank+=1
+                rankedLocs.append((loc,rank))
+            rankedLocs.sort(key=lambda x:x[1], reverse=True)
+            maxRank=rankedLocs[0][1]
+            bestMatches=[loc for loc, rank in rankedLocs if rank==maxRank]
+            bestMatches.sort(key=lambda loc: float(loc.population) if hasattr(loc, "population") and getattr(loc, "population") else 0.0,reverse=True)
+            return bestMatches[0]
+        else:
+            return None
+
+
 
     def lookupLocation(self, countryName:str=None, regionName:str=None, cityName:str=None):
         '''
@@ -57,21 +98,30 @@ class LocationFixer(ORFixer):
         Returns:
             List of locations that match the given location information
         '''
-        eventPlaces = []
-        for eventLocation in countryName, regionName, cityName:
-            # filter out known invalid and None values
-            if eventLocation in ["Online", "None", "N/A"]:
-                eventLocation = None
-            # Add eventLocations to event Places
-            if eventLocation:
-                if eventLocation.startswith("Category:"):
-                    eventLocation = eventLocation.replace("Category:", "")
-                if '/' in eventLocation:
-                    eventPlaces.extend(eventLocation.split('/'))
-                else:
-                    eventPlaces.append(eventLocation)
-        foundLocations = self.locationContext.locateLocation(*eventPlaces)
-        return foundLocations
+        locationCombination = f"{countryName},{regionName},{cityName}"
+        if locationCombination in self.locationTextLookup:
+            bestMatch=self.locationTextLookup.get(locationCombination)
+            return bestMatch
+        else:
+            eventPlaces = {
+                'city':cityName,
+                'region':regionName,
+                'country':countryName
+            }
+            for prop, value in eventPlaces.items():
+                # filter out known invalid and None values
+                if value in ["Online", "None", "N/A"]:
+                    value = None
+                # Add eventLocations to event Places
+                if value:
+                    if value.startswith("Category:"):
+                        value = value.replace("Category:", "")
+                    if '/' in value:
+                        value=value.split('/')[-1]
+                eventPlaces[prop]=value
+            bestMatch = self.getMatchingLocation(**eventPlaces)
+            self.locationTextLookup[locationCombination] = bestMatch
+            return bestMatch
 
     def fix(self,rating:EntityRating):
         '''
@@ -91,30 +141,18 @@ class LocationFixer(ORFixer):
         eventCity = event.get(self.CITY)
         eventRegion = event.get(self.REGION)
         eventCountry = event.get(self.COUNTRY)
-        # event Places could be extended with the event title
-        locationCombination=f"{eventCountry},{eventRegion},{eventCity}"
-        if locationCombination in self.locationTextLookup:
-            foundLocations=self.locationTextLookup.get(locationCombination)
-        else:
-            foundLocations=self.lookupLocation(eventCountry, eventRegion, eventCity)
-            self.locationTextLookup[locationCombination]=foundLocations
-        # find best match
-        foundCities = [l for l in foundLocations if isinstance(l, City) and getattr(l, 'pop') is not None]
-        foundRegions = [l for l in foundLocations if isinstance(l, Region)]
-        foundCountries = [l for l in foundLocations if isinstance(l, Country)]
-        if foundCities:
-            bestMatch=foundCities[0]
+
+        bestMatch=self.lookupLocation(eventCountry, eventRegion, eventCity)
+        if isinstance(bestMatch, City):
             event[self.CITY]=self.getPageTitle(bestMatch)
             event[self.REGION] = self.getPageTitle(bestMatch.region)
             event[self.COUNTRY] = self.getPageTitle(bestMatch.country)
-        elif foundRegions:
-            bestMatch = foundRegions[0]
+        elif isinstance(bestMatch, Region):
             #event[self.CITY] = None
             event[self.REGION] = self.getPageTitle(bestMatch)
             event[self.COUNTRY] = self.getPageTitle(bestMatch.country)
             errors["city_unknown"] = f"Location information did not match any city"
-        elif foundCountries:
-            bestMatch = foundCountries[0]
+        elif isinstance(bestMatch, Country):
             #event[self.CITY] = None
             #event[self.REGION] = None
             event[self.COUNTRY] = self.getPageTitle(bestMatch)
@@ -181,29 +219,25 @@ class LocationFixer(ORFixer):
         arating=self.getRating(eventRecord)
         rating.set(arating.pain, arating.reason, arating.hint)
 
-    @classmethod
     def getRating(cls, eventRecord):
         painrating = None
         city = None
         region = None
         country = None
 
-        if cls.CITY in eventRecord: city = eventRecord[cls.CITY]
-        if cls.REGION in eventRecord: region = eventRecord[cls.REGION]
-        if cls.COUNTRY in eventRecord: country = eventRecord[cls.COUNTRY]
-        for location in [city,region,country]:
-            if isinstance(location, str):
-                location.replace("/",",")   # Adjust new or naming scheme to geograpy
+        if cls.CITY in eventRecord and eventRecord[cls.CITY] : city = eventRecord[cls.CITY]
+        if cls.REGION in eventRecord and eventRecord[cls.REGION]: region = eventRecord[cls.REGION].replace("/",",")
+        if cls.COUNTRY in eventRecord and eventRecord[cls.COUNTRY]: country = eventRecord[cls.COUNTRY].replace("/",",")
+
         if not city and not region and not country:
             # location is not defined
             painrating=Rating(7, RatingType.missing,f'Locations are not defined')
         else:
-            if hasattr(cls,'locationContext'):
-                locationContext=getattr(cls,'locationContext')
-                cities=[l for l in locationContext.locateLocation(city) if isinstance(l, City)]
-                regions=[l for l in locationContext.locateLocation(region) if isinstance(l, Region)]
-                countries=[l for l in   locationContext.locateLocation(country) if isinstance(l, Country)]
-            if cities and regions and countries:
+            if hasattr(LocationFixer,'locationContext'):
+                cities=cls.getLocationsOfType(city, City)
+                regions=cls.getLocationsOfType(region, Region)
+                countries=cls.getLocationsOfType(country, Country)
+            if (cities and regions and countries) or (city in [cls.getPageTitle(city) for city in cities]):
                 # all locations are recognized
                 painrating=Rating(1,RatingType.ok,f'Locations are valid. (Country: {country}, Region: {region}, City:{city})')
             elif not cities:
@@ -216,6 +250,18 @@ class LocationFixer(ORFixer):
                 # City and region are valid but country is not
                 painrating=Rating(3, RatingType.invalid,f'Country is not recognized. (Country: {country}, Region: {region}, City:{city})')
         return painrating
+
+    def getLocationsOfType(self, locationName: str, type: Location):
+        if locationName in self.locationRatingLookup:
+            locs=self.locationRatingLookup[locationName]
+        elif locationName is None:
+            return []
+        else:
+            locs=LocationFixer.locationContext.locateLocation(locationName.replace("/",","))
+            self.locationRatingLookup[locationName]=locs
+        locsOfType = [l for l in locs if isinstance(l, type)]
+        return locsOfType
+
     
 if __name__ == '__main__':
     PageFixerManager.runCmdLine([LocationFixer])

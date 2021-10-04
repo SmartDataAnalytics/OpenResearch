@@ -231,7 +231,7 @@ if __name__ == '__main__':
         lookup.getDataSource(lookupId).eventSeriesManager.wikiFileManager = wikiFileManager
     eventLocationHandler=EventLocationHandler(wikiFileManager)
     # generate technical pages for the location topic
-    eventLocationHandler.generateTechnicalPages("loacation", wikiFileManager, overwrite=True)
+    eventLocationHandler.generateTechnicalPages("location", wikiFileManager, overwrite=True)
     # generate location pages
     lookup = CorpusLookup(lookupIds=[lookupId], configure=patchEventSource)
     lookup.load(forceUpdate=False)

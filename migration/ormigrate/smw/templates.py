@@ -23,7 +23,7 @@ class LocationTemplatePage(TemplatePage):
         """
         overwrites the default view mode
         """
-        viewmodes = super(EventTemplatePage, self).viewmodes
+        viewmodes = super(LocationTemplatePage, self).viewmodes
         # overwrite the default viewmode
         template=f"""
 { '{{' }#display_map:center={ TemplateParam('coordinates') }|zoom={ TemplateParam('zoomLevel', defaultValue=5) }|service=leaflet|width=280|height=280{ '}}' }
@@ -168,7 +168,7 @@ class RatedEventTemplatePage(EventTemplatePage):
         header.add_cell("worst", is_header=True)
         painRow = table.add_row()
         painRow.add_cell(
-            "{{PainScale|{{#ask:[[-has subobject::{{PAGENAME}}/rating]]|mainlabel=-|?Rating pain|format=median}}}}")
+            "{{PainScale|{{#expr: ceil({{#ask:[[-has subobject::{{PAGENAME}}/rating]]|mainlabel=-|?Rating pain|format=median}})}}}}")
         painRow.add_cell(
             "{{PainScale|{{#ask:[[-has subobject::{{PAGENAME}}/rating]]|mainlabel=-|?Rating pain|format=max}}}}")
         return table

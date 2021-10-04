@@ -46,13 +46,13 @@ class TestLocationFixer(PageFixerTest):
         return
         # ToDo: Major cities of Bavaria currently not in geograpy3
         event={
-            "Acronym":"Test 2020",
+            "pageTitle":"Test 2020",
             self.COUNTRY:"Germany",
             self.REGION:"Bavaria",   #ToDo: Change to Region once template argument is changed
             self.CITY: "Munich"
         }
         exp_event={
-            "Acronym":"Test 2020",
+            "pageTitle":"Test 2020",
             self.COUNTRY:"DE",
             self.REGION:"DE/BY",   #ToDo: Change to Region once template argument is changed
             self.CITY: "DE/BY/Munich"
@@ -72,13 +72,13 @@ class TestLocationFixer(PageFixerTest):
         """
         profile = Profiler("Testing the correction invalid countries", self.profile)
         event={
-            "Acronym":"Test 2020",
+            "pageTitle":"Test 2020",
             self.COUNTRY:"USA",
             self.REGION:"British Columbia",   #ToDo: Change to Region once template argument is changed
             self.CITY: "Vancouver"
         }
         exp_event={
-            "Acronym":"Test 2020",
+            "pageTitle":"Test 2020",
             self.COUNTRY:"CA",
             self.REGION:"CA/BC",   #ToDo: Change to Region once template argument is changed
             self.CITY: "CA/BC/Vancouver"
@@ -93,12 +93,12 @@ class TestLocationFixer(PageFixerTest):
         """
         profile = Profiler("Testing detecting and fixing of missing location entries in event records", self.profile)
         event = {
-            "Acronym": "Test 2020",
+            "pageTitle": "Test 2020",
             self.COUNTRY: "USA",
             self.CITY: "Los Angeles"
         }
         exp_event = {
-            "Acronym": "Test 2020",
+            "pageTitle": "Test 2020",
             self.COUNTRY: "US",
             self.REGION: "US/CA",  # ToDo: Change to Region once template argument is changed
             self.CITY: "US/CA/Los Angeles"
@@ -113,12 +113,12 @@ class TestLocationFixer(PageFixerTest):
         It is expected that country and region entries are fixed and city entry stays missing
         """
         event = {
-            "Acronym": "Test 2020",
+            "pageTitle": "Test 2020",
             self.COUNTRY: "Germany",
             self.REGION: "Bavaria"   # ToDo: Change to Region once template argument is changed
         }
         exp_event = {
-            "Acronym": "Test 2020",
+            "pageTitle": "Test 2020",
             self.COUNTRY: "DE",
             self.REGION: "DE/BY",  # ToDo: Change to Region once template argument is changed
         }
@@ -131,13 +131,13 @@ class TestLocationFixer(PageFixerTest):
         It is expected that country and region entries are fixed and city entry stays missing
         """
         event = {
-            "Acronym": "Test 2020",
+            "pageTitle": "Test 2020",
             self.COUNTRY: "Germany",
             self.REGION: "Bavaria",   # ToDo: Change to Region once template argument is changed
             self.CITY: "EventLocation"
         }
         exp_event = {
-            "Acronym": "Test 2020",
+            "pageTitle": "Test 2020",
             self.COUNTRY: "DE",
             self.REGION: "DE/BY",  # ToDo: Change to Region once template argument is changed
             self.CITY: "EventLocation"
@@ -172,15 +172,16 @@ class TestLocationFixer(PageFixerTest):
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[5]>1000)
+                self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>1000)
             else:
-                self.assertEqual(3,painCounter[5])
+                self.assertEqual(3,painCounter[self.pageFixerClass.__name__][5])
 
     def testRate(self):
         '''
         tests the rating of location values of eventRecords
         '''
         event_region_missing={
+            "pageTitle":"Test",
             self.COUNTRY:"Germany",
             self.CITY:"Aachen"
         }
@@ -189,6 +190,7 @@ class TestLocationFixer(PageFixerTest):
         self.assertEqual(entityRating_region_missing.pain, 5)
 
         event_invalid_city = {
+            "pageTitle": "Test",
             self.COUNTRY: "Germany",
             self.CITY: "123456"
         }
@@ -196,14 +198,23 @@ class TestLocationFixer(PageFixerTest):
         self.fixer.rate(entityRating_invalid_city)
         self.assertEqual(entityRating_invalid_city.pain, 6)
 
-        event_missing_locations = {}
+        event_missing_locations = {"pageTitle":"Test"}
         entityRating_missing_locations  = PageFixerToolbox.getEntityRatingForRecord(event_missing_locations)
         self.fixer.rate(entityRating_missing_locations)
         self.assertEqual(entityRating_missing_locations.pain, 7)
 
+        event_or_loc_labels= {"pageTitle": "Test",
+                                   self.COUNTRY: "GR",
+                                   self.REGION:"GR/I",
+                                   self.CITY: "GR/I/Athens"
+                                   }
+        entityRating_or_loc_labels = PageFixerToolbox.getEntityRatingForRecord(event_or_loc_labels)
+        self.fixer.rate(entityRating_or_loc_labels)
+        self.assertEqual(entityRating_or_loc_labels.pain, 1)
+
     def testFix(self):
         eventRecord = {
-            "Acronym": "Test 2020",
+            "pageTitle": "Test 2020",
             self.COUNTRY: "Germany",
             self.CITY: "Bavaria"
         }
@@ -224,11 +235,13 @@ class TestLocationFixer(PageFixerTest):
 
     def testKnownLookupIssues(self):
         '''test ranking issues of found locations'''
-        return
+        #return
         #ToDo: Improve ranking of geograpy
         # greenville in North Carolina is first answer even though the correct choice is on place three
-        greenville=["Greenville", "South Carolina", "USA"]
-        greenvilleWikidataId="Q574192"
-        foundLocations=self.fixer.locationContext.locateLocation(*greenville)
-        print([l.wikidataid for l in foundLocations])
-        self.assertEqual(greenvilleWikidataId, foundLocations[0].wikidataid)
+        locations={
+            "Q574192":["Greenville", "South Carolina", "USA"]
+        }
+        for wikidataId, locationParts in locations.items():
+            foundLocation=self.fixer.getMatchingLocation(*locationParts)
+            print(foundLocation)
+            self.assertEqual(wikidataId, foundLocation.wikidataid)

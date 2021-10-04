@@ -4,6 +4,9 @@ Created on 2021-07-14
 @author: wf
 '''
 import os
+
+from lodstorage.jsonable import JSONAble
+
 from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.smw.rating import EntityRating
 from corpus.smw.topic import SMWEntity
@@ -111,7 +114,7 @@ class PageFixerToolbox(object):
         '''
         creates EntityRating for given record
         '''
-        entity = SMWEntity()
+        entity = JSONAble()
         entity.__dict__.update(record)
         entityRating = EntityRating(entity)
         return entityRating
