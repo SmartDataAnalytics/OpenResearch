@@ -164,11 +164,11 @@ class RatedEventTemplatePage(EventTemplatePage):
     def getRatingTable():
         table = Table(css_class="wikitable", escape=True)
         header = table.add_row()
-        header.add_cell("average", is_header=True)
+        header.add_cell("median", is_header=True)
         header.add_cell("worst", is_header=True)
         painRow = table.add_row()
         painRow.add_cell(
-            "{{PainScale|{{#ask:[[-has subobject::{{PAGENAME}}/rating]]|mainlabel=-|?Rating pain|format=average}}}}")
+            "{{PainScale|{{#ask:[[-has subobject::{{PAGENAME}}/rating]]|mainlabel=-|?Rating pain|format=median}}}}")
         painRow.add_cell(
             "{{PainScale|{{#ask:[[-has subobject::{{PAGENAME}}/rating]]|mainlabel=-|?Rating pain|format=max}}}}")
         return table
