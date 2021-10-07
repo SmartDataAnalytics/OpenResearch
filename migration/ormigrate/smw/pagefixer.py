@@ -366,24 +366,7 @@ class PageFixerManager(object):
         """
         wikiFileManager=WikiFileManager(self.wikiFileManager.sourceWikiId, self.wikiFileManager.targetPath)
         # generate rating topic and property pages
-        from ormigrate.EventLocationHandler import EventLocationHandler
-        # pages for rating topic
-        EventLocationHandler.generateTechnicalPages("rating",
-                                                    wikiFileManager,
-                                                    overwrite=overwrite,
-                                                    template=RatingTemplatePage)
-        # pages for event topic
-        EventLocationHandler.generateTechnicalPages("event",
-                                                    wikiFileManager,
-                                                    overwrite=overwrite,
-                                                    templateParamMapping=self.getPropertyToTemplateParamMap(self.orDataSource.eventManager),
-                                                    template=RatedEventTemplatePage)
-        # pages for event series topic
-        EventLocationHandler.generateTechnicalPages("eventSeries",
-                                                    wikiFileManager,
-                                                    overwrite=overwrite,
-                                                    templateParamMapping=self.getPropertyToTemplateParamMap(self.orDataSource.eventSeriesManager),
-                                                    template=RatedEventSeriesTemplatePage)
+        self.generateTechnicalEntityPages(wikiFileManager,overwrite=overwrite)
         # add rating entites
         postfix="After" if afterFixing else ""
         total=len(self.ratings)
@@ -413,6 +396,37 @@ class PageFixerManager(object):
                     wikiFile.save_to_file(overwrite=overwrite)
                     count+=1
                     print(f"{count}/{total} Ratings added to the rating page", end='\r' if count != total else "\n")
+
+    def generateTechnicalEntityPages(self, wikiFileManager:WikiFileManager, overwrite:bool=False):
+        '''
+        Generates the technical pages for the enties Rating, Event and Event series
+        Args:
+            wikiFileManager: WikiFileManager (specifies the target location of the generated files)
+            overwrite: If True exisitng files will be overwritten
+
+        Returns:
+            Nothing
+        '''
+        from ormigrate.EventLocationHandler import EventLocationHandler
+        # pages for rating topic
+        EventLocationHandler.generateTechnicalPages("rating",
+                                                    wikiFileManager,
+                                                    overwrite=overwrite,
+                                                    template=RatingTemplatePage)
+        # pages for event topic
+        EventLocationHandler.generateTechnicalPages("event",
+                                                    wikiFileManager,
+                                                    overwrite=overwrite,
+                                                    templateParamMapping=self.getPropertyToTemplateParamMap(
+                                                        self.orDataSource.eventManager),
+                                                    template=RatedEventTemplatePage)
+        # pages for event series topic
+        EventLocationHandler.generateTechnicalPages("eventSeries",
+                                                    wikiFileManager,
+                                                    overwrite=overwrite,
+                                                    templateParamMapping=self.getPropertyToTemplateParamMap(
+                                                        self.orDataSource.eventSeriesManager),
+                                                    template=RatedEventSeriesTemplatePage)
 
     def getPropertyToTemplateParamMap(self, manager:EntityManager):
         """

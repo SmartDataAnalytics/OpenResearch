@@ -39,11 +39,22 @@ class CorpusForTesting(object):
         return wikiUser
         
     @classmethod
-    def getWikiFileManager(cls,wikiId=None,debug=False):
+    def getWikiFileManager(cls,wikiId=None,debug=False, targetDir:str=None) -> WikiFileManager:
+        '''
+
+        Args:
+            wikiId: id of the wiki
+            debug:
+            targetDir: Target directory of the WikiFileManager
+
+        Returns:
+            WikiFileManager
+        '''
         wikiUser=cls.getWikiUser(wikiId)
         home = path.expanduser("~")
         wikiTextPath = f"{home}/.or/wikibackup/{wikiUser.wikiId}"
-        wikiFileManager = WikiFileManager(wikiUser.wikiId,wikiTextPath,login=False,debug=debug)
+        targetWikiTextPath = f"{home}/.or/tests/{wikiUser.wikiId}" if not targetDir else targetDir
+        wikiFileManager = WikiFileManager(wikiUser.wikiId,wikiTextPath,targetWikiTextPath=targetWikiTextPath,login=False,debug=debug)
         return wikiFileManager
 
     @classmethod

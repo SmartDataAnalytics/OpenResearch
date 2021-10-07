@@ -1,8 +1,13 @@
+import os
+import tempfile
 from os import path
 from unittest import TestCase
 
 from ormigrate.fixer import ORFixer
 from ormigrate.smw.pagefixer import PageFixer, PageFixerManager
+from functools import wraps,partial
+
+from tests.corpusfortesting import CorpusForTesting
 
 
 class TestPagefixer(TestCase):
@@ -21,6 +26,16 @@ class TestPagefixer(TestCase):
         if self.debug:
             for pageFixer in pageFixers:
                 print(pageFixer.__name__)
+
+    def testGenerateTechnicalEntityPages(self):
+        '''tests the generation of the entity pages'''
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            wikiFileManager=CorpusForTesting.getWikiFileManager(targetDir=tmpdirname)
+            manager=PageFixerManager([],wikiFileManager)
+            manager.generateTechnicalEntityPages(wikiFileManager,True)
+            #check if template pages are generated
+            for entity in ["Event","Event series","Rating"]:
+                self.assertTrue(os.path.isfile(f"{wikiFileManager.targetPath}/Template:{entity}.wiki"))
 
 
     def testCmdLineRating(self):
