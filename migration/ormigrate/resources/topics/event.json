@@ -28,6 +28,7 @@
          "isLink": null,
          "nullable": null,
          "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null
       },
       {
@@ -351,6 +352,7 @@
          "isLink": null,
          "nullable": null,
          "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null
       },
       {
@@ -444,6 +446,7 @@
          "isLink": null,
          "nullable": null,
          "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null,
        "externalFormatterUri": "https://www.wikidata.org/entity/$1"
       }

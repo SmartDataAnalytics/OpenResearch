@@ -8,29 +8,6 @@
     },
   "properties":[
       {
-         "pageTitle": "Property:Acronym",
-         "name": "acronym",
-         "label": "acronym",
-         "type": "Text",
-         "index": null,
-         "sortPos": null,
-         "primaryKey": "t",
-         "mandatory": "f",
-         "namespace": null,
-         "size": null,
-         "uploadable": null,
-         "defaultValue": null,
-         "inputType": null,
-         "allowedValues": null,
-         "documentation": "This property is of the datatype Text and it is being used to provide the '''acronym''' of an academic event or an event series.It is a recommended property when describing an academic event or event series and it is not needed for the DOI registration process via DataCite.",
-         "values_from": null,
-         "showInGrid": null,
-         "isLink": null,
-         "nullable": null,
-         "topic": "Event",
-         "regexp": null
-      },
-      {
          "pageTitle": "Property:EventSeries acronym",
          "name": "acronym",
          "label": "acronym",
@@ -50,7 +27,7 @@
          "showInGrid": null,
          "isLink": null,
          "nullable": null,
-         "topic": "Concept:EventSeries",
+         "topic": "Concept:Event series",
          "regexp": null
       },
       {
@@ -73,7 +50,8 @@
          "showInGrid": null,
          "isLink": null,
          "nullable": null,
-         "topic": "Event",
+         "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null,
          "externalFormatterUri": "https://lobid.org/gnd/$1"
       },
@@ -81,7 +59,7 @@
          "pageTitle": "Property:Has subject",
          "name": "subject",
          "label": "academic field/subject",
-         "type": "Text",
+         "type": "Page",
          "index": null,
          "sortPos": null,
          "primaryKey": "f",
@@ -97,7 +75,8 @@
          "showInGrid": null,
          "isLink": null,
          "nullable": null,
-         "topic": "Event",
+         "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null
       },
       {
@@ -120,7 +99,8 @@
          "showInGrid": null,
          "isLink": null,
          "nullable": null,
-         "topic": "Event",
+         "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null
       },
       {
@@ -143,7 +123,8 @@
          "showInGrid": null,
          "isLink": null,
          "nullable": null,
-         "topic": "Event",
+         "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null
       },
       {
@@ -166,7 +147,8 @@
          "showInGrid": null,
          "isLink": null,
          "nullable": null,
-         "topic": "Event",
+         "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null
       },
       {
@@ -189,7 +171,8 @@
          "showInGrid": null,
          "isLink": null,
          "nullable": null,
-         "topic": "Event",
+         "topic": "Concept:Event series",
+         "usedFor": ["Concept:Event series"],
          "regexp": null,
          "externalFormatterUri": "http://wikicfp.com/cfp/program?id=$1"
       },
@@ -213,9 +196,35 @@
          "showInGrid": null,
          "isLink": null,
          "nullable": null,
-         "topic": "Event",
+         "topic": "Concept:Event",
+         "usedFor": ["Concept:Event series", "Concept:Event"],
          "regexp": null,
-       "externalFormatterUri": "https://www.wikidata.org/entity/$1"
+         "externalFormatterUri": "https://www.wikidata.org/entity/$1"
+      },
+      {
+         "pageTitle": "Property:DblpSeries",
+         "name": "DblpSeries",
+         "label": "dblp Series",
+         "type": "External identifier",
+         "index": null,
+         "sortPos": null,
+         "primaryKey": "f",
+         "mandatory": "f",
+         "namespace": null,
+         "size": null,
+         "uploadable": null,
+         "defaultValue": null,
+         "inputType": null,
+         "allowedValues": null,
+         "documentation": "This [[isA::Property|property ]] of the datatype [[Has type::External identifier]] is used to map an dblp series name to the dblp page \n\nIt's external formatter URI is [[External formatter uri::https://dblp.org/db/conf/$1/index.html]].\n",
+         "values_from": null,
+         "showInGrid": null,
+         "isLink": null,
+         "nullable": null,
+         "topic": "Concept:Event series",
+         "usedFor": ["Concept:Event series"],
+         "regexp": null,
+         "externalFormatterUri": "https://dblp.org/db/conf/$1/index.html"
       }
    ]
 }
