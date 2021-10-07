@@ -1,5 +1,6 @@
+from corpus.datasources.openresearch import OREvent
 from wikifile.smw import TemplatePage, Template, Table
-from wikifile.utils import TemplateParam, MagicWord, PageLink, Widget, ParserFunction
+from wikifile.utils import TemplateParam, MagicWord, PageLink, Widget, ParserFunction, SetProperties
 
 
 class Show(Widget):
@@ -77,6 +78,16 @@ class EventTemplatePage(TemplatePage):
     """
 
     @property
+    def storemodes(self) -> dict:
+        storemodes=super(EventTemplatePage, self).storemodes
+        # add isA property to storemode
+        default=storemodes.get("#default")
+        if isinstance(default, SetProperties):
+            if isinstance(default.arguments, list):
+                default.arguments.append(f"isA={self.topic.get_pageTitle()}")
+        return storemodes
+
+    @property
     def viewmodes(self) -> dict:
         """
         overwrites the default view mode
@@ -150,6 +161,8 @@ class EventTemplatePage(TemplatePage):
 ! colspan="2" style="background: #ADD8E6; color: black" {pipeStr} { MagicWord('PAGENAME') }     
 { joinStr.join([*basicInformationRows,*locationInfoRows,*dateInfoRows,*committeesInfoRows,*tableOfContentsRow,*twitterRows]) }
 {pipeStr}}}
+__SHOWFACTBOX__
+{{#default_form:Event}}
 """
         viewmodes["#default"] = template
         return viewmodes
@@ -230,6 +243,16 @@ class EventSeriesTemplatePage(TemplatePage):
     """
     Renders the temlate page for or event series
     """
+
+    @property
+    def storemodes(self) -> dict:
+        storemodes = super(EventSeriesTemplatePage, self).storemodes
+        # add isA property to storemode
+        default = storemodes.get("#default")
+        if isinstance(default, SetProperties):
+            if isinstance(default.arguments, list):
+                default.arguments.append(f"isA={self.topic.get_pageTitle()}")
+        return storemodes
 
     @property
     def viewmodes(self) -> dict:
@@ -329,9 +352,8 @@ class EventSeriesTemplatePage(TemplatePage):
 {{#ifeq:{{#arraymap:{{{Field|}}}|, |var|[[Category:var]]|&#32;}}|||{{#arraymap:{{{Field|}}}|, |var|[[Category:var]]|&#32;}}}}
 -->
 {{#ifeq:{{{Field|}}}|||{{#arraymap:{{{Field|}}}|, |var|[[Category:var]]|&#32;}}}}
-{{#ifeq:{{{Field|}}}|||{{#arraymap:{{{Field|}}}|, |var|[[Field::Category:var| ]]|&#32;}}}}
-
-{{#default_form:EventSeries}}"""
+{{#ifeq:{{{Field|}}}|||{{#arraymap:{{{Field|}}}|, |var|[[Has subject::Category:var| ]]|&#32;}}}}
+"""
         template=f"""__NOCACHE__
 {{{pipeStr} cellspacing="0" cellpadding="5" style="position:relative; margin: 0 0 0.5em 1em; border-collapse: collapse; border: 1px solid #aaa; background: #fff; float: right; clear: right; width: 20em"
 ! colspan="2" style="background: #ef7c00; color: white" {pipeStr} { MagicWord('PAGENAME') }
@@ -339,6 +361,8 @@ class EventSeriesTemplatePage(TemplatePage):
 {pipeStr}}}
 {metrics}
 {eventsShowCase}
+__SHOWFACTBOX__
+{{#default_form:EventSeries}}
 """
         viewmodes['#default'] = template
         return viewmodes
