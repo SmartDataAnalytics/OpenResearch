@@ -383,16 +383,15 @@ class PageFixerManager(object):
                     if not wikiFile.wikiText:
                         # rating subpage does not exist → add Headline with link to original entity
                         wikiFile.wikiText=f"== Ratings for [[{ ratingEntity.pageTitle }]]=="
-                    fixerLabel=str(Link(url=ratingEntity.fixer.issue, linkText=ratingEntity.fixer.__class__.__name__))
                     rating={
-                        "fixer": fixerLabel,
+                        "fixer": ratingEntity.fixer.__class__.__name__,
                         f"pain{postfix}":f"{ratingEntity.pain}",
                         f"reason{postfix}":str(ratingEntity.reason.value),
                         f"hint{postfix}":str(ratingEntity.hint),
                         "storemode":"subobject",
                         "viewmode": "ratingOnly" if not self.hasFixer(pageFixer) else "ratingComparison"
                     }
-                    wikiFile.updateTemplate("Rating", rating, match={"fixer":fixerLabel}, prettify=True)
+                    wikiFile.updateTemplate("Rating", rating, match={"fixer":ratingEntity.fixer.__class__.__name__}, prettify=True)
                     wikiFile.save_to_file(overwrite=overwrite)
                     count+=1
                     print(f"{count}/{total} Ratings added to the rating page", end='\r' if count != total else "\n")
@@ -408,6 +407,10 @@ class PageFixerManager(object):
             Nothing
         '''
         from ormigrate.EventLocationHandler import EventLocationHandler
+        # pages for fixer topic
+        EventLocationHandler.generateTechnicalPages("fixer",
+                                                    wikiFileManager,
+                                                    overwrite=overwrite)
         # pages for rating topic
         EventLocationHandler.generateTechnicalPages("rating",
                                                     wikiFileManager,
@@ -427,6 +430,23 @@ class PageFixerManager(object):
                                                     templateParamMapping=self.getPropertyToTemplateParamMap(
                                                         self.orDataSource.eventSeriesManager),
                                                     template=RatedEventSeriesTemplatePage)
+
+    def generateFixerPages(self, overwrite:bool=False):
+        """Generates the pages for all fixers"""
+        from ormigrate.EventLocationHandler import EventLocationHandler
+        # pages for fixer topic
+        EventLocationHandler.generateTechnicalPages("fixer",
+                                                    self.wikiFileManager,
+                                                    overwrite=overwrite)
+        for name,pageFixer in self.pageFixers.items():
+            wikiFile = self.wikiFileManager.getWikiFile(name, checkWiki=False)
+            fixer={
+                "name":name,
+                "issue":str(pageFixer.issue).replace("https://github.com/SmartDataAnalytics/OpenResearch/issues/",""),
+                "purpose":pageFixer.purpose
+            }
+            wikiFile.updateTemplate("Fixer", fixer, match={"name": name}, prettify=True)
+            wikiFile.save_to_file(overwrite=overwrite)
 
     def getPropertyToTemplateParamMap(self, manager:EntityManager):
         """
