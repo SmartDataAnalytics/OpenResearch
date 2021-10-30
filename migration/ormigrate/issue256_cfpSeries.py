@@ -8,7 +8,7 @@ import re
 from corpus.lookup import CorpusLookup
 from corpus.quality.rating import RatingType
 
-from ormigrate.fixer import ORFixer
+from ormigrate.fixer import ORFixer, Entity
 from ormigrate.smw.rating import EntityRating
 
 
@@ -20,6 +20,8 @@ class WikiCfpIdSeriesFixer(ORFixer):
 
     purpose = "fixer for getting WikiCFP id from the events of the event series"
     issue = "https://github.com/SmartDataAnalytics/OpenResearch/issues/256"
+
+    worksOn = [Entity.EVENT_SERIES]
 
     wikiCfpIdRegex="^[1-9]\d*$"  # https://www.wikidata.org/wiki/Property:P5127
     wikiCfpSeriesUriRegex="^https?:\/\/wikicfp\.com\/cfp\/program\?id=(?P<id>[1-9]\d*)" # https://www.wikidata.org/wiki/Property:P5127 slighty modified with a named group
@@ -96,13 +98,14 @@ class WikiCfpIdSeriesFixer(ORFixer):
             if acronym is None:
                 acronym=rating.pageTitle
             events=self.getEventsOfSeries(acronym)
-            wikiCfpIdsOfEvents={getattr(event, self.WIKI_CFP_ID) for event in events if hasattr(event, self.WIKI_CFP_ID)}
-            possibleWikiCFPSeriesIds={self.getWikiCFPSeriesIdOfEvent(eventId) for eventId in wikiCfpIdsOfEvents}
-            reg = re.compile(self.wikiCfpIdRegex)
-            possibleWikiCFPSeriesIds=list(filter(reg.search, filter(None,possibleWikiCFPSeriesIds)))
-            if len(possibleWikiCFPSeriesIds) == 1:
-                # wikiCFP series id is distinct
-                record[self.WIKI_CFP_SERIES]=possibleWikiCFPSeriesIds.pop()
+            if events is not None:
+                wikiCfpIdsOfEvents={getattr(event, self.WIKI_CFP_ID) for event in events if hasattr(event, self.WIKI_CFP_ID)}
+                possibleWikiCFPSeriesIds={self.getWikiCFPSeriesIdOfEvent(eventId) for eventId in wikiCfpIdsOfEvents}
+                reg = re.compile(self.wikiCfpIdRegex)
+                possibleWikiCFPSeriesIds=list(filter(reg.search, filter(None,possibleWikiCFPSeriesIds)))
+                if len(possibleWikiCFPSeriesIds) == 1:
+                    # wikiCFP series id is distinct
+                    record[self.WIKI_CFP_SERIES]=possibleWikiCFPSeriesIds.pop()
 
     def rate(self,rating:EntityRating):
         """

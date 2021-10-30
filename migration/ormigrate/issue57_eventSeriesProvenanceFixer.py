@@ -4,7 +4,7 @@ Created on 2021-04-16
 @author: wf
 '''
 from ormigrate.smw.pagefixer import PageFixerManager
-from ormigrate.fixer import ORFixer
+from ormigrate.fixer import ORFixer, Entity
 from ormigrate.smw.rating import Rating, RatingType, EntityRating
 
 
@@ -14,6 +14,8 @@ class EventSeriesProvenanceFixer(ORFixer):
     '''
     issue="https://github.com/SmartDataAnalytics/OpenResearch/issues/57"
     purpose="fixes missing provenance information"
+
+    worksOn = [Entity.EVENT_SERIES]
 
     def __init__(self,pageFixerManager):
         '''
