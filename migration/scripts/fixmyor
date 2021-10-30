@@ -59,16 +59,25 @@ nuke() {
 
 }
 #
+# get the entity pages from orclone
+#
+getWikiBackup() {
+  local backupPath="$1"
+  wikibackup -s orclone -qd 100 -q "[[Concept:Event series]]" --backupPath $backupPath
+  wikibackup -s orclone -qd 100 -q "[[Concept:Event]]" --backupPath $backupPath
+}
+#
 # nuke Events, Events series and ratings in the given wiki
 #
 generateAndFix() {
-  local base="$1"
-  local target_wiki="$2"
+  local backupPath="$1"
+  local targetWikiTextPath="$2"
+  local target_wiki="$3"
   echo "Generate Location pages"
-  python ./ormigrate/EventLocationHandler.py --decile 10 -s orclone --wikiTextPath $base
+  python ./ormigrate/EventLocationHandler.py --decile 10 -s orclone --wikiTextPath $targetWikiTextPath
 
   echo "Rate and fix entities"
-  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer EventSeriesAcronymFixer WikiCFPIDFixer SeriesFixer OrdinalFixer DateFixer BiblographicFieldFixer AcceptanceRateFixer NullValueFixer EventSeriesProvenanceFixer AcronymLengthFixer LocationFixer WikiCfpIdSeriesFixer --addRatingPage --fix --force
+  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --backupPath $backupPath --targetWikiTextPath $targetWikiTextPath --fixer EventSeriesAcronymFixer WikiCFPIDFixer SeriesFixer OrdinalFixer DateFixer BiblographicFieldFixer AcceptanceRateFixer NullValueFixer EventSeriesProvenanceFixer AcronymLengthFixer LocationFixer WikiCfpIdSeriesFixer --addRatingPage --fix --force
   #python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer OrdinalFixer --addRatingPage --fix --force
 }
 #
@@ -90,6 +99,24 @@ do
   case $option in
     -h|--help)
        usage;;
+
+    --wikiTextPath)
+      if [ $# -lt 1 ]
+      then
+	      usage
+      fi
+      wikiTextPath="$1"
+      shift
+      ;;
+
+    --targetWikiTextPath)
+      if [ $# -lt 1 ]
+      then
+	      usage
+      fi
+      targetWikiTextPath="$1"
+      shift
+      ;;
     -t|--target)
       if [ $# -lt 1 ]
       then
@@ -102,7 +129,7 @@ do
 done
 
 scriptbase=$(pwd)
-base=~/.or/generated/orfixed
+targetWikiTextPath=~/.or/generated/orfixed
 if [ ! -d $base ]
 then
   mkdir -p $base
@@ -114,11 +141,11 @@ fi
 echo "Install openresearch migration"
 #pip install OpenResearchMigration
 
-#ToDo: call getbackup script
+getWikiBackup $wikiTextPath
 
-generateAndFix $base $target_wiki
+generateAndFix $wikiTextPath $targetWikiTextPath $target_wiki
 
 #nuke $target_wiki
 
-restore $base $target_wiki
+restore $targetWikiTextPath $target_wiki
 
