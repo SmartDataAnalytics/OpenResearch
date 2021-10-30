@@ -34,7 +34,7 @@ class TestPagefixer(TestCase):
             manager=PageFixerManager([],wikiFileManager)
             manager.generateTechnicalEntityPages(wikiFileManager,True)
             #check if template pages are generated
-            for entity in ["Event","Event series","Rating"]:
+            for entity in ["Event","Event series","Rating","Fixer"]:
                 self.assertTrue(os.path.isfile(f"{wikiFileManager.targetPath}/Template:{entity}.wiki"))
 
 
