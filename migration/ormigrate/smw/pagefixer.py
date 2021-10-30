@@ -113,6 +113,8 @@ class PageFixerManager(object):
                                 help="Format the resulting table should have. E.g. mediawiki, github, table")
         cmdLine.parser.add_argument("--addRatingPage", action="store_true",
                                     help="adds a rating subpage for each entity containing the ratings of the entity")
+        cmdLine.parser.add_argument("--genTechPages", default=False, action="store_true",
+                                    help="GEnerate the technical entity pages such as Help: Category: List of etc. and their prperties")
         if argv is None:
             argv=sys.argv[1:]
         args = cmdLine.parser.parse_args(argv)
@@ -174,6 +176,9 @@ class PageFixerManager(object):
                 # add rating to rating subpage after fixers are applied
                 self.getRatings(debug=self.args.debug, onlyIfHasFixer=True)   # rate entities again (only if they were fixed)
                 self.addRatingSubPages(afterFixing=True)
+        if self.args.genTechPages:
+            # generate rating topic and property pages
+            self.generateTechnicalEntityPages(self.wikiFileManager, overwrite=self.args.force)
 
 
     def setupEntityRatings(self, pageTitles:list=None):
@@ -365,8 +370,6 @@ class PageFixerManager(object):
         Generate the Rating subpages
         """
         wikiFileManager=WikiFileManager(self.wikiFileManager.sourceWikiId, self.wikiFileManager.targetPath)
-        # generate rating topic and property pages
-        self.generateTechnicalEntityPages(wikiFileManager,overwrite=overwrite)
         # add rating entites
         postfix="After" if afterFixing else ""
         total=len(self.ratings)
