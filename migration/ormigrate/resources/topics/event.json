@@ -264,7 +264,7 @@
       },
       {
          "pageTitle": "Property:Homepage",
-         "name": "officialWebsite",
+         "name": "Homepage",
          "label": "official website",
          "type": "URL",
          "index": null,
