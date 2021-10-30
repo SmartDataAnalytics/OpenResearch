@@ -85,6 +85,7 @@ class EventTemplatePage(TemplatePage):
         if isinstance(default, SetProperties):
             if isinstance(default.arguments, list):
                 default.arguments.append(f"isA={self.topic.get_pageTitle()}")
+                default.arguments.append("Has year="+"{{{Year|{{#time:Y|{{{Start date|1500}}}}}}}}")
         return storemodes
 
     @property
@@ -99,11 +100,11 @@ class EventTemplatePage(TemplatePage):
             "{{#ifeq:{{{Logo|}}}|||{{Tablelongrow|Align=Center|Value=[[Image:{{{Logo}}}|frameless|Logo of {{{Name|{{PAGENAME}}}}}]] }}}}",
             "{{#ifeq:{{{Title|}}}|||{{Tablelongrow|Value={{{Title}}} }}}}",
             "{{#ifeq:{{{Ordinal|}}}|||{{TableRow|Label=Ordinal|Value={{{Ordinal}}}}}}}",
-            "{{#ifeq:{{{Series|}}}|||{{TableRow|Label=Event in series|Value={{{Series}}}}}}}",
+            "{{#ifeq:{{{Series|}}}|||{{TableRow|Label=Event in series|Value=[[{{{Series}}}]]}}}}",
             "{{#ifeq:{{{Superevent|}}}|||{{TableRow|Label=Subevent of|Value={{{Superevent}}}}}}}",
             "{{#ifeq:{{{Start date|}}}|||{{TableRow|Label=Dates|Value={{{Start date}}} {{#ifeq:{{{End date|}}}|||<small>{{#ask:[[{{PAGENAME}}]]|?start date=start|?end date=end|?has location city=location|searchlabel=(iCal)|format=icalendar}}</small>}}}} - {{#ifeq:{{{End date|}}}|||{{{End date}}}}} }}",
             "{{#ifeq:{{{presence|}}}|||{{TableRow|Label=Presence|Value={{{presence}}}}}}}",
-            "{{#ifeq:{{{Homepage|}}}|||{{TableRow|Label=Homepage:|mandatory|Value={{{Homepage}}}}}}}",
+            "{{#ifeq:{{{Homepage|}}}|||{{TableRow|Label=Homepage:|mandatory|Value={{#show: {{PAGENAME}}|?Homepage}} }}}}",
             "{{#ifeq:{{{Twitter account|}}}|||{{TableRow|Label=Twitter account:|Value={{{Twitter account}}}}}}}",
             "{{#ifeq:{{{Submitting link|}}}|||{{TableRow|Label=Submitting link:|Value={{{Submitting link}}}}}}}",
         ]
@@ -162,7 +163,7 @@ class EventTemplatePage(TemplatePage):
 { joinStr.join([*basicInformationRows,*locationInfoRows,*dateInfoRows,*committeesInfoRows,*tableOfContentsRow,*twitterRows]) }
 {pipeStr}}}
 __SHOWFACTBOX__
-{{#default_form:Event}}
+{{{{#default_form:Event}}}}
 """
         viewmodes["#default"] = template
         return viewmodes
@@ -263,12 +264,13 @@ class EventSeriesTemplatePage(TemplatePage):
         joinStr = f"\n{pipeStr}-\n"
         basicInfoRows=[
             str(DisplayValueInRowIfPresent("Logo", TableLongRow("[[Image:{{{Logo}}}|frameless|Logo of {{{Name|{{PAGENAME}}}}}]]", escape=True))),   # Testing Widget usefulness
-            "{{#ifeq:{{{Title|}}}|||{{Tablelongrow|Value='''{{{Title}}}'''|Color=#fdddbb}}}}",
+            "{{#ifeq:{{{Title|}}}|||{{Tablelongrow|Value='''{{{name}}}'''|Color=#fdddbb}}}}",
             "{{#ifeq:{{{Field|}}}|||{{Tablelongrow|Value=Categories: {{{Field|}}} }} }}",
-            "{{#ifeq:{{{Homepage|}}}|||{{Tablelongrow|Value={{{Homepage}}} }} }}",
-            "{{#ifeq:{{{WikiDataId|}}}|||{{TableRow|Label=WikiDataId:|Value={{{WikiDataId}}} }}}}",
-            "{{#ifeq:{{{DblpSeries|}}}|||{{TableRow|Label=DblpSeries:|Value={{{DblpSeries}}} }}}}",
-            "{{#ifeq:{{{WikiCfpSeries|}}}|||{{TableRow|Label=WikiCFP Series:|Value={{{WikiCfpSeries}}} }}}}",
+            "{{#ifeq:{{{Homepage|}}}|||{{Tablelongrow|Value={{#show: {{PAGENAME}}|?Homepage}} }} }}",
+            "{{#ifeq:{{{WikiDataId|}}}|||{{TableRow|Label=WikiDataId:|Value={{#show: {{PAGENAME}}|mainlabel=-|?Wikidataid}} }}}}",
+            "{{#ifeq:{{{WikiDataId|}}}|||{{TableRow|Label=Scholia:|Value=https://scholia.toolforge.org/event-series/{{{WikiDataId}}}}}}}",
+            "{{#ifeq:{{{DblpSeries|}}}|||{{TableRow|Label=DblpSeries:|Value={{#show: {{PAGENAME}}|mainlabel=-|?DblpSeries}} }}}}",
+            "{{#ifeq:{{{WikiCfpSeries|}}}|||{{TableRow|Label=WikiCFP Series:|Value={{#show: {{PAGENAME}}|mainlabel=-|?WikiCfpSeries}} }}}}",
             "{{#ifeq:{{{has Twitter|}}}|||{{TableRow|Label=Twitter:|Value={{{has Twitter}}} }}}}",
             "{{#ifeq:{{{organizer|}}}|||{{TableRow|Label=Organizer:|Value={{{organizer}}} }}}}",
             "{{#ifeq:{{{has Bibliography|}}}|||{{TableRow|Label=Bibliography:|Value= {{{has Bibliography}}} }}}}",
@@ -293,30 +295,7 @@ class EventSeriesTemplatePage(TemplatePage):
 }}.
 }}"""
         eventsShowCase="""==Events==
-{{#ask:[[isA::Event]][[Event in series::{{PAGENAME}}]]
-|mainlabel=Event
-|?Acronym=acronym
-|?CFP=CFP
-|?DblpConferenceId=dblp Conference ID
-|?End date=end date
-|?Event in series=in event series
-|?Event type=event type
-|?Event type other=event type other
-|?GND-ID=GND ID
-|?Has location city=City
-|?Has location country=Country
-|?Has subject=academic field/subject
-|?Homepage=official website
-|?MeetingUrl=meeting URL
-|?Ordinal=event number
-|?Sponsor=sponsor
-|?Start date=start date
-|?Title=official name
-|?WikiCFP-ID=wikiCFP ID
-|?Wikidataid=wikidata QID
-|limit=200
-|order=ascending
-}}
+{{EventSeriesOverview|{{PAGENAME}} }}
 
 ==Submission/Acceptance==
 {{#ask: [[Event in series::{{PAGENAME}}]][[Submitted papers::>0]][[Accepted papers::>0]]
@@ -344,7 +323,7 @@ class EventSeriesTemplatePage(TemplatePage):
 
 ==Locations==
 {{#ask: [[Event in series::{{PAGENAME}}]]
- | ?Has coordinates
+ | ?Has location city.Location coordinates
  | format = openlayers
 }}
 
@@ -362,7 +341,7 @@ class EventSeriesTemplatePage(TemplatePage):
 {metrics}
 {eventsShowCase}
 __SHOWFACTBOX__
-{{#default_form:EventSeries}}
+{{{{#default_form:EventSeries}}}}
 """
         viewmodes['#default'] = template
         return viewmodes
@@ -404,7 +383,7 @@ class TableLongRow(Widget):
 
     def render(self):
         pipe="{{!}}" if self.escape else "|"
-        markup=f'{pipe} colspan="2" style="text-align: {self.align}; background: {self.color}"|<div style="font-size: {self.fontSize}">{self.value}</div>'
+        markup=f'{pipe} colspan="2" style="text-align: {self.align}; background: {self.color}"{pipe}<div style="font-size: {self.fontSize}">{self.value}</div>'
         return markup
 
 class TableRow(Widget):
