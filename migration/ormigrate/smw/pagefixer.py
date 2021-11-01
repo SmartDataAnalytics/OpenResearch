@@ -369,7 +369,7 @@ class PageFixerManager(object):
         """
         Generate the Rating subpages
         """
-        wikiFileManager=WikiFileManager(self.wikiFileManager.sourceWikiId, self.wikiFileManager.targetPath)
+        wikiFileManager=WikiFileManager(self.wikiFileManager.sourceWikiId, self.wikiFileManager.targetPath, login=False)
         # add rating entites
         postfix="After" if afterFixing else ""
         total=len(self.ratings)
