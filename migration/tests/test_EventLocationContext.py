@@ -67,8 +67,8 @@ class TestEventLocationHandler(TestCase):
         self.assertEqual(counterList.get("Third"), 3)
         profile.time()
 
-    def  testGenerateTechnicalPages(self):
+    def testGenerateTechnicalPages(self):
         '''Tests generation of the technical pages for the location topic in wikimarkup'''
         self.assertFalse(os.path.isfile(f"{self.tmpDir.name}/Help:Location.wiki"))
-        self.eventLocationContext.generateTechnicalPages()
+        self.eventLocationContext.generateTechnicalPages("location", self.wikiFileManager, overwrite=True)
         self.assertTrue(os.path.isfile(f"{self.tmpDir.name}/Help:Location.wiki"))
