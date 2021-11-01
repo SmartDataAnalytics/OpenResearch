@@ -63,6 +63,7 @@ nuke() {
 #
 getWikiBackup() {
   local backupPath="$1"
+  echo "Get files from wiki"
   wikibackup -s orclone -qd 100 -q "[[Concept:Event series]]" --backupPath $backupPath
   wikibackup -s orclone -qd 100 -q "[[Concept:Event]]" --backupPath $backupPath
 }
@@ -108,7 +109,6 @@ do
       wikiTextPath="$1"
       shift
       ;;
-
     --targetWikiTextPath)
       if [ $# -lt 1 ]
       then
@@ -135,11 +135,12 @@ then
   mkdir -p $base
 else
   # empty the folder to ensure that only newly generated pages are pushed
+  echo "Deleting previously generated wikiMarkupFiles"
   rm -r ~/.or/generated/orfixed/*
 fi
 
 echo "Install openresearch migration"
-#pip install OpenResearchMigration
+pip install OpenResearchMigration
 
 getWikiBackup $wikiTextPath
 
