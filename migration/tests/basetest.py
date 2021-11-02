@@ -4,6 +4,7 @@ Created on 20.08.2021
 @author: wf
 '''
 import unittest
+from corpus.eventcorpus import EventCorpus
 from ormigrate.toolbox import Profiler
 
 class ORMigrationTest(unittest.TestCase):
@@ -17,7 +18,7 @@ class ORMigrationTest(unittest.TestCase):
         self.profile=profile
         msg=f"test {self._testMethodName}, debug={self.debug}"
         self.profiler=Profiler(msg,profile=profile)
-        pass
+        EventCorpus.download()
 
 
     def tearDown(self):
