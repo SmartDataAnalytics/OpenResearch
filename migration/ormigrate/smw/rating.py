@@ -4,7 +4,9 @@ Created on 2021-04-16
 @author: wf
 '''
 from __future__ import annotations
-from typing import TYPE_CHECKING
+
+from collections import ChainMap
+from typing import TYPE_CHECKING, List
 from corpus.smw.topic import SMWEntity
 from lodstorage.jsonable import JSONAbleList, JSONAble
 from corpus.quality.rating import Rating, RatingType
@@ -83,8 +85,10 @@ class EntityRating(PageRating):
         if self.wikiFile:
             if hasattr(self.entity, "templateName"):
                 templateName = self.entity.templateName
-                rawRecords = self.wikiFile.extract_template(templateName)
-                return rawRecords
+                rawRecords = self.wikiFile.extractTemplatesByName(templateName)
+                if rawRecords:
+                    return dict(ChainMap(*rawRecords))
+        return dict()
 
     def rate(self):
         """uses the assigned fixer to rate itself"""
