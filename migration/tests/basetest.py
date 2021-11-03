@@ -37,8 +37,11 @@ class ORMigrationTest(unittest.TestCase):
                     else:
                         orDataSource.eventManager.wikiUser = wikiFileManager.wikiUser
                         orDataSource.eventSeriesManager.wikiUser = wikiFileManager.wikiUser
-        lookup = CorpusLookup(lookupIds=["orclone-backup"], configure=patchEventSource, debug=debug)
-        lookup.load(forceUpdate=HelperFunctions.inPublicCI())
+        if HelperFunctions.inPublicCI():
+            lookup = CorpusLookup(lookupIds=["orclone-backup"], configure=patchEventSource, debug=debug)
+            lookup.load(forceUpdate=True)
+            lookup.getDataSource("orclone-backup").eventManager.store()
+            lookup.getDataSource("orclone-backup").eventSeriesManager.store()
 
 
     def tearDown(self):
