@@ -78,8 +78,7 @@ generateAndFix() {
   python ./ormigrate/EventLocationHandler.py --decile 10 -s orclone --wikiTextPath $targetWikiTextPath
 
   echo "Rate and fix entities"
-  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --backupPath $backupPath --targetWikiTextPath $targetWikiTextPath --fixer EventSeriesAcronymFixer WikiCFPIDFixer SeriesFixer OrdinalFixer DateFixer BiblographicFieldFixer AcceptanceRateFixer NullValueFixer EventSeriesProvenanceFixer AcronymLengthFixer LocationFixer WikiCfpIdSeriesFixer --addRatingPage --fix --force
-  #python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --targetWikiTextPath $base --fixer OrdinalFixer --addRatingPage --fix --force
+  python ./ormigrate/smw/pagefixer.py -s orclone --ccId orclone-backup --wikiTextPath $backupPath --targetWikiTextPath $targetWikiTextPath --fixer EventSeriesAcronymFixer WikiCFPIDFixer SeriesFixer OrdinalFixer DateFixer BiblographicFieldFixer AcceptanceRateFixer NullValueFixer EventSeriesProvenanceFixer AcronymLengthFixer LocationFixer WikiCfpIdSeriesFixer --addRatingPage --fix --force
 }
 #
 # restore (upload) generated pages

@@ -5,7 +5,9 @@ Created on 2021-04-16
 '''
 import os
 from pathlib import Path
-from geograpy.locator import LocationContext
+
+from geograpy.locator import LocationContext, Locator
+
 
 class OpenResearch(object):
     '''
@@ -33,6 +35,9 @@ class OpenResearch(object):
         '''
         Returns a LocationContext 
         '''
+        Locator.resetInstance()
+        locator = Locator.getInstance()
+        locator.downloadDB()
         locationContext = LocationContext.fromCache()
         if locationContext is None:
             return
