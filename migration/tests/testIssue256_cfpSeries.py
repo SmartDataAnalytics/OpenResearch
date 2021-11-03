@@ -33,8 +33,8 @@ class TestWikiCfpSeriesId(PageFixerTest):
         """
         tests the fixing of missing wikiCFP ids for Event series
         """
-        records={"pageTitle":"CCC"}
-        expectedRecords={"pageTitle":"CCC", "wikiCfpSeries": "96447"}
+        records={"pageTitle":"VNC"}
+        expectedRecords={"pageTitle":"VNC", "wikiCfpSeries": "2967"}
         rating=self.getEntityRatingFromDict(records)
         self.fixer.fix(rating)
         print(rating.getRecord())

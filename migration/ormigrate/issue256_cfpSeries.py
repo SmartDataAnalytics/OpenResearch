@@ -24,7 +24,7 @@ class WikiCfpIdSeriesFixer(ORFixer):
 
     worksOn = [Entity.EVENT_SERIES]
 
-    wikiCfpIdRegex="^[1-9]\d*$"  # https://www.wikidata.org/wiki/Property:P5127
+    wikiCfpIdRegex=r"^[1-9]\d*$"  # https://www.wikidata.org/wiki/Property:P5127
     wikiCfpSeriesUriRegex="^https?:\/\/wikicfp\.com\/cfp\/program\?id=(?P<id>[1-9]\d*)" # https://www.wikidata.org/wiki/Property:P5127 slighty modified with a named group
     WIKI_CFP_SERIES="wikiCfpSeries"   # normalized property name
     WIKI_CFP_ID="wikicfpId"
