@@ -5,6 +5,7 @@ Created on 2021-09-27
 '''
 import re
 
+from corpus.datasources.wikicfp import WikiCfp
 from corpus.lookup import CorpusLookup
 from corpus.quality.rating import RatingType
 
@@ -41,9 +42,8 @@ class WikiCfpIdSeriesFixer(ORFixer):
 
     def getWikiCFPDataSource(self):
         """Returns the WikiCfpDataSource of the ConferenceCorpus"""
-        lookup = CorpusLookup(lookupIds=["wikicfp"], debug=self.debug)
-        lookup.load()
-        cfpDataSource = lookup.getDataSource("wikicfp")
+        cfpDataSource = WikiCfp()
+        cfpDataSource.load()
         return cfpDataSource
 
 

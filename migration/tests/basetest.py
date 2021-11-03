@@ -5,7 +5,11 @@ Created on 20.08.2021
 '''
 import unittest
 from corpus.eventcorpus import EventCorpus
-from ormigrate.toolbox import Profiler
+from corpus.lookup import CorpusLookup
+
+from ormigrate.toolbox import Profiler, HelperFunctions
+from tests.corpusfortesting import CorpusForTesting
+
 
 class ORMigrationTest(unittest.TestCase):
     '''
@@ -19,11 +23,28 @@ class ORMigrationTest(unittest.TestCase):
         msg=f"test {self._testMethodName}, debug={self.debug}"
         self.profiler=Profiler(msg,profile=profile)
         EventCorpus.download()
+        wikiFileManager=CorpusForTesting.getWikiFileManager()
+        def patchEventSource(lookup: CorpusLookup):
+            '''
+            patches the EventManager and EventSeriesManager by adding wikiUser and WikiFileManager
+            '''
+            for lookupId in ["orclone", "orclone-backup", "or", "or-backup"]:
+                orDataSource = lookup.getDataSource(lookupId)
+                if orDataSource is not None:
+                    if lookupId.endswith("-backup"):
+                        orDataSource.eventManager.wikiFileManager = wikiFileManager
+                        orDataSource.eventSeriesManager.wikiFileManager = wikiFileManager
+                    else:
+                        orDataSource.eventManager.wikiUser = wikiFileManager.wikiUser
+                        orDataSource.eventSeriesManager.wikiUser = wikiFileManager.wikiUser
+        lookup = CorpusLookup(lookupIds=["orclone-backup"], configure=patchEventSource, debug=debug)
+        lookup.load(forceUpdate=HelperFunctions.inPublicCI())
 
 
     def tearDown(self):
         self.profiler.time()
         pass
+
 
 
 
