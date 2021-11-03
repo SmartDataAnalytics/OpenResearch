@@ -18,7 +18,7 @@ class TestWikiCfpSeriesId(PageFixerTest):
         PageFixerTest.setUp(self)
         self.pageFixerClass = WikiCfpIdSeriesFixer
         self.template="Event series"
-        self.fixer=self.getPageFixer()
+        self.fixer=self.getPageFixer(forceUpdate=True)
 
     def getEntityRatingFromDict(self, records:dict):
         """

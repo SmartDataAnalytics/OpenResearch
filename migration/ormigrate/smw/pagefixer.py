@@ -30,13 +30,14 @@ class PageFixerManager(object):
     manage a list of PageFixers
     '''
     
-    def __init__(self,pageFixerClassList,wikiFileManager:WikiFileManager, ccID:str="orclone-backup", pageTitles:str=None,debug=False):
+    def __init__(self,pageFixerClassList,wikiFileManager:WikiFileManager, ccID:str="orclone-backup", pageTitles:str=None,debug=False,forceUpdate:bool=False):
         ''' 
         construct me 
         
         Args:
             pageFixerClassList(list): a list of pageFixers
             ccID(str): ConferenceCorpus source lookup id
+            forceUpdate(bool): If true forceUpdate the ConferenceCorpus datasources
         '''
         self.pageFixerClassList=pageFixerClassList
         self.pageFixers={}
@@ -49,7 +50,7 @@ class PageFixerManager(object):
 
         patchEventSource=partial(self.patchEventSource, wikiFileManager=wikiFileManager)
         lookup = CorpusLookup(lookupIds=[ccID], configure=patchEventSource, debug=debug)
-        lookup.load(forceUpdate=False)   # forceUpdate to init the managers from the markup files
+        lookup.load(forceUpdate=forceUpdate)   # forceUpdate to init the managers from the markup files
         self.orDataSource = lookup.getDataSource("orclone-backup")
         # load wikiFiles for each entity
         for entityManager in self.orDataSource.eventManager, self.orDataSource.eventSeriesManager:

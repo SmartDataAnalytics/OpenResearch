@@ -25,12 +25,12 @@ class PageFixerToolbox(object):
         '''
         
     @staticmethod
-    def getPageFixer(pageFixerClass,debug=False):
+    def getPageFixer(pageFixerClass,debug=False,forceUpdate:bool=False):
         '''
         get a page fixer for the given pageFixerClass
         '''
         wikiFileManager=Corpus.getWikiFileManager()
-        pageFixerManager=PageFixerManager([pageFixerClass],wikiFileManager,debug=debug)
+        pageFixerManager=PageFixerManager([pageFixerClass],wikiFileManager,debug=debug,forceUpdate=forceUpdate)
         fixer=pageFixerClass(pageFixerManager)
         return fixer
         pass
@@ -136,8 +136,8 @@ class PageFixerTest(ORMigrationTest):
         counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, self.pageFixerClass, self.template)
         return counters
     
-    def getPageFixer(self):
-        pageFixer=PageFixerToolbox.getPageFixer(self.pageFixerClass, self.debug)
+    def getPageFixer(self,forceUpdate:bool=False):
+        pageFixer=PageFixerToolbox.getPageFixer(self.pageFixerClass, self.debug, forceUpdate)
         return pageFixer
               
     
