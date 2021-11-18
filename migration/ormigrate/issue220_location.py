@@ -66,17 +66,22 @@ class LocationFixer(ORFixer):
                 rank=0
                 checkLocation=loc
                 if isinstance(checkLocation, City):
-                    if checkLocation.isKnownAs(city):
+                    if city in self.locationAlsoKnownAs(checkLocation):
                         rank+=3
                     checkLocation=checkLocation.region
                 if isinstance(checkLocation, Region):
-                    if checkLocation.isKnownAs(region):
+                    if region in self.locationAlsoKnownAs(checkLocation):
                         rank+=2
                     checkLocation=checkLocation.country
                 if isinstance(checkLocation, Country):
-                    if checkLocation.isKnownAs(country):
+                    if country in self.locationAlsoKnownAs(checkLocation):
                         rank+=1
                 rankedLocs.append((loc,rank))
+            # Postprocess ranking for known issues
+            for i, t in enumerate(rankedLocs):
+                loc, rank=t
+                if "Brussels" in [city, region, country] and loc.wikidataid=='Q239': rank+=3
+                rankedLocs[i]=(loc, rank)
             rankedLocs.sort(key=lambda x:x[1], reverse=True)
             maxRank=rankedLocs[0][1]
             bestMatches=[loc for loc, rank in rankedLocs if rank==maxRank]
@@ -85,6 +90,22 @@ class LocationFixer(ORFixer):
         else:
             return None
 
+    def locationAlsoKnownAs(self, location:Location) -> list:
+        """
+        Returns all labels of the given location
+        """
+        locationContext=LocationFixer.locationContext
+        sqlDb = locationContext.cityManager.getSQLDB(locationContext.cityManager.getCacheFile())
+        table = "CityLookup"
+        if isinstance(location, Country): table="CountryLookup"
+        elif isinstance(location, Region): table="RegionLookup"
+        query = f"""
+        SELECT label
+        FROM { table }
+        WHERE wikidataid == '{ location.wikidataid }'
+        """
+        queryRes = sqlDb.query(query)
+        return [record.get('label') for record in queryRes]
 
 
     def lookupLocation(self, countryName:str=None, regionName:str=None, cityName:str=None):

@@ -245,3 +245,23 @@ class TestLocationFixer(PageFixerTest):
             foundLocation=self.fixer.getMatchingLocation(*locationParts)
             print(foundLocation)
             self.assertEqual(wikidataId, foundLocation.wikidataid)
+
+
+    def test_matching_brussels(self):
+        """
+        Tests if given city Brussels it is correctly found in geograpy3
+        """
+        event = {
+            "pageTitle": "Test 2020",
+            self.COUNTRY: "Belgium",
+            self.REGION: None,
+            self.CITY: "Brussels"
+        }
+        exp_event = {
+            "pageTitle": "Test 2020",
+            self.COUNTRY: "BE",
+            self.REGION: "BE/BRU",
+            self.CITY: "BE/BRU/City of Brussels"
+        }
+        res, errors = self.fixer.fixEventRecord(event)
+        self.assertDictEqual(exp_event, res)
