@@ -23,7 +23,15 @@ class TestInvalidDatesFixer(PageFixerTest):
         dateFixer=self.getPageFixer()
         sampledates=['2020-02-20','2020/02/20','2020.02.20','20/02/2020','02/20/2020','20.02.2020','02.20.2020','20 Feb, 2020','2020, Feb 20','2020 20 Feb','2020 Feb 20']
         for date in sampledates:
-            self.assertEqual('2020/02/20',dateFixer.parseDate(date)[0])
+            self.assertEqual('2020-02-20',dateFixer.parseDate(date)[0])
+
+    def testDateParserForYear(self):
+        '''
+        tests the behavior of date parser when only the year is the input
+        '''
+        dateFixer = self.getPageFixer()
+        parsedDate, errors = dateFixer.parseDate("2020")
+        self.assertTrue("onlyYear" in errors)
             
     def testIssue71Examples(self):
         '''
@@ -36,11 +44,12 @@ class TestInvalidDatesFixer(PageFixerTest):
                         {'startDate': '20 Feb, 2020', 'endDate': None},
                         {'startDate': None, 'endDate': '20 Feb, 2020'},
                         {'startDate': '2010/03/22', 'endDate':'2011/03/226'},
+                        {'startDate': '2011-03-22', 'endDate':'2011-03-26'},
                         ]
-        expectedPainRatings=[1, 5, 3, 7,7]
-        expectedStartDates=['2020/02/20', None, '2020/02/20', None,'2010/03/22']
-        expectedEndDates=['2020/02/20', None, None, '2020/02/20','2011/03/226']
-        expectedErrors=[0, 2, 1, 1, 1]
+        expectedPainRatings=[3, 5, 5, 5,7,1]
+        expectedStartDates=['2020-02-20', None, '2020-02-20', None,'2010-03-22','2011-03-22']
+        expectedEndDates=['2020-02-20', None, None, '2020-02-20',None,'2011-03-26']
+        expectedErrors=[0, 2, 1, 1, 1,0]
         painRatings=[]
         errors=[]
         fixedStartDates=[]
@@ -68,12 +77,67 @@ class TestInvalidDatesFixer(PageFixerTest):
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
+            print(painCounter)
             if pageTitleList is None:
-                self.assertGreater(painCounter[self.pageFixerClass.__name__][3],100)
+                self.assertGreater(painCounter[self.pageFixerClass.__name__][1],500)
+                self.assertGreater(painCounter[self.pageFixerClass.__name__][3], 7000)
+                self.assertGreater(painCounter[self.pageFixerClass.__name__][4], 200)
                 self.assertGreater(painCounter[self.pageFixerClass.__name__][5],500)
                 self.assertGreater(painCounter[self.pageFixerClass.__name__][7],100)
             else:
                 self.assertEqual(3,painCounter[self.pageFixerClass.__name__][7])
+
+
+    def testPropertyShift(self):
+        '''
+        tests if only the year is given if the value is moved to the year property
+        '''
+        dateFixer = self.getPageFixer()
+        eventRecords = [
+            {
+                "expected": {"year": "2020", "startDate":None},
+                "raw": {"startDate": "2020"}
+            },
+            {
+                "expected": {"year": "2020", "endDate":None},
+                "raw": {"endDate": "2020"}
+            },
+            {
+                "expected": {"year": "2020", "endDate": None, "startDate":"2020-01-05"},
+                "raw": {"endDate": "2020", "startDate":"2020/01/05"}
+            }
+        ]
+        for record in eventRecords:
+            entityRating=self.getEntityRatingFromDict(record["raw"])
+            dateFixer.fix(entityRating)
+            self.assertDictEqual(record["expected"], entityRating.getRecord())
+
+    def testDurationVerification(self):
+        """
+        tests if the events have a valid duration
+        """
+        dateFixer = self.getPageFixer()
+        eventRecords = [
+            {
+                "expected": {"startDate": "2020-02-01", "endDate": "2020-01-05"},
+                "raw": {"startDate": "2020-02-01", "endDate": "2020-01-05"},
+                "rating":4
+            },
+            {
+                "expected": {"startDate": "2020-02-01", "endDate": "2020-02-05"},
+                "raw": {"startDate": "2020-02-01", "endDate": "2020-02-05"},
+                "rating":1
+            },
+            {
+                "expected": {"startDate": "2020-02-01"},
+                "raw": {"startDate": "2020-02-01"},
+                "rating":5
+            }
+        ]
+        for record in eventRecords:
+            entityRating = self.getEntityRatingFromDict(record["raw"])
+            dateFixer.rate(entityRating)
+            self.assertEqual(record["rating"], entityRating.pain)
 
 
 if __name__ == "__main__":

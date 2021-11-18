@@ -490,7 +490,7 @@ class PageFixer(object):
         self.pageFixerManager=pageFixerManager
         self.wikiFileManager=pageFixerManager.wikiFileManager
 
-    def fixEventRecord(self):
+    def fixEventRecord(self, **kwargs):
         ''' abstract base function to be overwritten by fixing class'''
         return
 

@@ -156,5 +156,13 @@ class PageFixerTest(ORMigrationTest):
         if self.testAll:
             pageLists.append(None)
         return pageLists
-         
+
+    def getEntityRatingFromDict(self, records:dict):
+        """
+        returns a EntityRating for the given dict
+        """
+        entity = JSONAble()
+        entity.fromDict(records)
+        rating = EntityRating(entity=entity)
+        return rating
         

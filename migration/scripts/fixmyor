@@ -128,7 +128,6 @@ do
 done
 
 scriptbase=$(pwd)
-targetWikiTextPath=~/.or/generated/orfixed
 if [ ! -d $base ]
 then
   mkdir -p $base

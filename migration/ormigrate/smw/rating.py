@@ -65,7 +65,7 @@ class EntityRating(PageRating):
             entity(JSONAble): entity to be rated/fixed
             fixer(EntityFixer): fixer responsible for rating/fixing the entity
         '''
-        pageTitle=getattr(entity, "pageTitle") if not pageTitle else pageTitle
+        pageTitle=getattr(entity, "pageTitle", None) if not pageTitle else pageTitle
         super().__init__(pageTitle=pageTitle)
         self.entity=entity
         self.fixer = fixer

@@ -24,84 +24,108 @@ class DateFixer(ORFixer):
         Constructor
         '''
         super(DateFixer, self).__init__(pageFixerManager)
-        
-    def parseDate(self,date):
+
+    @staticmethod
+    def parseDate(date:str):
         '''
-        parses the date in any format to the format YYYY/MM/DD
+        parses the date in any format to the format YYYY-MM-DD (iso-format see https://www.semantic-mediawiki.org/wiki/Help:Type_Date)
         Args:
             date: Given date in any format
         Returns:
-            date(str): Date in YYYY/MM/DD format. None if date cannot be converted
+            date(str): Date in YYYY-MM-DD format. None if date cannot be converted
         '''
         errors= {}
+        if date:
+            if re.match("^(19|20)\d{2}$", date.strip()):
+                errors["onlyYear"]="Only the year is en as input the parsed date will be the given year and month & day from the time of cumputation"
         try:
             parseToDatetime = dateutil.parser.parse(date)
-        except ValueError as _e:
+        except ValueError or TypeError as _e:
             errors[date] = _e
             return None,errors
         datetimeToDate = parseToDatetime.date()
-        datetimetoString = datetimeToDate.strftime("%Y/%m/%d")
+        datetimetoString = datetimeToDate.strftime("%Y-%m-%d")
         return datetimetoString,errors
 
     def fix(self,rating:EntityRating):
         record=rating.getRecord()
         self.fixEventRecord(record, datelist=["startDate", "endDate"])
 
-    def fixEventRecord(self, event, datelist:list=['Start date' , 'End date'], errors=None):
+    def fixEventRecord(self, event, datelist=None, errors=None):
+        if datelist is None:
+            datelist = ['Start date', 'End date']
         if errors is None:
             errors={}
         for element in datelist:
             eventDate = event.get(element)
             if eventDate is not None:
                 fixedDate,parseError = self.parseDate(eventDate)
-                if len(parseError) == 0:
+                if len(parseError)==0:
                     if fixedDate != eventDate:
                         event[element] = fixedDate
+                elif "onlyYear" in parseError:
+                    # eventDate is only a year → move property value to the property year
+                    event["year"]=eventDate
+                    event[element] = None
                 else:
                     errors['fixNotPossible']=True
+                    event[element]=None
             else:
                 key= element+'notFound'
                 errors[key]= True
         if self.debug and errors.get('fixNotPossible'): print(self.generateLink(event['pageTitle']))
         return event,errors
 
+    @classmethod
+    def isIso(cls, date:str):
+        """
+        checks if given date is in iso format yyyy-mm-dd
+        Args:
+            date:
 
-    def getFixedDateWikiFile(self, page, event, datetype='date'):
-        '''
-        fix the date of the given page and event and mark unfixable pages
         Returns:
-            Fixed text of the page.
-        '''
-        generateLink=False
-        change=False
-        dates = re.findall('|.*'+datetype+'.*=.*\n', event)
-        if len(dates) != 0:
-            for element in dates:
-                name,value=self.getNameValue(element)
-                if name is not None and value is not None:
-                    fixedDate = self.parseDate(value)
-                    if fixedDate is not None:
-                        if fixedDate != value:
-                            change = True
-                        event = event.replace(element,'|'+name+'='+fixedDate)
-                    else:
-                        generateLink=True
-        if self.debug and generateLink: print(self.generateLink(page))
-        if change:
-            return event
-        else:
-            return None
+            bool
+        """
+        try:
+            parsedDate=dateutil.parser.isoparse(date)
+            return True
+        except Exception as e:
+            return False
         
     @classmethod
     def checkDate(cls,dateStr)->(int,str):
         if dateStr is None or dateStr.strip()=="":
             return 5,"Date is missing"
         else:
-            _date,errors = cls.parseDate(cls, dateStr)
-            if len(errors) == 0:
-                return 1,"Date is {dateStr} is ok"
+            _date,errors = cls.parseDate(dateStr)
+            if len(errors)==0:
+                if cls.isIso(dateStr):
+                    return 1,"Date {dateStr} is ok"
+                else:
+                    return 3, "Date {dateStr} is not in iso format but valid date"
+            elif "onlyYear" in errors:
+                return 4, f"Date '{dateStr}' is only a year (property value can be ed over to year property)"
             else:
                 return 7,f"Date '{dateStr}' can't be parsed: {errors[dateStr]}"
+
+    @classmethod
+    def durationValid(cls, startdate, enddate) -> bool:
+        """
+        Checks if the given dates form a valid duration for an event (0 - 100 days)
+        Args:
+            startdate: start date
+            enddate: end date
+
+        Returns:
+            bool
+        """
+        startdate=dateutil.parser.parse(startdate)
+        enddate=dateutil.parser.parse(enddate)
+        duration=enddate-startdate
+        if duration.days<0 or duration.days>100:
+            return False
+        else:
+            return True
 
     def rate(self, rating: EntityRating):
         aRating = self.getRating(rating.getRecord())
@@ -115,26 +139,27 @@ class DateFixer(ORFixer):
         '''
         # TODO add checks for invalid dates that are not properly formatted examples
         painrating= None
-        startDate = None
-        endDate = None
-        if 'startDate' in eventRecord: startDate = eventRecord['startDate']
-        if 'endDate' in eventRecord: endDate = eventRecord['endDate']
+        startDate = eventRecord.get('startDate')
+        endDate = eventRecord.get('endDate')
         painStartDate, messageStartDate = self.checkDate(startDate)
         painEndDate, messageEndDate = self.checkDate(endDate)
+        maxPain=max(painStartDate, painEndDate)
+        additionalHint=""
+        if maxPain == 1 or maxPain == 3:
+            if not self.durationValid(startDate, endDate):
+                additionalHint+="The duration of the event is invalid! Please check start- and endDate"
+                maxPain=4
+                ratingType = RatingType.invalid
+            else:
+                ratingType = RatingType.ok
 
-        if painStartDate == 1 and painEndDate == 1:
-            painrating= Rating(1,RatingType.ok,f'Dates,  {startDate} , {endDate} valid')
-        elif painStartDate == 7:
-            painrating= Rating(7,RatingType.invalid,f"{messageStartDate}")
-        elif painEndDate == 7:
-            painrating = Rating(7, RatingType.invalid,f"{messageEndDate}")
-        elif painStartDate != 1 and painEndDate != 1:
-            painrating=Rating(5,RatingType.missing,f'Dates not found')
-        elif painStartDate == 5 and painEndDate == 1:
-            painrating=Rating(7,RatingType.missing,f'Start Date missing for valid end date {endDate}')
-        elif painStartDate == 1 and painEndDate == 5:
-            painrating=Rating(3,RatingType.missing,f'End Date missing for valid start date {startDate}')
-        return painrating
+        elif maxPain == 4:
+            ratingType = RatingType.missing
+        elif maxPain == 5:
+            ratingType = RatingType.missing
+        else:
+            ratingType = RatingType.invalid
+        return Rating(maxPain,ratingType,f"{additionalHint} startdate: {messageStartDate} endDate: {messageEndDate}")
 
 if __name__ == "__main__":
     PageFixerManager.runCmdLine([DateFixer])
