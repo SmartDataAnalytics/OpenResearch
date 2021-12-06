@@ -49,6 +49,9 @@ class OrdinalFixer(ORFixer):
                 event['ordinal'] = cardinal_value
                 if self.debug:
                     print(f"{ordinal_val} will changed to {cardinal_value}.")
+        else:
+            # ordinal is string and numeric
+            event['ordinal'] = int(ordinal_val)
         return event,errors
 
 
@@ -97,15 +100,18 @@ class OrdinalFixer(ORFixer):
         if 'ordinal' in eventRecord: value=eventRecord['ordinal']
         if value is None:
             painRating = Rating(4,RatingType.missing,'Ordinal is missing')
-        elif type(value) == int:
-            if value<1 or value>100:
-                painRating=Rating(7,RatingType.invalid,f'Ordinal {value} out of range 1-100')
-            painRating = Rating(1,RatingType.ok,f'Ordinal {value} valid and in range 1-100')
-        elif type(value) == str:
-            if any(char.isdigit() for char in value):
-                painRating = Rating(5,RatingType.invalid,f'Ordinal {value} is not a number')
-            else:
-                painRating = Rating(7,RatingType.invalid,f'Ordinal {value} is not a number')
+        else:
+            if type(value) == str and value.isnumeric():
+                value=int(value)
+            if type(value) == int:
+                if value<1 or value>100:
+                    painRating=Rating(7,RatingType.invalid,f'Ordinal {value} out of range 1-100')
+                painRating = Rating(1,RatingType.ok,f'Ordinal {value} valid and in range 1-100')
+            elif type(value) == str:
+                if any(char.isdigit() for char in value):
+                    painRating = Rating(5,RatingType.invalid,f'Ordinal {value} is not a number')
+                else:
+                    painRating = Rating(7,RatingType.invalid,f'Ordinal {value} is not a number')
         return painRating
 
 if __name__ == '__main__':
