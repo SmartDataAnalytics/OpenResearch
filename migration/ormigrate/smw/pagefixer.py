@@ -80,6 +80,8 @@ class PageFixerManager(object):
             a pageFixerManager that has completed the work as specified
             in the arguments
         '''
+        if argv is None:
+            argv=["-s", "orclone", "--stats"]
         pageFixerManager=PageFixerManager.fromCommandLine(pageFixerClassList, argv)
         if pageFixerManager:
             pageFixerManager.workOnArgs()
