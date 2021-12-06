@@ -152,7 +152,7 @@ class PageFixerManager(object):
                                         targetWikiTextPath=args.targetWikiTextPath,
                                         login=False,
                                         debug=args.debug)
-        pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager=wikiFileManager, pageTitles=args.pages,debug=args.debug)
+        pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager=wikiFileManager, pageTitles=args.pages,debug=args.debug, forceUpdate=args.force)
         for pageFixer in pageFixerManager.pageFixers.values():
             pageFixer.templateName=args.template
         pageFixerManager.args=args
