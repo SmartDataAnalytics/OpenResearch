@@ -134,11 +134,11 @@ then
 else
   # empty the folder to ensure that only newly generated pages are pushed
   echo "Deleting previously generated wikiMarkupFiles"
-  rm -r ~/.or/generated/orfixed/*
+  #rm -r $targetWikiTextPath
 fi
 
 echo "Install openresearch migration"
-pip install OpenResearchMigration
+#pip install OpenResearchMigration -U
 
 getWikiBackup $wikiTextPath
 
