@@ -3,7 +3,7 @@
 os=$(uname -a)
 case $os in
   Darwin*)
-   pip="pip"
+   pip="pip3"
    install="sudo port install"
    ;;
   *)
@@ -22,5 +22,5 @@ esac
 #$install python3-pip
 $pip --version
 # --force-reinstall
-$pip install  -r requirements.txt
+$pip install -U -r requirements.txt
 #python3 setup.py install --user

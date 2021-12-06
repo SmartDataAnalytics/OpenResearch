@@ -1,9 +1,5 @@
-
-from ormigrate.fixer import PageFixerManager
 from ormigrate.issue41_acronym import AcronymLengthFixer
-from tests.pagefixtoolbox import PageFixerToolbox,PageFixerTest
-from ormigrate.toolbox import HelperFunctions as hf
-from ormigrate.toolbox import Profiler
+from tests.pagefixtoolbox import PageFixerTest
 
 class TestIssue41(PageFixerTest):
     '''
