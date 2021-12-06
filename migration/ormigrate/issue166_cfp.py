@@ -97,9 +97,12 @@ class WikiCFPIDFixer(ORFixer):
         """
         wikiFile= rating.wikiFile
         eventWikiText = str(wikiFile.wikiText)
-        wikiCFPId = self.getWikiCFPIdFromPage(eventWikiText)
-        if wikiCFPId is None:
-            rating.set(1, RatingType.ok, "no legacy wikiCFP import id  found")
+        wikiCFPId =  self.getWikiCFPIdFromPage(eventWikiText)
+        if getattr(rating.entity, "wikicfpId", None):
+            # entity has wikicfpId correctly set
+            rating.set(1, RatingType.ok, "wikicfpId is correctly set")
+        elif wikiCFPId is None:
+            rating.set(3, RatingType.missing, "no legacy wikiCFP import id  found")
         else:
             rating.set(5, RatingType.invalid, f"legacy wikiCFP reference {wikiCFPId} found")
         return rating
@@ -133,26 +136,6 @@ class WikiCFPIDFixer(ORFixer):
         #                print('Title or acronym not found')
         #                print(dic)
         #                print(orEvent)
-
-
-    #TODO Change function when architecture is implemented.
-    def getRatingFromWikiFile(self,wikiFile:WikiFile)->PageRating:
-        '''
-        Args:
-            wikiFile(WikiFile): the wikiFile to work on
-            
-        Return:
-            Rating: The rating for this WikiFile
-        
-        '''
-        # prepare rating
-        eventWikiText,_eventDict,rating=self.prepareWikiFileRating(wikiFile,"Event")
-        wikiCFPId=self.getWikiCFPIdFromPage(eventWikiText)
-        if wikiCFPId is None:
-            rating.set(1,RatingType.ok,"no legacy wikiCFP import id  found")
-        else:
-            rating.set(5,RatingType.invalid,f"legacy wikiCFP reference {wikiCFPId} found")
-        return rating
         
 
 if __name__ == "__main__":
