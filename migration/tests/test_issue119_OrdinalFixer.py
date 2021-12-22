@@ -35,9 +35,9 @@ class TestOrdinalFixer(PageFixerTest):
         '''
         fixer=self.getPageFixer()
         lookup_dict = hf.loadDictionary()
-        eventRecords=[{"ordinal":val} for val in [2, None, '2nd', 'test', '2']]
-        expectedPainRatings=[1, 4, 5, 7,1]
-        expectedOrdinals= [2, None, 2, 'test',2]
+        eventRecords=[{"ordinal":val} for val in [2, None, '2nd', 'test', '2','7th']]
+        expectedPainRatings=[1, 4, 5, 7,1,5]
+        expectedOrdinals= [2, None, 2, 'test',2,7]
         painRatings = []
         ordinals=[]
         for event in eventRecords:
