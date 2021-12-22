@@ -7,22 +7,18 @@ import sys
 import inspect
 from functools import partial
 from os import path
-from corpus.datasources.openresearch import OREventManager
+from corpus.datasources.openresearch import OREventManager, OR
 from corpus.lookup import CorpusLookup
 from lodstorage.entity import EntityManager
 from lodstorage.lod import LOD
 from tabulate import tabulate
-from wikifile.metamodel import Topic
-from wikifile.utils import Link
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
 from corpus.smw.topic import SMWEntity, SMWEntityList
 from ormigrate.smw.rating import RatingType, PageRating, EntityRating
 from collections import Counter
-
-from ormigrate.smw.templates import RatingTemplatePage, EventTemplatePage, RatedEventTemplatePage, \
-    EventSeriesTemplatePage, RatedEventSeriesTemplatePage
+from ormigrate.smw.templates import RatingTemplatePage, EventTemplatePage, RatedEventTemplatePage, EventSeriesTemplatePage, RatedEventSeriesTemplatePage
 
 
 class PageFixerManager(object):
