@@ -13,4 +13,4 @@ geograpy3>=0.2.1
 # https://github.com/SmartDataAnalytics/OpenResearch
 ConferenceCorpus>=0.0.26
 # https://github.com/mocnik-science/osm-python-tools
-OSMPythonTools
+OSMPythonTools>=0.3.3

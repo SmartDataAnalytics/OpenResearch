@@ -7,6 +7,7 @@ import logging
 import os
 from collections import Counter
 
+from OSMPythonTools.cachingStrategy import CachingStrategy, JSON
 from OSMPythonTools.nominatim import Nominatim
 from corpus.lookup import CorpusLookup
 from lodstorage.tabulateCounter import TabulateCounter
@@ -35,7 +36,8 @@ class CountryFixer(ORFixer):
         cacheDir = f"{cacheRootDir}/.nominatim"
         if not os.path.exists(cacheDir):
             os.makedirs(cacheDir)
-        self.nominatim = Nominatim(cacheDir=cacheDir)
+        CachingStrategy.use(JSON, cacheDir=cacheDir)
+        self.nominatim = Nominatim()
         logging.getLogger('OSMPythonTools').setLevel(logging.ERROR)
         self.invalidCountryNames = self.cacheNominatim(show=self.debug)
         
