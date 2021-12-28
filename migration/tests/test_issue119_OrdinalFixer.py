@@ -57,10 +57,14 @@ class TestOrdinalFixer(PageFixerTest):
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
+            pain5Counter=painCounter[self.pageFixerClass.__name__][5]
+            show=True
+            if show:
+                print(f"found {pain5Counter} painLevel 5 entries for the ordinal fixer")
             if pageTitleList is None:
-                self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>800)
+                self.assertTrue(pain5Counter>800)
             else:
-                self.assertEqual(3,painCounter[self.pageFixerClass.__name__][5])
+                self.assertEqual(3,pain5Counter)
                 
 
 if __name__ == "__main__":
