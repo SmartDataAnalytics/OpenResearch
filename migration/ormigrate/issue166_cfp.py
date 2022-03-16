@@ -4,15 +4,9 @@ Created on 2021-04-06
 @author: wf
 '''
 import re
-import ntpath
-from difflib import SequenceMatcher
-from lodstorage.sql import SQLDB
-from os.path import expanduser,isfile
-from wikifile.wikiFile import WikiFile
 from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer, Entity
-from ormigrate.smw.rating import EntityRating,RatingType,PageRating
-
+from ormigrate.smw.rating import EntityRating,RatingType
 
 class WikiCFPIDFixer(ORFixer):
     '''
