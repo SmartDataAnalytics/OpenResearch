@@ -52,14 +52,6 @@ class TestWikiCFPId(PageFixerTest):
         fixer.fix(entityRating)
         self.assertEqual(entityRating.entity.wikicfpId,"3845")
 
-        # TODO
-        # if fixer.databaseAvailable():
-        #     fixedPage= fixer.fixPageWithDBCrosscheck(samplesWikiText[1], wikicfpid)
-        #     if self.debug:
-        #         print(fixedPage)
-        #     fixedDict=fixedPage.extract_template('Event')
-        #     self.assertIsNotNone(fixedDict['wikicfpId'])
-        #     self.assertEqual(fixedDict['wikicfpId'],'3845')
 
     def testIssue166Rating(self):
         """
