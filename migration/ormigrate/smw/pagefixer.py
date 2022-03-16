@@ -51,7 +51,7 @@ class PageFixerManager(object):
         # load wikiFiles for each entity
         for entityManager in self.orDataSource.eventManager, self.orDataSource.eventSeriesManager:
             if hasattr(entityManager, 'smwHandler'):
-                entityManager.smwHandler.interlinkEnititesWithWikiMarkupFile(useCacheIfPresent=True)
+                entityManager.smwHandler.interlinkEntitiesWithWikiMarkupFile(useCacheIfPresent=True)
         self.setupEntityRatings(pageTitles)
 
 
