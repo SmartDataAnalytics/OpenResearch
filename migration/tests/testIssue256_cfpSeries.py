@@ -20,15 +20,6 @@ class TestWikiCfpSeriesId(PageFixerTest):
         self.template="Event series"
         self.fixer=self.getPageFixer(forceUpdate=True)
 
-    def getEntityRatingFromDict(self, records:dict):
-        """
-        returns a EntityRating for the given dict
-        """
-        entity = JSONAble()
-        entity.fromDict(records)
-        rating = EntityRating(entity=entity)
-        return rating
-
     def testFix(self):
         """
         tests the fixing of missing wikiCFP ids for Event series

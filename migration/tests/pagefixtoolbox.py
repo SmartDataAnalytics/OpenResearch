@@ -5,14 +5,15 @@ Created on 2021-07-14
 '''
 import os
 
-from lodstorage.jsonable import JSONAble
-
-from ormigrate.smw.pagefixer import PageFixerManager
-from ormigrate.smw.rating import EntityRating
 from corpus.smw.topic import SMWEntity
+from lodstorage.jsonable import JSONAble
+from wikifile.wikiFile import WikiFile
+from ormigrate.smw.pagefixer import PageFixerManager, PageFixer
+from ormigrate.smw.rating import EntityRating
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
 from tests.basetest import ORMigrationTest
+
 
 class PageFixerToolbox(object):
     '''
@@ -51,7 +52,7 @@ class PageFixerToolbox(object):
         '''
         pageCount="all" if pageTitleList is None else len(pageTitleList)
         profile=Profiler(f"{pageFixerClass.purpose} for {pageCount} pages")
-        argv=PageFixerToolbox.getArgs(pageTitleList,["--stats"],template=template,debug=testCase.debug)
+        argv=PageFixerToolbox.getArgs(pageTitleList,["--stats", "--ccId", "orclone-backup"],template=template,debug=testCase.debug)
         pageFixerManager=PageFixerManager.fromCommandLine([pageFixerClass],argv)
         pageFixerManager.wikiFilesToWorkon=pageFixerManager.wikiFileManager.getAllWikiFilesForArgs(pageFixerManager.args)
         pageFixerManager.getRatings(debug=testCase.debug)
@@ -119,28 +120,35 @@ class PageFixerToolbox(object):
         entityRating = EntityRating(entity)
         return entityRating
 
+
 class PageFixerTest(ORMigrationTest):
     '''
     test for pageFixer
     '''
     
-    def setUp(self,debug=False):
-        super().setUp(debug=debug)
-        self.testAll=True
-        self.template="Event"
-        self.wikiUser=Corpus.getWikiUser()
+    def setUp(self, debug:bool=False, profile:bool=True):
+        super().setUp(debug=debug, profile=profile)
+        self.testAll = True
+        self.template = "Event"
+        self.wikiUser = Corpus.getWikiUser()
         pass
 
-    
     def getRatingCounters(self,pageTitleList:list):
         counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, self.pageFixerClass, self.template)
         return counters
     
-    def getPageFixer(self,forceUpdate:bool=False):
+    def getPageFixer(self, forceUpdate:bool=False) -> PageFixer:
+        """
+        Creates the PageFixer object of the test
+        Args:
+            forceUpdate: If True update the ConferenceCorpus cache
+
+        Returns:
+            PageFixer
+        """
         pageFixer=PageFixerToolbox.getPageFixer(self.pageFixerClass, self.debug, forceUpdate)
         return pageFixer
-              
-    
+
     def getPageTitleLists(self,*pageTitles):
         '''
         get the pageTitle lists to be tested
@@ -157,12 +165,21 @@ class PageFixerTest(ORMigrationTest):
             pageLists.append(None)
         return pageLists
 
-    def getEntityRatingFromDict(self, records:dict):
+    def getEntityRatingFromDict(self, records:dict, wikiText:str=None):
         """
-        returns a EntityRating for the given dict
+        Args:
+            records(dict): records of the entity
+            wikiText(str): wikiMarkup content of the page
+
+        Returns:
+             a EntityRating for the given dict
         """
         entity = JSONAble()
         entity.fromDict(records)
+        wikiFile = None
+        if wikiText is not None:
+            wikiFile = WikiFile(records.get("pageTitle", "TestPage"), wikiText=wikiText)
+        entity.smwHandler = SMWEntity(self, wikiFile)
         rating = EntityRating(entity=entity)
         return rating
         

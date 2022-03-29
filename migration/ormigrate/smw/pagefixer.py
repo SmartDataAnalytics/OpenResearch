@@ -5,20 +5,21 @@ Created on 2021-04-06
 '''
 import sys
 import inspect
-from functools import partial
 from os import path
-from corpus.datasources.openresearch import OREventManager, OR
-from corpus.lookup import CorpusLookup
+from corpus.datasources.download import Profiler
+from corpus.datasources.openresearch import OR
+from corpus.eventcorpus import EventDataSource
 from lodstorage.entity import EntityManager
 from lodstorage.lod import LOD
+from lodstorage.sql import SQLDB
 from tabulate import tabulate
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
-from corpus.smw.topic import SMWEntity, SMWEntityList
+from corpus.smw.topic import SMWEntity
 from ormigrate.smw.rating import RatingType, PageRating, EntityRating
 from collections import Counter
-from ormigrate.smw.templates import RatingTemplatePage, EventTemplatePage, RatedEventTemplatePage, EventSeriesTemplatePage, RatedEventSeriesTemplatePage
+from ormigrate.smw.templates import RatingTemplatePage, RatedEventTemplatePage, RatedEventSeriesTemplatePage
 
 
 class PageFixerManager(object):
@@ -44,16 +45,50 @@ class PageFixerManager(object):
             pageFixerClassName=pageFixerClass.__name__
             self.pageFixers[pageFixerClassName]=pageFixer
 
-        patchEventSource=partial(self.patchEventSource, wikiFileManager=wikiFileManager)
-        lookup = CorpusLookup(lookupIds=[ccID], configure=patchEventSource, debug=debug)
-        lookup.load(forceUpdate=forceUpdate)   # forceUpdate to init the managers from the markup files
-        self.orDataSource = lookup.getDataSource("orclone-backup")
+        self.orDataSource = self.loadOR(wikiFileManager=wikiFileManager, ccId=ccID)
         # load wikiFiles for each entity
         for entityManager in self.orDataSource.eventManager, self.orDataSource.eventSeriesManager:
             if hasattr(entityManager, 'smwHandler'):
                 entityManager.smwHandler.interlinkEnititesWithWikiMarkupFile(useCacheIfPresent=True)
         self.setupEntityRatings(pageTitles)
 
+    def loadOR(self, wikiFileManager:WikiFileManager, ccId:str):
+        """
+        loads the OR to memory
+
+        Args:
+            wikiFileManager:
+            ccId: if None try to load from
+            forceUpdate:
+
+        Returns:
+
+        """
+        if ccId is None:
+            # load from file to memory
+            datasource = OR(self.wikiFileManager.sourceWikiId, via="backup")
+            self.patchEventSource(datasource, wikiFileManager=wikiFileManager)
+            msg = f"loading {datasource.sourceConfig.title}"
+            profiler = Profiler(msg=msg, profile=self.debug)
+            datasource.eventSeriesManager.configure()
+            datasource.eventManager.configure()
+            # first events
+            datasource.eventManager.setListFromLoD(datasource.eventManager.getLoDfromWikiFileManager())
+            # then series
+            datasource.eventSeriesManager.setListFromLoD(datasource.eventSeriesManager.getLoDfromWikiFileManager())
+            datasource.eventManager.linkSeriesAndEvent(datasource.eventSeriesManager, "inEventSeries")
+            profiler.time()
+        else:
+            # load from ConferenceCorpus
+            idParts = ccId.split("-")
+            wikiId = idParts[0]
+            via = "api"
+            if len(idParts) == 2:
+                via = idParts[1]
+            datasource = OR(wikiId, via=via)
+            self.patchEventSource(datasource, wikiFileManager=wikiFileManager)
+            datasource.load()
+        return datasource
 
     @property
     def ratings(self):
@@ -65,7 +100,6 @@ class PageFixerManager(object):
                     res.extend(entityRatings)
         return res
 
-    
     @staticmethod
     def runCmdLine(pageFixerClassList:list=None,argv=None):
         '''
@@ -148,10 +182,15 @@ class PageFixerManager(object):
                                         targetWikiTextPath=args.targetWikiTextPath,
                                         login=False,
                                         debug=args.debug)
-        pageFixerManager=PageFixerManager(pageFixerClassList,wikiFileManager=wikiFileManager, pageTitles=args.pages,debug=args.debug, forceUpdate=args.force)
+        pageFixerManager=PageFixerManager(pageFixerClassList,
+                                          wikiFileManager=wikiFileManager,
+                                          ccID=args.ccId,
+                                          pageTitles=args.pages,
+                                          debug=args.debug,
+                                          forceUpdate=args.force)
         for pageFixer in pageFixerManager.pageFixers.values():
-            pageFixer.templateName=args.template
-        pageFixerManager.args=args
+            pageFixer.templateName = args.template
+        pageFixerManager.args = args
         return pageFixerManager
         
     def workOnArgs(self):    
@@ -171,14 +210,16 @@ class PageFixerManager(object):
             self.addRatingSubPages()
         if self.args.fix:
             self.fix(self.args.force)
-            if self.args.addRatingPage:
+            if self.args.addRatingPage or self.args.stats:
                 # add rating to rating subpage after fixers are applied
                 self.getRatings(debug=self.args.debug, onlyIfHasFixer=True)   # rate entities again (only if they were fixed)
-                self.addRatingSubPages(afterFixing=True)
+                if self.args.stats:
+                    self.showRatingStats()
+                if self.args.addRatingPage:
+                    self.addRatingSubPages(afterFixing=True)
         if self.args.genTechPages:
             # generate rating topic and property pages
             self.generateTechnicalEntityPages(self.wikiFileManager, overwrite=self.args.force)
-
 
     def setupEntityRatings(self, pageTitles:list=None):
         '''
@@ -296,7 +337,6 @@ class PageFixerManager(object):
         mandatoryFields=[*EntityRating.getSamples()[0].keys(), "url"]
         displayRatings=LOD.filterFields(ratings, fields=mandatoryFields, reverse=True)
         print(tabulate(displayRatings, headers="keys", tablefmt=tableFormat))
-
         
     def showRatingStats(self): 
         '''
@@ -336,19 +376,21 @@ class PageFixerManager(object):
         for i,pageTitle in enumerate(self.ratings):
             print(f"{i+1}:{pageTitle}->{self.ratings[pageTitle]}")
 
-    def patchEventSource(self, lookup:CorpusLookup, wikiFileManager:WikiFileManager):
+    def patchEventSource(self, lookup:EventDataSource, wikiFileManager:WikiFileManager):
         '''
         patches the EventManager and EventSeriesManager by adding wikiUser and WikiFileManager
         '''
-        for lookupId in ["orclone", "orclone-backup", "or", "or-backup"]:
-            orDataSource = lookup.getDataSource(lookupId)
-            if orDataSource is not None:
-                if lookupId.endswith("-backup"):
-                    orDataSource.eventManager.smwHandler.wikiFileManager = wikiFileManager
-                    orDataSource.eventSeriesManager.smwHandler.wikiFileManager = wikiFileManager
-                else:
-                    orDataSource.eventManager.smwHandler.wikiUser = wikiFileManager.wikiUser
-                    orDataSource.eventSeriesManager.smwHandler.wikiUser = wikiFileManager.wikiUser
+        # for lookupId in ["orclone", "orclone-backup", "or", "or-backup"]:
+        #     orDataSource = lookup.getDataSource(lookupId)
+        #     if orDataSource is not None:
+        lookup.eventManager.tableName="ormigrate"+lookup.eventManager.tableName
+        lookup.eventSeriesManager.tableName = "ormigrate" + lookup.eventSeriesManager.tableName
+        if lookup.sourceConfig.lookupId.endswith("-backup"):
+            lookup.eventManager.smwHandler.wikiFileManager = wikiFileManager
+            lookup.eventSeriesManager.smwHandler.wikiFileManager = wikiFileManager
+        else:
+            lookup.eventManager.smwHandler.wikiUser = wikiFileManager.wikiUser
+            lookup.eventSeriesManager.smwHandler.wikiUser = wikiFileManager.wikiUser
 
     @staticmethod
     def getAllFixers():
@@ -530,6 +572,10 @@ class PageFixer(object):
         # create a default bad rating
         rating=PageRating(pageTitle,templateName,7,RatingType.missing,"rating error")
         return wikiText,entityRecord,rating
+
+    def getConferenceCorpusSqlDb(self) -> SQLDB:
+        db=self.pageFixerManager.orDataSource.eventManager.getSQLDB(self.pageFixerManager.orDataSource.eventManager.getCacheFile())
+        return db
 
     
 class EntityFixer(PageFixer):

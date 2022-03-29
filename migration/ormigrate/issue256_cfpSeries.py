@@ -36,15 +36,15 @@ class WikiCfpIdSeriesFixer(ORFixer):
             pageFixerManager: manager who manages this fixer
         """
         super(WikiCfpIdSeriesFixer, self).__init__(pageFixerManager)
-        self.wikiCfpDataSource=self.getWikiCFPDataSource()
-        self.wikiCfpEventLookup, _dup = self.wikiCfpDataSource.eventManager.getLookup("eventId")
+        # self.wikiCfpDataSource=self.getWikiCFPDataSource()
+        # self.wikiCfpEventLookup, _dup = self.wikiCfpDataSource.eventManager.getLookup("eventId")
         self.seriesLookup=None
 
-    def getWikiCFPDataSource(self):
-        """Returns the WikiCfpDataSource of the ConferenceCorpus"""
-        cfpDataSource = WikiCfp()
-        cfpDataSource.load()
-        return cfpDataSource
+    # def getWikiCFPDataSource(self):
+    #     """Returns the WikiCfpDataSource of the ConferenceCorpus"""
+    #     cfpDataSource = WikiCfp()
+    #     cfpDataSource.load()
+    #     return cfpDataSource
 
 
     def getEventsOfSeries(self, seriesAcronym):
@@ -69,11 +69,13 @@ class WikiCfpIdSeriesFixer(ORFixer):
         Returns:
             str wikiCFP series id
         """
-        if eventId in self.wikiCfpEventLookup:
-            event=self.wikiCfpEventLookup.get(eventId)
-            seriesId=getattr(event, "seriesId")
-            if seriesId:
-                return seriesId
+        if eventId is None:
+            return None
+        query = "SELECT seriesId FROM event_wikicfp WHERE wikicfpId = ? "
+        db = self.getConferenceCorpusSqlDb()
+        qres = db.query(query, (eventId,))
+        if qres:
+            return qres[0].get("seriesId", None)
 
     def fix(self,rating:EntityRating):
         """

@@ -17,7 +17,7 @@ class ORMigrationTest(unittest.TestCase):
     '''
 
 
-    def setUp(self,debug:bool=False,profile:bool=True):
+    def setUp(self, debug:bool=False, profile:bool=True):
         self.debug=debug
         self.profile=profile
         msg=f"test {self._testMethodName}, debug={self.debug}"

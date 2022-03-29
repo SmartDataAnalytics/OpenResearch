@@ -35,9 +35,9 @@ class ORFixer(EntityFixer):
         # workaround as long as we can't use MetaModel information directly from the wiki
         self.propertyLookups["Event"]=OREventManager.getPropertyLookup()
         self.propertyLookups["Event series"]=OREventSeriesManager.getPropertyLookup()
-        lookup=CorpusLookup(lookupIds=["orclone-backup"], configure=self.patchEventSource,debug=debug)
-        lookup.load()
-        self.orDataSource = lookup.getDataSource("orclone-backup")
+        # lookup=CorpusLookup(lookupIds=["orclone-backup"], configure=self.patchEventSource,debug=debug)
+        # lookup.load()
+        # self.orDataSource = lookup.getDataSource("orclone-backup")
 
     def patchEventSource(self, lookup: CorpusLookup):
         '''

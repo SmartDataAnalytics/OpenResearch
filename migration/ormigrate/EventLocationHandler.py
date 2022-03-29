@@ -31,7 +31,6 @@ class EventLocationHandler(object):
         pageFixerManager=PageFixerManager([LocationFixer],wikiFileManager)
         self.locationFixer=LocationFixer(pageFixerManager)
         self.locationContext = OpenResearch.getORLocationContext()
-        self.locationContext.countryManager.fromCache()
 
     def getSamples(self)->list:
         '''
