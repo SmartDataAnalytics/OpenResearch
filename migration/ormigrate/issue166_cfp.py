@@ -6,8 +6,7 @@ Created on 2021-04-06
 import re
 from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer, Entity
-from ormigrate.smw.rating import EntityRating,RatingType,PageRating
-
+from ormigrate.smw.rating import EntityRating,RatingType
 
 class WikiCFPIDFixer(ORFixer):
     '''
@@ -80,4 +79,4 @@ class WikiCFPIDFixer(ORFixer):
 
 
 if __name__ == "__main__":
-    PageFixerManager.runCmdLine([WikiCFPIDFixer], ["-s", "orclone", "--targetWikiTextPath", "/home/holzheim/wikibackup/orclone","--targetWikiTextPath", "/home/holzheim/wikibackup/generated/orclone", "--fix", "--stats"])
+    PageFixerManager.runCmdLine([WikiCFPIDFixer])

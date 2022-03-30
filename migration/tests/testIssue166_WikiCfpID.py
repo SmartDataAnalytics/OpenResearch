@@ -20,6 +20,7 @@ class TestWikiCFPId(PageFixerTest):
         self.pageFixerClass=WikiCFPIDFixer
         #self.testAll=False
 
+
     def testIssue166Examples(self):
         """
         Tests the issue 166 for addition of WikiCFP-ID to applicable pages.
