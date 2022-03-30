@@ -53,7 +53,7 @@ class TestIssue170(PageFixerTest):
             print (f"{len(userLookup)} users")
         expected=1 if hf.inPublicCI() else 140
         print(len(userLookup))
-        self.assertTrue(len(userLookup)>expected)
+        self.assertGreaterEqual(len(userLookup), expected)
         counter=Counter()
         for user in userLookup.keys():
             counter[user]+=len(userLookup[user])

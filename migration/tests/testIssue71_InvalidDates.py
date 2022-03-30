@@ -110,7 +110,7 @@ class TestInvalidDatesFixer(PageFixerTest):
         for record in eventRecords:
             entityRating=self.getEntityRatingFromDict(record["raw"])
             dateFixer.fix(entityRating)
-            self.assertDictEqual(record["expected"], entityRating.getRecord())
+            self.assertDictEqual(record["expected"], self.getRecordOfEntity(entityRating))
 
     def testDurationVerification(self):
         """

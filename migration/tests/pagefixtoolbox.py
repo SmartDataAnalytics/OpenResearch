@@ -182,4 +182,15 @@ class PageFixerTest(ORMigrationTest):
         entity.smwHandler = SMWEntity(self, wikiFile)
         rating = EntityRating(entity=entity)
         return rating
+
+    def getRecordOfEntity(self, entity:EntityRating) -> dict:
+        """
+        removes auxiliary properties from the entity
+        Args:
+            entity: EntityRating
+
+        Returns:
+            dict
+        """
+        return {k:v for k,v in entity.getRecord().items() if k != "smwHandler"}
         

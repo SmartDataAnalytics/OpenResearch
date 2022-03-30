@@ -105,7 +105,7 @@ class CountryFixer(ORFixer):
         Return:
             List of names that could not be identified as countries
         '''
-        events = self.orDataSource.eventManager.getList()
+        events = self.pageFixerManager.orDataSource.eventManager.getList()
         pCount, _pCountTab = self.getCounter(events, 'country')
         count = len(pCount.items())
         total = sum(pCount.values())

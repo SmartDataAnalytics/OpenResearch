@@ -4,11 +4,6 @@ Created on 2021-04-06
 @author: wf
 '''
 import re
-import ntpath
-from difflib import SequenceMatcher
-from lodstorage.sql import SQLDB
-from os.path import expanduser,isfile
-from wikifile.wikiFile import WikiFile
 from ormigrate.smw.pagefixer import PageFixerManager
 from ormigrate.fixer import ORFixer, Entity
 from ormigrate.smw.rating import EntityRating,RatingType,PageRating
@@ -82,6 +77,7 @@ class WikiCFPIDFixer(ORFixer):
             else:
                 rating.set(5, RatingType.invalid, f"legacy wikiCFP reference {wikiCFPId} found")
         return rating
+
 
 if __name__ == "__main__":
     PageFixerManager.runCmdLine([WikiCFPIDFixer], ["-s", "orclone", "--targetWikiTextPath", "/home/holzheim/wikibackup/orclone","--targetWikiTextPath", "/home/holzheim/wikibackup/generated/orclone", "--fix", "--stats"])

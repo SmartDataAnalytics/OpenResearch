@@ -56,7 +56,7 @@ class TestYearFixer(PageFixerTest):
         for record in self.eventRecords:
             entity = self.getEntityRatingFromDict(record["raw"])
             fixer.fix(entity)
-            self.assertDictEqual(record["expected"], entity.getRecord())
+            self.assertDictEqual(record["expected"], self.getRecordOfEntity(entity))
 
     def test_rate(self):
         """

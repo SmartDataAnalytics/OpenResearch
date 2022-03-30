@@ -29,7 +29,7 @@ class TestWikiCfpSeriesId(PageFixerTest):
         rating=self.getEntityRatingFromDict(records)
         self.fixer.fix(rating)
         print(rating.getRecord())
-        self.assertDictEqual(expectedRecords, rating.getRecord())
+        self.assertDictEqual(expectedRecords, self.getRecordOfEntity(rating))
 
     def testUriFix(self):
         """tests the fixing of the id being inside a URI"""
@@ -38,7 +38,7 @@ class TestWikiCfpSeriesId(PageFixerTest):
         rating = self.getEntityRatingFromDict(records)
         self.fixer.fix(rating)
         print(rating.getRecord())
-        self.assertDictEqual(expectedRecords, rating.getRecord())
+        self.assertDictEqual(expectedRecords, self.getRecordOfEntity(rating))
 
     def testRate(self):
         """

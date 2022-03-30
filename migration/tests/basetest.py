@@ -16,7 +16,6 @@ class ORMigrationTest(unittest.TestCase):
     Base test class for all OpenResearh migration project test cases
     '''
 
-
     def setUp(self, debug:bool=False, profile:bool=True):
         self.debug=debug
         self.profile=profile
@@ -38,12 +37,16 @@ class ORMigrationTest(unittest.TestCase):
                         orDataSource.eventManager.wikiUser = wikiFileManager.wikiUser
                         orDataSource.eventSeriesManager.wikiUser = wikiFileManager.wikiUser
 
-
     def tearDown(self):
         self.profiler.time()
         pass
 
-
+    def inCI(self) -> bool:
+        """
+        Returns:
+            True if called in CI otherwise False
+        """
+        return HelperFunctions.inPublicCI()
 
 
 if __name__ == "__main__":

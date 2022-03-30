@@ -65,9 +65,8 @@ class TestPagefixer(TestCase):
         home = path.expanduser("~")
         PageFixerManager.runCmdLine(argv=["-s", "orclone", "--ccId", "orclone-backup", "--targetWikiTextPath", f"{home}/.or/generated/test", "--fixer", "EventSeriesAcronymFixer", "--fix", "--force"])
 
-
     def testGenerateFixerPages(self):
         home = path.expanduser("~")
-        fixer=[ fixer.__name__ for fixer in PageFixerManager.getAllFixers()]
+        fixer=[fixer.__name__ for fixer in PageFixerManager.getAllFixers()]
         manager=PageFixerManager.runCmdLine( argv=["-s", "orclone", "--ccId", "orclone-backup", "--targetWikiTextPath", f"{home}/.or/generated/fixer","--fixer",*fixer])
         manager.generateFixerPages(overwrite=True)

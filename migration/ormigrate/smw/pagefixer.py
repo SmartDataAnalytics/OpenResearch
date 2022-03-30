@@ -6,9 +6,10 @@ Created on 2021-04-06
 import sys
 import inspect
 from os import path
-from corpus.datasources.download import Profiler
+
 from corpus.datasources.openresearch import OR
 from corpus.eventcorpus import EventDataSource
+from corpus.utils.download import Profiler
 from lodstorage.entity import EntityManager
 from lodstorage.lod import LOD
 from lodstorage.sql import SQLDB
@@ -40,16 +41,16 @@ class PageFixerManager(object):
         self.pageFixers={}
         self.debug=debug
         self.wikiFileManager=wikiFileManager
+        self.orDataSource = self.loadOR(wikiFileManager=wikiFileManager, ccId=ccID)
         for pageFixerClass in pageFixerClassList:
             pageFixer=pageFixerClass(self)
             pageFixerClassName=pageFixerClass.__name__
             self.pageFixers[pageFixerClassName]=pageFixer
 
-        self.orDataSource = self.loadOR(wikiFileManager=wikiFileManager, ccId=ccID)
         # load wikiFiles for each entity
         for entityManager in self.orDataSource.eventManager, self.orDataSource.eventSeriesManager:
             if hasattr(entityManager, 'smwHandler'):
-                entityManager.smwHandler.interlinkEnititesWithWikiMarkupFile(useCacheIfPresent=True)
+                entityManager.smwHandler.interlinkEntitiesWithWikiMarkupFile(useCacheIfPresent=True)
         self.setupEntityRatings(pageTitles)
 
     def loadOR(self, wikiFileManager:WikiFileManager, ccId:str):
