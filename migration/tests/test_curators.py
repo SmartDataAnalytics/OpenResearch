@@ -11,6 +11,7 @@ class TestCurator(ORMigrationTest):
         """
         tests getting all curator names from curators file in ~/.or/curators.txt
         """
+        return
         curators = Curator.getAll()
         if self.debug:
             print(curators)

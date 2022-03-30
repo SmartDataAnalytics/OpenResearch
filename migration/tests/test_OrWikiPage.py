@@ -13,7 +13,8 @@ class TestOrWikiPage(ORMigrationTest):
     def setUp(self, debug:bool=False, profile:bool=True):
         super().setUp(debug, profile)
         self.testWikiId = "test"
-        self.orWikiPage = OrWikiPage(wikiId=self.testWikiId)
+        if not self.inCI():
+            self.orWikiPage = OrWikiPage(wikiId=self.testWikiId)
 
     def test_updateEvent(self):
         """
@@ -54,6 +55,15 @@ class TestOrWikiPage(ORMigrationTest):
         normalized_dict = {v: "test value" for v in propMap.values()}
         self.assertDictEqual(normalized_dict, OrWikiPage.normalizeProperties(template_dict, OREvent))
         self.assertDictEqual(template_dict, OrWikiPage.normalizeProperties(normalized_dict, OREvent, reverse=True))
+
+    def test_normalizeProperties_propertyExclution(self):
+        """
+        tests normalizeProperties() excluding of properties that are not in the getTemplateParamLookup of the entity
+        """
+        record = {"Property that is not in the getTemplateParamLookup": "Should be excluded if force=False"}
+        self.assertWarns(Warning, OrWikiPage.normalizeProperties, record, OREvent, force=False)
+        self.assertEqual(dict(), OrWikiPage.normalizeProperties(record, OREvent, force=False))
+        self.assertEqual(record,OrWikiPage.normalizeProperties(record, OREvent, force=True))
 
     def test_getPageUrl(self):
         """
