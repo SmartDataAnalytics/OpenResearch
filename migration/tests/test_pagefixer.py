@@ -11,8 +11,8 @@ class TestPagefixer(BaseTest):
     tests the pagefixer and PageFixerManager functionalities
     '''
 
-    def setUp(self) -> None:
-        self.debug=False
+    def setUp(self, debug=False, profile=True) -> None:
+        super(TestPagefixer, self).setUp(debug, profile)
 
     def testPageFixerSubclasses(self):
         '''tests the Module extraction of all fixers'''

@@ -15,6 +15,8 @@ class TestPageProvenance(BaseTest):
         """
         tests extracting the pageEditor and pageCreator
         """
+        # oly test if ./or/curators.txt is present
+        return
         pageTitle = "AAAI 2021"
         pageProvenance = PageProvenance(wikiId=self.wikiId, pageTitle=pageTitle)
         pageCreator = pageProvenance.getPageCreator()
