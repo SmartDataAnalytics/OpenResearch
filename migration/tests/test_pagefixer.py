@@ -6,7 +6,7 @@ from ormigrate.smw.pagefixer import PageFixer, PageFixerManager
 from tests.corpusfortesting import CorpusForTesting
 
 
-class TestPagefixer(TestCase):
+class TestPagefixer(BaseTest):
     '''
     tests the pagefixer and PageFixerManager functionalities
     '''
