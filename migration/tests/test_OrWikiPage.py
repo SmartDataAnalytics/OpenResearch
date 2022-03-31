@@ -69,6 +69,8 @@ class TestOrWikiPage(ORMigrationTest):
         """
         tests generating the page url
         """
+        if self.inCI():
+            return
         wikiPage = OrWikiPage("orclone")
         url = wikiPage.getPageUrl("AAAI")
         expectedUrl = "https://confident.dbis.rwth-aachen.de/or/index.php?title=AAAI"

@@ -2,11 +2,7 @@ import os
 import tempfile
 from os import path
 from unittest import TestCase
-
-from ormigrate.fixer import ORFixer
 from ormigrate.smw.pagefixer import PageFixer, PageFixerManager
-from functools import wraps,partial
-
 from tests.corpusfortesting import CorpusForTesting
 
 
@@ -17,7 +13,6 @@ class TestPagefixer(TestCase):
 
     def setUp(self) -> None:
         self.debug=False
-
 
     def testPageFixerSubclasses(self):
         '''tests the Module extraction of all fixers'''
@@ -36,7 +31,6 @@ class TestPagefixer(TestCase):
             #check if template pages are generated
             for entity in ["Event","Event series","Rating","Fixer"]:
                 self.assertTrue(os.path.isfile(f"{wikiFileManager.targetPath}/Template:{entity}.wiki"))
-
 
     def testCmdLineRating(self):
         '''test rating functionality of the cmdLine interface'''
