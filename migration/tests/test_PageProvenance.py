@@ -1,4 +1,3 @@
-from ormigrate.smw import pageProvenance
 from ormigrate.smw.pageProvenance import PageProvenance
 from tests.basetest import BaseTest
 

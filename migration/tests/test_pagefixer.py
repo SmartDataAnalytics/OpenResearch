@@ -1,8 +1,8 @@
 import os
 import tempfile
 from os import path
-from unittest import TestCase
-from ormigrate.smw.pagefixer import PageFixer, PageFixerManager
+from ormigrate.smw.pagefixer import PageFixerManager
+from tests.basetest import BaseTest
 from tests.corpusfortesting import CorpusForTesting
 
 
