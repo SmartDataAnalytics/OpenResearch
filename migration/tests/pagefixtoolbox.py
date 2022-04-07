@@ -165,11 +165,12 @@ class PageFixerTest(ORMigrationTest):
             pageLists.append(None)
         return pageLists
 
-    def getEntityRatingFromDict(self, records:dict, wikiText:str=None):
+    def getEntityRatingFromDict(self, records:dict, wikiText:str=None, wikiFile:WikiFile=None):
         """
         Args:
             records(dict): records of the entity
             wikiText(str): wikiMarkup content of the page
+            wikiFile(str): wikiFile of the page. Has higher priority than wikiText and thus will overwrite given wikiText
 
         Returns:
              a EntityRating for the given dict
@@ -177,7 +178,7 @@ class PageFixerTest(ORMigrationTest):
         entity = JSONAble()
         entity.fromDict(records)
         wikiFile = None
-        if wikiText is not None:
+        if wikiText is not None and wikiFile is None:
             wikiFile = WikiFile(records.get("pageTitle", "TestPage"), wikiText=wikiText)
         entity.smwHandler = SMWEntity(self, wikiFile)
         rating = EntityRating(entity=entity)
