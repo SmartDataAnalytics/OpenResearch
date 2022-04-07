@@ -24,7 +24,8 @@ class WikiCFPIDFixer(ORFixer):
         '''
         super(WikiCFPIDFixer, self).__init__(pageFixerManager)
 
-    def getWikiCFPIdFromPage(self, eventWikiText:str) -> int:
+    @staticmethod
+    def getWikiCFPIdFromPage(eventWikiText:str) -> int:
         """
         Get wikiCFP ID from the text of the event if available
         
