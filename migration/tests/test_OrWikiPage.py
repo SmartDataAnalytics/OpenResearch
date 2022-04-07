@@ -82,8 +82,8 @@ class TestOrWikiPage(ORMigrationTest):
         """
         if self.inCI():
             return
-        record = main(['','--wikiId', 'orfixed', '-et', 'Event', '-p', 'AAAI 2020'])
-        self.assertEqual('1227124856', record['gndId'])
+        record = main(['', '--wikiId', 'orfixed', '-et', 'Event', '-p', 'AAAI 2020', '--raw'])
+        self.assertEqual('1227124856', record['gndId'], f"gndId not found in {record}")
 
     def test_cmdlineInterfaceOfOrWikiPage_update(self):
         """

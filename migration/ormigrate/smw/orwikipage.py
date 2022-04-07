@@ -45,6 +45,21 @@ class OrWikiPage(WikiPage):
                                props=props,
                                updateMsg=updateMsg)
 
+    def getEvent(self, pageTitle:str, normalize:bool=True) -> dict:
+        """
+        get the event record from given page
+        Args:
+            pageTitle: name of the page
+            normalize: If True normalize the event properties
+
+        Returns:
+            dict: event records of the page
+        """
+        record = self.getWikiSonFromPage(pageTitle, OREvent.templateName)
+        if normalize:
+            record = self.normalizeProperties(record, OREvent, force=True)
+        return record
+
     @staticmethod
     def normalizeProperties(record: dict,
                             entity: Union[Type[OREvent], Type[OREventSeries]],
@@ -108,7 +123,7 @@ def main(argv=None):
     import sys
     if argv:
         sys.argv = argv
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Edit or retrieve data event or event series data from a wiki. If no valueMap is given the entity record is returned.")
     parser.add_argument('--wikiId', required=True, help='id of the wiki')
     entityTypeChoices = {
         "Event": OREvent,
@@ -119,6 +134,7 @@ def main(argv=None):
     parser.add_argument('-v', '--valueMap', help='properties to update the WikiSON object in JSON/dict format')
     parser.add_argument('-m', '--message', help='update message displayed in page revision')
     parser.add_argument('-d', '--debug', action='store_true', help='Enable debug output')
+    parser.add_argument('--raw', action='store_true', help='Keep properties that can not be normalized')
     args = parser.parse_args()
     orWikiPage = OrWikiPage(wikiId=args.wikiId)
     entityType = entityTypeChoices.get(args.entityType, None)
@@ -139,7 +155,7 @@ def main(argv=None):
 
     else:
         record = orWikiPage.getWikiSonFromPage(pageTitle=args.pageTitle, wikiSonEntity=entityType.templateName)
-        record = orWikiPage.normalizeProperties(record, entityType)
+        record = orWikiPage.normalizeProperties(record, entityType, force=args.raw)
         print(record)
         return record
 
