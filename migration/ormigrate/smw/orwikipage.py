@@ -60,6 +60,21 @@ class OrWikiPage(WikiPage):
             record = self.normalizeProperties(record, OREvent, force=True)
         return record
 
+    def getEventSeries(self, pageTitle:str, normalize:bool=True) -> dict:
+        """
+        get the event series record from given page
+        Args:
+            pageTitle: name of the page
+            normalize: If True normalize the event properties
+
+        Returns:
+            dict: event records of the page
+        """
+        record = self.getWikiSonFromPage(pageTitle, OREventSeries.templateName)
+        if normalize:
+            record = self.normalizeProperties(record, OREventSeries, force=True)
+        return record
+
     @staticmethod
     def normalizeProperties(record: dict,
                             entity: Union[Type[OREvent], Type[OREventSeries]],
