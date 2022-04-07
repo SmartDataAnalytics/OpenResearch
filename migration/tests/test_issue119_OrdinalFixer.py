@@ -65,7 +65,7 @@ class TestOrdinalFixer(PageFixerTest):
                 # found 221 painLevel 5 entries for the ordinal fixer
                 self.assertTrue(pain5Counter>200)
             else:
-                self.assertEqual(3,pain5Counter)
+                self.assertEqual(0,pain5Counter)
                 
 
 if __name__ == "__main__":

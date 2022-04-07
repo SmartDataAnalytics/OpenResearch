@@ -7,6 +7,7 @@ import unittest
 from ormigrate.issue71_date import DateFixer
 from tests.pagefixtoolbox import PageFixerToolbox,PageFixerTest
 
+
 class TestInvalidDatesFixer(PageFixerTest):
     '''
     https://github.com/SmartDataAnalytics/OpenResearch/issues/71
@@ -77,7 +78,8 @@ class TestInvalidDatesFixer(PageFixerTest):
         for pageTitleList in pageTitleLists:
             counters=self.getRatingCounters(pageTitleList)
             painCounter=counters["pain"]
-            print(painCounter)
+            if self.debug:
+                print(painCounter)
             if pageTitleList is None:
                 self.assertGreater(painCounter[self.pageFixerClass.__name__][1],500)
                 self.assertGreater(painCounter[self.pageFixerClass.__name__][3], 7000)
@@ -86,7 +88,6 @@ class TestInvalidDatesFixer(PageFixerTest):
                 self.assertGreater(painCounter[self.pageFixerClass.__name__][7],100)
             else:
                 self.assertEqual(3,painCounter[self.pageFixerClass.__name__][7])
-
 
     def testPropertyShift(self):
         '''
