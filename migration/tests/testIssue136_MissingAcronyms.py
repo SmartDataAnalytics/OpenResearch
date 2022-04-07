@@ -33,6 +33,7 @@ class TestIssue136(PageFixerTest):
                 self.assertEqual(3,painCounter[self.pageFixerClass.__name__][5])
         pass
 
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

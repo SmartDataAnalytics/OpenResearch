@@ -23,7 +23,6 @@ class EventSeriesAcronymFixer(ORFixer):
         '''
         super(EventSeriesAcronymFixer, self).__init__(pageFixerManager)
 
-
     def rate(self, rating: EntityRating):
         if hasattr(rating.entity, 'acronym') and getattr(rating.entity, 'acronym'):
             rating.set(1,RatingType.ok,'acronym available')
