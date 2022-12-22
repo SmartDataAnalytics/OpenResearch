@@ -9,7 +9,7 @@ wikitextparser>=0.47.4
 # https://pypi.org/project/wikirender/
 wikirender>=0.0.43
 # https://github.com/somnathrakshit/geograpy3
-geograpy3>=0.2.4
+geograpy3>=0.2.5
 # https://github.com/SmartDataAnalytics/OpenResearch
 ConferenceCorpus>=0.1.1
 # https://github.com/mocnik-science/osm-python-tools
