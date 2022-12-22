@@ -6,17 +6,12 @@ Created on 2021-04-16
 from __future__ import annotations
 
 from collections import ChainMap
-from copy import deepcopy
-from typing import TYPE_CHECKING, List
-from corpus.smw.topic import SMWEntity
+from typing import TYPE_CHECKING
 from lodstorage.jsonable import JSONAbleList, JSONAble
 from corpus.quality.rating import Rating, RatingType
-from wikifile.smw import TemplatePage, Table
-from wikifile.utils import TemplateParam, PageLink
 
 if TYPE_CHECKING:
-    from ormigrate.smw.pagefixer import PageFixer, EntityFixer
-
+    from ormigrate.smw.pagefixer import EntityFixer
 
 class PageRating(Rating):
     '''
