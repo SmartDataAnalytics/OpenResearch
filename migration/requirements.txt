@@ -1,7 +1,7 @@
 # https://pypi.org/project/pylodstorage/
 pylodstorage>=0.4.9
 # https://pypi.org/project/python-dateutil/
-python-dateutil
+python-dateutil>=2.8.2
 # https://pypi.org/project/py-3rdparty-mediawiki/
 py-3rdparty-mediawiki>=0.8.0
 # https://github.com/5j9/wikitextparser
