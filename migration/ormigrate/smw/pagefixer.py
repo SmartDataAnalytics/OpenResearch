@@ -17,7 +17,6 @@ from tabulate import tabulate
 from wikifile.wikiFileManager import WikiFileManager
 from wikifile.cmdline import CmdLineAble
 from wikifile.wikiRender import WikiFile
-from corpus.smw.topic import SMWEntity
 from ormigrate.smw.rating import RatingType, PageRating, EntityRating
 from collections import Counter
 from ormigrate.smw.templates import RatingTemplatePage, RatedEventTemplatePage, RatedEventSeriesTemplatePage

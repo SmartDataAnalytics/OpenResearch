@@ -12,7 +12,7 @@ except:
     long_description = open('../README.md').read()
 
 setup(name='OpenResearchMigration',
-      version='0.0.30',
+      version='0.1.0',
       description='python api to access OPENRESEARCH data',
       long_description=long_description,
       long_description_content_type='text/markdown',
@@ -29,9 +29,11 @@ setup(name='OpenResearchMigration',
       ),
       classifiers=[
             'Programming Language :: Python',
-            'Programming Language :: Python :: 3.7',
             'Programming Language :: Python :: 3.8',
-            'Programming Language :: Python :: 3.9'
+            'Programming Language :: Python :: 3.9',
+            'Programming Language :: Python :: 3.10',
+            # wikibase integrator not compatible yet
+            #'Programming Language :: Python :: 3.11'
       ],
       packages=['ormigrate','ormigrate.smw','openresearch',''],
       package_data={'ormigrate': ['resources/*.json','resources/*.yaml','resources/templates/**/*.jinja','resources/topics/*.json']},
