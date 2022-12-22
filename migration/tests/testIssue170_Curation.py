@@ -51,7 +51,7 @@ class TestIssue170(PageFixerTest):
         userLookup=eventDataSource.eventManager.getLookup("lastEditor",withDuplicates=True)
         if self.debug:
             print (f"{len(userLookup)} users")
-        expected=1 if hf.inPublicCI() else 140
+        expected=1 if hf.inPublicCI() else 9 # 140
         print(len(userLookup))
         self.assertGreaterEqual(len(userLookup), expected)
         counter=Counter()
