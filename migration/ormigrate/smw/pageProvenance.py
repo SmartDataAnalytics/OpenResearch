@@ -1,5 +1,5 @@
 from typing import Dict, List, Union
-from wikibot.pagehistory import PageHistory
+from wikibot3rd.pagehistory import PageHistory
 from ormigrate.smw.curators import Curator
 
 

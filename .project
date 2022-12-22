@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>ConferenceCorpus</project>
+		<project>py-3rdparty-mediawiki</project>
 		<project>pyLoDStorage</project>
 		<project>wikirender</project>
 	</projects>

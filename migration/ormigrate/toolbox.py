@@ -1,7 +1,7 @@
 import os
 from ormigrate.dictionary import Dictionary
-from wikibot.wikiuser import WikiUser
-from wikibot.wikiclient import WikiClient
+from wikibot3rd.wikiuser import WikiUser
+from wikibot3rd.wikiclient import WikiClient
 import getpass
 import time
 
