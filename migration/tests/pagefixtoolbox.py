@@ -49,11 +49,17 @@ class PageFixerToolbox(object):
         Returns:
             PageFixerManager: a PageFixerManager with pageRatings already set
         '''
-        pageCount="all" if pageTitleList is None else len(pageTitleList)
-        profile=Profiler(f"{pageFixerClass.purpose} for {pageCount} pages")
-        argv=PageFixerToolbox.getArgs(pageTitleList,["--stats", "--ccId", "orclone-backup"],template=template,debug=testCase.debug)
-        pageFixerManager=PageFixerManager.fromCommandLine([pageFixerClass],argv)
-        pageFixerManager.wikiFilesToWorkon=pageFixerManager.wikiFileManager.getAllWikiFilesForArgs(pageFixerManager.args)
+        pageCount = "all" if pageTitleList is None else len(pageTitleList)
+        profile = Profiler(f"{pageFixerClass.purpose} for {pageCount} pages")
+        argv = PageFixerToolbox.getArgs(
+                pageTitleList,
+                ["--stats", "--ccId", "orclone-backup"],
+                template=template,
+                debug=testCase.debug
+        )
+        pageFixerManager = PageFixerManager.fromCommandLine([pageFixerClass],argv)
+        wikifiles = pageFixerManager.wikiFileManager.getAllWikiFilesForArgs(pageFixerManager.args)
+        pageFixerManager.wikiFilesToWorkon = wikifiles
         pageFixerManager.getRatings(debug=testCase.debug)
         profile.time()
         return pageFixerManager
@@ -72,13 +78,13 @@ class PageFixerToolbox(object):
         Returns:
             the rating/pain counters as per the given pageTitleList 
         '''
-        pageFixerManager=PageFixerToolbox.runAndGetPageFixerManager(testCase, pageTitleList, pageFixerClass, template)
-        counters=pageFixerManager.getRatingCounters()
-        painCounter=counters["pain"]
+        pageFixerManager = PageFixerToolbox.runAndGetPageFixerManager(testCase, pageTitleList, pageFixerClass, template)
+        counters = pageFixerManager.getRatingCounters()
+        painCounter = counters["pain"]
         if testCase.debug:
-            print (painCounter)
+            print(painCounter)
         if pageTitleList is not None:
-            testCase.assertEqual(len(pageTitleList),len(pageFixerManager.ratings))
+            testCase.assertEqual(len(pageTitleList), len(pageFixerManager.ratings))
         return counters
         
     @staticmethod
@@ -133,7 +139,7 @@ class PageFixerTest(ORMigrationTest):
         pass
 
     def getRatingCounters(self,pageTitleList:list):
-        counters=PageFixerToolbox.getRatingCounters(self, pageTitleList, self.pageFixerClass, self.template)
+        counters = PageFixerToolbox.getRatingCounters(self, pageTitleList, self.pageFixerClass, self.template)
         return counters
     
     def getPageFixer(self, forceUpdate:bool=False) -> PageFixer:

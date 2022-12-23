@@ -4,13 +4,15 @@ Created on 2021-07-14
 @author: wf
 '''
 import unittest
+
+from tests.basetest import BaseTest
 from tests.corpusfortesting import CorpusForTesting as Corpus
 from ormigrate.toolbox import Profiler
 from lodstorage.lod import LOD
     
 class MatchingSet:
     
-    def __init__(self,title,list1Name,entityList1,list2Name,entityList2,keys):
+    def __init__(self, title, list1Name, entityList1, list2Name, entityList2, keys):
         '''
         construct me
         '''
@@ -44,12 +46,13 @@ class MatchingSet:
             print(f"{self.title} {key}: {self.list1Name}: {len(lodf1)}/{len(self.lod1)} {self.list2Name}: {len(lodf2)}/{len(self.lod2)} common: {len(commonList)}")
     
 
-class TestEventCorpus(unittest.TestCase):
+class TestEventCorpus(BaseTest):
     '''
     test handling the event corpus
     '''
 
     def setUp(self):
+        super().setUp()
         self.debug = False
         self.profile=True
         self.eventDataSourceAPI=None
@@ -59,36 +62,37 @@ class TestEventCorpus(unittest.TestCase):
     def tearDown(self):
         pass
     
-    def checkEventCorpus(self,eventCorpus,expectedAttrs=['lastEditor','pageTitle']):
+    def checkEventCorpus(self, eventCorpus, expectedAttrs=['lastEditor','pageTitle']):
         '''
         check the given eventCorpus
         '''
-        listOfEvents=eventCorpus.eventManager.getList()
-        eventSeriesByPageTitle,duplicates=LOD.getLookup(lod=eventCorpus.eventSeriesManager.getList(),attrName='pageTitle')
-        withSeries=0
-        withValidSeries=0
+        listOfEvents = eventCorpus.eventManager.getList()
+        eventSeriesByPageTitle, duplicates = LOD.getLookup(
+                lod=eventCorpus.eventSeriesManager.getList(),
+                attrName='pageTitle')
+        withSeries = 0
+        withValidSeries = 0
         for event in listOfEvents:
             for attr in expectedAttrs:
                 self.assertTrue(hasattr(event, attr))
-            if hasattr(event,'inEventSeries'): 
+            if hasattr(event, 'inEventSeries'):
                 if event.inEventSeries:
-                    withSeries+=1
+                    withSeries += 1
                     if event.inEventSeries in eventSeriesByPageTitle:
-                        withValidSeries+=1
+                        withValidSeries += 1
         if self.debug:
             print(f"inEventseries: {withSeries} valid: {withValidSeries}")
-        self.assertTrue(withSeries>4500)
+        self.assertTrue(withSeries > 4500)
 
     def testEventCorpusFromWikiUser(self):
-        '''
+        """
         test the event corpus
-        '''
+        """
         self.debug=True
-        profile=Profiler("getting EventCorpus from WikiUser")
-        eventDataSource=Corpus.getEventDataSourceFromWikiAPI(forceUpdate=True, debug=self.debug)
+        profile = Profiler("getting EventCorpus from WikiUser")
+        eventDataSource = Corpus.getEventDataSourceFromWikiAPI(forceUpdate=True, debug=self.debug)
         profile.time()
         self.checkEventCorpus(eventDataSource)
-
 
     def testEventCorpusFromWikiUserCache(self):
         """
@@ -96,38 +100,51 @@ class TestEventCorpus(unittest.TestCase):
         """
         debug = True
         if Corpus.hasCache():
-            profile=Profiler(f"getting EventCorpus for {Corpus.wikiId} from WikiUser Cache",self.profile)
-            self.eventDataSourceAPI=Corpus.getEventDataSourceFromWikiAPI(debug=debug, forceUpdate=False)
+            profile = Profiler(f"getting EventCorpus for {Corpus.wikiId} from WikiUser Cache",self.profile)
+            self.eventDataSourceAPI = Corpus.getEventDataSourceFromWikiAPI(debug=debug, forceUpdate=False)
             profile.time()
             self.checkEventCorpus(self.eventDataSourceAPI)
-        
 
+    @unittest.skipIf(BaseTest.inCI(), "Takes too long for CI")
     def testEventCorpusFromWikiFileManager(self):
         """
         test the Event Corpus from the wiki file manager(wikiFiles).
         """
-        profile=Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
+        profile = Profiler(f"getting EventCorpus from wikiText files for {Corpus.wikiId}")
         self.eventDataSourceWikiText = Corpus.getEventDataSourceFromWikiText(forceUpdate=True, debug=self.debug)
         profile.time()
         self.checkEventCorpus(self.eventDataSourceWikiText, ['pageTitle'])
-  
-        
+
     def testMatchingSetsForEventCorpus(self):
         """
         test the different sets of Event Corpus and check the similarities between them
         """
         if not Corpus.hasCache():
             return
-        profile=Profiler(f"getting EventCorpora from wikiAPI and wikiText files for {Corpus.wikiId}")
+        profile = Profiler(f"getting EventCorpora from wikiAPI and wikiText files for {Corpus.wikiId}")
         if self.eventDataSourceAPI is None:
-            self.eventDataSourceAPI=Corpus.getEventDataSourceFromWikiAPI(debug=self.debug, forceUpdate=False)
+            self.eventDataSourceAPI = Corpus.getEventDataSourceFromWikiAPI(debug=self.debug, forceUpdate=False)
         if self.eventDataSourceWikiText is None:
             self.eventDataSourceWikiText = Corpus.getEventDataSourceFromWikiText(debug=self.debug)
         profile.time()    
-        profile=Profiler(f"finding common events and series for {Corpus.wikiId}")
+        profile = Profiler(f"finding common events and series for {Corpus.wikiId}")
         keys=["acronym","pageTitle"]
-        eventSet=MatchingSet("Events","api", self.eventDataSourceAPI.eventManager, "wikiText", self.eventDataSourceWikiText.eventManager, keys)
-        eventSeriesSet=MatchingSet("EventSeries","api", self.eventDataSourceAPI.eventSeriesManager, "wikiText", self.eventDataSourceWikiText.eventSeriesManager, keys)
+        eventSet = MatchingSet(
+                "Events",
+                "api",
+                self.eventDataSourceAPI.eventManager,
+                "wikiText",
+                self.eventDataSourceWikiText.eventManager,
+                keys
+        )
+        eventSeriesSet=MatchingSet(
+                "EventSeries",
+                "api",
+                self.eventDataSourceAPI.eventSeriesManager,
+                "wikiText",
+                self.eventDataSourceWikiText.eventSeriesManager,
+                keys
+        )
         profile.time()
         eventSet.showStats()
         eventSeriesSet.showStats()

@@ -31,7 +31,8 @@ class BaseTest(TestCase):
         self.profiler.time()
         pass
 
-    def inCI(self) -> bool:
+    @staticmethod
+    def inCI() -> bool:
         """
         Returns:
             True if called in CI otherwise False

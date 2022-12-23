@@ -26,13 +26,13 @@ class TestRefactoring(unittest.TestCase):
         '''
         test the mapping
         '''
-        for entityListClass,entityClass in (OREventManager,OREvent),(OREventSeriesManager,OREventSeries):
+        for entityListClass, entityClass in (OREventManager, OREvent), (OREventSeriesManager, OREventSeries):
             config = StorageConfig.getDefault()
             entityList=entityListClass(config=config)
-            entityList.smwHandler.fromSampleWikiSonLod(entityClass)
-            self.assertTrue(len(entityList.getList())>0)    
+            entityList.fromLoD(entityClass.getSamples())
+            self.assertTrue(len(entityList.getList()) > 0)
             for entity in entityList.getList():
-                self.assertTrue(isinstance(entity,entityClass))
+                self.assertTrue(isinstance(entity, entityClass))
                 if self.debug: 
                     print(entity)
         pass

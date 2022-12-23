@@ -3,11 +3,13 @@ Created on 16.04.2021
 
 @author: wf
 '''
+from pathlib import Path
+
+from corpus.eventcorpus import EventDataSource
 from corpus.lookup import CorpusLookup
 from lodstorage.storageconfig import StorageConfig
 from ormigrate.toolbox import HelperFunctions as hf
 from wikifile.wikiFileManager import WikiFileManager
-from os import path
 import os
 
 
@@ -39,8 +41,13 @@ class CorpusForTesting(object):
         return wikiUser
         
     @classmethod
-    def getWikiFileManager(cls,wikiId=None,debug=False, targetDir:str=None) -> WikiFileManager:
-        '''
+    def getWikiFileManager(
+            cls,
+            wikiId: str = None,
+            debug: bool = False,
+            targetDir: str = None
+    ) -> WikiFileManager:
+        """
 
         Args:
             wikiId: id of the wiki
@@ -49,17 +56,27 @@ class CorpusForTesting(object):
 
         Returns:
             WikiFileManager
-        '''
-        wikiUser=cls.getWikiUser(wikiId)
-        home = path.expanduser("~")
-        wikiTextPath = f"{home}/.or/wikibackup/{wikiUser.wikiId}"
-        targetWikiTextPath = f"{home}/.or/tests/{wikiUser.wikiId}" if not targetDir else targetDir
-        wikiFileManager = WikiFileManager(wikiUser.wikiId,wikiTextPath,targetWikiTextPath=targetWikiTextPath,login=False,debug=debug)
+        """
+        wikiUser = cls.getWikiUser(wikiId)
+        wikiTextPath = f"{Path.home()}/.or/wikibackup/{wikiUser.wikiId}"
+        targetWikiTextPath = f"{Path.home()}/.or/tests/{wikiUser.wikiId}" if not targetDir else targetDir
+        wikiFileManager = WikiFileManager(
+                wikiUser.wikiId,
+                wikiTextPath,
+                targetWikiTextPath=targetWikiTextPath,
+                login=False,
+                debug=debug
+        )
         return wikiFileManager
 
     @classmethod
-    def getEventDataSourceFromWikiAPI(cls, lookupId:str= "orclone", forceUpdate:bool=False, debug:bool=False):
-        '''
+    def getEventDataSourceFromWikiAPI(
+            cls,
+            lookupId: str = "orclone",
+            forceUpdate: bool = False,
+            debug: bool = False
+    ) -> EventDataSource:
+        """
         get events with series by knitting / linking the entities together
 
         Args:
@@ -69,12 +86,17 @@ class CorpusForTesting(object):
 
         Returns:
             EventDataSource
-        '''
-        eventDataSource=cls.getEventDataSource(lookupId=lookupId, forceUpdate=forceUpdate, debug=debug)
+        """
+        eventDataSource = cls.getEventDataSource(lookupId=lookupId, forceUpdate=forceUpdate, debug=debug)
         return eventDataSource
 
     @classmethod
-    def getEventDataSourceFromWikiText(cls, lookupId:str= "orclone-backup", forceUpdate:bool=False, debug=False):
+    def getEventDataSourceFromWikiText(
+            cls,
+            lookupId: str = "orclone-backup",
+            forceUpdate: bool = False,
+            debug=False
+    ) -> EventDataSource:
         """
         get events with series by knitting/linking entities from a WikiFileManager
 
@@ -90,7 +112,7 @@ class CorpusForTesting(object):
         return eventDataSource
 
     @classmethod
-    def getEventDataSource(cls, lookupId:str, forceUpdate:bool=False, debug:bool=False):
+    def getEventDataSource(cls, lookupId: str, forceUpdate: bool=False, debug: bool = False):
         """
 
         Args:

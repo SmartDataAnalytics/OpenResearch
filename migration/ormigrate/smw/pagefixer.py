@@ -435,7 +435,7 @@ class PageFixerManager(object):
                 ratings = self.getEventRatingsForFixer(self.pageFixers.get(fixer))
                 for rating in ratings:
                     if hasattr(rating, attr):   # If not rated the attr is not set and thus not included in the counters
-                        counter[getattr(rating, attr)]+=1
+                        counter[getattr(rating, attr)] += 1
                 counters[attr][fixer] = counter
         return counters
     
