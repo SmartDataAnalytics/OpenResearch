@@ -164,26 +164,26 @@ class TestLocationFixer(PageFixerTest):
         profile.time()
         
     def testRating(self):
-        '''
+        """
         test the rating
-        '''
-        pageTitleLists=self.getPageTitleLists("ICKE 2022","AAC 2019","ETC 2021","CSCW 2021","ACNS 2016")
+        """
+        pageTitleLists = self.getPageTitleLists("ICKE 2022", "AAC 2019", "ETC 2021", "CSCW 2021", "ACNS 2016")
         for pageTitleList in pageTitleLists:
-            counters=self.getRatingCounters(pageTitleList)
-            painCounter=counters["pain"]
+            counters = self.getRatingCounters(pageTitleList)
+            painCounter = counters["pain"]
             if pageTitleList is None:
-                self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>1000)
+                self.assertGreaterEqual(painCounter[self.pageFixerClass.__name__][5], 1000)
             else:
-                self.assertGreaterEqual(2, painCounter[self.pageFixerClass.__name__][5])
+                self.assertGreaterEqual(painCounter[self.pageFixerClass.__name__][5], 1)
 
     def testRate(self):
-        '''
+        """
         tests the rating of location values of eventRecords
-        '''
-        event_region_missing={
-            "pageTitle":"Test",
-            self.COUNTRY:"Germany",
-            self.CITY:"Aachen"
+        """
+        event_region_missing = {
+            "pageTitle": "Test",
+            self.COUNTRY: "Germany",
+            self.CITY: "Aachen"
         }
         entityRating_region_missing = PageFixerToolbox.getEntityRatingForRecord(event_region_missing)
         self.fixer.rate(entityRating_region_missing)
