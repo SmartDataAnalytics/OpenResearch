@@ -85,10 +85,9 @@ class TestWikiCFPId(PageFixerTest):
             counters = self.getRatingCounters(pageTitleList)
             painCounter = counters["pain"]
             if pageTitleList is not None:
-                self.assertEqual(8, painCounter[self.pageFixerClass.__name__][1])
+                self.assertEqual(8, painCounter[self.pageFixerClass.__name__][5])
             else:
-                self.assertGreaterEqual(painCounter[self.pageFixerClass.__name__][1], 2400)
-                self.assertGreaterEqual(painCounter[self.pageFixerClass.__name__][5], 3)
+                self.assertGreaterEqual(painCounter[self.pageFixerClass.__name__][5], 2400)
 
     def getTestEntity(self) -> EntityRating:
         """

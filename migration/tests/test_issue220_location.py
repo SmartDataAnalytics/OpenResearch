@@ -174,7 +174,7 @@ class TestLocationFixer(PageFixerTest):
             if pageTitleList is None:
                 self.assertTrue(painCounter[self.pageFixerClass.__name__][5]>1000)
             else:
-                self.assertEqual(2, painCounter[self.pageFixerClass.__name__][5])
+                self.assertGreaterEqual(2, painCounter[self.pageFixerClass.__name__][5])
 
     def testRate(self):
         '''
