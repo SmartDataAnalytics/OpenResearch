@@ -5,10 +5,12 @@ Created on 2021-04-16
 '''
 from __future__ import annotations
 
+import typing
 from collections import ChainMap
 from typing import TYPE_CHECKING
 from lodstorage.jsonable import JSONAbleList, JSONAble
 from corpus.quality.rating import Rating, RatingType
+from wikifile.wikiFile import WikiFile
 
 if TYPE_CHECKING:
     from ormigrate.smw.pagefixer import EntityFixer
@@ -18,7 +20,14 @@ class PageRating(Rating):
     I am a Rating for a page
     '''
     
-    def __init__(self,pageTitle:str=None,templateName:str=None,pain:int=-1,reason:RatingType=None,hint:str=None):
+    def __init__(
+            self,
+            pageTitle: str = None,
+            templateName: str = None,
+            pain: int = -1,
+            reason: RatingType = None,
+            hint: str = None
+    ):
         '''
         construct me
         
@@ -54,7 +63,7 @@ class EntityRating(PageRating):
     a rating for an entity
     '''
     
-    def __init__(self,entity:JSONAble, fixer:EntityFixer=None, pageTitle:str=None):
+    def __init__(self, entity: JSONAble, fixer: EntityFixer = None, pageTitle: str = None):
         '''
         construct me
 
@@ -62,20 +71,16 @@ class EntityRating(PageRating):
             entity(JSONAble): entity to be rated/fixed
             fixer(EntityFixer): fixer responsible for rating/fixing the entity
         '''
-        pageTitle=getattr(entity, "pageTitle", None) if not pageTitle else pageTitle
-        super().__init__(pageTitle=pageTitle)
-        self.entity=entity
+        pageTitle = getattr(entity, "pageTitle", None) if not pageTitle else pageTitle
+        template_name = getattr(entity, "templateName", None)
+        super().__init__(pageTitle=pageTitle, templateName=template_name)
+        self.entity = entity
         self.fixer = fixer
+        self.wikiFile: typing.Union[WikiFile, None] = None
 
     def getRecord(self):
         # ToDo: Limit to entity properties (exclude auxiliary properties)
         return self.entity.__dict__
-
-    @property
-    def wikiFile(self):
-        if hasattr(self.entity, "smwHandler"):
-            return self.entity.smwHandler.wikiFile
-        return None
 
     def getRawRecords(self):
         '''Returns the raw entity values of the wiki markup file'''

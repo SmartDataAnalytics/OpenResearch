@@ -5,7 +5,6 @@ Created on 2021-07-14
 '''
 import os
 
-from corpus.smw.topic import SMWEntity
 from lodstorage.jsonable import JSONAble
 from wikifile.wikiFile import WikiFile
 from ormigrate.smw.pagefixer import PageFixerManager, PageFixer
@@ -180,8 +179,8 @@ class PageFixerTest(ORMigrationTest):
         wikiFile = None
         if wikiText is not None and wikiFile is None:
             wikiFile = WikiFile(records.get("pageTitle", "TestPage"), wikiText=wikiText)
-        entity.smwHandler = SMWEntity(self, wikiFile)
         rating = EntityRating(entity=entity)
+        rating.wikiFile = wikiFile
         return rating
 
     def getRecordOfEntity(self, entity:EntityRating) -> dict:
